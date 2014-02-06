@@ -84,6 +84,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    self.tabBarController.tabBar.hidden = YES;
     // Refresh label content based on event
     _titleLabel.text = _event.title;
     _dateLabel.text = [NSString stringWithFormat:@"%@",[dateFormatter stringFromDate:_event.startDate]];
@@ -144,6 +145,10 @@
         _recurrenceLabel.text = @"Enter Rule?";    }
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    self.tabBarController.tabBar.hidden = NO;
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

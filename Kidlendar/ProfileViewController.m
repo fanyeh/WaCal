@@ -31,15 +31,23 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
     // Put that image onto the screen in our image view
     UIImage *image = [[ProfileImageStore sharedStore]imageForKey:_profile.imageKey];
-    
     [_profileImage setContentMode:UIViewContentModeScaleAspectFit];
     _profileImage.image = image;
     _nameTextField.text = _profile.name;
     NSDate *birthDate = [NSDate dateWithTimeIntervalSince1970:_profile.birthDate];
     _birthDayTextField.text = [NSString stringWithFormat:@"%@",birthDate];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    self.tabBarController.tabBar.hidden = YES;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    self.tabBarController.tabBar.hidden = NO;
 }
 
 - (void)didReceiveMemoryWarning

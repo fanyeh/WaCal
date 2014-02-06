@@ -140,7 +140,6 @@
     } else {
         order = [[allItems lastObject] orderingValue] + 1.0;
     }
-
     ProfileData *p = [NSEntityDescription insertNewObjectForEntityForName:@"ProfileData"
                                                 inManagedObjectContext:context];
     [p setOrderingValue:order];

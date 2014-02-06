@@ -17,12 +17,12 @@
     EKEvent *event;
     NSDateFormatter *dateFormatter;
     NSDateFormatter *timeFormatter;
-    EventTitleAndTimeView *titleAndTimeView;
     NSDate *minimumDate;
     UIImage *blurBackgroundImage;
-    GPUImageiOSBlurFilter *blurFilter;
     UIImageView *backgroundImageView;
     UIImage *backgroundImage;
+    EventTitleAndTimeView *titleAndTimeView;
+    GPUImageiOSBlurFilter *blurFilter;
 }
 @end
 
@@ -95,7 +95,6 @@
     event.calendar = [[CalendarStore sharedStore]calendar];
     event.startDate = _selectedDate;
     event.endDate = [NSDate dateWithTimeInterval:300 sinceDate:_selectedDate];
-    NSLog(@"e %@",[[CalendarStore sharedStore]calendar]);
 }
 
 - (void)didReceiveMemoryWarning
@@ -164,6 +163,5 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"eventChange" object:nil userInfo:startDate];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
-
 
 @end

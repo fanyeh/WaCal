@@ -12,5 +12,4 @@
 @interface EventCreateViewController : UIViewController <UITextFieldDelegate>
 @property UIDatePicker *datePicker;
 @property NSDate *selectedDate;
-
 @end
