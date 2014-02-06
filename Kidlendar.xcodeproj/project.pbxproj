@@ -58,6 +58,8 @@
 		4CA888331896478C00FAA799 /* DiaryVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA888311896478C00FAA799 /* DiaryVideoViewController.m */; };
 		4CA888341896478C00FAA799 /* DiaryVideoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CA888321896478C00FAA799 /* DiaryVideoViewController.xib */; };
 		4CB27D57188ED88800F34E7A /* IMG_1725.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4CB27D56188ED88800F34E7A /* IMG_1725.jpg */; };
+		4CB3BD2C18A330D80006AFD4 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB3BD2A18A330D80006AFD4 /* SettingViewController.m */; };
+		4CB3BD2D18A330D80006AFD4 /* SettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CB3BD2B18A330D80006AFD4 /* SettingViewController.xib */; };
 		4CB3DD7C18521DC400673478 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB3DD7B18521DC400673478 /* Foundation.framework */; };
 		4CB3DD7E18521DC400673478 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB3DD7D18521DC400673478 /* CoreGraphics.framework */; };
 		4CB3DD8018521DC400673478 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB3DD7F18521DC400673478 /* UIKit.framework */; };
@@ -191,6 +193,9 @@
 		4CA888311896478C00FAA799 /* DiaryVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiaryVideoViewController.m; path = ../DiaryVideoViewController.m; sourceTree = "<group>"; };
 		4CA888321896478C00FAA799 /* DiaryVideoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DiaryVideoViewController.xib; path = ../DiaryVideoViewController.xib; sourceTree = "<group>"; };
 		4CB27D56188ED88800F34E7A /* IMG_1725.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = IMG_1725.jpg; path = ../../IMG_1725.jpg; sourceTree = "<group>"; };
+		4CB3BD2918A330D80006AFD4 /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingViewController.h; path = ../SettingViewController.h; sourceTree = "<group>"; };
+		4CB3BD2A18A330D80006AFD4 /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingViewController.m; path = ../SettingViewController.m; sourceTree = "<group>"; };
+		4CB3BD2B18A330D80006AFD4 /* SettingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SettingViewController.xib; path = ../SettingViewController.xib; sourceTree = "<group>"; };
 		4CB3DD7818521DC400673478 /* Kidlendar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kidlendar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CB3DD7B18521DC400673478 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4CB3DD7D18521DC400673478 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -385,6 +390,16 @@
 			name = Calendar;
 			sourceTree = "<group>";
 		};
+		4CB3BD2E18A331BD0006AFD4 /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				4CB3BD2918A330D80006AFD4 /* SettingViewController.h */,
+				4CB3BD2A18A330D80006AFD4 /* SettingViewController.m */,
+				4CB3BD2B18A330D80006AFD4 /* SettingViewController.xib */,
+			);
+			name = Setting;
+			sourceTree = "<group>";
+		};
 		4CB3DD6F18521DC400673478 = {
 			isa = PBXGroup;
 			children = (
@@ -446,6 +461,7 @@
 				4C515D2618973C27002E8DEE /* ShareViewController.xib */,
 				4C12B2E718A1E4570046C5EC /* FileManager.h */,
 				4C12B2E818A1E4570046C5EC /* FileManager.m */,
+				4CB3BD2E18A331BD0006AFD4 /* Setting */,
 				4C3E3EA818865AFE00D02397 /* Event */,
 				4C92155E185AD445009A3090 /* Calendar */,
 				4C0C38C518673A240001CC08 /* Diary */,
@@ -624,6 +640,7 @@
 				4CB27D57188ED88800F34E7A /* IMG_1725.jpg in Resources */,
 				4C515D2818973C27002E8DEE /* ShareViewController.xib in Resources */,
 				4CB3DD8618521DC400673478 /* InfoPlist.strings in Resources */,
+				4CB3BD2D18A330D80006AFD4 /* SettingViewController.xib in Resources */,
 				4CA888251895F26000FAA799 /* MediaTableViewController.xib in Resources */,
 				4CB3DD8E18521DC400673478 /* Images.xcassets in Resources */,
 				4CF592E1186D5BE500F1BEEB /* MonthViewController.xib in Resources */,
@@ -665,6 +682,7 @@
 				4C6C49C0186DDB680042EB61 /* DiaryTableViewController.m in Sources */,
 				4C515D2718973C27002E8DEE /* ShareViewController.m in Sources */,
 				4CF592E0186D5BE500F1BEEB /* MonthViewController.m in Sources */,
+				4CB3BD2C18A330D80006AFD4 /* SettingViewController.m in Sources */,
 				4C86E938188F977F00137B6A /* RecurrenceViewController.m in Sources */,
 				4C3E3EAB18865B6D00D02397 /* EventTitleAndTimeView.m in Sources */,
 				4CA888241895F26000FAA799 /* MediaTableViewController.m in Sources */,

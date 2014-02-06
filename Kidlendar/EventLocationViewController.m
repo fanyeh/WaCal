@@ -11,7 +11,7 @@
 #import "CalendarStore.h"
 #import <GoogleMaps/GoogleMaps.h>
 
-#define kGOOGLE_API_KEY @"AIzaSyC3mzoJiHuSh6p6K0UaekKtMXNYZ60hdGE"
+#define kGOOGLE_API_KEY @"AIzaSyAD9e182Fr19_2DcJFZYUHf6wEeXjxs_kQ"
 #define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
 
 @interface EventLocationViewController ()
@@ -22,6 +22,7 @@
     GMSMapView *mapView_;
     CLGeocoder *geocoder;
     NSArray* places;
+    UIActivityIndicatorView *activityIndicator;
 }
 @end
 
@@ -56,7 +57,18 @@
     
     locationView.searchedLocation.dataSource = self;
     locationView.searchedLocation.delegate = self;
-    [locationView.searchedLocation registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
+    //[locationView.searchedLocation registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
+    
+    activityIndicator = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(0, 0, 100, 100)];
+    [activityIndicator setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhite];
+    activityIndicator.center = CGPointMake(self.view.center.x, self.view.center.y - 30);
+    [self.view addSubview:activityIndicator];
+    [activityIndicator stopAnimating];
+    
+    mapView_ = [GMSMapView mapWithFrame:CGRectMake(10, 128, 300, 210) camera:nil];
+    mapView_.myLocationEnabled = YES;
+    mapView_.hidden = YES;
+    [self.view addSubview:mapView_];
     
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showMap)];
     [locationView.locationField.rightView addGestureRecognizer:tapGesture];
@@ -66,37 +78,43 @@
                                                                                  target:self
                                                                                  action:@selector(saveLocation)];
     self.navigationItem.rightBarButtonItem = saveButton;
-
 }
 
--(void) queryGooglePlaces: (NSString *) name {
-    // Build the url string to send to Google. NOTE: The kGOOGLE_API_KEY is a constant that should contain your own API key that you obtain from Google. See this link for more info:
-    // https://developers.google.com/maps/documentation/places/#Authentication
-
+-(void) queryGooglePlaces: (NSString *) name
+{
+    [locationView.searchedLocation setHidden:YES];
+    [activityIndicator startAnimating];
     NSString *url = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/textsearch/json?query=%@&sensor=true&language=zh-TW&key=%@",name,kGOOGLE_API_KEY];
     NSLog(@"URL %@",url);
     //Formulate the string as a URL object.
     NSURL *googleRequestURL=[NSURL URLWithString:[url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     // Retrieve the results of the URL.
-    dispatch_async(kBgQueue, ^{
-        NSData* data = [NSData dataWithContentsOfURL: googleRequestURL];
-        [self performSelectorOnMainThread:@selector(fetchedData:) withObject:data waitUntilDone:YES];
-    });
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:googleRequestURL];
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:queue
+                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+                               if ([data length]>0 && connectionError==nil) {
+                                   //收到正確的資料，連線沒有錯
+                                   NSDictionary* json = [NSJSONSerialization JSONObjectWithData:data
+                                                                                        options:NSJSONReadingAllowFragments
+                                                                                          error:&connectionError];
+                                   //The results from Google will be an array obtained from the NSDictionary object with the key "results".
+                                   places = [json objectForKey:@"results"];
+                                   NSLog(@"places %@",places);
+                                   [activityIndicator stopAnimating];
+                                   [locationView.searchedLocation setHidden:NO];
+                                   [locationView.searchedLocation reloadData];
+                                   
+                               } else if ([data length]==0 && connectionError==nil) {
+                                   //沒有資料，連線沒有錯誤
+                               } else if (connectionError != nil) {
+                                   //連線有錯誤
+                                   NSLog(@"error %@",connectionError);
+                               }
+                           }];
 }
-
--(void)fetchedData:(NSData *)responseData {
-    //parse out the json data
-    NSError* error;
-    NSDictionary* json = [NSJSONSerialization JSONObjectWithData:responseData
-                                                         options:NSJSONReadingAllowFragments
-                                                           error:&error];
-    NSLog(@"error %@",error);
-    //The results from Google will be an array obtained from the NSDictionary object with the key "results".
-    places = [json objectForKey:@"results"];
-    NSLog(@"places %@",places);
-    [locationView.searchedLocation reloadData];
-}
-
 
 - (void)saveLocation
 {
@@ -132,8 +150,6 @@
     NSString *address = [places[indexPath.row] objectForKey:@"formatted_address"];
     cell.textLabel.text = locName;
     cell.detailTextLabel.text = address;
-    NSLog(@"address %@",address);
-    NSLog(@"cell %@",cell.detailTextLabel.text);
     return cell;
 }
 
@@ -146,16 +162,15 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     locationView.searchedLocation.hidden = YES;
+    mapView_.hidden = NO;
     NSDictionary *location = [[places[indexPath.row] objectForKey:@"geometry"] objectForKey:@"location"];
     NSString *lat = [location objectForKey:@"lat"];
     NSString *lng = [location objectForKey:@"lng"];
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:[lat doubleValue]
                                                             longitude:[lng doubleValue]
-                                                                 zoom:6];
-    mapView_ = [GMSMapView mapWithFrame:CGRectMake(10, 128, 300, 210) camera:camera];
-    mapView_.myLocationEnabled = YES;
-    self.view = mapView_;
-    
+                                                                 zoom:15];
+
+    [mapView_ setCamera:camera];
     // Creates a marker in the center of the map.
     GMSMarker *marker = [[GMSMarker alloc] init];
     marker.position = CLLocationCoordinate2DMake([lat doubleValue], [lng doubleValue]);
@@ -175,5 +190,6 @@
     [self queryGooglePlaces:locationView.locationField.text];
     return YES;
 }
+
 
 @end

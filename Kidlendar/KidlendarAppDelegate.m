@@ -14,6 +14,7 @@
 #import <FacebookSDK/FacebookSDK.h>
 #import "ShareViewController.h"
 #import <GoogleMaps/GoogleMaps.h>
+#import "SettingViewController.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 
@@ -25,6 +26,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    [GMSServices provideAPIKey:@"AIzaSyBm7gHFT7u0OC0pny4uR32lz0_hOR8RQko"];
     // Override point for customization after application launch.
     /*
     [FBProfilePictureView class];
@@ -83,9 +85,15 @@
     UINavigationController *diaryNavigationController = [[UINavigationController alloc]initWithRootViewController:diaryController];
     [diaryNavigationController.tabBarItem setTitle:@"Diary"];
     
+    // Set up setting controller
+    SettingViewController *settingController = [[SettingViewController alloc]init];
+    UINavigationController *settingNavigationController = [[UINavigationController alloc]initWithRootViewController:settingController];
+    [settingNavigationController.navigationBar.topItem setTitle:@"Setting"];
+    [settingNavigationController.tabBarItem setTitle:@"Setting"];
+    
     // Set up tab bar contoller for entire app
     UITabBarController *tbc = [[UITabBarController alloc]init];
-    NSArray *viewControllers = [NSArray arrayWithObjects:calendarNavigationController,diaryNavigationController, nil];
+    NSArray *viewControllers = [NSArray arrayWithObjects:calendarNavigationController,diaryNavigationController,settingNavigationController, nil];
     [tbc setViewControllers:viewControllers];
     
     // Add Tab bar controller to window

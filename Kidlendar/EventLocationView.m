@@ -27,6 +27,7 @@
         [self addSubview:_locationField];
         
         _searchedLocation = [[UITableView alloc]initWithFrame:CGRectMake(10, 128, 300, 210)];
+        _searchedLocation.hidden = YES;
         [self addSubview:_searchedLocation];
     }
     return self;
