@@ -15,6 +15,7 @@
 #import "ShareViewController.h"
 #import <GoogleMaps/GoogleMaps.h>
 #import "SettingViewController.h"
+#import "ProfileTableViewController.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 
@@ -91,9 +92,15 @@
     [settingNavigationController.navigationBar.topItem setTitle:@"Setting"];
     [settingNavigationController.tabBarItem setTitle:@"Setting"];
     
+    // Set up profile controller
+    ProfileTableViewController *profileController = [[ProfileTableViewController alloc]initWithStyle:UITableViewStyleGrouped];
+    UINavigationController *profileNavigationController = [[UINavigationController alloc]initWithRootViewController:profileController];
+    [profileNavigationController.navigationBar.topItem setTitle:@"Profile"];
+    [profileNavigationController.tabBarItem setTitle:@"Profile"];
+    
     // Set up tab bar contoller for entire app
     UITabBarController *tbc = [[UITabBarController alloc]init];
-    NSArray *viewControllers = [NSArray arrayWithObjects:calendarNavigationController,diaryNavigationController,settingNavigationController, nil];
+    NSArray *viewControllers = [NSArray arrayWithObjects:calendarNavigationController,diaryNavigationController,settingNavigationController,profileNavigationController, nil];
     [tbc setViewControllers:viewControllers];
     
     // Add Tab bar controller to window
