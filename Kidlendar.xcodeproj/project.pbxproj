@@ -1,0 +1,935 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4C0C38CA18673AD60001CC08 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C0C38C918673AD60001CC08 /* AssetsLibrary.framework */; };
+		4C12B2E918A1E4570046C5EC /* FileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C12B2E818A1E4570046C5EC /* FileManager.m */; };
+		4C12B2ED18A1FC280046C5EC /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2EC18A1FC280046C5EC /* GoogleMaps.framework */; };
+		4C12B2EF18A1FD960046C5EC /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2EE18A1FD960046C5EC /* CoreText.framework */; };
+		4C12B2F118A1FDA20046C5EC /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2F018A1FDA20046C5EC /* GLKit.framework */; };
+		4C12B2F318A1FDAA0046C5EC /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2F218A1FDAA0046C5EC /* ImageIO.framework */; };
+		4C12B2F518A1FDBA0046C5EC /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2F418A1FDBA0046C5EC /* libicucore.dylib */; };
+		4C12B2F718A1FDC40046C5EC /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2F618A1FDC40046C5EC /* libz.dylib */; };
+		4C12B2F918A1FDE60046C5EC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2F818A1FDE60046C5EC /* SystemConfiguration.framework */; };
+		4C12B2FE18A200790046C5EC /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2FD18A200790046C5EC /* libc++.dylib */; };
+		4C12B30018A201450046C5EC /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4C12B2FF18A201450046C5EC /* GoogleMaps.bundle */; };
+		4C2E83BD1890BB450051215F /* CalendarStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2E83BC1890BB450051215F /* CalendarStore.m */; };
+		4C2FEC101889697600D37F18 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2FEC0E1889697600D37F18 /* EventViewController.m */; };
+		4C2FEC111889697600D37F18 /* EventViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C2FEC0F1889697600D37F18 /* EventViewController.xib */; };
+		4C3E3EAB18865B6D00D02397 /* EventTitleAndTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3E3EAA18865B6D00D02397 /* EventTitleAndTimeView.m */; };
+		4C3E3EB118865C0C00D02397 /* EventLocationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3E3EB018865C0C00D02397 /* EventLocationView.m */; };
+		4C3F26241896AF97000E05F9 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3F26231896AF97000E05F9 /* FacebookSDK.framework */; };
+		4C417E7618714A4C000878FC /* DiaryDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C417E7518714A4C000878FC /* DiaryDataStore.m */; };
+		4C48FFAA188D65580038AE6F /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFA9188D65580038AE6F /* CoreMedia.framework */; };
+		4C48FFAC188D65620038AE6F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFAB188D65620038AE6F /* CoreVideo.framework */; };
+		4C48FFAD188D656F0038AE6F /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFA7188D61C40038AE6F /* OpenGLES.framework */; };
+		4C48FFAF188D65820038AE6F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFAE188D65820038AE6F /* AVFoundation.framework */; };
+		4C515D2718973C27002E8DEE /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C515D2518973C27002E8DEE /* ShareViewController.m */; };
+		4C515D2818973C27002E8DEE /* ShareViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C515D2618973C27002E8DEE /* ShareViewController.xib */; };
+		4C51761D186FF309002F6F6D /* KidlendarModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C51761B186FF309002F6F6D /* KidlendarModel.xcdatamodeld */; };
+		4C51761F186FF707002F6F6D /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C51761E186FF707002F6F6D /* CoreData.framework */; };
+		4C52952F188D002300471B43 /* EventCreateViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C52952E188D002300471B43 /* EventCreateViewController.xib */; };
+		4C5420F01857FC9D006D2DE4 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5420EF1857FC9D006D2DE4 /* QuartzCore.framework */; };
+		4C5BA25B1861731A00528843 /* 929-film-1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BA25A1861731A00528843 /* 929-film-1@2x.png */; };
+		4C5BA25D1861745D00528843 /* 929-film-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BA25C1861745D00528843 /* 929-film-1.png */; };
+		4C6AC2DC187161CC004FA1E4 /* DiaryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6AC2DB187161CC004FA1E4 /* DiaryData.m */; };
+		4C6C49C0186DDB680042EB61 /* DiaryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C49BF186DDB680042EB61 /* DiaryTableViewController.m */; };
+		4C6C49C4186DDDDF0042EB61 /* DiaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C49C2186DDDDF0042EB61 /* DiaryViewController.m */; };
+		4C6C49C5186DDDDF0042EB61 /* DiaryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C6C49C3186DDDDF0042EB61 /* DiaryViewController.xib */; };
+		4C6F40B71867EB6200B44443 /* DiaryPhotoCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6F40B61867EB6200B44443 /* DiaryPhotoCollectionViewController.m */; };
+		4C86E927188F8ADE00137B6A /* EventTitleAndTimeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86E926188F8ADE00137B6A /* EventTitleAndTimeViewController.m */; };
+		4C86E92A188F91D700137B6A /* EventLocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86E929188F91D700137B6A /* EventLocationViewController.m */; };
+		4C86E933188F973800137B6A /* AlarmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86E931188F973800137B6A /* AlarmViewController.m */; };
+		4C86E934188F973800137B6A /* AlarmViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C86E932188F973800137B6A /* AlarmViewController.xib */; };
+		4C86E938188F977F00137B6A /* RecurrenceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86E936188F977F00137B6A /* RecurrenceViewController.m */; };
+		4C86E939188F977F00137B6A /* RecurrenceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C86E937188F977F00137B6A /* RecurrenceViewController.xib */; };
+		4C88B387188E56E100F4F47E /* DiaryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88B386188E56E100F4F47E /* DiaryCell.m */; };
+		4C9214CB185AAA29009A3090 /* DateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9214CA185AAA29009A3090 /* DateView.m */; };
+		4C92155A185AD39E009A3090 /* MonthCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C921559185AD39E009A3090 /* MonthCalendarView.m */; };
+		4CA2506C1869377000AEA94E /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA2506B1869377000AEA94E /* UIImage+Resize.m */; };
+		4CA2506F1869517400AEA94E /* DiaryPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA2506E1869517400AEA94E /* DiaryPhotoCell.m */; };
+		4CA888241895F26000FAA799 /* MediaTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA888221895F26000FAA799 /* MediaTableViewController.m */; };
+		4CA888251895F26000FAA799 /* MediaTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CA888231895F26000FAA799 /* MediaTableViewController.xib */; };
+		4CA888331896478C00FAA799 /* DiaryVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA888311896478C00FAA799 /* DiaryVideoViewController.m */; };
+		4CA888341896478C00FAA799 /* DiaryVideoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CA888321896478C00FAA799 /* DiaryVideoViewController.xib */; };
+		4CB27D57188ED88800F34E7A /* IMG_1725.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4CB27D56188ED88800F34E7A /* IMG_1725.jpg */; };
+		4CB3DD7C18521DC400673478 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB3DD7B18521DC400673478 /* Foundation.framework */; };
+		4CB3DD7E18521DC400673478 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB3DD7D18521DC400673478 /* CoreGraphics.framework */; };
+		4CB3DD8018521DC400673478 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB3DD7F18521DC400673478 /* UIKit.framework */; };
+		4CB3DD8618521DC400673478 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CB3DD8418521DC400673478 /* InfoPlist.strings */; };
+		4CB3DD8818521DC400673478 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB3DD8718521DC400673478 /* main.m */; };
+		4CB3DD8C18521DC400673478 /* KidlendarAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB3DD8B18521DC400673478 /* KidlendarAppDelegate.m */; };
+		4CB3DD8E18521DC400673478 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CB3DD8D18521DC400673478 /* Images.xcassets */; };
+		4CB3DD9518521DC500673478 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB3DD9418521DC500673478 /* XCTest.framework */; };
+		4CB3DD9618521DC500673478 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB3DD7B18521DC400673478 /* Foundation.framework */; };
+		4CB3DD9718521DC500673478 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB3DD7F18521DC400673478 /* UIKit.framework */; };
+		4CB3DD9F18521DC500673478 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CB3DD9D18521DC500673478 /* InfoPlist.strings */; };
+		4CB3DDA118521DC500673478 /* KidlendarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB3DDA018521DC500673478 /* KidlendarTests.m */; };
+		4CC3A7E4188D6ECF000BAE1A /* libGPUImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC3A7DF188D6EAF000BAE1A /* libGPUImage.a */; };
+		4CF46E4D18878E3800B22888 /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46E4C18878E3800B22888 /* CustomTextField.m */; };
+		4CF592C9186D3B4700F1BEEB /* EventCreateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF592C7186D3B4700F1BEEB /* EventCreateViewController.m */; };
+		4CF592D6186D498E00F1BEEB /* DiaryCreateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF592D4186D498E00F1BEEB /* DiaryCreateViewController.m */; };
+		4CF592D7186D498E00F1BEEB /* DiaryCreateViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CF592D5186D498E00F1BEEB /* DiaryCreateViewController.xib */; };
+		4CF592E0186D5BE500F1BEEB /* MonthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF592DE186D5BE500F1BEEB /* MonthViewController.m */; };
+		4CF592E1186D5BE500F1BEEB /* MonthViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CF592DF186D5BE500F1BEEB /* MonthViewController.xib */; };
+		4CFB086C187E696A00456D5D /* DateModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFB086B187E696A00456D5D /* DateModel.m */; };
+		4CFB086F187E6BFB00456D5D /* MonthModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFB086E187E6BFB00456D5D /* MonthModel.m */; };
+		4CFB6DC8186A6BAC001C8F05 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CFB6DC7186A6BAC001C8F05 /* CoreLocation.framework */; };
+		4CFFD584189775270070C33C /* DiaryPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFFD582189775270070C33C /* DiaryPhotoViewController.m */; };
+		4CFFD585189775270070C33C /* DiaryPhotoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CFFD583189775270070C33C /* DiaryPhotoViewController.xib */; };
+		4CFFD58A1897800A0070C33C /* lookup_amatorka.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CFFD5891897800A0070C33C /* lookup_amatorka.png */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4CB3DD9818521DC500673478 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4CB3DD7018521DC400673478 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4CB3DD7718521DC400673478;
+			remoteInfo = Kidlendar;
+		};
+		4CC3A7DE188D6EAF000BAE1A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4CC3A7D8188D6EAF000BAE1A /* GPUImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BCF1A33414DDB1EC00852800;
+			remoteInfo = GPUImage;
+		};
+		4CC3A7E0188D6EAF000BAE1A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4CC3A7D8188D6EAF000BAE1A /* GPUImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BCF1A34414DDB1EC00852800;
+			remoteInfo = GPUImageTests;
+		};
+		4CC3A7E2188D6EC4000BAE1A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4CC3A7D8188D6EAF000BAE1A /* GPUImage.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BCF1A33314DDB1EC00852800;
+			remoteInfo = GPUImage;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4C0C38C918673AD60001CC08 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		4C0F42731897890500B8C4FA /* PassFilteredImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PassFilteredImage.h; sourceTree = "<group>"; };
+		4C12B2E718A1E4570046C5EC /* FileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileManager.h; sourceTree = "<group>"; };
+		4C12B2E818A1E4570046C5EC /* FileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileManager.m; sourceTree = "<group>"; };
+		4C12B2EC18A1FC280046C5EC /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMaps.framework; sourceTree = "<group>"; };
+		4C12B2EE18A1FD960046C5EC /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		4C12B2F018A1FDA20046C5EC /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		4C12B2F218A1FDAA0046C5EC /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		4C12B2F418A1FDBA0046C5EC /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		4C12B2F618A1FDC40046C5EC /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		4C12B2F818A1FDE60046C5EC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		4C12B2FD18A200790046C5EC /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
+		4C12B2FF18A201450046C5EC /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle; sourceTree = "<group>"; };
+		4C2E83BB1890BB450051215F /* CalendarStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarStore.h; sourceTree = "<group>"; };
+		4C2E83BC1890BB450051215F /* CalendarStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarStore.m; sourceTree = "<group>"; };
+		4C2FEC0D1889697600D37F18 /* EventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventViewController.h; sourceTree = "<group>"; };
+		4C2FEC0E1889697600D37F18 /* EventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventViewController.m; sourceTree = "<group>"; };
+		4C2FEC0F1889697600D37F18 /* EventViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventViewController.xib; sourceTree = "<group>"; };
+		4C3E3EA918865B6D00D02397 /* EventTitleAndTimeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTitleAndTimeView.h; sourceTree = "<group>"; };
+		4C3E3EAA18865B6D00D02397 /* EventTitleAndTimeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTitleAndTimeView.m; sourceTree = "<group>"; };
+		4C3E3EAF18865C0C00D02397 /* EventLocationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventLocationView.h; sourceTree = "<group>"; };
+		4C3E3EB018865C0C00D02397 /* EventLocationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventLocationView.m; sourceTree = "<group>"; };
+		4C3F26231896AF97000E05F9 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		4C417E7418714A4C000878FC /* DiaryDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiaryDataStore.h; path = ../DiaryDataStore.h; sourceTree = "<group>"; };
+		4C417E7518714A4C000878FC /* DiaryDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiaryDataStore.m; path = ../DiaryDataStore.m; sourceTree = "<group>"; };
+		4C48FFA7188D61C40038AE6F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		4C48FFA9188D65580038AE6F /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		4C48FFAB188D65620038AE6F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		4C48FFAE188D65820038AE6F /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		4C515D2418973C27002E8DEE /* ShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShareViewController.h; sourceTree = "<group>"; };
+		4C515D2518973C27002E8DEE /* ShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShareViewController.m; sourceTree = "<group>"; };
+		4C515D2618973C27002E8DEE /* ShareViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ShareViewController.xib; sourceTree = "<group>"; };
+		4C51761C186FF309002F6F6D /* KidlendarModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = KidlendarModel.xcdatamodel; sourceTree = "<group>"; };
+		4C51761E186FF707002F6F6D /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		4C52952E188D002300471B43 /* EventCreateViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventCreateViewController.xib; sourceTree = "<group>"; };
+		4C5420EF1857FC9D006D2DE4 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		4C5BA25A1861731A00528843 /* 929-film-1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "929-film-1@2x.png"; sourceTree = "<group>"; };
+		4C5BA25C1861745D00528843 /* 929-film-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "929-film-1.png"; sourceTree = "<group>"; };
+		4C6AC2DA187161CC004FA1E4 /* DiaryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiaryData.h; path = ../DiaryData.h; sourceTree = "<group>"; };
+		4C6AC2DB187161CC004FA1E4 /* DiaryData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiaryData.m; path = ../DiaryData.m; sourceTree = "<group>"; };
+		4C6C49BE186DDB680042EB61 /* DiaryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryTableViewController.h; sourceTree = "<group>"; };
+		4C6C49BF186DDB680042EB61 /* DiaryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryTableViewController.m; sourceTree = "<group>"; };
+		4C6C49C1186DDDDF0042EB61 /* DiaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryViewController.h; sourceTree = "<group>"; };
+		4C6C49C2186DDDDF0042EB61 /* DiaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryViewController.m; sourceTree = "<group>"; };
+		4C6C49C3186DDDDF0042EB61 /* DiaryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiaryViewController.xib; sourceTree = "<group>"; };
+		4C6F40B51867EB6200B44443 /* DiaryPhotoCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryPhotoCollectionViewController.h; sourceTree = "<group>"; };
+		4C6F40B61867EB6200B44443 /* DiaryPhotoCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryPhotoCollectionViewController.m; sourceTree = "<group>"; };
+		4C86E925188F8ADE00137B6A /* EventTitleAndTimeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTitleAndTimeViewController.h; sourceTree = "<group>"; };
+		4C86E926188F8ADE00137B6A /* EventTitleAndTimeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTitleAndTimeViewController.m; sourceTree = "<group>"; };
+		4C86E928188F91D700137B6A /* EventLocationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventLocationViewController.h; sourceTree = "<group>"; };
+		4C86E929188F91D700137B6A /* EventLocationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventLocationViewController.m; sourceTree = "<group>"; };
+		4C86E930188F973800137B6A /* AlarmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlarmViewController.h; sourceTree = "<group>"; };
+		4C86E931188F973800137B6A /* AlarmViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlarmViewController.m; sourceTree = "<group>"; };
+		4C86E932188F973800137B6A /* AlarmViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlarmViewController.xib; sourceTree = "<group>"; };
+		4C86E935188F977F00137B6A /* RecurrenceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecurrenceViewController.h; sourceTree = "<group>"; };
+		4C86E936188F977F00137B6A /* RecurrenceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecurrenceViewController.m; sourceTree = "<group>"; };
+		4C86E937188F977F00137B6A /* RecurrenceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RecurrenceViewController.xib; sourceTree = "<group>"; };
+		4C88B385188E56E100F4F47E /* DiaryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryCell.h; sourceTree = "<group>"; };
+		4C88B386188E56E100F4F47E /* DiaryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryCell.m; sourceTree = "<group>"; };
+		4C9214C9185AAA29009A3090 /* DateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateView.h; sourceTree = "<group>"; };
+		4C9214CA185AAA29009A3090 /* DateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateView.m; sourceTree = "<group>"; };
+		4C921558185AD39E009A3090 /* MonthCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthCalendarView.h; sourceTree = "<group>"; };
+		4C921559185AD39E009A3090 /* MonthCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonthCalendarView.m; sourceTree = "<group>"; };
+		4CA2506A1869377000AEA94E /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
+		4CA2506B1869377000AEA94E /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resize.m"; sourceTree = "<group>"; };
+		4CA2506D1869517400AEA94E /* DiaryPhotoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryPhotoCell.h; sourceTree = "<group>"; };
+		4CA2506E1869517400AEA94E /* DiaryPhotoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryPhotoCell.m; sourceTree = "<group>"; };
+		4CA888211895F26000FAA799 /* MediaTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaTableViewController.h; sourceTree = "<group>"; };
+		4CA888221895F26000FAA799 /* MediaTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaTableViewController.m; sourceTree = "<group>"; };
+		4CA888231895F26000FAA799 /* MediaTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MediaTableViewController.xib; sourceTree = "<group>"; };
+		4CA888301896478C00FAA799 /* DiaryVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiaryVideoViewController.h; path = ../DiaryVideoViewController.h; sourceTree = "<group>"; };
+		4CA888311896478C00FAA799 /* DiaryVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiaryVideoViewController.m; path = ../DiaryVideoViewController.m; sourceTree = "<group>"; };
+		4CA888321896478C00FAA799 /* DiaryVideoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DiaryVideoViewController.xib; path = ../DiaryVideoViewController.xib; sourceTree = "<group>"; };
+		4CB27D56188ED88800F34E7A /* IMG_1725.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = IMG_1725.jpg; path = ../../IMG_1725.jpg; sourceTree = "<group>"; };
+		4CB3DD7818521DC400673478 /* Kidlendar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kidlendar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CB3DD7B18521DC400673478 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		4CB3DD7D18521DC400673478 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		4CB3DD7F18521DC400673478 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		4CB3DD8318521DC400673478 /* Kidlendar-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Kidlendar-Info.plist"; sourceTree = "<group>"; };
+		4CB3DD8518521DC400673478 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4CB3DD8718521DC400673478 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4CB3DD8918521DC400673478 /* Kidlendar-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Kidlendar-Prefix.pch"; sourceTree = "<group>"; };
+		4CB3DD8A18521DC400673478 /* KidlendarAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KidlendarAppDelegate.h; sourceTree = "<group>"; };
+		4CB3DD8B18521DC400673478 /* KidlendarAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KidlendarAppDelegate.m; sourceTree = "<group>"; };
+		4CB3DD8D18521DC400673478 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		4CB3DD9318521DC500673478 /* KidlendarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KidlendarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4CB3DD9418521DC500673478 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		4CB3DD9C18521DC500673478 /* KidlendarTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "KidlendarTests-Info.plist"; sourceTree = "<group>"; };
+		4CB3DD9E18521DC500673478 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4CB3DDA018521DC500673478 /* KidlendarTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KidlendarTests.m; sourceTree = "<group>"; };
+		4CC3A7D8188D6EAF000BAE1A /* GPUImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPUImage.xcodeproj; path = "../../Downloads/GPUImage-master/framework/GPUImage.xcodeproj"; sourceTree = "<group>"; };
+		4CF46E4B18878E3800B22888 /* CustomTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTextField.h; sourceTree = "<group>"; };
+		4CF46E4C18878E3800B22888 /* CustomTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTextField.m; sourceTree = "<group>"; };
+		4CF592C6186D3B4700F1BEEB /* EventCreateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventCreateViewController.h; sourceTree = "<group>"; };
+		4CF592C7186D3B4700F1BEEB /* EventCreateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventCreateViewController.m; sourceTree = "<group>"; };
+		4CF592D3186D498E00F1BEEB /* DiaryCreateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiaryCreateViewController.h; path = ../DiaryCreateViewController.h; sourceTree = "<group>"; };
+		4CF592D4186D498E00F1BEEB /* DiaryCreateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiaryCreateViewController.m; path = ../DiaryCreateViewController.m; sourceTree = "<group>"; };
+		4CF592D5186D498E00F1BEEB /* DiaryCreateViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DiaryCreateViewController.xib; path = ../DiaryCreateViewController.xib; sourceTree = "<group>"; };
+		4CF592DD186D5BE500F1BEEB /* MonthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthViewController.h; sourceTree = "<group>"; };
+		4CF592DE186D5BE500F1BEEB /* MonthViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonthViewController.m; sourceTree = "<group>"; };
+		4CF592DF186D5BE500F1BEEB /* MonthViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MonthViewController.xib; sourceTree = "<group>"; };
+		4CFB086A187E696A00456D5D /* DateModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateModel.h; sourceTree = "<group>"; };
+		4CFB086B187E696A00456D5D /* DateModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateModel.m; sourceTree = "<group>"; };
+		4CFB086D187E6BFB00456D5D /* MonthModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthModel.h; sourceTree = "<group>"; };
+		4CFB086E187E6BFB00456D5D /* MonthModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonthModel.m; sourceTree = "<group>"; };
+		4CFB6DC7186A6BAC001C8F05 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		4CFFD581189775270070C33C /* DiaryPhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryPhotoViewController.h; sourceTree = "<group>"; };
+		4CFFD582189775270070C33C /* DiaryPhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryPhotoViewController.m; sourceTree = "<group>"; };
+		4CFFD583189775270070C33C /* DiaryPhotoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiaryPhotoViewController.xib; sourceTree = "<group>"; };
+		4CFFD5891897800A0070C33C /* lookup_amatorka.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lookup_amatorka.png; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4CB3DD7518521DC400673478 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C12B2FE18A200790046C5EC /* libc++.dylib in Frameworks */,
+				4C12B2F918A1FDE60046C5EC /* SystemConfiguration.framework in Frameworks */,
+				4C48FFAD188D656F0038AE6F /* OpenGLES.framework in Frameworks */,
+				4C12B2F718A1FDC40046C5EC /* libz.dylib in Frameworks */,
+				4C12B2F518A1FDBA0046C5EC /* libicucore.dylib in Frameworks */,
+				4C12B2F318A1FDAA0046C5EC /* ImageIO.framework in Frameworks */,
+				4C12B2F118A1FDA20046C5EC /* GLKit.framework in Frameworks */,
+				4C12B2EF18A1FD960046C5EC /* CoreText.framework in Frameworks */,
+				4CC3A7E4188D6ECF000BAE1A /* libGPUImage.a in Frameworks */,
+				4C48FFAF188D65820038AE6F /* AVFoundation.framework in Frameworks */,
+				4C48FFAC188D65620038AE6F /* CoreVideo.framework in Frameworks */,
+				4C48FFAA188D65580038AE6F /* CoreMedia.framework in Frameworks */,
+				4C51761F186FF707002F6F6D /* CoreData.framework in Frameworks */,
+				4CFB6DC8186A6BAC001C8F05 /* CoreLocation.framework in Frameworks */,
+				4C0C38CA18673AD60001CC08 /* AssetsLibrary.framework in Frameworks */,
+				4C12B2ED18A1FC280046C5EC /* GoogleMaps.framework in Frameworks */,
+				4C3F26241896AF97000E05F9 /* FacebookSDK.framework in Frameworks */,
+				4C5420F01857FC9D006D2DE4 /* QuartzCore.framework in Frameworks */,
+				4CB3DD7E18521DC400673478 /* CoreGraphics.framework in Frameworks */,
+				4CB3DD8018521DC400673478 /* UIKit.framework in Frameworks */,
+				4CB3DD7C18521DC400673478 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CB3DD9018521DC500673478 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CB3DD9518521DC500673478 /* XCTest.framework in Frameworks */,
+				4CB3DD9718521DC500673478 /* UIKit.framework in Frameworks */,
+				4CB3DD9618521DC500673478 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4C0C38C518673A240001CC08 /* Diary */ = {
+			isa = PBXGroup;
+			children = (
+				4C417E7C18714ACA000878FC /* View */,
+				4C417E7A18714A69000878FC /* Model */,
+			);
+			name = Diary;
+			sourceTree = "<group>";
+		};
+		4C3E3EA818865AFE00D02397 /* Event */ = {
+			isa = PBXGroup;
+			children = (
+				4C86E92E188F96E600137B6A /* Controller */,
+				4C86E92F188F96EF00137B6A /* View */,
+				4CB27D56188ED88800F34E7A /* IMG_1725.jpg */,
+			);
+			name = Event;
+			sourceTree = "<group>";
+		};
+		4C417E7A18714A69000878FC /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				4C6AC2DA187161CC004FA1E4 /* DiaryData.h */,
+				4C6AC2DB187161CC004FA1E4 /* DiaryData.m */,
+				4C417E7418714A4C000878FC /* DiaryDataStore.h */,
+				4C417E7518714A4C000878FC /* DiaryDataStore.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		4C417E7C18714ACA000878FC /* View */ = {
+			isa = PBXGroup;
+			children = (
+				4CA888301896478C00FAA799 /* DiaryVideoViewController.h */,
+				4CA888311896478C00FAA799 /* DiaryVideoViewController.m */,
+				4CA888321896478C00FAA799 /* DiaryVideoViewController.xib */,
+				4C6F40B51867EB6200B44443 /* DiaryPhotoCollectionViewController.h */,
+				4C6F40B61867EB6200B44443 /* DiaryPhotoCollectionViewController.m */,
+				4CA888211895F26000FAA799 /* MediaTableViewController.h */,
+				4CA888221895F26000FAA799 /* MediaTableViewController.m */,
+				4CA888231895F26000FAA799 /* MediaTableViewController.xib */,
+				4C6C49BE186DDB680042EB61 /* DiaryTableViewController.h */,
+				4C6C49BF186DDB680042EB61 /* DiaryTableViewController.m */,
+				4CF592D3186D498E00F1BEEB /* DiaryCreateViewController.h */,
+				4CF592D4186D498E00F1BEEB /* DiaryCreateViewController.m */,
+				4CF592D5186D498E00F1BEEB /* DiaryCreateViewController.xib */,
+				4CFFD581189775270070C33C /* DiaryPhotoViewController.h */,
+				4CFFD582189775270070C33C /* DiaryPhotoViewController.m */,
+				4C0F42731897890500B8C4FA /* PassFilteredImage.h */,
+				4CFFD583189775270070C33C /* DiaryPhotoViewController.xib */,
+				4C6C49C1186DDDDF0042EB61 /* DiaryViewController.h */,
+				4C6C49C2186DDDDF0042EB61 /* DiaryViewController.m */,
+				4C6C49C3186DDDDF0042EB61 /* DiaryViewController.xib */,
+				4CA2506D1869517400AEA94E /* DiaryPhotoCell.h */,
+				4CA2506E1869517400AEA94E /* DiaryPhotoCell.m */,
+				4CA2506A1869377000AEA94E /* UIImage+Resize.h */,
+				4CA2506B1869377000AEA94E /* UIImage+Resize.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		4C86E92E188F96E600137B6A /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				4C2FEC0D1889697600D37F18 /* EventViewController.h */,
+				4C2FEC0E1889697600D37F18 /* EventViewController.m */,
+				4C2FEC0F1889697600D37F18 /* EventViewController.xib */,
+				4CF592C6186D3B4700F1BEEB /* EventCreateViewController.h */,
+				4CF592C7186D3B4700F1BEEB /* EventCreateViewController.m */,
+				4C52952E188D002300471B43 /* EventCreateViewController.xib */,
+				4C86E925188F8ADE00137B6A /* EventTitleAndTimeViewController.h */,
+				4C86E926188F8ADE00137B6A /* EventTitleAndTimeViewController.m */,
+				4C86E928188F91D700137B6A /* EventLocationViewController.h */,
+				4C86E929188F91D700137B6A /* EventLocationViewController.m */,
+				4C86E930188F973800137B6A /* AlarmViewController.h */,
+				4C86E931188F973800137B6A /* AlarmViewController.m */,
+				4C86E932188F973800137B6A /* AlarmViewController.xib */,
+				4C86E935188F977F00137B6A /* RecurrenceViewController.h */,
+				4C86E936188F977F00137B6A /* RecurrenceViewController.m */,
+				4C86E937188F977F00137B6A /* RecurrenceViewController.xib */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		4C86E92F188F96EF00137B6A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				4C3E3EA918865B6D00D02397 /* EventTitleAndTimeView.h */,
+				4C3E3EAA18865B6D00D02397 /* EventTitleAndTimeView.m */,
+				4C3E3EAF18865C0C00D02397 /* EventLocationView.h */,
+				4C3E3EB018865C0C00D02397 /* EventLocationView.m */,
+				4CF46E4B18878E3800B22888 /* CustomTextField.h */,
+				4CF46E4C18878E3800B22888 /* CustomTextField.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		4C92155E185AD445009A3090 /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				4CF592DD186D5BE500F1BEEB /* MonthViewController.h */,
+				4CF592DE186D5BE500F1BEEB /* MonthViewController.m */,
+				4CF592DF186D5BE500F1BEEB /* MonthViewController.xib */,
+				4C88B385188E56E100F4F47E /* DiaryCell.h */,
+				4C88B386188E56E100F4F47E /* DiaryCell.m */,
+				4C921558185AD39E009A3090 /* MonthCalendarView.h */,
+				4C921559185AD39E009A3090 /* MonthCalendarView.m */,
+				4C9214C9185AAA29009A3090 /* DateView.h */,
+				4C9214CA185AAA29009A3090 /* DateView.m */,
+				4CFB0869187E68D600456D5D /* Model */,
+			);
+			name = Calendar;
+			sourceTree = "<group>";
+		};
+		4CB3DD6F18521DC400673478 = {
+			isa = PBXGroup;
+			children = (
+				4CFFD5891897800A0070C33C /* lookup_amatorka.png */,
+				4CC3A7D8188D6EAF000BAE1A /* GPUImage.xcodeproj */,
+				4CB3DD8118521DC400673478 /* Kidlendar */,
+				4C51761B186FF309002F6F6D /* KidlendarModel.xcdatamodeld */,
+				4CB3DD9A18521DC500673478 /* KidlendarTests */,
+				4CB3DD7A18521DC400673478 /* Frameworks */,
+				4CB3DD7918521DC400673478 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4CB3DD7918521DC400673478 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4CB3DD7818521DC400673478 /* Kidlendar.app */,
+				4CB3DD9318521DC500673478 /* KidlendarTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4CB3DD7A18521DC400673478 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4C12B2FF18A201450046C5EC /* GoogleMaps.bundle */,
+				4C12B2FD18A200790046C5EC /* libc++.dylib */,
+				4C12B2F818A1FDE60046C5EC /* SystemConfiguration.framework */,
+				4C12B2F618A1FDC40046C5EC /* libz.dylib */,
+				4C12B2F418A1FDBA0046C5EC /* libicucore.dylib */,
+				4C12B2F218A1FDAA0046C5EC /* ImageIO.framework */,
+				4C12B2F018A1FDA20046C5EC /* GLKit.framework */,
+				4C12B2EE18A1FD960046C5EC /* CoreText.framework */,
+				4C12B2EC18A1FC280046C5EC /* GoogleMaps.framework */,
+				4C3F26231896AF97000E05F9 /* FacebookSDK.framework */,
+				4C48FFAE188D65820038AE6F /* AVFoundation.framework */,
+				4C48FFAB188D65620038AE6F /* CoreVideo.framework */,
+				4C48FFA9188D65580038AE6F /* CoreMedia.framework */,
+				4C48FFA7188D61C40038AE6F /* OpenGLES.framework */,
+				4C51761E186FF707002F6F6D /* CoreData.framework */,
+				4CFB6DC7186A6BAC001C8F05 /* CoreLocation.framework */,
+				4C0C38C918673AD60001CC08 /* AssetsLibrary.framework */,
+				4C5420EF1857FC9D006D2DE4 /* QuartzCore.framework */,
+				4CB3DD7B18521DC400673478 /* Foundation.framework */,
+				4CB3DD7D18521DC400673478 /* CoreGraphics.framework */,
+				4CB3DD7F18521DC400673478 /* UIKit.framework */,
+				4CB3DD9418521DC500673478 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4CB3DD8118521DC400673478 /* Kidlendar */ = {
+			isa = PBXGroup;
+			children = (
+				4CB3DD8A18521DC400673478 /* KidlendarAppDelegate.h */,
+				4CB3DD8B18521DC400673478 /* KidlendarAppDelegate.m */,
+				4C515D2418973C27002E8DEE /* ShareViewController.h */,
+				4C515D2518973C27002E8DEE /* ShareViewController.m */,
+				4C515D2618973C27002E8DEE /* ShareViewController.xib */,
+				4C12B2E718A1E4570046C5EC /* FileManager.h */,
+				4C12B2E818A1E4570046C5EC /* FileManager.m */,
+				4C3E3EA818865AFE00D02397 /* Event */,
+				4C92155E185AD445009A3090 /* Calendar */,
+				4C0C38C518673A240001CC08 /* Diary */,
+				4CB3DD8D18521DC400673478 /* Images.xcassets */,
+				4CB3DD8218521DC400673478 /* Supporting Files */,
+			);
+			path = Kidlendar;
+			sourceTree = "<group>";
+		};
+		4CB3DD8218521DC400673478 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4C5BA25C1861745D00528843 /* 929-film-1.png */,
+				4C5BA25A1861731A00528843 /* 929-film-1@2x.png */,
+				4CB3DD8318521DC400673478 /* Kidlendar-Info.plist */,
+				4CB3DD8418521DC400673478 /* InfoPlist.strings */,
+				4CB3DD8718521DC400673478 /* main.m */,
+				4CB3DD8918521DC400673478 /* Kidlendar-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4CB3DD9A18521DC500673478 /* KidlendarTests */ = {
+			isa = PBXGroup;
+			children = (
+				4CB3DDA018521DC500673478 /* KidlendarTests.m */,
+				4CB3DD9B18521DC500673478 /* Supporting Files */,
+			);
+			path = KidlendarTests;
+			sourceTree = "<group>";
+		};
+		4CB3DD9B18521DC500673478 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4CB3DD9C18521DC500673478 /* KidlendarTests-Info.plist */,
+				4CB3DD9D18521DC500673478 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4CC3A7D9188D6EAF000BAE1A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4CC3A7DF188D6EAF000BAE1A /* libGPUImage.a */,
+				4CC3A7E1188D6EAF000BAE1A /* GPUImageTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4CFB0869187E68D600456D5D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				4CFB086A187E696A00456D5D /* DateModel.h */,
+				4CFB086B187E696A00456D5D /* DateModel.m */,
+				4CFB086D187E6BFB00456D5D /* MonthModel.h */,
+				4CFB086E187E6BFB00456D5D /* MonthModel.m */,
+				4C2E83BB1890BB450051215F /* CalendarStore.h */,
+				4C2E83BC1890BB450051215F /* CalendarStore.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4CB3DD7718521DC400673478 /* Kidlendar */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4CB3DDA418521DC500673478 /* Build configuration list for PBXNativeTarget "Kidlendar" */;
+			buildPhases = (
+				4CB3DD7418521DC400673478 /* Sources */,
+				4CB3DD7518521DC400673478 /* Frameworks */,
+				4CB3DD7618521DC400673478 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4CC3A7E3188D6EC4000BAE1A /* PBXTargetDependency */,
+			);
+			name = Kidlendar;
+			productName = Kidlendar;
+			productReference = 4CB3DD7818521DC400673478 /* Kidlendar.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4CB3DD9218521DC500673478 /* KidlendarTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4CB3DDA718521DC500673478 /* Build configuration list for PBXNativeTarget "KidlendarTests" */;
+			buildPhases = (
+				4CB3DD8F18521DC500673478 /* Sources */,
+				4CB3DD9018521DC500673478 /* Frameworks */,
+				4CB3DD9118521DC500673478 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4CB3DD9918521DC500673478 /* PBXTargetDependency */,
+			);
+			name = KidlendarTests;
+			productName = KidlendarTests;
+			productReference = 4CB3DD9318521DC500673478 /* KidlendarTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4CB3DD7018521DC400673478 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = Kidlendar;
+				LastUpgradeCheck = 0500;
+				ORGANIZATIONNAME = MarriageKiller;
+				TargetAttributes = {
+					4CB3DD9218521DC500673478 = {
+						TestTargetID = 4CB3DD7718521DC400673478;
+					};
+				};
+			};
+			buildConfigurationList = 4CB3DD7318521DC400673478 /* Build configuration list for PBXProject "Kidlendar" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 4CB3DD6F18521DC400673478;
+			productRefGroup = 4CB3DD7918521DC400673478 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 4CC3A7D9188D6EAF000BAE1A /* Products */;
+					ProjectRef = 4CC3A7D8188D6EAF000BAE1A /* GPUImage.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				4CB3DD7718521DC400673478 /* Kidlendar */,
+				4CB3DD9218521DC500673478 /* KidlendarTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		4CC3A7DF188D6EAF000BAE1A /* libGPUImage.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libGPUImage.a;
+			remoteRef = 4CC3A7DE188D6EAF000BAE1A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4CC3A7E1188D6EAF000BAE1A /* GPUImageTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = GPUImageTests.octest;
+			remoteRef = 4CC3A7E0188D6EAF000BAE1A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4CB3DD7618521DC400673478 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CFFD585189775270070C33C /* DiaryPhotoViewController.xib in Resources */,
+				4C52952F188D002300471B43 /* EventCreateViewController.xib in Resources */,
+				4CF592D7186D498E00F1BEEB /* DiaryCreateViewController.xib in Resources */,
+				4CA888341896478C00FAA799 /* DiaryVideoViewController.xib in Resources */,
+				4C5BA25D1861745D00528843 /* 929-film-1.png in Resources */,
+				4C6C49C5186DDDDF0042EB61 /* DiaryViewController.xib in Resources */,
+				4C2FEC111889697600D37F18 /* EventViewController.xib in Resources */,
+				4C5BA25B1861731A00528843 /* 929-film-1@2x.png in Resources */,
+				4C86E939188F977F00137B6A /* RecurrenceViewController.xib in Resources */,
+				4C12B30018A201450046C5EC /* GoogleMaps.bundle in Resources */,
+				4C86E934188F973800137B6A /* AlarmViewController.xib in Resources */,
+				4CFFD58A1897800A0070C33C /* lookup_amatorka.png in Resources */,
+				4CB27D57188ED88800F34E7A /* IMG_1725.jpg in Resources */,
+				4C515D2818973C27002E8DEE /* ShareViewController.xib in Resources */,
+				4CB3DD8618521DC400673478 /* InfoPlist.strings in Resources */,
+				4CA888251895F26000FAA799 /* MediaTableViewController.xib in Resources */,
+				4CB3DD8E18521DC400673478 /* Images.xcassets in Resources */,
+				4CF592E1186D5BE500F1BEEB /* MonthViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CB3DD9118521DC500673478 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CB3DD9F18521DC500673478 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4CB3DD7418521DC400673478 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C86E92A188F91D700137B6A /* EventLocationViewController.m in Sources */,
+				4CB3DD8818521DC400673478 /* main.m in Sources */,
+				4CFB086C187E696A00456D5D /* DateModel.m in Sources */,
+				4C12B2E918A1E4570046C5EC /* FileManager.m in Sources */,
+				4C86E933188F973800137B6A /* AlarmViewController.m in Sources */,
+				4CF592D6186D498E00F1BEEB /* DiaryCreateViewController.m in Sources */,
+				4C417E7618714A4C000878FC /* DiaryDataStore.m in Sources */,
+				4C9214CB185AAA29009A3090 /* DateView.m in Sources */,
+				4CF592C9186D3B4700F1BEEB /* EventCreateViewController.m in Sources */,
+				4CFB086F187E6BFB00456D5D /* MonthModel.m in Sources */,
+				4CA2506F1869517400AEA94E /* DiaryPhotoCell.m in Sources */,
+				4CB3DD8C18521DC400673478 /* KidlendarAppDelegate.m in Sources */,
+				4CA888331896478C00FAA799 /* DiaryVideoViewController.m in Sources */,
+				4C88B387188E56E100F4F47E /* DiaryCell.m in Sources */,
+				4C2E83BD1890BB450051215F /* CalendarStore.m in Sources */,
+				4C2FEC101889697600D37F18 /* EventViewController.m in Sources */,
+				4C6C49C4186DDDDF0042EB61 /* DiaryViewController.m in Sources */,
+				4C6C49C0186DDB680042EB61 /* DiaryTableViewController.m in Sources */,
+				4C515D2718973C27002E8DEE /* ShareViewController.m in Sources */,
+				4CF592E0186D5BE500F1BEEB /* MonthViewController.m in Sources */,
+				4C86E938188F977F00137B6A /* RecurrenceViewController.m in Sources */,
+				4C3E3EAB18865B6D00D02397 /* EventTitleAndTimeView.m in Sources */,
+				4CA888241895F26000FAA799 /* MediaTableViewController.m in Sources */,
+				4C86E927188F8ADE00137B6A /* EventTitleAndTimeViewController.m in Sources */,
+				4CFFD584189775270070C33C /* DiaryPhotoViewController.m in Sources */,
+				4C51761D186FF309002F6F6D /* KidlendarModel.xcdatamodeld in Sources */,
+				4CF46E4D18878E3800B22888 /* CustomTextField.m in Sources */,
+				4C6AC2DC187161CC004FA1E4 /* DiaryData.m in Sources */,
+				4C6F40B71867EB6200B44443 /* DiaryPhotoCollectionViewController.m in Sources */,
+				4CA2506C1869377000AEA94E /* UIImage+Resize.m in Sources */,
+				4C92155A185AD39E009A3090 /* MonthCalendarView.m in Sources */,
+				4C3E3EB118865C0C00D02397 /* EventLocationView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4CB3DD8F18521DC500673478 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4CB3DDA118521DC500673478 /* KidlendarTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4CB3DD9918521DC500673478 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4CB3DD7718521DC400673478 /* Kidlendar */;
+			targetProxy = 4CB3DD9818521DC500673478 /* PBXContainerItemProxy */;
+		};
+		4CC3A7E3188D6EC4000BAE1A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GPUImage;
+			targetProxy = 4CC3A7E2188D6EC4000BAE1A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		4CB3DD8418521DC400673478 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4CB3DD8518521DC400673478 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		4CB3DD9D18521DC500673478 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4CB3DD9E18521DC500673478 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4CB3DDA218521DC500673478 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		4CB3DDA318521DC500673478 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				OTHER_LDFLAGS = "-ObjC";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4CB3DDA518521DC500673478 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/JackYeh/Desktop/Kidlendar,
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Kidlendar/Kidlendar-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"/Users/JackYeh/Desktop/Kidlendar/source/**",
+				);
+				INFOPLIST_FILE = "Kidlendar/Kidlendar-Info.plist";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		4CB3DDA618521DC500673478 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/JackYeh/Desktop/Kidlendar,
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Kidlendar/Kidlendar-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"/Users/JackYeh/Desktop/Kidlendar/source/**",
+				);
+				INFOPLIST_FILE = "Kidlendar/Kidlendar-Info.plist";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		4CB3DDA818521DC500673478 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Kidlendar.app/Kidlendar";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Kidlendar/Kidlendar-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "KidlendarTests/KidlendarTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		4CB3DDA918521DC500673478 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Kidlendar.app/Kidlendar";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Kidlendar/Kidlendar-Prefix.pch";
+				INFOPLIST_FILE = "KidlendarTests/KidlendarTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4CB3DD7318521DC400673478 /* Build configuration list for PBXProject "Kidlendar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CB3DDA218521DC500673478 /* Debug */,
+				4CB3DDA318521DC500673478 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4CB3DDA418521DC500673478 /* Build configuration list for PBXNativeTarget "Kidlendar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CB3DDA518521DC500673478 /* Debug */,
+				4CB3DDA618521DC500673478 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4CB3DDA718521DC500673478 /* Build configuration list for PBXNativeTarget "KidlendarTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4CB3DDA818521DC500673478 /* Debug */,
+				4CB3DDA918521DC500673478 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		4C51761B186FF309002F6F6D /* KidlendarModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				4C51761C186FF309002F6F6D /* KidlendarModel.xcdatamodel */,
+			);
+			currentVersion = 4C51761C186FF309002F6F6D /* KidlendarModel.xcdatamodel */;
+			name = KidlendarModel.xcdatamodeld;
+			path = Kidlendar/KidlendarModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 4CB3DD7018521DC400673478 /* Project object */;
+}
