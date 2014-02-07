@@ -16,6 +16,8 @@
 #import <GoogleMaps/GoogleMaps.h>
 #import "SettingViewController.h"
 #import "ProfileTableViewController.h"
+#import <DropboxSDK/DropboxSDK.h>
+#import "BackupViewController.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 
@@ -28,6 +30,15 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [GMSServices provideAPIKey:@"AIzaSyBm7gHFT7u0OC0pny4uR32lz0_hOR8RQko"];
+    
+    DBSession* dbSession = [[DBSession alloc]initWithAppKey:@"rb186yqaya1ijp8"
+                                                   appSecret:@"3eibrlmh4x2keim"
+                                                        root:kDBRootAppFolder] // either kDBRootAppFolder or kDBRootDropbox
+     ;
+    [DBSession setSharedSession:dbSession];
+    
+    BackupViewController *backupController = [[BackupViewController alloc]init];
+    [self.window setRootViewController:backupController];
     // Override point for customization after application launch.
     /*
     [FBProfilePictureView class];
@@ -35,7 +46,7 @@
     ShareViewController *svc = [[ShareViewController alloc]init];
     [self.window setRootViewController:svc];
     
-     */
+     
     // Init Calendar store
     [CalendarStore sharedStore];
     
@@ -51,25 +62,43 @@
                 NSLog(@"need permission , error %@",error);
         }];
     }
-
+     */
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
     return YES;
 }
 
+// Facebook
 - (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation {
     
+    /*
     // Call FBAppCall's handleOpenURL:sourceApplication to handle Facebook app responses
     BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
     
     // You can add your app-specific url handling code here if needed
     
     return wasHandled;
+    */
+    
+    NSLog(@"Souce application %@",sourceApplication);
+    if ([sourceApplication isEqual: @"com.getdropbox.Dropbox"]) {
+        if ([[DBSession sharedSession] handleOpenURL:url]) {
+            if ([[DBSession sharedSession] isLinked]) {
+                NSLog(@"App linked successfully!");
+                // At this point you can start making API calls
+            }
+            return YES;
+        }
+        // Add whatever other url handling code your app requires here
+        return NO;
+    }
+    return NO;
 }
+
 
 - (void)createAllViewControllers
 {

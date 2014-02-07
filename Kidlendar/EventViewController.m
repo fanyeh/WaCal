@@ -15,6 +15,7 @@
 #import "CalendarStore.h"
 #import "UIImage+Resize.h"
 #import "EventNameViewController.h"
+#import "ImageStore.h"
 
 @interface EventViewController ()
 {
@@ -32,6 +33,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *alarmLabel;
 @property (weak, nonatomic) IBOutlet UILabel *recurrenceLabel;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *locationImageView;
 
 @end
 
@@ -82,6 +84,7 @@
     [_timeLabel addGestureRecognizer:timeTap];
     [_nameLabel addGestureRecognizer:nameTap];
     [_locationLabel addGestureRecognizer:locationTap];
+    [_locationImageView addGestureRecognizer:locationTap];
     [_alarmLabel addGestureRecognizer:alarmTap];
     [_recurrenceLabel addGestureRecognizer:recurrenceTap];
 }
@@ -101,6 +104,12 @@
     else {
         _locationLabel.textColor = [UIColor grayColor];
         _locationLabel.text = @"Enter location?";
+    }
+    
+    // Check if there's location map
+    UIImage *locationImage = [[ImageStore sharedStore]imageForKey:_event.eventIdentifier];
+    if (locationImage) {
+        _locationImageView.image = locationImage;
     }
     
     // Check if there is alarm , if yes remove alarm button from option view

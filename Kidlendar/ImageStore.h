@@ -8,11 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ProfileImageStore : NSObject
+@interface ImageStore : NSObject
 {
     NSMutableDictionary *dictionary;
 }
-+ (ProfileImageStore *)sharedStore;
++ (ImageStore *)sharedStore;
 
 - (void)setImage:(UIImage *)i forKey:(NSString *)s;
 - (UIImage *)imageForKey:(NSString *)s;

@@ -10,6 +10,7 @@
 #import "EventLocationView.h"
 #import "CalendarStore.h"
 #import <GoogleMaps/GoogleMaps.h>
+#import "ImageStore.h"
 
 #define kGOOGLE_API_KEY @"AIzaSyAD9e182Fr19_2DcJFZYUHf6wEeXjxs_kQ"
 #define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
@@ -119,6 +120,11 @@
 - (void)saveLocation
 {
     _event.location = locationView.locationField.text;
+    
+    // Store image in the BNRImageStore with this key
+    [[ImageStore sharedStore] setImage:[self captureMapImage]
+                                forKey:_event.eventIdentifier];
+
     [[[CalendarStore sharedStore]eventStore] saveEvent:_event span:EKSpanThisEvent commit:YES error:nil];
     NSDictionary *startDate = [NSDictionary dictionaryWithObject:_event.startDate forKey:@"startDate"];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"eventChange" object:nil userInfo:startDate];
@@ -177,6 +183,7 @@
     marker.title = [places[indexPath.row] objectForKey:@"name"];
     marker.snippet = [places[indexPath.row] objectForKey:@"formatted_address"];
     marker.map = mapView_;
+    locationView.locationField.text = marker.title;
 }
 
 #pragma mark - UITextFieldDelegate
@@ -189,6 +196,15 @@
 {
     [self queryGooglePlaces:locationView.locationField.text];
     return YES;
+}
+
+- (UIImage *)captureMapImage
+{
+    UIGraphicsBeginImageContext(mapView_.frame.size);
+    [mapView_.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *screenShotImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return screenShotImage;
 }
 
 

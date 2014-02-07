@@ -47,7 +47,7 @@
 		4C66A7A918A3579C00C977D5 /* ProfileCreateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C66A7A318A3579C00C977D5 /* ProfileCreateViewController.m */; };
 		4C66A7AA18A3579C00C977D5 /* ProfileCreateViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C66A7A418A3579C00C977D5 /* ProfileCreateViewController.xib */; };
 		4C66A7B318A357C500C977D5 /* ProfileData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C66A7AE18A357C500C977D5 /* ProfileData.m */; };
-		4C66A7B418A357C500C977D5 /* ProfileImageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C66A7B018A357C500C977D5 /* ProfileImageStore.m */; };
+		4C66A7B418A357C500C977D5 /* ImageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C66A7B018A357C500C977D5 /* ImageStore.m */; };
 		4C66A7B518A357C500C977D5 /* ProfileDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C66A7B218A357C500C977D5 /* ProfileDataStore.m */; };
 		4C6AC2DC187161CC004FA1E4 /* DiaryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6AC2DB187161CC004FA1E4 /* DiaryData.m */; };
 		4C6C49C0186DDB680042EB61 /* DiaryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C49BF186DDB680042EB61 /* DiaryTableViewController.m */; };
@@ -85,6 +85,11 @@
 		4CB3DD9F18521DC500673478 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CB3DD9D18521DC500673478 /* InfoPlist.strings */; };
 		4CB3DDA118521DC500673478 /* KidlendarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB3DDA018521DC500673478 /* KidlendarTests.m */; };
 		4CC3A7E4188D6ECF000BAE1A /* libGPUImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC3A7DF188D6EAF000BAE1A /* libGPUImage.a */; };
+		4CD2B91F18A492B5002DA9E4 /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD2B91E18A492B5002DA9E4 /* DropboxSDK.framework */; };
+		4CD2B92318A492E6002DA9E4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD2B92218A492E6002DA9E4 /* Security.framework */; };
+		4CD2B92C18A497BF002DA9E4 /* BackupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD2B92A18A497BF002DA9E4 /* BackupViewController.m */; };
+		4CD2B92D18A497BF002DA9E4 /* BackupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CD2B92B18A497BF002DA9E4 /* BackupViewController.xib */; };
+		4CD2B93018A4B8FD002DA9E4 /* DropboxBackUp.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD2B92F18A4B8FD002DA9E4 /* DropboxBackUp.m */; };
 		4CDA810F18A3C61F00898266 /* 951-baby-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CDA810E18A3C61F00898266 /* 951-baby-selected@2x.png */; };
 		4CF46E4D18878E3800B22888 /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46E4C18878E3800B22888 /* CustomTextField.m */; };
 		4CF592C9186D3B4700F1BEEB /* EventCreateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF592C7186D3B4700F1BEEB /* EventCreateViewController.m */; };
@@ -187,8 +192,8 @@
 		4C66A7A418A3579C00C977D5 /* ProfileCreateViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileCreateViewController.xib; sourceTree = "<group>"; };
 		4C66A7AD18A357C500C977D5 /* ProfileData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileData.h; sourceTree = "<group>"; };
 		4C66A7AE18A357C500C977D5 /* ProfileData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileData.m; sourceTree = "<group>"; };
-		4C66A7AF18A357C500C977D5 /* ProfileImageStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileImageStore.h; sourceTree = "<group>"; };
-		4C66A7B018A357C500C977D5 /* ProfileImageStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileImageStore.m; sourceTree = "<group>"; };
+		4C66A7AF18A357C500C977D5 /* ImageStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageStore.h; sourceTree = "<group>"; };
+		4C66A7B018A357C500C977D5 /* ImageStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageStore.m; sourceTree = "<group>"; };
 		4C66A7B118A357C500C977D5 /* ProfileDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileDataStore.h; sourceTree = "<group>"; };
 		4C66A7B218A357C500C977D5 /* ProfileDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileDataStore.m; sourceTree = "<group>"; };
 		4C6AC2DA187161CC004FA1E4 /* DiaryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiaryData.h; path = ../DiaryData.h; sourceTree = "<group>"; };
@@ -247,6 +252,13 @@
 		4CB3DD9E18521DC500673478 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4CB3DDA018521DC500673478 /* KidlendarTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KidlendarTests.m; sourceTree = "<group>"; };
 		4CC3A7D8188D6EAF000BAE1A /* GPUImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPUImage.xcodeproj; path = "../../Downloads/GPUImage-master/framework/GPUImage.xcodeproj"; sourceTree = "<group>"; };
+		4CD2B91E18A492B5002DA9E4 /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DropboxSDK.framework; sourceTree = "<group>"; };
+		4CD2B92218A492E6002DA9E4 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		4CD2B92918A497BF002DA9E4 /* BackupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackupViewController.h; sourceTree = "<group>"; };
+		4CD2B92A18A497BF002DA9E4 /* BackupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackupViewController.m; sourceTree = "<group>"; };
+		4CD2B92B18A497BF002DA9E4 /* BackupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BackupViewController.xib; sourceTree = "<group>"; };
+		4CD2B92E18A4B8FD002DA9E4 /* DropboxBackUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxBackUp.h; sourceTree = "<group>"; };
+		4CD2B92F18A4B8FD002DA9E4 /* DropboxBackUp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxBackUp.m; sourceTree = "<group>"; };
 		4CDA810E18A3C61F00898266 /* 951-baby-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "951-baby-selected@2x.png"; sourceTree = "<group>"; };
 		4CF46E4B18878E3800B22888 /* CustomTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTextField.h; sourceTree = "<group>"; };
 		4CF46E4C18878E3800B22888 /* CustomTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTextField.m; sourceTree = "<group>"; };
@@ -274,8 +286,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CD2B92318A492E6002DA9E4 /* Security.framework in Frameworks */,
 				4C12B2FE18A200790046C5EC /* libc++.dylib in Frameworks */,
 				4C12B2F918A1FDE60046C5EC /* SystemConfiguration.framework in Frameworks */,
+				4CD2B91F18A492B5002DA9E4 /* DropboxSDK.framework in Frameworks */,
 				4C48FFAD188D656F0038AE6F /* OpenGLES.framework in Frameworks */,
 				4C12B2F718A1FDC40046C5EC /* libz.dylib in Frameworks */,
 				4C12B2F518A1FDBA0046C5EC /* libicucore.dylib in Frameworks */,
@@ -337,6 +351,8 @@
 				4C6AC2DB187161CC004FA1E4 /* DiaryData.m */,
 				4C417E7418714A4C000878FC /* DiaryDataStore.h */,
 				4C417E7518714A4C000878FC /* DiaryDataStore.m */,
+				4CD2B92E18A4B8FD002DA9E4 /* DropboxBackUp.h */,
+				4CD2B92F18A4B8FD002DA9E4 /* DropboxBackUp.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -403,8 +419,8 @@
 			children = (
 				4C66A7AD18A357C500C977D5 /* ProfileData.h */,
 				4C66A7AE18A357C500C977D5 /* ProfileData.m */,
-				4C66A7AF18A357C500C977D5 /* ProfileImageStore.h */,
-				4C66A7B018A357C500C977D5 /* ProfileImageStore.m */,
+				4C66A7AF18A357C500C977D5 /* ImageStore.h */,
+				4C66A7B018A357C500C977D5 /* ImageStore.m */,
 				4C66A7B118A357C500C977D5 /* ProfileDataStore.h */,
 				4C66A7B218A357C500C977D5 /* ProfileDataStore.m */,
 			);
@@ -505,6 +521,8 @@
 		4CB3DD7A18521DC400673478 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4CD2B92218A492E6002DA9E4 /* Security.framework */,
+				4CD2B91E18A492B5002DA9E4 /* DropboxSDK.framework */,
 				4C12B2FF18A201450046C5EC /* GoogleMaps.bundle */,
 				4C12B2FD18A200790046C5EC /* libc++.dylib */,
 				4C12B2F818A1FDE60046C5EC /* SystemConfiguration.framework */,
@@ -534,6 +552,9 @@
 		4CB3DD8118521DC400673478 /* Kidlendar */ = {
 			isa = PBXGroup;
 			children = (
+				4CD2B92918A497BF002DA9E4 /* BackupViewController.h */,
+				4CD2B92A18A497BF002DA9E4 /* BackupViewController.m */,
+				4CD2B92B18A497BF002DA9E4 /* BackupViewController.xib */,
 				4CB3DD8A18521DC400673478 /* KidlendarAppDelegate.h */,
 				4CB3DD8B18521DC400673478 /* KidlendarAppDelegate.m */,
 				4C515D2418973C27002E8DEE /* ShareViewController.h */,
@@ -728,6 +749,7 @@
 				4CA888251895F26000FAA799 /* MediaTableViewController.xib in Resources */,
 				4CB3DD8E18521DC400673478 /* Images.xcassets in Resources */,
 				4C66A7A718A3579C00C977D5 /* ProfileViewController.xib in Resources */,
+				4CD2B92D18A497BF002DA9E4 /* BackupViewController.xib in Resources */,
 				4CF592E1186D5BE500F1BEEB /* MonthViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -755,8 +777,9 @@
 				4C86E933188F973800137B6A /* AlarmViewController.m in Sources */,
 				4CF592D6186D498E00F1BEEB /* DiaryCreateViewController.m in Sources */,
 				4C417E7618714A4C000878FC /* DiaryDataStore.m in Sources */,
-				4C66A7B418A357C500C977D5 /* ProfileImageStore.m in Sources */,
+				4C66A7B418A357C500C977D5 /* ImageStore.m in Sources */,
 				4C9214CB185AAA29009A3090 /* DateView.m in Sources */,
+				4CD2B93018A4B8FD002DA9E4 /* DropboxBackUp.m in Sources */,
 				4CF592C9186D3B4700F1BEEB /* EventCreateViewController.m in Sources */,
 				4CFB086F187E6BFB00456D5D /* MonthModel.m in Sources */,
 				4CA2506F1869517400AEA94E /* DiaryPhotoCell.m in Sources */,
@@ -773,6 +796,7 @@
 				4CB3BD2C18A330D80006AFD4 /* SettingViewController.m in Sources */,
 				4C665E1818A47642001CC69D /* EventNameView.m in Sources */,
 				4C66A7A518A3579C00C977D5 /* profileCell.m in Sources */,
+				4CD2B92C18A497BF002DA9E4 /* BackupViewController.m in Sources */,
 				4C86E938188F977F00137B6A /* RecurrenceViewController.m in Sources */,
 				4C66A7A818A3579C00C977D5 /* ProfileTableViewController.m in Sources */,
 				4C3E3EAB18865B6D00D02397 /* EventTitleAndTimeView.m in Sources */,

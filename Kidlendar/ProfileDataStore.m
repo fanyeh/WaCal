@@ -8,7 +8,7 @@
 
 #import "ProfileDataStore.h"
 #import "ProfileData.h"
-#import "ProfileImageStore.h"
+#import "ImageStore.h"
 #import "KidlendarAppDelegate.h"
 
 @implementation ProfileDataStore
@@ -82,7 +82,7 @@
 - (void)removeItem:(ProfileData *)p
 {
     NSString *key = [p imageKey];
-    [[ProfileImageStore sharedStore] deleteImageForKey:key];
+    [[ImageStore sharedStore] deleteImageForKey:key];
     [context deleteObject:p];
     [allItems removeObjectIdenticalTo:p];
 }

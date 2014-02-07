@@ -6,17 +6,17 @@
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "ProfileImageStore.h"
+#import "ImageStore.h"
 
-@implementation ProfileImageStore
+@implementation ImageStore
 + (id)allocWithZone:(NSZone *)zone
 {
     return [self sharedStore];
 }
 
-+ (ProfileImageStore *)sharedStore
++ (ImageStore *)sharedStore
 {
-    static ProfileImageStore *sharedStore = nil;
+    static ImageStore *sharedStore = nil;
     if (!sharedStore) {
         // Create the singleton
         sharedStore = [[super allocWithZone:NULL] init];

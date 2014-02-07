@@ -10,7 +10,7 @@
 #import "EventNameView.h"
 #import "ProfileData.h"
 #import "ProfileDataStore.h"
-#import "ProfileImageStore.h"
+#import "ImageStore.h"
 #import <EventKit/EventKit.h>
 
 @interface EventNameViewController () <UITextFieldDelegate,UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UICollectionViewDelegate>
@@ -92,7 +92,7 @@
     cell.backgroundColor = [UIColor redColor];
     ProfileData *p =  [[ProfileDataStore sharedStore]allItems][indexPath.row];
     nameView.nameField.text = p.name;
-    UIImage *backgroundImage = [[ProfileImageStore sharedStore]imageForKey:p.imageKey];
+    UIImage *backgroundImage = [[ImageStore sharedStore]imageForKey:p.imageKey];
     nameView.backgroundImageView.image = backgroundImage;
 }
 

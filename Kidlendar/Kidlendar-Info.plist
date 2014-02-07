@@ -20,8 +20,20 @@
 	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.0</string>
+	<key>FacebookAppID</key>
+	<string>1450548605159832</string>
+	<key>FacebookDisplayName</key>
+	<string>Kidlendar</string>
 	<key>CFBundleURLTypes</key>
 	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>db-rb186yqaya1ijp8</string>
+			</array>
+		</dict>
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
@@ -29,12 +41,6 @@
 			</array>
 		</dict>
 	</array>
-	<key>CFBundleVersion</key>
-	<string>1.0</string>
-	<key>FacebookAppID</key>
-	<string>1450548605159832</string>
-	<key>FacebookDisplayName</key>
-	<string>Kidlendar</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIRequiredDeviceCapabilities</key>

@@ -7,7 +7,7 @@
 //
 
 #import "ProfileViewController.h"
-#import "ProfileImageStore.h"
+#import "ImageStore.h"
 
 @interface ProfileViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *profileImage;
@@ -32,7 +32,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     // Put that image onto the screen in our image view
-    UIImage *image = [[ProfileImageStore sharedStore]imageForKey:_profile.imageKey];
+    UIImage *image = [[ImageStore sharedStore]imageForKey:_profile.imageKey];
     [_profileImage setContentMode:UIViewContentModeScaleAspectFit];
     _profileImage.image = image;
     _nameTextField.text = _profile.name;

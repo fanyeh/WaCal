@@ -9,7 +9,7 @@
 #import "ProfileCreateViewController.h"
 #import "ProfileData.h"
 #import "ProfileDataStore.h"
-#import "ProfileImageStore.h"
+#import "ImageStore.h"
 
 @interface ProfileCreateViewController ()
 {
@@ -149,7 +149,7 @@
     [_profile setImageKey:key];
     
     // Store image in the BNRImageStore with this key
-    [[ProfileImageStore sharedStore] setImage:image
+    [[ImageStore sharedStore] setImage:image
                                    forKey:[_profile imageKey]];
     
     CFRelease(newUniqueIDString);
