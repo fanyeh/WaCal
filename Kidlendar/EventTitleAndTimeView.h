@@ -8,10 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "CustomTextField.h"
+#import "ProfileData.h"
 
 @interface EventTitleAndTimeView : UIView
 @property (strong,nonatomic) UITextField *titleField;
 @property (strong,nonatomic) CustomTextField *startTimeField;
 @property (strong,nonatomic) CustomTextField *endTimeField;
 @property (strong,nonatomic) UIButton *saveButton;
+@property (strong,nonatomic) ProfileData *p;
+@property (strong,nonatomic) UITextField *nameTextField;
 @end

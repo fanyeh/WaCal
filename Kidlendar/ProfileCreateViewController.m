@@ -148,7 +148,6 @@
     
     [_profile setImageKey:key];
     
-    
     // Store image in the BNRImageStore with this key
     [[ProfileImageStore sharedStore] setImage:image
                                    forKey:[_profile imageKey]];

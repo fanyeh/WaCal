@@ -14,6 +14,7 @@
 #import "GPUImage.h"
 #import "CalendarStore.h"
 #import "UIImage+Resize.h"
+#import "EventNameViewController.h"
 
 @interface EventViewController ()
 {
@@ -30,6 +31,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
 @property (weak, nonatomic) IBOutlet UILabel *alarmLabel;
 @property (weak, nonatomic) IBOutlet UILabel *recurrenceLabel;
+@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 
 @end
 
@@ -72,11 +74,13 @@
     // Create gestures for label
     UITapGestureRecognizer *titleTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(titleChange)];
     UITapGestureRecognizer *timeTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(timeChange)];
+    UITapGestureRecognizer *nameTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(nameChange)];
     UITapGestureRecognizer *locationTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(locationChange)];
     UITapGestureRecognizer *alarmTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(alarmChange)];
     UITapGestureRecognizer *recurrenceTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(recurrenceChange)];
     [_titleLabel addGestureRecognizer:titleTap];
     [_timeLabel addGestureRecognizer:timeTap];
+    [_nameLabel addGestureRecognizer:nameTap];
     [_locationLabel addGestureRecognizer:locationTap];
     [_alarmLabel addGestureRecognizer:alarmTap];
     [_recurrenceLabel addGestureRecognizer:recurrenceTap];
@@ -179,6 +183,12 @@
     [self pushToController:[[EventTitleAndTimeViewController alloc]init]];
 }
 
+- (void)nameChange
+{
+    [self pushToController:[[EventNameViewController alloc]init]];
+}
+
+
 -(void)locationChange
 {
     [self pushToController:[[EventLocationViewController alloc]init]];
@@ -202,19 +212,22 @@
         ((EventTitleAndTimeViewController *)vc).backgroundImage = blurBackgroundImage;
     }
     else if ([vc isKindOfClass:[EventLocationViewController class]]) {
-        ((EventLocationViewController *)vc).selectedDate = _selectedDate;
+        //((EventLocationViewController *)vc).selectedDate = _selectedDate;
         ((EventLocationViewController *)vc).event = _event;
         ((EventTitleAndTimeViewController *)vc).backgroundImage = blurBackgroundImage;
     }
     else if ([vc isKindOfClass:[AlarmViewController class]]) {
-        ((AlarmViewController *)vc).selectedDate = _selectedDate;
+        //((AlarmViewController *)vc).selectedDate = _selectedDate;
         ((AlarmViewController *)vc).event = _event;
         ((EventTitleAndTimeViewController *)vc).backgroundImage = blurBackgroundImage;
     }
     else if ([vc isKindOfClass:[RecurrenceViewController class]]) {
-        ((RecurrenceViewController *)vc).selectedDate = _selectedDate;
+        //((RecurrenceViewController *)vc).selectedDate = _selectedDate;
         ((RecurrenceViewController *)vc).event = _event;
         ((EventTitleAndTimeViewController *)vc).backgroundImage = blurBackgroundImage;
+    }
+    else if ([vc isKindOfClass:[EventNameViewController class]]) {
+        ((EventNameViewController *)vc).event = _event;
     }
     [self.navigationController pushViewController:vc animated:YES];
 }

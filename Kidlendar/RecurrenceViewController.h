@@ -10,7 +10,7 @@
 #import <EventKit/EventKit.h>
 
 @interface RecurrenceViewController : UIViewController
-@property NSDate *selectedDate;
+//@property NSDate *selectedDate;
 @property (strong ,nonatomic) EKEvent *event;
 @property (strong,nonatomic)  UIImage *backgroundImage;
 @end

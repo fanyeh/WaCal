@@ -95,6 +95,7 @@
     [NSURLConnection sendAsynchronousRequest:request
                                        queue:queue
                            completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+                               [activityIndicator stopAnimating];
                                if ([data length]>0 && connectionError==nil) {
                                    //收到正確的資料，連線沒有錯
                                    NSDictionary* json = [NSJSONSerialization JSONObjectWithData:data
@@ -103,7 +104,6 @@
                                    //The results from Google will be an array obtained from the NSDictionary object with the key "results".
                                    places = [json objectForKey:@"results"];
                                    NSLog(@"places %@",places);
-                                   [activityIndicator stopAnimating];
                                    [locationView.searchedLocation setHidden:NO];
                                    [locationView.searchedLocation reloadData];
                                    

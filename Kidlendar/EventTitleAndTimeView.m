@@ -36,10 +36,17 @@
         _saveButton.titleLabel.textColor = [UIColor whiteColor];
         [_saveButton setTitle:@"Save" forState:UIControlStateNormal];
         
+        _nameTextField = [[UITextField alloc]initWithFrame:CGRectMake(10, 202, 220, 50)];
+        _nameTextField.backgroundColor = [UIColor colorWithWhite:0.8 alpha:0.8];
+        _nameTextField.placeholder = @"Who?";
+        _nameTextField.tag = 4;
+        _nameTextField.font = [UIFont fontWithName:@"Avenir-Light" size:25];
+
         [self addSubview:_startTimeField];
         [self addSubview:_endTimeField];
         [self addSubview:_titleField];
         [self addSubview:_saveButton];
+        [self addSubview:_nameTextField];
     }
     return self;
 }
