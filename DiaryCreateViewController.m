@@ -16,13 +16,11 @@
 #import "MediaTableViewController.h"
 #import "FileManager.h"
 
-@interface DiaryCreateViewController () <DBRestClientDelegate>
+@interface DiaryCreateViewController ()
 {
     CGRect diaryViewFrame;
     CGRect tabBarFrame;
     CGPoint _priorPoint;
-    BOOL folderExist;
-    NSString *foldername;
 }
 
 @property (weak, nonatomic) IBOutlet UITextField *diarySubject;
@@ -254,7 +252,6 @@
 
 - (void)backupDiary
 {
-    [self linkToDropBox];
     // Diary file system structure should be "/kidlendar/profile name/create date time - diary title/filename"
 }
 
@@ -289,89 +286,4 @@
 {
     _collectionView.userInteractionEnabled = YES;
 }
-
-- (void)linkToDropBox
-{
-    if (![[DBSession sharedSession] isLinked]) {
-		[[DBSession sharedSession] linkFromController:self];
-        // Call method to execute folder check with completion block
-        [self checkFolders:^{
-            NSString *subfolder = [NSString stringWithFormat:@"%f-%@",_diary.dateCreated,_diary.subject];
-            foldername  = @"unknown";
-            FileManager *fm = [[FileManager alloc]initWithKey:_diary.diaryKey];
-            fm loadDiaryImageWithIndex:<#(int)#>
-            
-            if (folderExist) {
-                // save file
-                NSString *destDir = [NSString stringWithFormat:@"/%@/%@",foldername,subfolder];
-               [_restClient uploadFile:filename toPath:destDir
-                                withParentRev:nil fromPath:nil];
-            }
-            else {
-                // create folder then save file
-                [self createFolderName:@"unknown"];
-
-            }
-        }];
-    } else {
-        [[DBSession sharedSession] unlinkAll];
-        [[[UIAlertView alloc] initWithTitle:@"Account Unlinked!" message:@"Your dropbox account has been unlinked"
-                                   delegate:nil
-                          cancelButtonTitle:@"OK"
-                          otherButtonTitles:nil] show];
-    }
-}
-- (void)createFolderName:(NSString *)name
-{
-    // Create New folder command
-    NSString *folder = [NSString stringWithFormat:@"/%@",name];
-    [[self restClient] createFolder:folder];
-}
-
-- (void)checkFolders:(void(^)())block
-{
-    [[self restClient] loadMetadata:@"/"];
-}
-
-#pragma mark - DBRestClientDelegate
-- (void)restClient:(DBRestClient*)client uploadedFile:(NSString*)destPath
-              from:(NSString*)srcPath metadata:(DBMetadata*)metadata {
-    
-    NSLog(@"File uploaded successfully to path: %@", metadata.path);
-}
-
-- (void)restClient:(DBRestClient*)client uploadFileFailedWithError:(NSError*)error {
-    NSLog(@"File upload failed with error - %@", error);
-}
-
-- (void)restClient:(DBRestClient *)client loadedMetadata:(DBMetadata *)metadata {
-    if (metadata.isDirectory) {
-        NSLog(@"Folder '%@' contains:", metadata.path);
-        folderExist = NO;
-        for (DBMetadata *file in metadata.contents) {
-            if (file.isDirectory && [file.filename isEqualToString:foldername]) {
-                folderExist = YES;
-                break;
-                // compare file.filename with profile name , if not exist create new folder use profile name
-                // if there's no profile name , create new forder named "unknown"
-                // Diary file system structure should be "/kidlendar/profile name/create date time - diary title/filename"
-            }
-        }
-    }
-}
-
-- (void)restClient:(DBRestClient *)clientloadMetadata FailedWithError:(NSError *)error {
-    
-    NSLog(@"Error loading metadata: %@", error);
-}
-
-- (DBRestClient *)restClient {
-    if (!_restClient) {
-        _restClient =
-        [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
-        _restClient.delegate = self;
-    }
-    return _restClient;
-}
-
 @end

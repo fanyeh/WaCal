@@ -12,14 +12,15 @@
 {
     NSArray *paths;
     NSString *documentsDirectory;
-    NSString *fileDirectory;
     NSString *savedImagePath;
     NSData *imageData;
     NSString *fileName;
 }
+@property (strong,nonatomic) NSString *fileDirectory;
 -(id)initWithKey:(NSString *)key;
 -(void)saveDiaryImage:(UIImage *)image index:(int)i;
 -(UIImage *)loadDiaryImageWithIndex:(int)i;
 - (void)saveCollectionImage:(UIImage *)collectionViewImage;
+- (UIImage *)loadCollectionImage;
 
 @end

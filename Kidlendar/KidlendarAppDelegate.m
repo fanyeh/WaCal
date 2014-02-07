@@ -17,6 +17,7 @@
 #import "SettingViewController.h"
 #import "ProfileTableViewController.h"
 #import <DropboxSDK/DropboxSDK.h>
+#import <Dropbox/Dropbox.h>
 #import "BackupViewController.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
@@ -31,12 +32,18 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [GMSServices provideAPIKey:@"AIzaSyBm7gHFT7u0OC0pny4uR32lz0_hOR8RQko"];
     
+    // Dropbox Core API
     DBSession* dbSession = [[DBSession alloc]initWithAppKey:@"rb186yqaya1ijp8"
                                                    appSecret:@"3eibrlmh4x2keim"
                                                         root:kDBRootAppFolder] // either kDBRootAppFolder or kDBRootDropbox
      ;
     [DBSession setSharedSession:dbSession];
     
+    // Dropbox Sync API
+    DBAccountManager *accountManager =
+    [[DBAccountManager alloc] initWithAppKey:@"APP_KEY" secret:@"APP_SECRET"];
+    [DBAccountManager setSharedManager:accountManager];
+
     BackupViewController *backupController = [[BackupViewController alloc]init];
     [self.window setRootViewController:backupController];
     // Override point for customization after application launch.

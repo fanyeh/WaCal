@@ -90,6 +90,8 @@
 		4CD2B92C18A497BF002DA9E4 /* BackupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD2B92A18A497BF002DA9E4 /* BackupViewController.m */; };
 		4CD2B92D18A497BF002DA9E4 /* BackupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CD2B92B18A497BF002DA9E4 /* BackupViewController.xib */; };
 		4CD2B93018A4B8FD002DA9E4 /* DropboxBackUp.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD2B92F18A4B8FD002DA9E4 /* DropboxBackUp.m */; };
+		4CD2B93218A4CF69002DA9E4 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD2B93118A4CF69002DA9E4 /* CFNetwork.framework */; };
+		4CD2B93418A4D026002DA9E4 /* Dropbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD2B93318A4D026002DA9E4 /* Dropbox.framework */; };
 		4CDA810F18A3C61F00898266 /* 951-baby-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CDA810E18A3C61F00898266 /* 951-baby-selected@2x.png */; };
 		4CF46E4D18878E3800B22888 /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46E4C18878E3800B22888 /* CustomTextField.m */; };
 		4CF592C9186D3B4700F1BEEB /* EventCreateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF592C7186D3B4700F1BEEB /* EventCreateViewController.m */; };
@@ -259,6 +261,8 @@
 		4CD2B92B18A497BF002DA9E4 /* BackupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BackupViewController.xib; sourceTree = "<group>"; };
 		4CD2B92E18A4B8FD002DA9E4 /* DropboxBackUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxBackUp.h; sourceTree = "<group>"; };
 		4CD2B92F18A4B8FD002DA9E4 /* DropboxBackUp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxBackUp.m; sourceTree = "<group>"; };
+		4CD2B93118A4CF69002DA9E4 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		4CD2B93318A4D026002DA9E4 /* Dropbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Dropbox.framework; sourceTree = "<group>"; };
 		4CDA810E18A3C61F00898266 /* 951-baby-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "951-baby-selected@2x.png"; sourceTree = "<group>"; };
 		4CF46E4B18878E3800B22888 /* CustomTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTextField.h; sourceTree = "<group>"; };
 		4CF46E4C18878E3800B22888 /* CustomTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTextField.m; sourceTree = "<group>"; };
@@ -286,6 +290,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CD2B93218A4CF69002DA9E4 /* CFNetwork.framework in Frameworks */,
 				4CD2B92318A492E6002DA9E4 /* Security.framework in Frameworks */,
 				4C12B2FE18A200790046C5EC /* libc++.dylib in Frameworks */,
 				4C12B2F918A1FDE60046C5EC /* SystemConfiguration.framework in Frameworks */,
@@ -297,6 +302,7 @@
 				4C12B2F118A1FDA20046C5EC /* GLKit.framework in Frameworks */,
 				4C12B2EF18A1FD960046C5EC /* CoreText.framework in Frameworks */,
 				4CC3A7E4188D6ECF000BAE1A /* libGPUImage.a in Frameworks */,
+				4CD2B93418A4D026002DA9E4 /* Dropbox.framework in Frameworks */,
 				4C48FFAF188D65820038AE6F /* AVFoundation.framework in Frameworks */,
 				4C48FFAC188D65620038AE6F /* CoreVideo.framework in Frameworks */,
 				4C48FFAA188D65580038AE6F /* CoreMedia.framework in Frameworks */,
@@ -521,6 +527,8 @@
 		4CB3DD7A18521DC400673478 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4CD2B93318A4D026002DA9E4 /* Dropbox.framework */,
+				4CD2B93118A4CF69002DA9E4 /* CFNetwork.framework */,
 				4CD2B92218A492E6002DA9E4 /* Security.framework */,
 				4CD2B91E18A492B5002DA9E4 /* DropboxSDK.framework */,
 				4C12B2FF18A201450046C5EC /* GoogleMaps.bundle */,

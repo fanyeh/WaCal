@@ -10,8 +10,6 @@
 #import "DiaryPhotoCollectionViewController.h"
 #import "PassFilteredImage.h"
 #import "UIImage+Resize.h"
-#import <DropboxSDK/DropboxSDK.h>
-
 
 @class DiaryData;
 
@@ -19,6 +17,5 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (strong,nonatomic) NSMutableArray *selectedPhotos;
 @property (strong,nonatomic) DiaryData *diary;
-@property (nonatomic, strong) DBRestClient *restClient;
 
 @end
