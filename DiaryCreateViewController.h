@@ -8,13 +8,21 @@
 
 #import <UIKit/UIKit.h>
 #import "DiaryPhotoCollectionViewController.h"
-#import "PassFilteredImage.h"
 #import "UIImage+Resize.h"
 
 @class DiaryData;
 
-@interface DiaryCreateViewController : UIViewController <UICollectionViewDataSource,UICollectionViewDelegate,PassFilteredImage,UICollectionViewDelegateFlowLayout,UITextFieldDelegate,UIScrollViewDelegate>
-@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@protocol PhotosDelegate <NSObject>
+@optional
+-(NSMutableArray *)selectedPhotos;
+@end
+
+@interface DiaryCreateViewController : UIViewController <UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,UITextViewDelegate,UIScrollViewDelegate>
+{
+    __weak id<PhotosDelegate>_delegate;
+}
+@property (nonatomic,weak)id<PhotosDelegate>delegate;
+@property (strong, nonatomic)  UICollectionView *collectionView;
 @property (strong,nonatomic) NSMutableArray *selectedPhotos;
 @property (strong,nonatomic) DiaryData *diary;
 

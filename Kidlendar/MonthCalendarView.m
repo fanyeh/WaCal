@@ -85,7 +85,7 @@ CGFloat weekdayViewHeight;
         dateView.row = dateModel.row;
         dateView.tag = i; // Index to link view and date model
         dateView.date = dateModel.date;
-        [dateView.dateLabel setText:[NSString stringWithFormat:@"%ld",dateComp.day]];
+        [dateView.dateLabel setText:[NSString stringWithFormat:@"%ld",(long)dateComp.day]];
         
         // Configure color for dates not in current month
         if (dateModel.isCurrentMonth)

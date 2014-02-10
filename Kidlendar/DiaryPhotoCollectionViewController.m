@@ -14,7 +14,7 @@
 #import <CoreMedia/CoreMedia.h>
 #import "DiaryVideoViewController.h"
 
-@interface DiaryPhotoCollectionViewController ()
+@interface DiaryPhotoCollectionViewController () <PhotosDelegate>
 {
     CGFloat minimumItemSpace;
     CGFloat minimumLineSpace;
@@ -189,16 +189,22 @@
 
 - (void)photoSelectDone
 {
+    DiaryCreateViewController *dvc = [[DiaryCreateViewController alloc]init];
+    dvc.delegate = self;
+    [self.navigationController pushViewController:dvc animated:YES];
+}
+
+-(NSMutableArray *)selectedPhotos
+{
     NSArray *selectedPhotosIndexPath = [self.collectionView indexPathsForSelectedItems];
     NSMutableArray *photoAssets = [[NSMutableArray alloc]init];
     
     for (NSIndexPath *indexPath in selectedPhotosIndexPath) {
         ALAsset *asset =  [_assets objectAtIndex:indexPath.row];
-       [photoAssets addObject:[UIImage imageWithCGImage:asset.defaultRepresentation.fullScreenImage]];
+        [photoAssets addObject:[UIImage imageWithCGImage:asset.defaultRepresentation.fullScreenImage]];
     }
-    DiaryCreateViewController *dvc = [[DiaryCreateViewController alloc]init];
-    dvc.selectedPhotos = photoAssets;
-    [self.navigationController pushViewController:dvc animated:YES];
+    return photoAssets;
 }
+
 
 @end

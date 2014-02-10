@@ -33,9 +33,9 @@
         UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(xoff, yoff, 80, 80)];
         imageView.layer.borderColor = [[UIColor whiteColor]CGColor];
         imageView.layer.borderWidth = 1.0f;
-        [imageView setContentMode:UIViewContentModeScaleToFill];
+        //[imageView setContentMode:UIViewContentModeScaleToFill];
         imageView.image = diaryPhotos[i];
-        [self addSubview:imageView];
+        [self.contentView addSubview:imageView];
         xoff +=3;
         yoff +=3;
     }

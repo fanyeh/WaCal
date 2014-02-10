@@ -34,6 +34,7 @@
     EKEvent *_comingUpEvent;
     NSDateFormatter *dateFormatter;
     NSDateFormatter *timeFormatter;
+    NSMutableArray *diaryArrayPhotos;
 }
 
 @property (weak, nonatomic) IBOutlet UILabel *comingEventTime;
@@ -158,9 +159,31 @@
                                             selector:@selector(refreshCalendarOnEventChange:)
                                                 name:@"eventChange" object:nil];
     
-    // Only refersh when view did load and event update
-    //[self refreshEvent];
+    // Add observer to monitor event when new new calendar event is created or removed
+    [[NSNotificationCenter defaultCenter]addObserver:self
+                                            selector:@selector(refreshDiary:)
+                                                name:@"newDiary" object:nil];
+    
+    // Reload diary images
+    [self reloadDiaryImages];
 }
+
+-(void)reloadDiaryImages
+{
+    NSArray *diaryArray = [[DiaryDataStore sharedStore]allItems];
+    diaryArrayPhotos = [[NSMutableArray alloc]init];
+    for (DiaryData *d in diaryArray) {
+        FileManager *fm = [[FileManager alloc]initWithKey:d.diaryKey];
+        NSMutableArray *diaryPhotos = [[NSMutableArray alloc]init];
+        for (int i = 0;i <4;i++) {
+            UIImage *image = [fm loadDiaryImageWithIndex:i];
+            if (image)
+                [diaryPhotos addObject:[image resizeImageToSize:CGSizeMake(80, 80)]];
+        }
+        [diaryArrayPhotos addObject:diaryPhotos];
+    }
+}
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -237,6 +260,13 @@
     else
         [self resetCalendar];
 }
+
+-(void)refreshDiary:(NSNotification *)notification
+{
+    [self reloadDiaryImages];
+    [_diaryCollectionView reloadData];
+}
+
 
 #pragma mark -UIGesture
 
@@ -473,15 +503,9 @@
     DiaryCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
     
     // Configure the cell...
-    NSMutableArray *diaryPhotos = [[NSMutableArray alloc]init];
     DiaryData *d = [[DiaryDataStore sharedStore]allItems][indexPath.row];
-    
-    FileManager *fm = [[FileManager alloc]initWithKey:d.diaryKey];
-    for (int i = 0;i <4;i++) {
-        [diaryPhotos addObject:[fm loadDiaryImageWithIndex:i]];
-    }
-    cell.subjectLabel.text = @"test 123";
-    [cell setupImages:diaryPhotos];
+    cell.subjectLabel.text = d.diaryText;
+    [cell setupImages:diaryArrayPhotos[indexPath.row]];
     return cell;
 }
 

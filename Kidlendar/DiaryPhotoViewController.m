@@ -9,7 +9,7 @@
 #import "DiaryPhotoViewController.h"
 #import "GPUImage.h"
 
-@interface DiaryPhotoViewController ()
+@interface DiaryPhotoViewController () 
 {
     UIImage *filterImage;
 }
@@ -104,7 +104,8 @@
 
 - (void)done
 {
-    [_PassFilteredImageDelegate filteredImage:_photoImageView.image index:_index];
+    [_delegate filteredImage:_photoImageView.image index:_index];
     [self.navigationController popViewControllerAnimated:YES];
 }
+
 @end

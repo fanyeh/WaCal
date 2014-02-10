@@ -56,4 +56,5 @@
     UIImage *tn = [UIImage imageWithData:[self thumbnailData]];
     [self setPrimitiveValue:tn forKey:@"thumbnail"];
 }
+
 @end

@@ -74,7 +74,7 @@
     // Configure the cell...
     DiaryData *d = [DiaryDataStore sharedStore].allItems[indexPath.row];
     cell.imageView.image = d.thumbnail;
-    cell.textLabel.text = d.subject;
+    cell.textLabel.text = d.diaryText;
     return cell;
 }
 
@@ -129,17 +129,19 @@
 
  */
 
-- (void)createDiary
-{
-    MediaTableViewController *mvc = [[MediaTableViewController alloc]init];
-    [self.navigationController pushViewController:mvc animated:YES];
-}
+#pragma mark - UITableViewDelegate
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     DiaryViewController *controller = [[DiaryViewController alloc]init];
     controller.diaryData = [[DiaryDataStore sharedStore]allItems][indexPath.row];
     [self.navigationController pushViewController:controller animated:NO];
+}
+
+- (void)createDiary
+{
+    MediaTableViewController *mvc = [[MediaTableViewController alloc]init];
+    [self.navigationController pushViewController:mvc animated:YES];
 }
 
 -(void)editDiaryTable

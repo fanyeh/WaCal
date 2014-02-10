@@ -9,5 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface DiaryPhotoCell : UICollectionViewCell
-@property (strong,nonatomic) IBOutlet UIImageView *photoView;
+@property (strong,nonatomic) UIImageView *photoView;
+@property (strong,nonatomic) UILabel *deleteBadger;
+- (void)deletePhotoBadger:(BOOL)deletePhotoBadger;
+
 @end

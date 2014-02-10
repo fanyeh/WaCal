@@ -26,6 +26,7 @@
     EventTitleAndTimeView *titleAndTimeView;
     GPUImageiOSBlurFilter *blurFilter;
     UICollectionView *profileCollectionView;
+    UIView *profileSelectionView;
 }
 @end
 
@@ -93,11 +94,13 @@
     // Setup Profile table
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
     [layout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
-    profileCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, 300, 60) collectionViewLayout:layout];
+    profileCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(10, 0, 300, 60) collectionViewLayout:layout];
     [profileCollectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Cell"];
     profileCollectionView.dataSource = self;
     profileCollectionView.delegate = self;
-    profileCollectionView.backgroundColor = [UIColor colorWithWhite:0.8 alpha:0.8];
+    profileCollectionView.backgroundColor =  [UIColor colorWithWhite:0.8 alpha:0.8];
+    profileSelectionView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 70)];
+    [profileSelectionView addSubview:profileCollectionView];
     
     // Set up save button
     [titleAndTimeView.saveButton addTarget:self action:@selector(createEvent) forControlEvents:UIControlEventTouchDown];
@@ -201,7 +204,7 @@
             titleAndTimeView.startTimeField.layer.borderWidth = 0;
             break;
         case 4:
-            titleAndTimeView.nameTextField.inputAccessoryView = profileCollectionView;
+            titleAndTimeView.nameTextField.inputAccessoryView = profileSelectionView;
         default:
             break;
     }

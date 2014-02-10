@@ -12,14 +12,13 @@
 @interface DiaryData : NSManagedObject
 
 @property (nonatomic) NSTimeInterval dateCreated;
-@property (nonatomic, retain) NSString * diaryText;
+@property (nonatomic, strong) NSString * diaryText;
 @property (nonatomic) double orderingValue;
-@property (nonatomic, retain) NSString * subject;
+@property (nonatomic, strong) NSString * subject;
 @property (nonatomic,strong) UIImage *thumbnail;
-@property (nonatomic, retain) NSData * thumbnailData;
-@property (nonatomic, retain) NSString * diaryKey;
+@property (nonatomic, strong) NSData * thumbnailData;
+@property (nonatomic, strong) NSString * diaryKey;
 
 - (void)setThumbnailDataFromImage:(UIImage *)image;
-
 
 @end

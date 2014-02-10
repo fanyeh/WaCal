@@ -17,7 +17,6 @@
 #import "SettingViewController.h"
 #import "ProfileTableViewController.h"
 #import <DropboxSDK/DropboxSDK.h>
-#import <Dropbox/Dropbox.h>
 #import "BackupViewController.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
@@ -38,22 +37,17 @@
                                                         root:kDBRootAppFolder] // either kDBRootAppFolder or kDBRootDropbox
      ;
     [DBSession setSharedSession:dbSession];
-    
-    // Dropbox Sync API
-    DBAccountManager *accountManager =
-    [[DBAccountManager alloc] initWithAppKey:@"APP_KEY" secret:@"APP_SECRET"];
-    [DBAccountManager setSharedManager:accountManager];
-
+    /*
     BackupViewController *backupController = [[BackupViewController alloc]init];
     [self.window setRootViewController:backupController];
     // Override point for customization after application launch.
-    /*
+    
     [FBProfilePictureView class];
 
     ShareViewController *svc = [[ShareViewController alloc]init];
     [self.window setRootViewController:svc];
     
-     
+     */
     // Init Calendar store
     [CalendarStore sharedStore];
     
@@ -63,13 +57,15 @@
     else {
         [[[CalendarStore sharedStore]eventStore] requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
             if (granted) {
-                [self createAllViewControllers];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self createAllViewControllers];
+                });
             }
             else
                 NSLog(@"need permission , error %@",error);
         }];
     }
-     */
+     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     

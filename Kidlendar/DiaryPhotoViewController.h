@@ -7,10 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PassFilteredImage.h"
+@protocol filterImageDelegate <NSObject>
+@required
+- (void)filteredImage:(UIImage *)image index:(NSInteger)i;
+@end
 
 @interface DiaryPhotoViewController : UIViewController
+{
+    __weak id<filterImageDelegate>_delegate;
+}
 @property (strong,nonatomic) UIImage *photoImage;
-@property id <PassFilteredImage> PassFilteredImageDelegate;
+@property (weak,nonatomic) id<filterImageDelegate>delegate;
 @property NSInteger index;
 @end

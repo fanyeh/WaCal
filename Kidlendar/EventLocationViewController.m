@@ -71,7 +71,7 @@
     mapView_.hidden = YES;
     [self.view addSubview:mapView_];
     
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showMap)];
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clearText)];
     [locationView.locationField.rightView addGestureRecognizer:tapGesture];
     
     // Put save button on navigation bar
@@ -96,7 +96,7 @@
     [NSURLConnection sendAsynchronousRequest:request
                                        queue:queue
                            completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-                               [activityIndicator stopAnimating];
+                               
                                if ([data length]>0 && connectionError==nil) {
                                    //收到正確的資料，連線沒有錯
                                    NSDictionary* json = [NSJSONSerialization JSONObjectWithData:data
@@ -104,9 +104,11 @@
                                                                                           error:&connectionError];
                                    //The results from Google will be an array obtained from the NSDictionary object with the key "results".
                                    places = [json objectForKey:@"results"];
-                                   NSLog(@"places %@",places);
-                                   [locationView.searchedLocation setHidden:NO];
-                                   [locationView.searchedLocation reloadData];
+                                   dispatch_async(dispatch_get_main_queue(), ^{
+                                       [activityIndicator stopAnimating];
+                                       [locationView.searchedLocation setHidden:NO];
+                                       [locationView.searchedLocation reloadData];
+                                   });
                                    
                                } else if ([data length]==0 && connectionError==nil) {
                                    //沒有資料，連線沒有錯誤
@@ -131,9 +133,9 @@
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
-- (void)showMap
+- (void)clearText
 {
-
+    locationView.locationField.text = nil;
 }
 
 - (void)didReceiveMemoryWarning
