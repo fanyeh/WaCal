@@ -13,10 +13,9 @@
 
 @interface DiaryViewController () <DBRestClientDelegate>
 {
-    BOOL folderExist;
-    BOOL subFolderExist;
     NSString *foldername;
-    NSString *subfolderName;
+    NSString *parentFolder;
+    NSString *childFolder;
 }
 @property (weak, nonatomic) IBOutlet UIImageView *diaryPhoto;
 @property (weak, nonatomic) IBOutlet UITextView *diaryDetailTextView;
@@ -45,6 +44,7 @@
     // Put that image onto the screen in our image view
     _diaryPhoto.image = [fm loadCollectionImage];
     _diaryDetailTextView.text = _diaryData.diaryText;
+
     
     UIBarButtonItem *backupButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize
                                                                                  target:self
@@ -53,12 +53,12 @@
     self.navigationItem.rightBarButtonItem = backupButton;
     
     [[NSNotificationCenter defaultCenter]addObserver:self
-                                            selector:@selector(uploadFile:)
-                                                name:@"folderCheckDone" object:nil];
-    
+                                            selector:@selector(subFolderCheck:)
+                                                name:@"firstFolderCheckDone" object:nil];
+
     [[NSNotificationCenter defaultCenter]addObserver:self
                                             selector:@selector(uploadFile:)
-                                                name:@"folderCreateDone" object:nil];
+                                                name:@"secondFolderCheckDone" object:nil];
 
 
     // TODO:Add swipe gesture , only swipable if there are more than 1 diaries
@@ -75,10 +75,13 @@
 {
     if (![[DBSession sharedSession] isLinked]) {
 		[[DBSession sharedSession] linkFromController:self];
-        // Call method to execute folder check with completion block
     }
     else {
-        foldername  = @"unknown";
+        parentFolder = @"unknown";
+        childFolder = [NSString stringWithFormat:@"%f",_diaryData.dateCreated];
+        
+        // Check if parent folder exist
+        foldername  = parentFolder;
         [[self restClient] loadMetadata:@"/"];
 
 //        [[DBSession sharedSession] unlinkAll];
@@ -89,31 +92,23 @@
     }
 }
 
+- (void)subFolderCheck:(NSNotification *)notification
+{
+    foldername  = childFolder;
+    [[self restClient] loadMetadata:[NSString stringWithFormat:@"/%@",parentFolder]];
+}
+
 - (void)uploadFile:(NSNotification *)notification
 {
-    NSLog(@"Checking folders");
-    subfolderName = [NSString stringWithFormat:@"%f",_diaryData.dateCreated];
     FileManager *fm = [[FileManager alloc]initWithKey:_diaryData.diaryKey];
-    NSString *fromDir = [fm fileDirectory];
     NSString *filename = @"collectionViewImage.png";
-    
-    if (folderExist) {
-        if (subFolderExist) {
-            // save file
-            NSString *destDir = [NSString stringWithFormat:@"/%@/%@",foldername,subfolderName];
-            [_restClient uploadFile:filename
-                             toPath:destDir
-                      withParentRev:nil
-                           fromPath:fromDir];
-        }
-        else {
-            [[self restClient] createFolder:[NSString stringWithFormat:@"/%@/%@",foldername,subfolderName]];
-        }
-    }
-    else {
-        // create folder then save file
-        [[self restClient] createFolder:foldername];
-    }
+    NSString *fromDir =[NSString stringWithFormat:@"%@/%@",[fm fileDirectory],filename];
+
+    NSString *destDir = [NSString stringWithFormat:@"/%@/%@",parentFolder,foldername];
+    [_restClient uploadFile:filename
+                     toPath:destDir
+              withParentRev:nil
+                   fromPath:fromDir];
 }
 
 #pragma mark - DBRestClientDelegate
@@ -129,26 +124,20 @@
 
 - (void)restClient:(DBRestClient *)client loadedMetadata:(DBMetadata *)metadata {
     if (metadata.isDirectory) {
-        folderExist = NO;
-        subFolderExist = NO;
+        BOOL folderExist = NO;
         for (DBMetadata *file in metadata.contents) {
             // Check if there's folder
             if (file.isDirectory && [file.filename isEqualToString:foldername]) {
                 folderExist = YES;
-                NSLog(@"Folder %@",file.filename);
-                NSLog(@"Contents %@",file.contents);
-                for (DBMetadata *subFolder in file.contents) {
-                    // Check if there's subfolder
-                    NSLog(@"Sub folder %@",subFolder.filename);
-                    if (subFolder.isDirectory && [subFolder.filename isEqualToString:subfolderName]) {
-                        subFolderExist = YES;
-                        break;
-                    }
-                }
+                if ([metadata.filename isEqualToString:@"/"])
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"firstFolderCheckDone" object:nil];
+                else
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"secondFolderCheckDone" object:nil];
                 break;
             }
         }
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"folderCheckDone" object:nil];
+        if (!folderExist)
+            [_restClient createFolder:foldername];
     }
     // compare file.filename with profile name , if not exist create new folder use profile name
     // if there's no profile name , create new forder named "unknown"
@@ -163,7 +152,10 @@
 - (void)restClient:(DBRestClient*)client createdFolder:(DBMetadata*)folder;
 {
     // Folder is the metadata for the newly created folder
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"folderCreateDone" object:nil];
+    if ([folder.filename isEqualToString:[NSString stringWithFormat:@"/%@",parentFolder]])
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"firstFolderCheckDone" object:nil];
+    else
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"secondFolderCheckDone" object:nil];
 }
 
 - (void)restClient:(DBRestClient*)client createFolderFailedWithError:(NSError*)error;

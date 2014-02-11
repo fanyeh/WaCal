@@ -201,7 +201,18 @@
     
     for (NSIndexPath *indexPath in selectedPhotosIndexPath) {
         ALAsset *asset =  [_assets objectAtIndex:indexPath.row];
-        [photoAssets addObject:[UIImage imageWithCGImage:asset.defaultRepresentation.fullScreenImage]];
+        
+        // Retrieve the image orientation from the ALAsset
+        UIImageOrientation orientation = UIImageOrientationUp;
+        NSNumber* orientationValue = [asset valueForProperty:@"ALAssetPropertyOrientation"];
+        if (orientationValue != nil) {
+            orientation = [orientationValue intValue];
+        }
+        
+        CGFloat scale  = 1;
+        UIImage* image = [UIImage imageWithCGImage:[asset.defaultRepresentation fullResolutionImage]
+                                             scale:scale orientation:orientation];
+        [photoAssets addObject:image];
     }
     return photoAssets;
 }

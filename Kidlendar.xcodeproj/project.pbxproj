@@ -391,8 +391,6 @@
 				4C6C49C3186DDDDF0042EB61 /* DiaryViewController.xib */,
 				4CA2506D1869517400AEA94E /* DiaryPhotoCell.h */,
 				4CA2506E1869517400AEA94E /* DiaryPhotoCell.m */,
-				4CA2506A1869377000AEA94E /* UIImage+Resize.h */,
-				4CA2506B1869377000AEA94E /* UIImage+Resize.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -585,6 +583,8 @@
 		4CB3DD8218521DC400673478 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4CA2506A1869377000AEA94E /* UIImage+Resize.h */,
+				4CA2506B1869377000AEA94E /* UIImage+Resize.m */,
 				4CDA810E18A3C61F00898266 /* 951-baby-selected@2x.png */,
 				4C5BA25C1861745D00528843 /* 929-film-1.png */,
 				4C5BA25A1861731A00528843 /* 929-film-1@2x.png */,

@@ -39,8 +39,11 @@
     
     self.navigationItem.rightBarButtonItem = saveButton;
 
+    
+    [_photoImageView setContentMode:UIViewContentModeScaleAspectFit];
     [_photoImageView setImage:_photoImage];
-    filterImage = [[UIImage alloc]initWithData:UIImagePNGRepresentation(_photoImage)];
+    
+    //filterImage = [[UIImage alloc]initWithData:UIImagePNGRepresentation(_photoImage)];
 }
 
 -(void)viewWillAppear:(BOOL)animated

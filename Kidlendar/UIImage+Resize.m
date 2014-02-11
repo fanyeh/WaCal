@@ -7,8 +7,10 @@
 //
 
 #import "UIImage+Resize.h"
+#import "GPUImage.h"
 
 @implementation UIImage (Resize)
+
 - (UIImage *)resizeImageToSize:(CGSize)newSize
 {
     // Put that image onto the screen in our image view
@@ -22,14 +24,12 @@
     float newWidth = self.size.width / factor;
     float newHeight = self.size.height / factor;
 
-    
-    CGRect rect = CGRectMake(0.0, 0.0, newWidth, newHeight);
-    UIGraphicsBeginImageContext(rect.size);
-    [self drawInRect:rect];
-    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    // Create a bitmap context.
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(newWidth, newHeight), YES, [UIScreen mainScreen].scale);
+    [self drawInRect:CGRectMake(0,0,newWidth,newHeight)];
+    UIImage* finalImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-
-    return img;
+    return finalImage;
 }
 
 - (UIImage *)transformOrientationForSave
@@ -111,12 +111,33 @@
 
 -(UIImage *)resizeWtihFaceDetect:(CGSize)size
 {
-    CGFloat displayViewRatio = size.width/size.height;
-    CGFloat finalHeight = self.size.width/displayViewRatio;
-    CGFloat finalWidth = self.size.width;
-
     // draw a CI image with the previously loaded face detection picture
-    CIImage* image =  [CIImage imageWithCGImage:self.CGImage];
+    CIImage *o_image =  [CIImage imageWithCGImage:self.CGImage];
+    NSLog(@"CIImage extent before transform %@",o_image);
+    CGFloat xRatio = self.size.width/o_image.extent.size.width;
+    CGFloat yRatio = self.size.height/o_image.extent.size.height;
+    CGAffineTransform t = CGAffineTransformMakeScale(xRatio, yRatio);
+    CIImage *image = [o_image imageByApplyingTransform:t];
+    NSLog(@"CIImage extent after transform %@",image);
+
+    
+
+//    CGFloat imageWidth = image.extent.size.width;
+//    CGFloat imageHeight = image.extent.size.height;
+    
+    CGFloat imageWidth = self.size.width;
+    CGFloat imageHeight = self.size.height;
+    
+    CGFloat cropRatio = size.width/size.height;
+    CGFloat maxCropHeight = imageWidth/cropRatio;
+    CGFloat maxCropWidth = imageWidth;
+    
+    if (maxCropHeight > imageHeight) {
+        maxCropHeight = imageHeight;
+        maxCropWidth = imageHeight*cropRatio;
+    }
+    
+    NSMutableArray *facesBounds = [[NSMutableArray alloc]init];
     
     // create a face detector - since speed is not an issue we'll use a high accuracy
     // detector
@@ -126,59 +147,133 @@
     
     // create an array containing all the detected faces from the detector
     NSArray* features = [detector featuresInImage:image];
-    float x = 0;
-    float y = 0;
-    float x1 = 0;
-    float y1 = 0;
-    int i =0;
     
-    if (!features) {
-        return [self resizeImageToSize:size];
+    NSLog(@"Image width %f height %f",imageWidth,imageHeight);
+    NSLog(@"crop width %f , crop height = %f",maxCropWidth,maxCropHeight);
+
+    
+    if ([features count]==0) {
+        CGFloat y = (imageHeight - maxCropHeight)/2;
+        CGFloat x = (imageWidth - maxCropWidth)/2;
+        CGRect cropRect = CGRectMake(x, y, maxCropWidth, maxCropHeight);
+        return [self cropImageWithRect:cropRect resize:size];
     }
     else {
         for(CIFaceFeature* faceFeature in features)
         {
             CGRect b = faceFeature.bounds;
-            if (i ==0 ) {
-                x = b.origin.x;
-                y = b.origin.y;
-                if (b.origin.x + b.size.width > x1)
-                    x1 = b.origin.x + b.size.width;
-                if (b.origin.y + b.size.height > y1)
-                    y1 = b.origin.y + b.size.height;
-                
+            NSValue *v = [NSValue valueWithCGRect:b];
+            [facesBounds addObject:v];
+        }
+        
+        // Set up
+        CGRect initialRect = [facesBounds[0] CGRectValue];
+        CGFloat y = initialRect.origin.y;
+        CGFloat x = (imageWidth - maxCropWidth)/2;
+        CGFloat diagonalY = initialRect.origin.y+initialRect.size.height;
+        //CGFloat diagonalX = initialRect.origin.x+initialRect.size.width;
+        CGRect highestFaceBounds = initialRect;
+        
+        for(NSValue *v in facesBounds) {
+            CGRect faceBounds = [v CGRectValue];
+            NSLog(@"face rect %@",v);
+            CGSize  faceSize = faceBounds.size;
+            CGPoint faceOrigin = faceBounds.origin;
+            CGPoint faceOriginDiagonal = CGPointMake(faceOrigin.x+faceSize.width, faceOrigin.y+faceSize.height);
+            
+            if (faceOrigin.y <y)
+                y = faceOrigin.y;
+            
+            if (faceOriginDiagonal.y > diagonalY) {
+                diagonalY = faceOriginDiagonal.y;
+                highestFaceBounds = faceBounds;
+            }
+        }
+        
+        CGFloat sumFaceDetectHeight = diagonalY - y;
+        NSLog(@"crop width %f , crop height = %f , detect height = %f",maxCropWidth,maxCropHeight,sumFaceDetectHeight);
+        
+        // If face detect rec > max crop height
+        if (sumFaceDetectHeight > maxCropHeight) {
+            
+            // Y coordinate of highest face bounds height
+            CGFloat highestFaceBoundsHeight_y = highestFaceBounds.origin.y + highestFaceBounds.size.height;
+            NSLog(@"y %f highest y %f",y,highestFaceBoundsHeight_y);
+            if (maxCropHeight > highestFaceBounds.size.height) {
+                CGFloat offset = (maxCropHeight - highestFaceBounds.size.height)/2;
+                // Place crop rect in face bound center if no touched image height
+                if ((highestFaceBoundsHeight_y+offset) < imageHeight) {
+                    y = highestFaceBounds.origin.y - offset;
+                    NSLog(@"1");
+                }
+                else {
+                    y = self.size.height - maxCropHeight;
+                    NSLog(@"2");
+                }
+            }
+            // Set the crop rect in the middle of face bounds
+            else {
+                y = highestFaceBounds.origin.y + ((highestFaceBounds.size.height-maxCropHeight)/2);
+                NSLog(@"3");
+            }
+        } else {
+            // If max crop rect exceeded image height , move crop rect down to make it within image height
+            if ((imageHeight - y ) < maxCropHeight) {
+                // position the crop rect in middle of face rect
+                y = imageHeight - maxCropHeight;
+                NSLog(@"4");
+            }
+            else if ((imageHeight - y ) > maxCropHeight) {
+                CGFloat offset =  (maxCropHeight - sumFaceDetectHeight)/2;
+                if ((y-offset) > 0)
+                    y -= offset;
+                else
+                    y =0;
+                NSLog(@"5");
             }
             else {
-                if (b.origin.x < x)
-                    x = b.origin.x;
-                if (b.origin.y < y)
-                    y = b.origin.y;
-                if (b.origin.x + b.size.width > x1)
-                    x1 = b.origin.x + b.size.width;
-                if (b.origin.y + b.size.height > y1)
-                    y1 = b.origin.y + b.size.height;
+                y = imageHeight - maxCropHeight;
+                NSLog(@"6");
             }
-            i++;
         }
-        float cropHeight = y1 - y;
         
-        float remainHeightTop = self.size.height - y1;
-        float remainHeightFromCrop = finalHeight - cropHeight;
-        float remainHeightBot ;
+        NSLog(@"final y %f",y);
         
-        if (remainHeightFromCrop/2 > remainHeightTop)
-            remainHeightBot = remainHeightFromCrop - remainHeightTop;
-        else
-            remainHeightBot = remainHeightTop/2;
+        // Final rect from face detection
+        CGRect CIfinalRect = CGRectMake(x,y,maxCropWidth,maxCropHeight);
+        NSValue *ci = [NSValue valueWithCGRect:CIfinalRect];
+        NSLog(@"CIRect%@",ci);
         
-        y = y - remainHeightBot;
-        
-        CGRect finalRect = CGRectMake(0,y,finalWidth,finalHeight);
-        CIImage *rawImg = [CIImage imageWithCGImage:self.CGImage];
-        CIImage *imageRef  = [rawImg imageByCroppingToRect:finalRect];
-        UIImage *finalImage = [UIImage imageWithCIImage:imageRef];
-        return [finalImage resizeImageToSize:size];
+        // Convert CIImage coordinate to UIImage coordinate
+        CGAffineTransform transform = CGAffineTransformMakeScale(1, -1);
+        transform = CGAffineTransformTranslate(transform,0, -imageHeight);
+        CGRect cropRect = CGRectApplyAffineTransform(CIfinalRect, transform);
+        // Crop then resize
+        return [self cropImageWithRect:cropRect resize:size];
     }
+}
+
+- (UIImage *)cropImageWithRect:(CGRect)cropRect resize:(CGSize)size
+{
+    // Convert cropRect unit to cropRegion unit
+    CGAffineTransform t = CGAffineTransformMakeScale(1.0f / self.size.width, 1.0f / self.size.height);
+    CGRect cropRegion = CGRectApplyAffineTransform(cropRect, t);
+    
+    NSValue *c = [NSValue valueWithCGRect:cropRect];    
+    NSLog(@"crop rect %@",c);
+    
+//    // Process the filtering
+    GPUImageCropFilter *cropFilter = [[GPUImageCropFilter alloc]init];
+    cropFilter.cropRegion = cropRegion;
+    UIImage *cropImage =  [cropFilter imageByFilteringImage:self];
+//
+    // Create a bitmap context.
+//    UIGraphicsBeginImageContextWithOptions(size, YES, [UIScreen mainScreen].scale);
+////    [cropImage drawInRect:CGRectMake(0,0,size.width,size.height)];
+//
+//    UIImage* finalImage = UIGraphicsGetImageFromCurrentImageContext();
+//    UIGraphicsEndImageContext();
+    return cropImage;
 }
 
 @end

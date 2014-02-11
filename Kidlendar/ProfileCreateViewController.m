@@ -10,6 +10,7 @@
 #import "ProfileData.h"
 #import "ProfileDataStore.h"
 #import "ImageStore.h"
+#import "UIImage+Resize.h"
 
 @interface ProfileCreateViewController ()
 {
@@ -155,33 +156,9 @@
     CFRelease(newUniqueIDString);
     CFRelease(newUniqueID);
     
-    // Put that image onto the screen in our image view    
+    // Put that image onto the screen in our image view
     
-    float actualHeight = image.size.height;
-    float actualWidth = image.size.width;
-    float imgRatio = actualWidth/actualHeight;
-    float maxRatio = _profileImageView.frame.size.width/_profileImageView.frame.size.height;
-    
-    if(imgRatio!=maxRatio){
-        if(imgRatio < maxRatio){
-            imgRatio = _profileImageView.frame.size.height / actualHeight;
-            actualWidth = imgRatio * actualWidth;
-            actualHeight = _profileImageView.frame.size.height;
-        }
-        else{
-            imgRatio = _profileImageView.frame.size.width / actualWidth;
-            actualHeight = imgRatio * actualHeight;
-            actualWidth = _profileImageView.frame.size.width;
-        }
-    }
-    CGRect rect = CGRectMake(0.0, 0.0, actualWidth, actualHeight);
-    UIGraphicsBeginImageContext(rect.size);
-    [image drawInRect:rect];
-    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    //imageSize = UIImagePNGRepresentation(img);
-    
-    _profileImageView.contentMode = UIViewContentModeScaleAspectFit;
+    UIImage *img = [[image resizeImageToSize:CGSizeMake(640, 1136)] resizeWtihFaceDetect:_profileImageView.frame.size];
     [_profileImageView setImage:img];
     [self dismissViewControllerAnimated:YES completion:nil];
 }

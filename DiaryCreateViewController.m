@@ -122,7 +122,7 @@
     [cell deletePhotoBadger:deleteDiaryPhotos];
     UIImage *photo = [_selectedPhotos objectAtIndex:indexPath.row];
     cell.photoView.frame = cell.contentView.bounds;
-    cell.photoView.image = [photo resizeImageToSize:cell.contentView.frame.size];
+    cell.photoView.image = [[photo resizeImageToSize:CGSizeMake(640, 1136)] resizeWtihFaceDetect:cell.contentView.frame.size];
     // Add gesture to each cell
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc]initWithTarget:self
                                                                                            action:@selector(enlargCell:)];
@@ -297,6 +297,7 @@
     
     // Create Image from collection view
     UIGraphicsBeginImageContext(_collectionView.bounds.size);
+    UIGraphicsBeginImageContextWithOptions(_collectionView.bounds.size, YES, [UIScreen mainScreen].scale);
     [_collectionView.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage *collectionViewImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
