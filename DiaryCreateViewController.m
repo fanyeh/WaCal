@@ -310,7 +310,7 @@
     [[DiaryDataStore sharedStore]saveChanges];
     
     // Send out notification for new diary added
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"newDiary" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"diaryChange" object:nil];
     
     // Back to Diary table view controller
     [self.navigationController popToRootViewControllerAnimated:YES];

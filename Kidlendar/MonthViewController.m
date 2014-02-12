@@ -154,16 +154,15 @@
     self.navigationItem.leftBarButtonItem = monthButton;
     
     
-    // Add observer to monitor event when new new calendar event is created or removed
+    // Add observer to monitor event when new calendar event is created or removed
     [[NSNotificationCenter defaultCenter]addObserver:self
                                             selector:@selector(refreshCalendarOnEventChange:)
                                                 name:@"eventChange" object:nil];
     
-    // Add observer to monitor event when new new calendar event is created or removed
+    // Add observer to monitor event when new calendar event is created or removed
     [[NSNotificationCenter defaultCenter]addObserver:self
                                             selector:@selector(refreshDiary:)
-                                                name:@"newDiary" object:nil];
-    
+                                                name:@"diaryChange" object:nil];
     // Reload diary images
     [self reloadDiaryImages];
 }

@@ -91,10 +91,14 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
+        NSLog(@"Diary count before delete %ld",[[[DiaryDataStore sharedStore]allItems]count]);
         // Delete the row from the data source
         DiaryData *d = [[[DiaryDataStore sharedStore]allItems]objectAtIndex:[indexPath row]];
         [[DiaryDataStore sharedStore] removeItem:d];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"diaryChange" object:nil];
+        NSLog(@"Diary count after delete %ld",[[[DiaryDataStore sharedStore]allItems]count]);
+
     }
     else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view

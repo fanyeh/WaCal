@@ -85,6 +85,7 @@
     [[ImageStore sharedStore] deleteImageForKey:key];
     [context deleteObject:p];
     [allItems removeObjectIdenticalTo:p];
+    [self saveChanges];
 }
 
 - (NSArray *)allItems

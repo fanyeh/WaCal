@@ -82,11 +82,12 @@
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
     NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:d.diaryKey];
-    NSLog(@"Delete DatePath %@",dataPath);
     if ([[NSFileManager defaultManager] fileExistsAtPath:dataPath])
         [[NSFileManager defaultManager] removeItemAtPath:dataPath error:nil]; //Delete folder
-    [context deleteObject:d];
+    NSLog(@"Delete DatePath %@",dataPath);
     [allItems removeObjectIdenticalTo:d];
+    [context deleteObject:d];
+    [self saveChanges];
 }
 
 - (NSArray *)allItems
