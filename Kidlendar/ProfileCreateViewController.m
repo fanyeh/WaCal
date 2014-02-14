@@ -11,12 +11,14 @@
 #import "ProfileDataStore.h"
 #import "ImageStore.h"
 #import "UIImage+Resize.h"
+#import "DiaryPhotoCollectionViewController.h"
 
 @interface ProfileCreateViewController ()
 {
     UIDatePicker *_datePicker;
     UIImagePickerController *_imagePicker;
 }
+@property (nonatomic) IBOutlet UIView *camerOverlayView;
 
 @end
 
@@ -166,6 +168,11 @@
 - (void)pickFromCamera
 {
     [_imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
+    _imagePicker.showsCameraControls = NO;
+    [[NSBundle mainBundle] loadNibNamed:@"CamerOverlayView" owner:self options:nil];
+    _camerOverlayView.frame = _imagePicker.cameraOverlayView.frame;
+    _imagePicker.cameraOverlayView = _camerOverlayView;
+    NSLog(@"overlay view %@",_imagePicker.cameraOverlayView);
     [self presentViewController:_imagePicker animated:YES completion:nil];
 }
 
@@ -193,12 +200,27 @@
     [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
     _birthdayTextField.text = [dateFormatter stringFromDate:_datePicker.date];
 }
+- (IBAction)dismissCamer:(id)sender {
+    [_imagePicker dismissViewControllerAnimated:YES completion:nil];
+}
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [_nameTextField resignFirstResponder];
     [_birthdayTextField resignFirstResponder];
     [self.navigationController setToolbarHidden:YES animated:YES];
+}
+- (IBAction)takePhoto:(id)sender {
+    NSLog(@"Take photo");
+}
+
+- (IBAction)showVideo:(id)sender {
+}
+- (IBAction)showAlbum:(id)sender
+{
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
+    DiaryPhotoCollectionViewController *dvc = [[DiaryPhotoCollectionViewController alloc]initWithCollectionViewLayout:layout];
+    [_imagePicker pushViewController:dvc animated:YES];
 }
 
 @end

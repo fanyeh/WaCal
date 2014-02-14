@@ -21,6 +21,9 @@
 		4C2E83BD1890BB450051215F /* CalendarStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2E83BC1890BB450051215F /* CalendarStore.m */; };
 		4C2FEC101889697600D37F18 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2FEC0E1889697600D37F18 /* EventViewController.m */; };
 		4C2FEC111889697600D37F18 /* EventViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C2FEC0F1889697600D37F18 /* EventViewController.xib */; };
+		4C315C7618AB18E600A2A363 /* CamerOverlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C315C7518AB18E600A2A363 /* CamerOverlayView.xib */; };
+		4C315C7B18AB298800A2A363 /* PhotoLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C315C7A18AB298800A2A363 /* PhotoLoader.m */; };
+		4C35FEF818AD0E1600307135 /* PhotoCollectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C35FEF718AD0E1600307135 /* PhotoCollectionHeaderView.m */; };
 		4C3E3EAB18865B6D00D02397 /* EventTitleAndTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3E3EAA18865B6D00D02397 /* EventTitleAndTimeView.m */; };
 		4C3E3EB118865C0C00D02397 /* EventLocationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3E3EB018865C0C00D02397 /* EventLocationView.m */; };
 		4C3F26241896AF97000E05F9 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3F26231896AF97000E05F9 /* FacebookSDK.framework */; };
@@ -35,6 +38,8 @@
 		4C51761F186FF707002F6F6D /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C51761E186FF707002F6F6D /* CoreData.framework */; };
 		4C52952F188D002300471B43 /* EventCreateViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C52952E188D002300471B43 /* EventCreateViewController.xib */; };
 		4C5420F01857FC9D006D2DE4 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5420EF1857FC9D006D2DE4 /* QuartzCore.framework */; };
+		4C5B01F618ACBD7F0030FCCC /* NewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B01F418ACBD7E0030FCCC /* NewViewController.m */; };
+		4C5B01F718ACBD7F0030FCCC /* NewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C5B01F518ACBD7E0030FCCC /* NewViewController.xib */; };
 		4C5BA25B1861731A00528843 /* 929-film-1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BA25A1861731A00528843 /* 929-film-1@2x.png */; };
 		4C5BA25D1861745D00528843 /* 929-film-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BA25C1861745D00528843 /* 929-film-1.png */; };
 		4C5C8FFC18A8730100B40F7E /* DiaryEntryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5C8FFA18A8730100B40F7E /* DiaryEntryViewController.m */; };
@@ -157,6 +162,11 @@
 		4C2FEC0D1889697600D37F18 /* EventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventViewController.h; sourceTree = "<group>"; };
 		4C2FEC0E1889697600D37F18 /* EventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventViewController.m; sourceTree = "<group>"; };
 		4C2FEC0F1889697600D37F18 /* EventViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventViewController.xib; sourceTree = "<group>"; };
+		4C315C7518AB18E600A2A363 /* CamerOverlayView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CamerOverlayView.xib; sourceTree = "<group>"; };
+		4C315C7918AB298800A2A363 /* PhotoLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoLoader.h; sourceTree = "<group>"; };
+		4C315C7A18AB298800A2A363 /* PhotoLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoLoader.m; sourceTree = "<group>"; };
+		4C35FEF618AD0E1600307135 /* PhotoCollectionHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoCollectionHeaderView.h; sourceTree = "<group>"; };
+		4C35FEF718AD0E1600307135 /* PhotoCollectionHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoCollectionHeaderView.m; sourceTree = "<group>"; };
 		4C3E3EA918865B6D00D02397 /* EventTitleAndTimeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTitleAndTimeView.h; sourceTree = "<group>"; };
 		4C3E3EAA18865B6D00D02397 /* EventTitleAndTimeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTitleAndTimeView.m; sourceTree = "<group>"; };
 		4C3E3EAF18865C0C00D02397 /* EventLocationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventLocationView.h; sourceTree = "<group>"; };
@@ -175,6 +185,9 @@
 		4C51761E186FF707002F6F6D /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4C52952E188D002300471B43 /* EventCreateViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventCreateViewController.xib; sourceTree = "<group>"; };
 		4C5420EF1857FC9D006D2DE4 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		4C5B01F318ACBD7E0030FCCC /* NewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewViewController.h; sourceTree = "<group>"; };
+		4C5B01F418ACBD7E0030FCCC /* NewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewViewController.m; sourceTree = "<group>"; };
+		4C5B01F518ACBD7E0030FCCC /* NewViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewViewController.xib; sourceTree = "<group>"; };
 		4C5BA25A1861731A00528843 /* 929-film-1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "929-film-1@2x.png"; sourceTree = "<group>"; };
 		4C5BA25C1861745D00528843 /* 929-film-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "929-film-1.png"; sourceTree = "<group>"; };
 		4C5C8FF918A8730100B40F7E /* DiaryEntryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryEntryViewController.h; sourceTree = "<group>"; };
@@ -341,6 +354,17 @@
 			name = Diary;
 			sourceTree = "<group>";
 		};
+		4C315C7C18AB299500A2A363 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				4C12B2E718A1E4570046C5EC /* FileManager.h */,
+				4C12B2E818A1E4570046C5EC /* FileManager.m */,
+				4C315C7918AB298800A2A363 /* PhotoLoader.h */,
+				4C315C7A18AB298800A2A363 /* PhotoLoader.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		4C3E3EA818865AFE00D02397 /* Event */ = {
 			isa = PBXGroup;
 			children = (
@@ -416,6 +440,7 @@
 				4C66A7A118A3579C00C977D5 /* ProfileTableViewController.m */,
 				4C66A7A218A3579C00C977D5 /* ProfileCreateViewController.h */,
 				4C66A7A318A3579C00C977D5 /* ProfileCreateViewController.m */,
+				4C315C7518AB18E600A2A363 /* CamerOverlayView.xib */,
 				4C66A7A418A3579C00C977D5 /* ProfileCreateViewController.xib */,
 			);
 			name = View;
@@ -505,6 +530,11 @@
 		4CB3DD6F18521DC400673478 = {
 			isa = PBXGroup;
 			children = (
+				4C5B01F318ACBD7E0030FCCC /* NewViewController.h */,
+				4C5B01F418ACBD7E0030FCCC /* NewViewController.m */,
+				4C5B01F518ACBD7E0030FCCC /* NewViewController.xib */,
+				4C35FEF618AD0E1600307135 /* PhotoCollectionHeaderView.h */,
+				4C35FEF718AD0E1600307135 /* PhotoCollectionHeaderView.m */,
 				4CFFD5891897800A0070C33C /* lookup_amatorka.png */,
 				4CC3A7D8188D6EAF000BAE1A /* GPUImage.xcodeproj */,
 				4CB3DD8118521DC400673478 /* Kidlendar */,
@@ -560,6 +590,7 @@
 		4CB3DD8118521DC400673478 /* Kidlendar */ = {
 			isa = PBXGroup;
 			children = (
+				4C315C7C18AB299500A2A363 /* Model */,
 				4CD2B92918A497BF002DA9E4 /* BackupViewController.h */,
 				4CD2B92A18A497BF002DA9E4 /* BackupViewController.m */,
 				4CD2B92B18A497BF002DA9E4 /* BackupViewController.xib */,
@@ -568,8 +599,6 @@
 				4C515D2418973C27002E8DEE /* ShareViewController.h */,
 				4C515D2518973C27002E8DEE /* ShareViewController.m */,
 				4C515D2618973C27002E8DEE /* ShareViewController.xib */,
-				4C12B2E718A1E4570046C5EC /* FileManager.h */,
-				4C12B2E818A1E4570046C5EC /* FileManager.m */,
 				4C66A79818A3574900C977D5 /* Profile */,
 				4CB3BD2E18A331BD0006AFD4 /* Setting */,
 				4C3E3EA818865AFE00D02397 /* Event */,
@@ -747,11 +776,13 @@
 				4C6C49C5186DDDDF0042EB61 /* DiaryViewController.xib in Resources */,
 				4C2FEC111889697600D37F18 /* EventViewController.xib in Resources */,
 				4C5BA25B1861731A00528843 /* 929-film-1@2x.png in Resources */,
+				4C315C7618AB18E600A2A363 /* CamerOverlayView.xib in Resources */,
 				4C86E939188F977F00137B6A /* RecurrenceViewController.xib in Resources */,
 				4C665E1318A475F7001CC69D /* EventNameViewController.xib in Resources */,
 				4C12B30018A201450046C5EC /* GoogleMaps.bundle in Resources */,
 				4C86E934188F973800137B6A /* AlarmViewController.xib in Resources */,
 				4CFFD58A1897800A0070C33C /* lookup_amatorka.png in Resources */,
+				4C5B01F718ACBD7F0030FCCC /* NewViewController.xib in Resources */,
 				4CB27D57188ED88800F34E7A /* IMG_1725.jpg in Resources */,
 				4C515D2818973C27002E8DEE /* ShareViewController.xib in Resources */,
 				4CB3DD8618521DC400673478 /* InfoPlist.strings in Resources */,
@@ -812,15 +843,18 @@
 				4C86E938188F977F00137B6A /* RecurrenceViewController.m in Sources */,
 				4C66A7A818A3579C00C977D5 /* ProfileTableViewController.m in Sources */,
 				4C3E3EAB18865B6D00D02397 /* EventTitleAndTimeView.m in Sources */,
+				4C35FEF818AD0E1600307135 /* PhotoCollectionHeaderView.m in Sources */,
 				4CA888241895F26000FAA799 /* MediaTableViewController.m in Sources */,
 				4C86E927188F8ADE00137B6A /* EventTitleAndTimeViewController.m in Sources */,
 				4CFFD584189775270070C33C /* DiaryPhotoViewController.m in Sources */,
 				4C51761D186FF309002F6F6D /* KidlendarModel.xcdatamodeld in Sources */,
 				4C66A7A918A3579C00C977D5 /* ProfileCreateViewController.m in Sources */,
 				4CF46E4D18878E3800B22888 /* CustomTextField.m in Sources */,
+				4C5B01F618ACBD7F0030FCCC /* NewViewController.m in Sources */,
 				4C6AC2DC187161CC004FA1E4 /* DiaryData.m in Sources */,
 				4C66A7B318A357C500C977D5 /* ProfileData.m in Sources */,
 				4C6F40B71867EB6200B44443 /* DiaryPhotoCollectionViewController.m in Sources */,
+				4C315C7B18AB298800A2A363 /* PhotoLoader.m in Sources */,
 				4CA2506C1869377000AEA94E /* UIImage+Resize.m in Sources */,
 				4C92155A185AD39E009A3090 /* MonthCalendarView.m in Sources */,
 				4C3E3EB118865C0C00D02397 /* EventLocationView.m in Sources */,

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "DiaryPhotoCollectionViewController.h"
-#import "UIImage+Resize.h"
+//#import "UIImage+Resize.h"
 
 @class DiaryData;
 

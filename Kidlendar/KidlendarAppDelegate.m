@@ -18,6 +18,7 @@
 #import "ProfileTableViewController.h"
 #import <DropboxSDK/DropboxSDK.h>
 #import "BackupViewController.h"
+#import "NewViewController.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 
@@ -47,7 +48,7 @@
     ShareViewController *svc = [[ShareViewController alloc]init];
     [self.window setRootViewController:svc];
     
-     */
+     
     // Init Calendar store
     [CalendarStore sharedStore];
     
@@ -65,7 +66,10 @@
                 NSLog(@"need permission , error %@",error);
         }];
     }
-     
+    */
+    NewViewController *cvc = [[NewViewController alloc]init];
+    [self.window setRootViewController:cvc];
+    
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     

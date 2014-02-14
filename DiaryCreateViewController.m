@@ -16,6 +16,7 @@
 #import "MediaTableViewController.h"
 #import "FileManager.h"
 #import "DiaryEntryViewController.h"
+#import "UIImage+Resize.h"
 
 @interface DiaryCreateViewController () <filterImageDelegate,DiaryDelegate>
 {
@@ -27,6 +28,8 @@
     CGFloat minimunLineSpace;
     BOOL deleteDiaryPhotos;
     NSArray *sizeArray;
+    NSMutableArray *cellImageArray;
+    NSMutableArray *resizedImageArray;
 }
 @property (weak, nonatomic) IBOutlet UIView *diaryDetailView;
 @property (weak, nonatomic) IBOutlet UITextView *diaryDetailTextView;
@@ -48,6 +51,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
 
     // Initiate collection view
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
@@ -59,8 +63,16 @@
     collectionViewInset = UIEdgeInsetsMake(5, 5, 5, 5);
     minimunCellSpace = 5.0;
     minimunLineSpace = 5.0;
+    
+    // Get selected photos from delegate
     _selectedPhotos = [[self delegate]selectedPhotos];
-    [self cellSizeArray];
+    resizedImageArray = [[NSMutableArray alloc]init];
+    cellImageArray = [[NSMutableArray alloc]init];
+
+    // Perform initial face detection
+    [self resizeSelectedPhotos];
+    [self performSelectorInBackground:@selector(processFaceDetection) withObject:nil];
+    
     
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(createNewDiaryEntry)];
     [_diaryDetailTextView addGestureRecognizer:tapGesture];
@@ -78,6 +90,37 @@
     
     self.navigationItem.rightBarButtonItems = @[editButton,saveButton];
     self.navigationItem.leftBarButtonItem = backButton;
+}
+
+- (void)resizeSelectedPhotos
+{
+    for (int i = 0 ; i < [_selectedPhotos count]; i++) {
+        UIImage *resizeImage =  [_selectedPhotos[i] resizeImageToSize:CGSizeMake(640, 1136)];
+        [resizedImageArray addObject:resizeImage];
+    }
+}
+
+- (void)processFaceDetection
+{
+    [self cellSizeArray];
+    [cellImageArray removeAllObjects];
+    // Process face detection
+    for (int i = 0 ; i < [resizedImageArray count]; i++) {
+        
+        CGSize size = [sizeArray[i] CGSizeValue];
+        
+        UIImage *resizeImage = resizedImageArray[i];
+
+        UIImage *cellImage = [resizeImage resizeWtihFaceDetect:size];
+        [cellImageArray addObject:cellImage];
+        
+        [self performSelectorOnMainThread:@selector(reloadCollecitonView) withObject:nil waitUntilDone:YES];
+    }
+}
+
+- (void)reloadCollecitonView
+{
+    [_collectionView reloadData];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -113,16 +156,17 @@
 //    else
 //        _addPhotoBtn.hidden = YES;
     
-    return [_selectedPhotos count];
+    return [cellImageArray count];
 }
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     DiaryPhotoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"DiaryPhotoCell" forIndexPath:indexPath];
     [cell deletePhotoBadger:deleteDiaryPhotos];
-    UIImage *photo = [_selectedPhotos objectAtIndex:indexPath.row];
     cell.photoView.frame = cell.contentView.bounds;
-    cell.photoView.image = [[photo resizeImageToSize:CGSizeMake(640, 1136)] resizeWtihFaceDetect:cell.contentView.frame.size];
+    if ([cellImageArray count] > 0)
+        cell.photoView.image = cellImageArray[indexPath.row];
+
     // Add gesture to each cell
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc]initWithTarget:self
                                                                                            action:@selector(enlargCell:)];
@@ -137,12 +181,12 @@
     if (deleteDiaryPhotos) {
         [collectionView performBatchUpdates:^{
             [_selectedPhotos removeObjectAtIndex:indexPath.row];
+            [resizedImageArray removeObjectAtIndex:indexPath.row];
             [collectionView deleteItemsAtIndexPaths:@[indexPath]];
 
         } completion:^(BOOL finished) {
             deleteDiaryPhotos = NO;
-            [self cellSizeArray];
-            [collectionView reloadData];
+            [self processFaceDetection];
         }];
     }
     else {
@@ -263,7 +307,8 @@
             } completion:^(BOOL finished) {
                 // Also need to adjust index position in data source
                 [_selectedPhotos exchangeObjectAtIndex:currentCellIndexPath.row withObjectAtIndex:touchedCellPath.row];
-                [self.collectionView reloadData];
+                [resizedImageArray exchangeObjectAtIndex:currentCellIndexPath.row withObjectAtIndex:touchedCellPath.row];
+                [self processFaceDetection];
             }];
         }
         else {

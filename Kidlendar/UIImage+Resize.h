@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+@class CellImage;
 
 @interface UIImage (Resize)
 - (UIImage *)resizeImageToSize:(CGSize)newSize;

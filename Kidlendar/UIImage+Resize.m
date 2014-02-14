@@ -119,11 +119,6 @@
     CGAffineTransform t = CGAffineTransformMakeScale(xRatio, yRatio);
     CIImage *image = [o_image imageByApplyingTransform:t];
     NSLog(@"CIImage extent after transform %@",image);
-
-    
-
-//    CGFloat imageWidth = image.extent.size.width;
-//    CGFloat imageHeight = image.extent.size.height;
     
     CGFloat imageWidth = self.size.width;
     CGFloat imageHeight = self.size.height;
@@ -143,19 +138,20 @@
     // detector
     CIDetector* detector = [CIDetector detectorOfType:CIDetectorTypeFace
                                               context:nil
-                                              options:[NSDictionary dictionaryWithObject:CIDetectorAccuracyHigh forKey:CIDetectorAccuracy]];
+                                              options:[NSDictionary dictionaryWithObject:CIDetectorAccuracyLow forKey:CIDetectorAccuracy]];
     
     // create an array containing all the detected faces from the detector
     NSArray* features = [detector featuresInImage:image];
     
     NSLog(@"Image width %f height %f",imageWidth,imageHeight);
     NSLog(@"crop width %f , crop height = %f",maxCropWidth,maxCropHeight);
-
+    
     
     if ([features count]==0) {
         CGFloat y = (imageHeight - maxCropHeight)/2;
         CGFloat x = (imageWidth - maxCropWidth)/2;
         CGRect cropRect = CGRectMake(x, y, maxCropWidth, maxCropHeight);
+
         return [self cropImageWithRect:cropRect resize:size];
     }
     else {
@@ -248,9 +244,11 @@
         CGAffineTransform transform = CGAffineTransformMakeScale(1, -1);
         transform = CGAffineTransformTranslate(transform,0, -imageHeight);
         CGRect cropRect = CGRectApplyAffineTransform(CIfinalRect, transform);
-        // Crop then resize
+        
+        // Crop
         return [self cropImageWithRect:cropRect resize:size];
     }
+
 }
 
 - (UIImage *)cropImageWithRect:(CGRect)cropRect resize:(CGSize)size
@@ -266,13 +264,6 @@
     GPUImageCropFilter *cropFilter = [[GPUImageCropFilter alloc]init];
     cropFilter.cropRegion = cropRegion;
     UIImage *cropImage =  [cropFilter imageByFilteringImage:self];
-//
-    // Create a bitmap context.
-//    UIGraphicsBeginImageContextWithOptions(size, YES, [UIScreen mainScreen].scale);
-////    [cropImage drawInRect:CGRectMake(0,0,size.width,size.height)];
-//
-//    UIImage* finalImage = UIGraphicsGetImageFromCurrentImageContext();
-//    UIGraphicsEndImageContext();
     return cropImage;
 }
 

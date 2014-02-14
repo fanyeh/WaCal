@@ -13,12 +13,14 @@
 #import <AVFoundation/AVFoundation.h>
 #import <CoreMedia/CoreMedia.h>
 #import "DiaryVideoViewController.h"
+#import "PhotoLoader.h"
 
 @interface DiaryPhotoCollectionViewController () <PhotosDelegate>
 {
     CGFloat minimumItemSpace;
     CGFloat minimumLineSpace;
     BOOL scrollToBottom;
+    PhotoLoader *photoLoader;
 }
 
 @end
@@ -47,8 +49,14 @@
     [self navigationItem].rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                                                                             target:self
                                                                                             action:@selector(photoSelectDone)];
-//    [self.navigationController setNavigationBarHidden:NO];
+
     scrollToBottom = NO;
+    
+    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadCollectionView) name:@"loadLibraySourceDone" object:nil];
+    
+    //photoLoader = [[PhotoLoader alloc]initWithSourceType:kSourceTypePhoto];
+    
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -129,6 +137,7 @@
 
 - (void)reloadCollectionView
 {
+    //_assets = [photoLoader sourceArray][0];
     [self.collectionView reloadData];
 }
 
