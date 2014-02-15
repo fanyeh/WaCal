@@ -23,7 +23,6 @@
 		4C2FEC111889697600D37F18 /* EventViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C2FEC0F1889697600D37F18 /* EventViewController.xib */; };
 		4C315C7618AB18E600A2A363 /* CamerOverlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C315C7518AB18E600A2A363 /* CamerOverlayView.xib */; };
 		4C315C7B18AB298800A2A363 /* PhotoLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C315C7A18AB298800A2A363 /* PhotoLoader.m */; };
-		4C35FEF818AD0E1600307135 /* PhotoCollectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C35FEF718AD0E1600307135 /* PhotoCollectionHeaderView.m */; };
 		4C3E3EAB18865B6D00D02397 /* EventTitleAndTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3E3EAA18865B6D00D02397 /* EventTitleAndTimeView.m */; };
 		4C3E3EB118865C0C00D02397 /* EventLocationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3E3EB018865C0C00D02397 /* EventLocationView.m */; };
 		4C3F26241896AF97000E05F9 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3F26231896AF97000E05F9 /* FacebookSDK.framework */; };
@@ -165,8 +164,6 @@
 		4C315C7518AB18E600A2A363 /* CamerOverlayView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CamerOverlayView.xib; sourceTree = "<group>"; };
 		4C315C7918AB298800A2A363 /* PhotoLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoLoader.h; sourceTree = "<group>"; };
 		4C315C7A18AB298800A2A363 /* PhotoLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoLoader.m; sourceTree = "<group>"; };
-		4C35FEF618AD0E1600307135 /* PhotoCollectionHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoCollectionHeaderView.h; sourceTree = "<group>"; };
-		4C35FEF718AD0E1600307135 /* PhotoCollectionHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoCollectionHeaderView.m; sourceTree = "<group>"; };
 		4C3E3EA918865B6D00D02397 /* EventTitleAndTimeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTitleAndTimeView.h; sourceTree = "<group>"; };
 		4C3E3EAA18865B6D00D02397 /* EventTitleAndTimeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTitleAndTimeView.m; sourceTree = "<group>"; };
 		4C3E3EAF18865C0C00D02397 /* EventLocationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventLocationView.h; sourceTree = "<group>"; };
@@ -533,8 +530,6 @@
 				4C5B01F318ACBD7E0030FCCC /* NewViewController.h */,
 				4C5B01F418ACBD7E0030FCCC /* NewViewController.m */,
 				4C5B01F518ACBD7E0030FCCC /* NewViewController.xib */,
-				4C35FEF618AD0E1600307135 /* PhotoCollectionHeaderView.h */,
-				4C35FEF718AD0E1600307135 /* PhotoCollectionHeaderView.m */,
 				4CFFD5891897800A0070C33C /* lookup_amatorka.png */,
 				4CC3A7D8188D6EAF000BAE1A /* GPUImage.xcodeproj */,
 				4CB3DD8118521DC400673478 /* Kidlendar */,
@@ -843,7 +838,6 @@
 				4C86E938188F977F00137B6A /* RecurrenceViewController.m in Sources */,
 				4C66A7A818A3579C00C977D5 /* ProfileTableViewController.m in Sources */,
 				4C3E3EAB18865B6D00D02397 /* EventTitleAndTimeView.m in Sources */,
-				4C35FEF818AD0E1600307135 /* PhotoCollectionHeaderView.m in Sources */,
 				4CA888241895F26000FAA799 /* MediaTableViewController.m in Sources */,
 				4C86E927188F8ADE00137B6A /* EventTitleAndTimeViewController.m in Sources */,
 				4CFFD584189775270070C33C /* DiaryPhotoViewController.m in Sources */,

@@ -31,10 +31,13 @@
         // Group enumerator Block
         void (^assetGroupEnumerator)(ALAssetsGroup *, BOOL *) = ^(ALAssetsGroup *group, BOOL *stop)
         {
-            if (group == nil)
+            // When the enumeration is done, enumerationBlock is invoked with group set to nil.
+            if (group == nil) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"loadLibraySourceDone" object:nil];
                 return;
+            }
+            
             NSString *sGroupPropertyName = (NSString *)[group valueForProperty:ALAssetsGroupPropertyName];
-            NSLog(@"Asset group property name %@",sGroupPropertyName);
             // Get all photos from library
             assets = [[NSMutableArray alloc]init];
             if (sourceType==kSourceTypePhoto) {
@@ -51,8 +54,6 @@
             }];
             
             [_sourceDictionary setObject:assets forKey:sGroupPropertyName];
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"loadLibraySourceDone" object:nil];
         };
         
         // Group Enumerator Failure Block

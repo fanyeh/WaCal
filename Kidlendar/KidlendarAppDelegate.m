@@ -68,7 +68,8 @@
     }
     */
     NewViewController *cvc = [[NewViewController alloc]init];
-    [self.window setRootViewController:cvc];
+    UINavigationController *testController = [[UINavigationController alloc]initWithRootViewController:cvc];
+    [self.window setRootViewController:testController];
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];

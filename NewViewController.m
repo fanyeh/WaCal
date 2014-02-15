@@ -13,16 +13,14 @@
 #import "FileManager.h"
 #import "DiaryPhotoCell.h"
 #import "DiaryPhotoViewController.h"
-#import "PhotoCollectionHeaderView.h"
 
-@interface NewViewController () <UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,filterImageDelegate>
+@interface NewViewController () <UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,filterImageDelegate,UITableViewDataSource,UITableViewDelegate>
 {
-    // General collection view property
-    UIEdgeInsets collectionViewInset;
-    CGFloat minimunCellSpace;
-    CGFloat minimunLineSpace;
-    
     // Diary photo collection view property
+    UIEdgeInsets diaryCollectionViewInset;
+    CGFloat diaryMinimunCellSpace;
+    CGFloat diaryMinimunLineSpace;
+    
     UICollectionView *diaryPhotosView; // Tag 0
     CGPoint _priorPoint;
     BOOL deleteDiaryPhotos;
@@ -33,14 +31,17 @@
     NSMutableArray *selectedPhotoOrderingInfo;
     
     // Photo collection view property
+    UIEdgeInsets photoCollectionViewInset;
+    CGFloat photoMinimunCellSpace;
+    CGFloat photoMinimunLineSpace;
+
     UICollectionView *photoCollectionView; // Tag 1
     BOOL scrollToBottom;
     NSMutableArray *photoAssets;
     NSString *assetGroupPropertyName;
     PhotoLoader *photoLoader;
-    PhotoCollectionHeaderView *photoCollectionHeaderView;
-    
-    
+    CGFloat swipeOffset;
+    UITableView *photoAlbumTable;
 }
 
 @end
@@ -64,14 +65,13 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    // Collection view properties
-    collectionViewInset = UIEdgeInsetsMake(5, 5, 5, 5);
-    minimunCellSpace = 5.0;
-    minimunLineSpace = 5.0;
     
     // Set up diary photo collection view
-    UICollectionViewFlowLayout *diaryFlowLayout = [[UICollectionViewFlowLayout alloc]init];
+    diaryCollectionViewInset = UIEdgeInsetsMake(5, 0, 5, 0);
+    diaryMinimunCellSpace = 5.0;
+    diaryMinimunLineSpace = 5.0;
 
+    UICollectionViewFlowLayout *diaryFlowLayout = [[UICollectionViewFlowLayout alloc]init];
     diaryPhotosView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 44, 320, 320) collectionViewLayout:diaryFlowLayout];
     diaryPhotosView.delegate = self;
     diaryPhotosView.dataSource = self;
@@ -83,23 +83,45 @@
     resizedImageArray = [[NSMutableArray alloc]init];
     cellImageArray = [[NSMutableArray alloc]init];
     selectedPhotoOrderingInfo = [[NSMutableArray alloc]init];
+        [diaryPhotosView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView"];
     
     // Set up photo album collection view
+    photoCollectionViewInset = UIEdgeInsetsMake(2, 0, 2, 0);
+    photoMinimunCellSpace = 2;
+    photoMinimunLineSpace = 2;
+
     UICollectionViewFlowLayout *photoFlowLayout = [[UICollectionViewFlowLayout alloc]init];
-    photoCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 376, 320, 320) collectionViewLayout:photoFlowLayout];
+    photoCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 408, 320, self.view.frame.size.height-44) collectionViewLayout:photoFlowLayout];
     photoCollectionView.delegate = self;
     photoCollectionView.dataSource = self;
     photoCollectionView.tag = 1;
+    photoCollectionView.showsVerticalScrollIndicator = NO;
     [photoCollectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Cell"];
-    [photoCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView"];
-    [photoCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"FooterView"];
-
     photoCollectionView.allowsMultipleSelection = YES;
+    swipeOffset = diaryPhotosView.frame.size.height;
+    [photoCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView"];
+    photoFlowLayout.headerReferenceSize = CGSizeMake(photoCollectionView.frame.size.width, 44);
+    
+    photoAlbumTable = [[UITableView alloc]initWithFrame:CGRectMake(-320, 408,320,self.view.frame.size.height-44) style:UITableViewStyleGrouped];
+    photoAlbumTable.delegate = self;
+    photoAlbumTable.dataSource = self;
+    [photoAlbumTable registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
+    photoAlbumTable.contentInset = UIEdgeInsetsMake(-1.0f, 0.0f, 0.0f, 0.0);
+    [self.view addSubview:photoAlbumTable];
+    
+    // Scroll control for photo collection view
+    UIView *scroller = [[UIView alloc]initWithFrame:CGRectMake(0, 364 , 320, 44)];
+    scroller.backgroundColor = [UIColor grayColor];
+    UISwipeGestureRecognizer *swipGesture = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipePhotoCollection:)];
+    swipGesture.direction = UISwipeGestureRecognizerDirectionUp;
+    [scroller addGestureRecognizer:swipGesture];
+    
+    [self.view addSubview:scroller];
     
     [self.view addSubview:photoCollectionView];
     //photoAssets = [[NSMutableArray alloc]init];
     scrollToBottom = NO;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadPhotoCollectionView) name:@"loadLibraySourceDone" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupPhotoCollectionView) name:@"loadLibraySourceDone" object:nil];
     
     photoLoader = [[PhotoLoader alloc]initWithSourceType:kSourceTypePhoto];
 }
@@ -112,6 +134,31 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     self.tabBarController.tabBar.hidden = NO;
+}
+
+- (void)swipePhotoCollection:(UISwipeGestureRecognizer *)sender
+{
+    if (sender.direction == UISwipeGestureRecognizerDirectionUp) {
+        sender.direction = UISwipeGestureRecognizerDirectionDown;
+        [UIView animateWithDuration:0.5 animations:^{
+            sender.view.frame = CGRectOffset(sender.view.frame, 0, -swipeOffset);
+            photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, 0, -swipeOffset);
+
+        } completion:^(BOOL finished) {
+            //
+        }];
+        
+    }
+    else if (sender.direction == UISwipeGestureRecognizerDirectionDown) {
+        sender.direction = UISwipeGestureRecognizerDirectionUp;
+        [UIView animateWithDuration:0.5 animations:^{
+            sender.view.frame = CGRectOffset(sender.view.frame, 0, swipeOffset);
+            photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, 0, swipeOffset);
+            
+        } completion:^(BOOL finished) {
+            //
+        }];
+    }
 }
 
 #pragma mark - Diary photo collection view relate
@@ -154,8 +201,8 @@
 
 - (void)cellSizeArray
 {
-    CGFloat sizeWidth = diaryPhotosView.frame.size.width-collectionViewInset.left-collectionViewInset.right;
-    CGFloat sizeHeight = diaryPhotosView.frame.size.height-collectionViewInset.top-collectionViewInset.bottom;
+    CGFloat sizeWidth = diaryPhotosView.frame.size.width-diaryCollectionViewInset.left-diaryCollectionViewInset.right;
+    CGFloat sizeHeight = diaryPhotosView.frame.size.height-diaryCollectionViewInset.top-diaryCollectionViewInset.bottom;
     switch ([selectedPhotoOrderingInfo count]) {
         case 1:
             //
@@ -163,32 +210,32 @@
             break;
         case 2:
             //
-            sizeArray = @[[NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight-minimunLineSpace)/2)],
-                          [NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight-minimunLineSpace)/2)]
+            sizeArray = @[[NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight-diaryMinimunLineSpace)/2)],
+                          [NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight-diaryMinimunLineSpace)/2)]
                           ];
             break;
         case 3:
             //
-            sizeArray = @[[NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight-minimunLineSpace)/2)],
-                          [NSValue valueWithCGSize:CGSizeMake((sizeWidth-minimunCellSpace)/2, (sizeHeight-minimunLineSpace)/2)],
-                          [NSValue valueWithCGSize:CGSizeMake((sizeWidth-minimunCellSpace)/2, (sizeHeight-minimunLineSpace)/2)]
+            sizeArray = @[[NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight-diaryMinimunLineSpace)/2)],
+                          [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace)/2, (sizeHeight-diaryMinimunLineSpace)/2)],
+                          [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace)/2, (sizeHeight-diaryMinimunLineSpace)/2)]
                           ];
             break;
         case 4:
             //
-            sizeArray = @[[NSValue valueWithCGSize:CGSizeMake((sizeWidth-minimunCellSpace)/2, (sizeHeight-minimunLineSpace)/2)],
-                          [NSValue valueWithCGSize:CGSizeMake((sizeWidth-minimunCellSpace)/2, (sizeHeight-minimunLineSpace)/2)],
-                          [NSValue valueWithCGSize:CGSizeMake((sizeWidth-minimunCellSpace)/2, (sizeHeight-minimunLineSpace)/2)],
-                          [NSValue valueWithCGSize:CGSizeMake((sizeWidth-minimunCellSpace)/2, (sizeHeight-minimunLineSpace)/2)]
+            sizeArray = @[[NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace)/2, (sizeHeight-diaryMinimunLineSpace)/2)],
+                          [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace)/2, (sizeHeight-diaryMinimunLineSpace)/2)],
+                          [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace)/2, (sizeHeight-diaryMinimunLineSpace)/2)],
+                          [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace)/2, (sizeHeight-diaryMinimunLineSpace)/2)]
                           ];
             break;
         case 5:
             //
-            sizeArray = @[[NSValue valueWithCGSize:CGSizeMake((sizeWidth-minimunCellSpace*2)/3, (sizeHeight-minimunLineSpace)/2)],
-                          [NSValue valueWithCGSize:CGSizeMake((sizeWidth-minimunCellSpace*2)/3, (sizeHeight-minimunLineSpace)/2)],
-                          [NSValue valueWithCGSize:CGSizeMake((sizeWidth-minimunCellSpace*2)/3, (sizeHeight-minimunLineSpace)/2)],
-                          [NSValue valueWithCGSize:CGSizeMake((sizeWidth-minimunCellSpace)/2, (sizeHeight-minimunLineSpace)/2)],
-                          [NSValue valueWithCGSize:CGSizeMake((sizeWidth-minimunCellSpace)/2, (sizeHeight-minimunLineSpace)/2)]
+            sizeArray = @[[NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace*2)/3, (sizeHeight-diaryMinimunLineSpace)/2)],
+                          [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace*2)/3, (sizeHeight-diaryMinimunLineSpace)/2)],
+                          [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace*2)/3, (sizeHeight-diaryMinimunLineSpace)/2)],
+                          [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace)/2, (sizeHeight-diaryMinimunLineSpace)/2)],
+                          [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace)/2, (sizeHeight-diaryMinimunLineSpace)/2)]
                           ];
             break;
         default:
@@ -292,7 +339,7 @@
 #pragma mark - Photo collection view relate
 #pragma mark
 
-- (void)reloadPhotoCollectionView
+- (void)setupPhotoCollectionView
 {
     NSArray *sourceKeys = photoLoader.sourceDictionary.allKeys;
     
@@ -302,11 +349,18 @@
         [selectedPhotoInfo setValue:photoGroupDict forKey:key];
     }
     
-    NSString *sourceKey = sourceKeys[0];
+    NSString *sourceKey = sourceKeys[1];
     assetGroupPropertyName = sourceKey;
     photoAssets = [photoLoader.sourceDictionary objectForKey:sourceKey];
     [photoCollectionView reloadData];
 }
+
+- (void)reloadPhotoCollectionView:(NSMutableArray *)selectedAlbum
+{
+    photoAssets = selectedAlbum;
+    [photoCollectionView reloadData];
+}
+
 
 -(void)viewDidLayoutSubviews
 {
@@ -420,6 +474,7 @@
         }
         
     }
+    
     // Photo collection view select
     else {
         [self selectedPhoto:indexPath];
@@ -487,25 +542,115 @@
         NSValue *cellSizeValue = sizeArray[indexPath.row];
         return [cellSizeValue CGSizeValue];
     } else {
-        CGFloat cellWidth = (collectionView.bounds.size.width-(5*minimunCellSpace))/4;
+        CGFloat cellWidth = (collectionView.bounds.size.width-photoCollectionViewInset.right -photoCollectionViewInset.left -(3*photoMinimunLineSpace))/4;
         return CGSizeMake(cellWidth, cellWidth);
     }
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return collectionViewInset;
+    if (collectionView.tag==0)
+        return diaryCollectionViewInset;
+    else
+        return photoCollectionViewInset;
 }
 
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
 {
-    return minimunLineSpace;
+    if (collectionView.tag==0)
+        return diaryMinimunLineSpace;
+    else
+        return photoMinimunLineSpace;
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
 {
-    return minimunCellSpace;
+    if (collectionView.tag==0)
+        return diaryMinimunCellSpace;
+    else
+        return photoMinimunCellSpace;
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionReusableView *reusableview = nil;
+
+    if (collectionView.tag==1 && kind ==UICollectionElementKindSectionHeader) {
+        UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView" forIndexPath:indexPath];
+        //headerView.backgroundColor = [UIColor redColor];
+        UINavigationBar *navBar = [[UINavigationBar alloc]initWithFrame:headerView.frame];
+        UINavigationItem *navItem = [[UINavigationItem alloc]initWithTitle:assetGroupPropertyName];
+        navItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(showTable)];
+        [navBar setItems:@[navItem]];
+        [headerView addSubview:navBar];
+        return headerView;
+    }
+    return reusableview;
+}
+
+- (void)showTable
+{
+    NSLog(@"show table");
+    [photoAlbumTable reloadData];
+    photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, 320, 0);
+
+    photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, 320, 0);
+}
+
+#pragma mark - UITableViewDataSource
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"Cell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
+    }
+    
+    // Configure the cell...
+    NSArray *souceKeys = photoLoader.sourceDictionary.allKeys;
+    NSString *key = souceKeys[indexPath.row];
+    cell.textLabel.text = key;
+    
+    NSMutableArray *photoAlbum = [[photoLoader sourceDictionary] objectForKey:key];
+    ALAsset *asset = [photoAlbum lastObject];
+    cell.imageView.image = [UIImage imageWithCGImage: asset.thumbnail];
+
+    //cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld",[photoAlbum count]];
+    //NSLog(@"%@",[NSString stringWithFormat:@"%ld",[photoAlbum count]]);
+    return cell;
+
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    NSLog(@"album count %ld",[photoLoader.sourceDictionary count]);
+    return [photoLoader.sourceDictionary count];
+}
+
+#pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSArray *souceKeys = photoLoader.sourceDictionary.allKeys;
+    NSString *key = souceKeys[indexPath.row];
+    NSMutableArray *photoAlbum = [[photoLoader sourceDictionary] objectForKey:key];
+    [self reloadPhotoCollectionView:photoAlbum];
+    tableView.frame = CGRectOffset(tableView.frame, -320, 0);
+    photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, -320, 0);
+
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 1.0f;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    return nil;
 }
 
 #pragma mark - Memory Warning
