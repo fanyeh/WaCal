@@ -10,7 +10,7 @@
 #import "DiaryDataStore.h"
 #import "DiaryData.h"
 #import "DiaryViewController.h"
-#import "MediaTableViewController.h"
+#import "DiaryCreateViewController.h"
 
 @interface DiaryTableViewController ()
 
@@ -144,8 +144,8 @@
 
 - (void)createDiary
 {
-    MediaTableViewController *mvc = [[MediaTableViewController alloc]init];
-    [self.navigationController pushViewController:mvc animated:YES];
+    DiaryCreateViewController *createViewController = [[DiaryCreateViewController alloc]init];
+    [self.navigationController pushViewController:createViewController animated:YES];
 }
 
 -(void)editDiaryTable

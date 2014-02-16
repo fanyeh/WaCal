@@ -12,5 +12,7 @@
 @interface UIImage (Resize)
 - (UIImage *)resizeImageToSize:(CGSize)newSize;
 - (UIImage *)transformOrientationForSave;
-- (UIImage *)resizeWtihFaceDetect:(CGSize)size;
+- (UIImage *)cropWithFaceDetect:(CGSize)size;
+- (UIImage *)cropWithoutFaceOutDetect:(CGSize)size;
+
 @end

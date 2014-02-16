@@ -45,7 +45,11 @@
 
 - (void)saveDiary
 {
-    [_delegate diaryDetails:_diaryEntryView.text];
-    [self.navigationController popViewControllerAnimated:YES];
+    // Update diary details
+    _diary.diaryText = _diaryEntryView.text;
+    [[DiaryDataStore sharedStore]saveChanges];
+    
+    // Return to diary table view controller
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 @end

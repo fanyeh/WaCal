@@ -107,7 +107,7 @@
 
 - (void)done
 {
-    [_delegate filteredImage:_photoImageView.image index:_index];
+    [_delegate filteredImage:_photoImageView.image indexPath:_indexPath];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

@@ -11,7 +11,6 @@
                 <outlet property="eventDetailView" destination="gOh-X5-6sN" id="U0R-FE-99Q"/>
                 <outlet property="locationImageView" destination="gCU-Yz-zqf" id="oBj-ra-lCw"/>
                 <outlet property="locationLabel" destination="0Hz-Uc-zC3" id="LXq-PP-ke9"/>
-                <outlet property="nameLabel" destination="nDj-Yl-L4k" id="HIx-ie-3lI"/>
                 <outlet property="recurrenceLabel" destination="kxw-Cl-xJT" id="fts-Hh-M6f"/>
                 <outlet property="timeLabel" destination="eYt-gS-lPP" id="p9Y-HT-h6g"/>
                 <outlet property="titleLabel" destination="hc1-UK-ihi" id="CnR-z5-fQc"/>
@@ -81,12 +80,6 @@
                                 <action selector="deleteBtn:" destination="-1" eventType="touchUpInside" id="ov5-kr-Ijd"/>
                             </connections>
                         </button>
-                        <label opaque="NO" clipsSubviews="YES" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nDj-Yl-L4k" userLabel="Name - Label">
-                            <rect key="frame" x="10" y="7" width="190" height="50"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <nil key="highlightedColor"/>
-                        </label>
                         <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gCU-Yz-zqf" userLabel="Location Image View">
                             <rect key="frame" x="10" y="180" width="300" height="210"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

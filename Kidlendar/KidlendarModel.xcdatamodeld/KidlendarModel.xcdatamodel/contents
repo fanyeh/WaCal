@@ -8,19 +8,8 @@
         <attribute name="subject" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="thumbnail" optional="YES" transient="YES" syncable="YES"/>
         <attribute name="thumbnailData" optional="YES" attributeType="Binary" syncable="YES"/>
-        <relationship name="profile" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ProfileData" inverseName="diarys" inverseEntity="ProfileData" syncable="YES"/>
-    </entity>
-    <entity name="ProfileData" representedClassName="ProfileData" syncable="YES">
-        <attribute name="birthDate" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="imageKey" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="orderingValue" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="thumbnail" optional="YES" transient="YES" syncable="YES"/>
-        <attribute name="thumbnailData" optional="YES" attributeType="Binary" syncable="YES"/>
-        <relationship name="diarys" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DiaryData" inverseName="profile" inverseEntity="DiaryData" syncable="YES"/>
     </entity>
     <elements>
         <element name="DiaryData" positionX="0" positionY="0" width="0" height="0"/>
-        <element name="ProfileData" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

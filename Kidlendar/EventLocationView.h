@@ -10,6 +10,6 @@
 
 @interface EventLocationView : UIView
 @property (strong,nonatomic) UITextField *locationField;
-@property (strong,nonatomic) UITableView *searchedLocation;
+@property (strong,nonatomic) UITableView *searchedLocationTable;
 
 @end

@@ -56,8 +56,8 @@
     locationView.locationField.text = _event.location;
     [locationView.locationField becomeFirstResponder];
     
-    locationView.searchedLocation.dataSource = self;
-    locationView.searchedLocation.delegate = self;
+    locationView.searchedLocationTable.dataSource = self;
+    locationView.searchedLocationTable.delegate = self;
     //[locationView.searchedLocation registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
     
     activityIndicator = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(0, 0, 100, 100)];
@@ -83,10 +83,9 @@
 
 -(void) queryGooglePlaces: (NSString *) name
 {
-    [locationView.searchedLocation setHidden:YES];
+    [locationView.searchedLocationTable setHidden:YES];
     [activityIndicator startAnimating];
     NSString *url = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/textsearch/json?query=%@&sensor=true&language=zh-TW&key=%@",name,kGOOGLE_API_KEY];
-    NSLog(@"URL %@",url);
     //Formulate the string as a URL object.
     NSURL *googleRequestURL=[NSURL URLWithString:[url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     // Retrieve the results of the URL.
@@ -106,8 +105,8 @@
                                    places = [json objectForKey:@"results"];
                                    dispatch_async(dispatch_get_main_queue(), ^{
                                        [activityIndicator stopAnimating];
-                                       [locationView.searchedLocation setHidden:NO];
-                                       [locationView.searchedLocation reloadData];
+                                       [locationView.searchedLocationTable setHidden:NO];
+                                       [locationView.searchedLocationTable reloadData];
                                    });
                                    
                                } else if ([data length]==0 && connectionError==nil) {
@@ -169,7 +168,7 @@
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    locationView.searchedLocation.hidden = YES;
+    locationView.searchedLocationTable.hidden = YES;
     mapView_.hidden = NO;
     NSDictionary *location = [[places[indexPath.row] objectForKey:@"geometry"] objectForKey:@"location"];
     NSString *lat = [location objectForKey:@"lat"];

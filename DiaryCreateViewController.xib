@@ -6,9 +6,6 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DiaryCreateViewController">
             <connections>
-                <outlet property="diaryDetailTextView" destination="kUt-2H-MOg" id="OrZ-Bc-bgK"/>
-                <outlet property="diaryDetailView" destination="hKJ-jj-G8q" id="QRY-BA-KSK"/>
-                <outlet property="searchDisplayController" destination="l8H-1u-luV" id="J2A-Kz-4sX"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
         </placeholder>
@@ -16,51 +13,9 @@
         <view contentMode="scaleToFill" id="1">
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-            <subviews>
-                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p6X-0h-f9w">
-                    <rect key="frame" x="0.0" y="384" width="320" height="44"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <items>
-                        <barButtonItem title="Add" id="cRd-CP-FIl">
-                            <connections>
-                                <action selector="addPhotos:" destination="-1" id="fK0-Us-5GS"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem width="201" style="plain" systemItem="fixedSpace" id="xbE-tb-9iW"/>
-                        <barButtonItem title="Delete" id="ZxQ-7l-h6u">
-                            <connections>
-                                <action selector="deletePhotos:" destination="-1" id="vcC-Ep-to0"/>
-                            </connections>
-                        </barButtonItem>
-                    </items>
-                </toolbar>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hKJ-jj-G8q">
-                    <rect key="frame" x="0.0" y="428" width="320" height="90"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" showsHorizontalScrollIndicator="NO" editable="NO" text="Create New Entry..." translatesAutoresizingMaskIntoConstraints="NO" id="kUt-2H-MOg">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="90"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                        </textView>
-                    </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                </view>
-            </subviews>
-            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
-            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
-        <searchDisplayController id="l8H-1u-luV">
-            <connections>
-                <outlet property="delegate" destination="-1" id="Mbd-z2-ueN"/>
-                <outlet property="searchContentsController" destination="-1" id="JfL-0f-nKW"/>
-                <outlet property="searchResultsDataSource" destination="-1" id="Pc1-HV-Qhs"/>
-                <outlet property="searchResultsDelegate" destination="-1" id="WUl-Hb-GIG"/>
-            </connections>
-        </searchDisplayController>
     </objects>
 </document>

@@ -7,15 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-@protocol DiaryDelegate <NSObject>
-@optional
--(void )diaryDetails:(NSString *)details;
-@end
+#import "DiaryData.h"
+#import "DiaryDataStore.h"
 
 @interface DiaryEntryViewController : UIViewController
-{
-    __weak id<DiaryDelegate>_delegate;
-}
-@property (nonatomic,weak)id<DiaryDelegate>delegate;
-
+@property (strong,nonatomic) DiaryData *diary;
 @end

@@ -21,7 +21,6 @@
 		4C2E83BD1890BB450051215F /* CalendarStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2E83BC1890BB450051215F /* CalendarStore.m */; };
 		4C2FEC101889697600D37F18 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2FEC0E1889697600D37F18 /* EventViewController.m */; };
 		4C2FEC111889697600D37F18 /* EventViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C2FEC0F1889697600D37F18 /* EventViewController.xib */; };
-		4C315C7618AB18E600A2A363 /* CamerOverlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C315C7518AB18E600A2A363 /* CamerOverlayView.xib */; };
 		4C315C7B18AB298800A2A363 /* PhotoLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C315C7A18AB298800A2A363 /* PhotoLoader.m */; };
 		4C3E3EAB18865B6D00D02397 /* EventTitleAndTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3E3EAA18865B6D00D02397 /* EventTitleAndTimeView.m */; };
 		4C3E3EB118865C0C00D02397 /* EventLocationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3E3EB018865C0C00D02397 /* EventLocationView.m */; };
@@ -37,29 +36,16 @@
 		4C51761F186FF707002F6F6D /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C51761E186FF707002F6F6D /* CoreData.framework */; };
 		4C52952F188D002300471B43 /* EventCreateViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C52952E188D002300471B43 /* EventCreateViewController.xib */; };
 		4C5420F01857FC9D006D2DE4 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5420EF1857FC9D006D2DE4 /* QuartzCore.framework */; };
-		4C5B01F618ACBD7F0030FCCC /* NewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B01F418ACBD7E0030FCCC /* NewViewController.m */; };
-		4C5B01F718ACBD7F0030FCCC /* NewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C5B01F518ACBD7E0030FCCC /* NewViewController.xib */; };
+		4C5B01F618ACBD7F0030FCCC /* DiaryCreateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B01F418ACBD7E0030FCCC /* DiaryCreateViewController.m */; };
+		4C5B01F718ACBD7F0030FCCC /* DiaryCreateViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C5B01F518ACBD7E0030FCCC /* DiaryCreateViewController.xib */; };
 		4C5BA25B1861731A00528843 /* 929-film-1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BA25A1861731A00528843 /* 929-film-1@2x.png */; };
 		4C5BA25D1861745D00528843 /* 929-film-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BA25C1861745D00528843 /* 929-film-1.png */; };
 		4C5C8FFC18A8730100B40F7E /* DiaryEntryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5C8FFA18A8730100B40F7E /* DiaryEntryViewController.m */; };
 		4C5C8FFD18A8730100B40F7E /* DiaryEntryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C5C8FFB18A8730100B40F7E /* DiaryEntryViewController.xib */; };
-		4C665E1218A475F7001CC69D /* EventNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C665E1018A475F7001CC69D /* EventNameViewController.m */; };
-		4C665E1318A475F7001CC69D /* EventNameViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C665E1118A475F7001CC69D /* EventNameViewController.xib */; };
-		4C665E1818A47642001CC69D /* EventNameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C665E1718A47642001CC69D /* EventNameView.m */; };
-		4C66A7A518A3579C00C977D5 /* profileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C66A79C18A3579C00C977D5 /* profileCell.m */; };
-		4C66A7A618A3579C00C977D5 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C66A79E18A3579C00C977D5 /* ProfileViewController.m */; };
-		4C66A7A718A3579C00C977D5 /* ProfileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C66A79F18A3579C00C977D5 /* ProfileViewController.xib */; };
-		4C66A7A818A3579C00C977D5 /* ProfileTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C66A7A118A3579C00C977D5 /* ProfileTableViewController.m */; };
-		4C66A7A918A3579C00C977D5 /* ProfileCreateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C66A7A318A3579C00C977D5 /* ProfileCreateViewController.m */; };
-		4C66A7AA18A3579C00C977D5 /* ProfileCreateViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C66A7A418A3579C00C977D5 /* ProfileCreateViewController.xib */; };
-		4C66A7B318A357C500C977D5 /* ProfileData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C66A7AE18A357C500C977D5 /* ProfileData.m */; };
-		4C66A7B418A357C500C977D5 /* ImageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C66A7B018A357C500C977D5 /* ImageStore.m */; };
-		4C66A7B518A357C500C977D5 /* ProfileDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C66A7B218A357C500C977D5 /* ProfileDataStore.m */; };
 		4C6AC2DC187161CC004FA1E4 /* DiaryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6AC2DB187161CC004FA1E4 /* DiaryData.m */; };
 		4C6C49C0186DDB680042EB61 /* DiaryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C49BF186DDB680042EB61 /* DiaryTableViewController.m */; };
 		4C6C49C4186DDDDF0042EB61 /* DiaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C49C2186DDDDF0042EB61 /* DiaryViewController.m */; };
 		4C6C49C5186DDDDF0042EB61 /* DiaryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C6C49C3186DDDDF0042EB61 /* DiaryViewController.xib */; };
-		4C6F40B71867EB6200B44443 /* DiaryPhotoCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6F40B61867EB6200B44443 /* DiaryPhotoCollectionViewController.m */; };
 		4C86E927188F8ADE00137B6A /* EventTitleAndTimeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86E926188F8ADE00137B6A /* EventTitleAndTimeViewController.m */; };
 		4C86E92A188F91D700137B6A /* EventLocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86E929188F91D700137B6A /* EventLocationViewController.m */; };
 		4C86E933188F973800137B6A /* AlarmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86E931188F973800137B6A /* AlarmViewController.m */; };
@@ -67,12 +53,11 @@
 		4C86E938188F977F00137B6A /* RecurrenceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C86E936188F977F00137B6A /* RecurrenceViewController.m */; };
 		4C86E939188F977F00137B6A /* RecurrenceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C86E937188F977F00137B6A /* RecurrenceViewController.xib */; };
 		4C88B387188E56E100F4F47E /* DiaryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88B386188E56E100F4F47E /* DiaryCell.m */; };
+		4C91918718AF3A4900ED4695 /* ImageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C91918618AF3A4900ED4695 /* ImageStore.m */; };
 		4C9214CB185AAA29009A3090 /* DateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9214CA185AAA29009A3090 /* DateView.m */; };
 		4C92155A185AD39E009A3090 /* MonthCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C921559185AD39E009A3090 /* MonthCalendarView.m */; };
 		4CA2506C1869377000AEA94E /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA2506B1869377000AEA94E /* UIImage+Resize.m */; };
 		4CA2506F1869517400AEA94E /* DiaryPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA2506E1869517400AEA94E /* DiaryPhotoCell.m */; };
-		4CA888241895F26000FAA799 /* MediaTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA888221895F26000FAA799 /* MediaTableViewController.m */; };
-		4CA888251895F26000FAA799 /* MediaTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CA888231895F26000FAA799 /* MediaTableViewController.xib */; };
 		4CA888331896478C00FAA799 /* DiaryVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA888311896478C00FAA799 /* DiaryVideoViewController.m */; };
 		4CA888341896478C00FAA799 /* DiaryVideoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CA888321896478C00FAA799 /* DiaryVideoViewController.xib */; };
 		4CB27D57188ED88800F34E7A /* IMG_1725.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4CB27D56188ED88800F34E7A /* IMG_1725.jpg */; };
@@ -100,8 +85,6 @@
 		4CDA810F18A3C61F00898266 /* 951-baby-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CDA810E18A3C61F00898266 /* 951-baby-selected@2x.png */; };
 		4CF46E4D18878E3800B22888 /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46E4C18878E3800B22888 /* CustomTextField.m */; };
 		4CF592C9186D3B4700F1BEEB /* EventCreateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF592C7186D3B4700F1BEEB /* EventCreateViewController.m */; };
-		4CF592D6186D498E00F1BEEB /* DiaryCreateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF592D4186D498E00F1BEEB /* DiaryCreateViewController.m */; };
-		4CF592D7186D498E00F1BEEB /* DiaryCreateViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CF592D5186D498E00F1BEEB /* DiaryCreateViewController.xib */; };
 		4CF592E0186D5BE500F1BEEB /* MonthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF592DE186D5BE500F1BEEB /* MonthViewController.m */; };
 		4CF592E1186D5BE500F1BEEB /* MonthViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CF592DF186D5BE500F1BEEB /* MonthViewController.xib */; };
 		4CFB086C187E696A00456D5D /* DateModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFB086B187E696A00456D5D /* DateModel.m */; };
@@ -161,7 +144,6 @@
 		4C2FEC0D1889697600D37F18 /* EventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventViewController.h; sourceTree = "<group>"; };
 		4C2FEC0E1889697600D37F18 /* EventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventViewController.m; sourceTree = "<group>"; };
 		4C2FEC0F1889697600D37F18 /* EventViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventViewController.xib; sourceTree = "<group>"; };
-		4C315C7518AB18E600A2A363 /* CamerOverlayView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CamerOverlayView.xib; sourceTree = "<group>"; };
 		4C315C7918AB298800A2A363 /* PhotoLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoLoader.h; sourceTree = "<group>"; };
 		4C315C7A18AB298800A2A363 /* PhotoLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoLoader.m; sourceTree = "<group>"; };
 		4C3E3EA918865B6D00D02397 /* EventTitleAndTimeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTitleAndTimeView.h; sourceTree = "<group>"; };
@@ -182,35 +164,14 @@
 		4C51761E186FF707002F6F6D /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4C52952E188D002300471B43 /* EventCreateViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventCreateViewController.xib; sourceTree = "<group>"; };
 		4C5420EF1857FC9D006D2DE4 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		4C5B01F318ACBD7E0030FCCC /* NewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewViewController.h; sourceTree = "<group>"; };
-		4C5B01F418ACBD7E0030FCCC /* NewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewViewController.m; sourceTree = "<group>"; };
-		4C5B01F518ACBD7E0030FCCC /* NewViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewViewController.xib; sourceTree = "<group>"; };
+		4C5B01F318ACBD7E0030FCCC /* DiaryCreateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiaryCreateViewController.h; path = ../DiaryCreateViewController.h; sourceTree = "<group>"; };
+		4C5B01F418ACBD7E0030FCCC /* DiaryCreateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiaryCreateViewController.m; path = ../DiaryCreateViewController.m; sourceTree = "<group>"; };
+		4C5B01F518ACBD7E0030FCCC /* DiaryCreateViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DiaryCreateViewController.xib; path = ../DiaryCreateViewController.xib; sourceTree = "<group>"; };
 		4C5BA25A1861731A00528843 /* 929-film-1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "929-film-1@2x.png"; sourceTree = "<group>"; };
 		4C5BA25C1861745D00528843 /* 929-film-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "929-film-1.png"; sourceTree = "<group>"; };
 		4C5C8FF918A8730100B40F7E /* DiaryEntryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryEntryViewController.h; sourceTree = "<group>"; };
 		4C5C8FFA18A8730100B40F7E /* DiaryEntryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryEntryViewController.m; sourceTree = "<group>"; };
 		4C5C8FFB18A8730100B40F7E /* DiaryEntryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiaryEntryViewController.xib; sourceTree = "<group>"; };
-		4C665E0F18A475F7001CC69D /* EventNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventNameViewController.h; sourceTree = "<group>"; };
-		4C665E1018A475F7001CC69D /* EventNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventNameViewController.m; sourceTree = "<group>"; };
-		4C665E1118A475F7001CC69D /* EventNameViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventNameViewController.xib; sourceTree = "<group>"; };
-		4C665E1618A47642001CC69D /* EventNameView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventNameView.h; sourceTree = "<group>"; };
-		4C665E1718A47642001CC69D /* EventNameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventNameView.m; sourceTree = "<group>"; };
-		4C66A79B18A3579C00C977D5 /* profileCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = profileCell.h; sourceTree = "<group>"; };
-		4C66A79C18A3579C00C977D5 /* profileCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = profileCell.m; sourceTree = "<group>"; };
-		4C66A79D18A3579C00C977D5 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
-		4C66A79E18A3579C00C977D5 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
-		4C66A79F18A3579C00C977D5 /* ProfileViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileViewController.xib; sourceTree = "<group>"; };
-		4C66A7A018A3579C00C977D5 /* ProfileTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileTableViewController.h; sourceTree = "<group>"; };
-		4C66A7A118A3579C00C977D5 /* ProfileTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileTableViewController.m; sourceTree = "<group>"; };
-		4C66A7A218A3579C00C977D5 /* ProfileCreateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileCreateViewController.h; sourceTree = "<group>"; };
-		4C66A7A318A3579C00C977D5 /* ProfileCreateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileCreateViewController.m; sourceTree = "<group>"; };
-		4C66A7A418A3579C00C977D5 /* ProfileCreateViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileCreateViewController.xib; sourceTree = "<group>"; };
-		4C66A7AD18A357C500C977D5 /* ProfileData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileData.h; sourceTree = "<group>"; };
-		4C66A7AE18A357C500C977D5 /* ProfileData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileData.m; sourceTree = "<group>"; };
-		4C66A7AF18A357C500C977D5 /* ImageStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageStore.h; sourceTree = "<group>"; };
-		4C66A7B018A357C500C977D5 /* ImageStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageStore.m; sourceTree = "<group>"; };
-		4C66A7B118A357C500C977D5 /* ProfileDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileDataStore.h; sourceTree = "<group>"; };
-		4C66A7B218A357C500C977D5 /* ProfileDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileDataStore.m; sourceTree = "<group>"; };
 		4C6AC2DA187161CC004FA1E4 /* DiaryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiaryData.h; path = ../DiaryData.h; sourceTree = "<group>"; };
 		4C6AC2DB187161CC004FA1E4 /* DiaryData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiaryData.m; path = ../DiaryData.m; sourceTree = "<group>"; };
 		4C6C49BE186DDB680042EB61 /* DiaryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryTableViewController.h; sourceTree = "<group>"; };
@@ -218,8 +179,6 @@
 		4C6C49C1186DDDDF0042EB61 /* DiaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryViewController.h; sourceTree = "<group>"; };
 		4C6C49C2186DDDDF0042EB61 /* DiaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryViewController.m; sourceTree = "<group>"; };
 		4C6C49C3186DDDDF0042EB61 /* DiaryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiaryViewController.xib; sourceTree = "<group>"; };
-		4C6F40B51867EB6200B44443 /* DiaryPhotoCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryPhotoCollectionViewController.h; sourceTree = "<group>"; };
-		4C6F40B61867EB6200B44443 /* DiaryPhotoCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryPhotoCollectionViewController.m; sourceTree = "<group>"; };
 		4C86E925188F8ADE00137B6A /* EventTitleAndTimeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTitleAndTimeViewController.h; sourceTree = "<group>"; };
 		4C86E926188F8ADE00137B6A /* EventTitleAndTimeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTitleAndTimeViewController.m; sourceTree = "<group>"; };
 		4C86E928188F91D700137B6A /* EventLocationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventLocationViewController.h; sourceTree = "<group>"; };
@@ -232,6 +191,8 @@
 		4C86E937188F977F00137B6A /* RecurrenceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RecurrenceViewController.xib; sourceTree = "<group>"; };
 		4C88B385188E56E100F4F47E /* DiaryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryCell.h; sourceTree = "<group>"; };
 		4C88B386188E56E100F4F47E /* DiaryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryCell.m; sourceTree = "<group>"; };
+		4C91918518AF3A4900ED4695 /* ImageStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageStore.h; sourceTree = "<group>"; };
+		4C91918618AF3A4900ED4695 /* ImageStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageStore.m; sourceTree = "<group>"; };
 		4C9214C9185AAA29009A3090 /* DateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateView.h; sourceTree = "<group>"; };
 		4C9214CA185AAA29009A3090 /* DateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateView.m; sourceTree = "<group>"; };
 		4C921558185AD39E009A3090 /* MonthCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthCalendarView.h; sourceTree = "<group>"; };
@@ -240,9 +201,6 @@
 		4CA2506B1869377000AEA94E /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resize.m"; sourceTree = "<group>"; };
 		4CA2506D1869517400AEA94E /* DiaryPhotoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryPhotoCell.h; sourceTree = "<group>"; };
 		4CA2506E1869517400AEA94E /* DiaryPhotoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryPhotoCell.m; sourceTree = "<group>"; };
-		4CA888211895F26000FAA799 /* MediaTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaTableViewController.h; sourceTree = "<group>"; };
-		4CA888221895F26000FAA799 /* MediaTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaTableViewController.m; sourceTree = "<group>"; };
-		4CA888231895F26000FAA799 /* MediaTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MediaTableViewController.xib; sourceTree = "<group>"; };
 		4CA888301896478C00FAA799 /* DiaryVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiaryVideoViewController.h; path = ../DiaryVideoViewController.h; sourceTree = "<group>"; };
 		4CA888311896478C00FAA799 /* DiaryVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiaryVideoViewController.m; path = ../DiaryVideoViewController.m; sourceTree = "<group>"; };
 		4CA888321896478C00FAA799 /* DiaryVideoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DiaryVideoViewController.xib; path = ../DiaryVideoViewController.xib; sourceTree = "<group>"; };
@@ -280,9 +238,6 @@
 		4CF46E4C18878E3800B22888 /* CustomTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTextField.m; sourceTree = "<group>"; };
 		4CF592C6186D3B4700F1BEEB /* EventCreateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventCreateViewController.h; sourceTree = "<group>"; };
 		4CF592C7186D3B4700F1BEEB /* EventCreateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventCreateViewController.m; sourceTree = "<group>"; };
-		4CF592D3186D498E00F1BEEB /* DiaryCreateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiaryCreateViewController.h; path = ../DiaryCreateViewController.h; sourceTree = "<group>"; };
-		4CF592D4186D498E00F1BEEB /* DiaryCreateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiaryCreateViewController.m; path = ../DiaryCreateViewController.m; sourceTree = "<group>"; };
-		4CF592D5186D498E00F1BEEB /* DiaryCreateViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DiaryCreateViewController.xib; path = ../DiaryCreateViewController.xib; sourceTree = "<group>"; };
 		4CF592DD186D5BE500F1BEEB /* MonthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthViewController.h; sourceTree = "<group>"; };
 		4CF592DE186D5BE500F1BEEB /* MonthViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonthViewController.m; sourceTree = "<group>"; };
 		4CF592DF186D5BE500F1BEEB /* MonthViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MonthViewController.xib; sourceTree = "<group>"; };
@@ -346,7 +301,6 @@
 			isa = PBXGroup;
 			children = (
 				4C417E7C18714ACA000878FC /* View */,
-				4C417E7A18714A69000878FC /* Model */,
 			);
 			name = Diary;
 			sourceTree = "<group>";
@@ -354,10 +308,9 @@
 		4C315C7C18AB299500A2A363 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				4C12B2E718A1E4570046C5EC /* FileManager.h */,
-				4C12B2E818A1E4570046C5EC /* FileManager.m */,
-				4C315C7918AB298800A2A363 /* PhotoLoader.h */,
-				4C315C7A18AB298800A2A363 /* PhotoLoader.m */,
+				4C91918818AF3D3100ED4695 /* Other Model */,
+				4CFB0869187E68D600456D5D /* Calendar Model */,
+				4C417E7A18714A69000878FC /* Diary Model */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -372,7 +325,7 @@
 			name = Event;
 			sourceTree = "<group>";
 		};
-		4C417E7A18714A69000878FC /* Model */ = {
+		4C417E7A18714A69000878FC /* Diary Model */ = {
 			isa = PBXGroup;
 			children = (
 				4C6AC2DA187161CC004FA1E4 /* DiaryData.h */,
@@ -382,25 +335,20 @@
 				4CD2B92E18A4B8FD002DA9E4 /* DropboxBackUp.h */,
 				4CD2B92F18A4B8FD002DA9E4 /* DropboxBackUp.m */,
 			);
-			name = Model;
+			name = "Diary Model";
 			sourceTree = "<group>";
 		};
 		4C417E7C18714ACA000878FC /* View */ = {
 			isa = PBXGroup;
 			children = (
+				4C5B01F318ACBD7E0030FCCC /* DiaryCreateViewController.h */,
+				4C5B01F418ACBD7E0030FCCC /* DiaryCreateViewController.m */,
+				4C5B01F518ACBD7E0030FCCC /* DiaryCreateViewController.xib */,
 				4CA888301896478C00FAA799 /* DiaryVideoViewController.h */,
 				4CA888311896478C00FAA799 /* DiaryVideoViewController.m */,
 				4CA888321896478C00FAA799 /* DiaryVideoViewController.xib */,
-				4C6F40B51867EB6200B44443 /* DiaryPhotoCollectionViewController.h */,
-				4C6F40B61867EB6200B44443 /* DiaryPhotoCollectionViewController.m */,
-				4CA888211895F26000FAA799 /* MediaTableViewController.h */,
-				4CA888221895F26000FAA799 /* MediaTableViewController.m */,
-				4CA888231895F26000FAA799 /* MediaTableViewController.xib */,
 				4C6C49BE186DDB680042EB61 /* DiaryTableViewController.h */,
 				4C6C49BF186DDB680042EB61 /* DiaryTableViewController.m */,
-				4CF592D3186D498E00F1BEEB /* DiaryCreateViewController.h */,
-				4CF592D4186D498E00F1BEEB /* DiaryCreateViewController.m */,
-				4CF592D5186D498E00F1BEEB /* DiaryCreateViewController.xib */,
 				4C5C8FF918A8730100B40F7E /* DiaryEntryViewController.h */,
 				4C5C8FFA18A8730100B40F7E /* DiaryEntryViewController.m */,
 				4C5C8FFB18A8730100B40F7E /* DiaryEntryViewController.xib */,
@@ -414,46 +362,6 @@
 				4CA2506E1869517400AEA94E /* DiaryPhotoCell.m */,
 			);
 			name = View;
-			sourceTree = "<group>";
-		};
-		4C66A79818A3574900C977D5 /* Profile */ = {
-			isa = PBXGroup;
-			children = (
-				4C66A7AC18A357B900C977D5 /* Model */,
-				4C66A7AB18A357AA00C977D5 /* View */,
-			);
-			name = Profile;
-			sourceTree = "<group>";
-		};
-		4C66A7AB18A357AA00C977D5 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				4C66A79B18A3579C00C977D5 /* profileCell.h */,
-				4C66A79C18A3579C00C977D5 /* profileCell.m */,
-				4C66A79D18A3579C00C977D5 /* ProfileViewController.h */,
-				4C66A79E18A3579C00C977D5 /* ProfileViewController.m */,
-				4C66A79F18A3579C00C977D5 /* ProfileViewController.xib */,
-				4C66A7A018A3579C00C977D5 /* ProfileTableViewController.h */,
-				4C66A7A118A3579C00C977D5 /* ProfileTableViewController.m */,
-				4C66A7A218A3579C00C977D5 /* ProfileCreateViewController.h */,
-				4C66A7A318A3579C00C977D5 /* ProfileCreateViewController.m */,
-				4C315C7518AB18E600A2A363 /* CamerOverlayView.xib */,
-				4C66A7A418A3579C00C977D5 /* ProfileCreateViewController.xib */,
-			);
-			name = View;
-			sourceTree = "<group>";
-		};
-		4C66A7AC18A357B900C977D5 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				4C66A7AD18A357C500C977D5 /* ProfileData.h */,
-				4C66A7AE18A357C500C977D5 /* ProfileData.m */,
-				4C66A7AF18A357C500C977D5 /* ImageStore.h */,
-				4C66A7B018A357C500C977D5 /* ImageStore.m */,
-				4C66A7B118A357C500C977D5 /* ProfileDataStore.h */,
-				4C66A7B218A357C500C977D5 /* ProfileDataStore.m */,
-			);
-			name = Model;
 			sourceTree = "<group>";
 		};
 		4C86E92E188F96E600137B6A /* Controller */ = {
@@ -472,9 +380,6 @@
 				4C86E930188F973800137B6A /* AlarmViewController.h */,
 				4C86E931188F973800137B6A /* AlarmViewController.m */,
 				4C86E932188F973800137B6A /* AlarmViewController.xib */,
-				4C665E0F18A475F7001CC69D /* EventNameViewController.h */,
-				4C665E1018A475F7001CC69D /* EventNameViewController.m */,
-				4C665E1118A475F7001CC69D /* EventNameViewController.xib */,
 				4C86E935188F977F00137B6A /* RecurrenceViewController.h */,
 				4C86E936188F977F00137B6A /* RecurrenceViewController.m */,
 				4C86E937188F977F00137B6A /* RecurrenceViewController.xib */,
@@ -489,12 +394,23 @@
 				4C3E3EAA18865B6D00D02397 /* EventTitleAndTimeView.m */,
 				4C3E3EAF18865C0C00D02397 /* EventLocationView.h */,
 				4C3E3EB018865C0C00D02397 /* EventLocationView.m */,
-				4C665E1618A47642001CC69D /* EventNameView.h */,
-				4C665E1718A47642001CC69D /* EventNameView.m */,
 				4CF46E4B18878E3800B22888 /* CustomTextField.h */,
 				4CF46E4C18878E3800B22888 /* CustomTextField.m */,
 			);
 			name = View;
+			sourceTree = "<group>";
+		};
+		4C91918818AF3D3100ED4695 /* Other Model */ = {
+			isa = PBXGroup;
+			children = (
+				4C91918518AF3A4900ED4695 /* ImageStore.h */,
+				4C91918618AF3A4900ED4695 /* ImageStore.m */,
+				4C12B2E718A1E4570046C5EC /* FileManager.h */,
+				4C12B2E818A1E4570046C5EC /* FileManager.m */,
+				4C315C7918AB298800A2A363 /* PhotoLoader.h */,
+				4C315C7A18AB298800A2A363 /* PhotoLoader.m */,
+			);
+			name = "Other Model";
 			sourceTree = "<group>";
 		};
 		4C92155E185AD445009A3090 /* Calendar */ = {
@@ -509,7 +425,6 @@
 				4C921559185AD39E009A3090 /* MonthCalendarView.m */,
 				4C9214C9185AAA29009A3090 /* DateView.h */,
 				4C9214CA185AAA29009A3090 /* DateView.m */,
-				4CFB0869187E68D600456D5D /* Model */,
 			);
 			name = Calendar;
 			sourceTree = "<group>";
@@ -527,9 +442,6 @@
 		4CB3DD6F18521DC400673478 = {
 			isa = PBXGroup;
 			children = (
-				4C5B01F318ACBD7E0030FCCC /* NewViewController.h */,
-				4C5B01F418ACBD7E0030FCCC /* NewViewController.m */,
-				4C5B01F518ACBD7E0030FCCC /* NewViewController.xib */,
 				4CFFD5891897800A0070C33C /* lookup_amatorka.png */,
 				4CC3A7D8188D6EAF000BAE1A /* GPUImage.xcodeproj */,
 				4CB3DD8118521DC400673478 /* Kidlendar */,
@@ -585,16 +497,15 @@
 		4CB3DD8118521DC400673478 /* Kidlendar */ = {
 			isa = PBXGroup;
 			children = (
-				4C315C7C18AB299500A2A363 /* Model */,
+				4CB3DD8A18521DC400673478 /* KidlendarAppDelegate.h */,
+				4CB3DD8B18521DC400673478 /* KidlendarAppDelegate.m */,
 				4CD2B92918A497BF002DA9E4 /* BackupViewController.h */,
 				4CD2B92A18A497BF002DA9E4 /* BackupViewController.m */,
 				4CD2B92B18A497BF002DA9E4 /* BackupViewController.xib */,
-				4CB3DD8A18521DC400673478 /* KidlendarAppDelegate.h */,
-				4CB3DD8B18521DC400673478 /* KidlendarAppDelegate.m */,
 				4C515D2418973C27002E8DEE /* ShareViewController.h */,
 				4C515D2518973C27002E8DEE /* ShareViewController.m */,
 				4C515D2618973C27002E8DEE /* ShareViewController.xib */,
-				4C66A79818A3574900C977D5 /* Profile */,
+				4C315C7C18AB299500A2A363 /* Model */,
 				4CB3BD2E18A331BD0006AFD4 /* Setting */,
 				4C3E3EA818865AFE00D02397 /* Event */,
 				4C92155E185AD445009A3090 /* Calendar */,
@@ -647,7 +558,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		4CFB0869187E68D600456D5D /* Model */ = {
+		4CFB0869187E68D600456D5D /* Calendar Model */ = {
 			isa = PBXGroup;
 			children = (
 				4CFB086A187E696A00456D5D /* DateModel.h */,
@@ -657,7 +568,7 @@
 				4C2E83BB1890BB450051215F /* CalendarStore.h */,
 				4C2E83BC1890BB450051215F /* CalendarStore.m */,
 			);
-			name = Model;
+			name = "Calendar Model";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -763,7 +674,6 @@
 			files = (
 				4CFFD585189775270070C33C /* DiaryPhotoViewController.xib in Resources */,
 				4C52952F188D002300471B43 /* EventCreateViewController.xib in Resources */,
-				4CF592D7186D498E00F1BEEB /* DiaryCreateViewController.xib in Resources */,
 				4C5C8FFD18A8730100B40F7E /* DiaryEntryViewController.xib in Resources */,
 				4CDA810F18A3C61F00898266 /* 951-baby-selected@2x.png in Resources */,
 				4CA888341896478C00FAA799 /* DiaryVideoViewController.xib in Resources */,
@@ -771,21 +681,16 @@
 				4C6C49C5186DDDDF0042EB61 /* DiaryViewController.xib in Resources */,
 				4C2FEC111889697600D37F18 /* EventViewController.xib in Resources */,
 				4C5BA25B1861731A00528843 /* 929-film-1@2x.png in Resources */,
-				4C315C7618AB18E600A2A363 /* CamerOverlayView.xib in Resources */,
 				4C86E939188F977F00137B6A /* RecurrenceViewController.xib in Resources */,
-				4C665E1318A475F7001CC69D /* EventNameViewController.xib in Resources */,
 				4C12B30018A201450046C5EC /* GoogleMaps.bundle in Resources */,
 				4C86E934188F973800137B6A /* AlarmViewController.xib in Resources */,
 				4CFFD58A1897800A0070C33C /* lookup_amatorka.png in Resources */,
-				4C5B01F718ACBD7F0030FCCC /* NewViewController.xib in Resources */,
+				4C5B01F718ACBD7F0030FCCC /* DiaryCreateViewController.xib in Resources */,
 				4CB27D57188ED88800F34E7A /* IMG_1725.jpg in Resources */,
 				4C515D2818973C27002E8DEE /* ShareViewController.xib in Resources */,
 				4CB3DD8618521DC400673478 /* InfoPlist.strings in Resources */,
-				4C66A7AA18A3579C00C977D5 /* ProfileCreateViewController.xib in Resources */,
 				4CB3BD2D18A330D80006AFD4 /* SettingViewController.xib in Resources */,
-				4CA888251895F26000FAA799 /* MediaTableViewController.xib in Resources */,
 				4CB3DD8E18521DC400673478 /* Images.xcassets in Resources */,
-				4C66A7A718A3579C00C977D5 /* ProfileViewController.xib in Resources */,
 				4CD2B92D18A497BF002DA9E4 /* BackupViewController.xib in Resources */,
 				4CF592E1186D5BE500F1BEEB /* MonthViewController.xib in Resources */,
 			);
@@ -810,18 +715,14 @@
 				4CB3DD8818521DC400673478 /* main.m in Sources */,
 				4CFB086C187E696A00456D5D /* DateModel.m in Sources */,
 				4C12B2E918A1E4570046C5EC /* FileManager.m in Sources */,
-				4C66A7A618A3579C00C977D5 /* ProfileViewController.m in Sources */,
 				4C5C8FFC18A8730100B40F7E /* DiaryEntryViewController.m in Sources */,
 				4C86E933188F973800137B6A /* AlarmViewController.m in Sources */,
-				4CF592D6186D498E00F1BEEB /* DiaryCreateViewController.m in Sources */,
 				4C417E7618714A4C000878FC /* DiaryDataStore.m in Sources */,
-				4C66A7B418A357C500C977D5 /* ImageStore.m in Sources */,
 				4C9214CB185AAA29009A3090 /* DateView.m in Sources */,
 				4CD2B93018A4B8FD002DA9E4 /* DropboxBackUp.m in Sources */,
 				4CF592C9186D3B4700F1BEEB /* EventCreateViewController.m in Sources */,
 				4CFB086F187E6BFB00456D5D /* MonthModel.m in Sources */,
 				4CA2506F1869517400AEA94E /* DiaryPhotoCell.m in Sources */,
-				4C66A7B518A357C500C977D5 /* ProfileDataStore.m in Sources */,
 				4CB3DD8C18521DC400673478 /* KidlendarAppDelegate.m in Sources */,
 				4CA888331896478C00FAA799 /* DiaryVideoViewController.m in Sources */,
 				4C88B387188E56E100F4F47E /* DiaryCell.m in Sources */,
@@ -832,27 +733,20 @@
 				4C515D2718973C27002E8DEE /* ShareViewController.m in Sources */,
 				4CF592E0186D5BE500F1BEEB /* MonthViewController.m in Sources */,
 				4CB3BD2C18A330D80006AFD4 /* SettingViewController.m in Sources */,
-				4C665E1818A47642001CC69D /* EventNameView.m in Sources */,
-				4C66A7A518A3579C00C977D5 /* profileCell.m in Sources */,
 				4CD2B92C18A497BF002DA9E4 /* BackupViewController.m in Sources */,
 				4C86E938188F977F00137B6A /* RecurrenceViewController.m in Sources */,
-				4C66A7A818A3579C00C977D5 /* ProfileTableViewController.m in Sources */,
 				4C3E3EAB18865B6D00D02397 /* EventTitleAndTimeView.m in Sources */,
-				4CA888241895F26000FAA799 /* MediaTableViewController.m in Sources */,
 				4C86E927188F8ADE00137B6A /* EventTitleAndTimeViewController.m in Sources */,
 				4CFFD584189775270070C33C /* DiaryPhotoViewController.m in Sources */,
 				4C51761D186FF309002F6F6D /* KidlendarModel.xcdatamodeld in Sources */,
-				4C66A7A918A3579C00C977D5 /* ProfileCreateViewController.m in Sources */,
 				4CF46E4D18878E3800B22888 /* CustomTextField.m in Sources */,
-				4C5B01F618ACBD7F0030FCCC /* NewViewController.m in Sources */,
+				4C5B01F618ACBD7F0030FCCC /* DiaryCreateViewController.m in Sources */,
 				4C6AC2DC187161CC004FA1E4 /* DiaryData.m in Sources */,
-				4C66A7B318A357C500C977D5 /* ProfileData.m in Sources */,
-				4C6F40B71867EB6200B44443 /* DiaryPhotoCollectionViewController.m in Sources */,
 				4C315C7B18AB298800A2A363 /* PhotoLoader.m in Sources */,
 				4CA2506C1869377000AEA94E /* UIImage+Resize.m in Sources */,
+				4C91918718AF3A4900ED4695 /* ImageStore.m in Sources */,
 				4C92155A185AD39E009A3090 /* MonthCalendarView.m in Sources */,
 				4C3E3EB118865C0C00D02397 /* EventLocationView.m in Sources */,
-				4C665E1218A475F7001CC69D /* EventNameViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

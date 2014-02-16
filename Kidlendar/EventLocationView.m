@@ -26,9 +26,9 @@
         _locationField.rightView.backgroundColor = [UIColor redColor];
         [self addSubview:_locationField];
         
-        _searchedLocation = [[UITableView alloc]initWithFrame:CGRectMake(10, 128, 300, 210)];
-        _searchedLocation.hidden = YES;
-        [self addSubview:_searchedLocation];
+        _searchedLocationTable = [[UITableView alloc]initWithFrame:CGRectMake(10, 128, 300, 210)];
+        _searchedLocationTable.hidden = YES;
+        [self addSubview:_searchedLocationTable];
     }
     return self;
 }

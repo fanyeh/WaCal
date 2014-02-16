@@ -92,7 +92,6 @@
         case UIImageOrientationLeftMirrored:
         case UIImageOrientationRight:
         case UIImageOrientationRightMirrored:
-            // Grr...
             CGContextDrawImage(ctx, CGRectMake(0,0,image.size.height,image.size.width), image.CGImage);
             break;
             
@@ -109,15 +108,15 @@
     return img;
 }
 
--(UIImage *)resizeWtihFaceDetect:(CGSize)size
+-(UIImage *)cropWithFaceDetect:(CGSize)size
 {
     // draw a CI image with the previously loaded face detection picture
-    CIImage *o_image =  [CIImage imageWithCGImage:self.CGImage];
-    NSLog(@"CIImage extent before transform %@",o_image);
-    CGFloat xRatio = self.size.width/o_image.extent.size.width;
-    CGFloat yRatio = self.size.height/o_image.extent.size.height;
-    CGAffineTransform t = CGAffineTransformMakeScale(xRatio, yRatio);
-    CIImage *image = [o_image imageByApplyingTransform:t];
+    CIImage *image =  [CIImage imageWithCGImage:self.CGImage];
+    NSLog(@"CIImage extent before transform %@",image);
+//    CGFloat xRatio = self.size.width/image.extent.size.width;
+//    CGFloat yRatio = self.size.height/image.extent.size.height;
+//    CGAffineTransform t = CGAffineTransformMakeScale(xRatio, yRatio);
+//    CIImage *image = [o_image imageByApplyingTransform:t];
     NSLog(@"CIImage extent after transform %@",image);
     
     CGFloat imageWidth = self.size.width;
@@ -251,6 +250,28 @@
 
 }
 
+-(UIImage *)cropWithoutFaceOutDetect:(CGSize)size
+{
+    
+    CGFloat imageWidth = self.size.width;
+    CGFloat imageHeight = self.size.height;
+    
+    CGFloat cropRatio = size.width/size.height;
+    CGFloat maxCropHeight = imageWidth/cropRatio;
+    CGFloat maxCropWidth = imageWidth;
+    
+    if (maxCropHeight > imageHeight) {
+        maxCropHeight = imageHeight;
+        maxCropWidth = imageHeight*cropRatio;
+    }
+    
+    CGFloat y = (imageHeight - maxCropHeight)/2;
+    CGFloat x = (imageWidth - maxCropWidth)/2;
+    CGRect cropRect = CGRectMake(x, y, maxCropWidth, maxCropHeight);
+    
+    return [self cropImageWithRect:cropRect resize:size];
+}
+
 - (UIImage *)cropImageWithRect:(CGRect)cropRect resize:(CGSize)size
 {
     // Convert cropRect unit to cropRegion unit
@@ -266,5 +287,6 @@
     UIImage *cropImage =  [cropFilter imageByFilteringImage:self];
     return cropImage;
 }
+
 
 @end

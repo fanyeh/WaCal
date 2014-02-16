@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <EventKit/EventKit.h>
 
-@interface EventCreateViewController : UIViewController <UITextFieldDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
+@interface EventCreateViewController : UIViewController <UITextFieldDelegate>
 @property UIDatePicker *datePicker;
 @property NSDate *selectedDate;
 @end

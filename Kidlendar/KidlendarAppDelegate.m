@@ -15,10 +15,9 @@
 #import "ShareViewController.h"
 #import <GoogleMaps/GoogleMaps.h>
 #import "SettingViewController.h"
-#import "ProfileTableViewController.h"
 #import <DropboxSDK/DropboxSDK.h>
 #import "BackupViewController.h"
-#import "NewViewController.h"
+#import "DiaryCreateViewController.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 
@@ -30,23 +29,25 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    // Google map
     [GMSServices provideAPIKey:@"AIzaSyBm7gHFT7u0OC0pny4uR32lz0_hOR8RQko"];
-    
-    // Dropbox Core API
-    DBSession* dbSession = [[DBSession alloc]initWithAppKey:@"rb186yqaya1ijp8"
-                                                   appSecret:@"3eibrlmh4x2keim"
-                                                        root:kDBRootAppFolder] // either kDBRootAppFolder or kDBRootDropbox
-     ;
-    [DBSession setSharedSession:dbSession];
-    /*
-    BackupViewController *backupController = [[BackupViewController alloc]init];
-    [self.window setRootViewController:backupController];
-    // Override point for customization after application launch.
-    
-    [FBProfilePictureView class];
-
-    ShareViewController *svc = [[ShareViewController alloc]init];
-    [self.window setRootViewController:svc];
+//
+//    // Dropbox Core API
+//    DBSession* dbSession = [[DBSession alloc]initWithAppKey:@"rb186yqaya1ijp8"
+//                                                   appSecret:@"3eibrlmh4x2keim"
+//                                                        root:kDBRootAppFolder] // either kDBRootAppFolder or kDBRootDropbox
+//     ;
+//    [DBSession setSharedSession:dbSession];
+//    
+//    BackupViewController *backupController = [[BackupViewController alloc]init];
+//    [self.window setRootViewController:backupController];
+//    // Override point for customization after application launch.
+//    
+//    [FBProfilePictureView class];
+//
+//    ShareViewController *svc = [[ShareViewController alloc]init];
+//    [self.window setRootViewController:svc];
     
      
     // Init Calendar store
@@ -58,18 +59,12 @@
     else {
         [[[CalendarStore sharedStore]eventStore] requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
             if (granted) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self createAllViewControllers];
-                });
+                [self createAllViewControllers];
             }
             else
                 NSLog(@"need permission , error %@",error);
         }];
     }
-    */
-    NewViewController *cvc = [[NewViewController alloc]init];
-    UINavigationController *testController = [[UINavigationController alloc]initWithRootViewController:cvc];
-    [self.window setRootViewController:testController];
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
@@ -129,15 +124,10 @@
     [settingNavigationController.navigationBar.topItem setTitle:@"Setting"];
     [settingNavigationController.tabBarItem setTitle:@"Setting"];
     
-    // Set up profile controller
-    ProfileTableViewController *profileController = [[ProfileTableViewController alloc]initWithStyle:UITableViewStyleGrouped];
-    UINavigationController *profileNavigationController = [[UINavigationController alloc]initWithRootViewController:profileController];
-    [profileNavigationController.navigationBar.topItem setTitle:@"Profile"];
-    [profileNavigationController.tabBarItem setTitle:@"Profile"];
     
     // Set up tab bar contoller for entire app
     UITabBarController *tbc = [[UITabBarController alloc]init];
-    NSArray *viewControllers = [NSArray arrayWithObjects:calendarNavigationController,diaryNavigationController,settingNavigationController,profileNavigationController, nil];
+    NSArray *viewControllers = [NSArray arrayWithObjects:calendarNavigationController,diaryNavigationController,settingNavigationController, nil];
     [tbc setViewControllers:viewControllers];
     
     // Add Tab bar controller to window

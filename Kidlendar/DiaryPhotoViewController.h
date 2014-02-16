@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 @protocol filterImageDelegate <NSObject>
 @required
-- (void)filteredImage:(UIImage *)image index:(NSInteger)i;
+- (void)filteredImage:(UIImage *)image indexPath:(NSIndexPath *)path;
 @end
 
 @interface DiaryPhotoViewController : UIViewController
@@ -18,5 +18,5 @@
 }
 @property (strong,nonatomic) UIImage *photoImage;
 @property (weak,nonatomic) id<filterImageDelegate>delegate;
-@property NSInteger index;
+@property NSIndexPath *indexPath;
 @end
