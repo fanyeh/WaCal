@@ -9,13 +9,13 @@
 #import "DiaryViewController.h"
 #import "DiaryData.h"
 #import "FileManager.h"
-#import <DropboxSDK/DropboxSDK.h>
+#import <FacebookSDK/FacebookSDK.h>
+#import "KidlendarAppDelegate.h"
+#import "DropboxModel.h"
 
-@interface DiaryViewController () <DBRestClientDelegate>
+@interface DiaryViewController () <FBLoginViewDelegate>
 {
-    NSString *foldername;
-    NSString *parentFolder;
-    NSString *childFolder;
+    DropboxModel *DBModel;
 }
 @property (weak, nonatomic) IBOutlet UIImageView *diaryPhoto;
 @property (weak, nonatomic) IBOutlet UITextView *diaryDetailTextView;
@@ -46,131 +46,43 @@
     _diaryDetailTextView.text = _diaryData.diaryText;
 
     
-    UIBarButtonItem *backupButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize
+    UIBarButtonItem *backupButton = [[UIBarButtonItem alloc]initWithTitle:@"Dropbox" style:UIBarButtonItemStyleBordered
                                                                                  target:self
                                                                                  action:@selector(backupDiary)];
     
-    self.navigationItem.rightBarButtonItem = backupButton;
+    backupButton.title = @"Dropbox";
     
-    [[NSNotificationCenter defaultCenter]addObserver:self
-                                            selector:@selector(subFolderCheck:)
-                                                name:@"firstFolderCheckDone" object:nil];
+    
+    UIBarButtonItem *faceBookButton = [[UIBarButtonItem alloc]initWithTitle:@"Facebook" style:UIBarButtonItemStyleBordered
+                                                                                 target:self
+                                                                                 action:@selector(shareDiary)];
+    
+    self.navigationItem.rightBarButtonItems = @[faceBookButton,backupButton];
+    
+    
+    //[[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(insertDiary:) name:@"insertDiary" object:nil];
+    
+    
+    
+}
 
-    [[NSNotificationCenter defaultCenter]addObserver:self
-                                            selector:@selector(uploadFile:)
-                                                name:@"secondFolderCheckDone" object:nil];
+- (void)insertDiary:(NSNotification *)notification
+{
+    [[DropboxModel shareModel] createDiaryRecord:_diaryData.diaryKey diaryText:_diaryData.diaryText];
+    NSLog(@"insert diary done");
+}
 
+- (void)shareDiary
+{
 
-    // TODO:Add swipe gesture , only swipable if there are more than 1 diaries
-    // TODO:Add share button on navigation bar right
 }
 
 - (void)backupDiary
 {
-    [self linkToDropBox];
-    // Diary file system structure should be "/kidlendar/profile name/create date time - diary title/filename"
+    [[DropboxModel shareModel] linkToDropBox:self];
 }
 
-- (void)linkToDropBox
-{
-    if (![[DBSession sharedSession] isLinked]) {
-		[[DBSession sharedSession] linkFromController:self];
-    }
-    else {
-        parentFolder = @"unknown";
-        childFolder = [NSString stringWithFormat:@"%f",_diaryData.dateCreated];
-        
-        // Check if parent folder exist
-        foldername  = parentFolder;
-        [[self restClient] loadMetadata:@"/"];
-
-//        [[DBSession sharedSession] unlinkAll];
-//        [[[UIAlertView alloc] initWithTitle:@"Account Unlinked!" message:@"Your dropbox account has been unlinked"
-//                                   delegate:nil
-//                          cancelButtonTitle:@"OK"
-//                          otherButtonTitles:nil] show];
-    }
-}
-
-- (void)subFolderCheck:(NSNotification *)notification
-{
-    foldername  = childFolder;
-    [[self restClient] loadMetadata:[NSString stringWithFormat:@"/%@",parentFolder]];
-}
-
-- (void)uploadFile:(NSNotification *)notification
-{
-    FileManager *fm = [[FileManager alloc]initWithKey:_diaryData.diaryKey];
-    NSString *filename = @"collectionViewImage.png";
-    NSString *fromDir =[NSString stringWithFormat:@"%@/%@",[fm fileDirectory],filename];
-
-    NSString *destDir = [NSString stringWithFormat:@"/%@/%@",parentFolder,foldername];
-    [_restClient uploadFile:filename
-                     toPath:destDir
-              withParentRev:nil
-                   fromPath:fromDir];
-}
-
-#pragma mark - DBRestClientDelegate
-- (void)restClient:(DBRestClient*)client uploadedFile:(NSString*)destPath
-              from:(NSString*)srcPath metadata:(DBMetadata*)metadata {
-    
-    NSLog(@"File uploaded successfully to path: %@", metadata.path);
-}
-
-- (void)restClient:(DBRestClient*)client uploadFileFailedWithError:(NSError*)error {
-    NSLog(@"File upload failed with error - %@", error);
-}
-
-- (void)restClient:(DBRestClient *)client loadedMetadata:(DBMetadata *)metadata {
-    if (metadata.isDirectory) {
-        BOOL folderExist = NO;
-        for (DBMetadata *file in metadata.contents) {
-            // Check if there's folder
-            if (file.isDirectory && [file.filename isEqualToString:foldername]) {
-                folderExist = YES;
-                if ([metadata.filename isEqualToString:@"/"])
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"firstFolderCheckDone" object:nil];
-                else
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"secondFolderCheckDone" object:nil];
-                break;
-            }
-        }
-        if (!folderExist)
-            [_restClient createFolder:foldername];
-    }
-    // compare file.filename with profile name , if not exist create new folder use profile name
-    // if there's no profile name , create new forder named "unknown"
-    // Diary file system structure should be "/kidlendar/profile name/create date time - diary title/filename"
-}
-
-- (void)restClient:(DBRestClient *)clientloadMetadata FailedWithError:(NSError *)error {
-    
-    NSLog(@"Error loading metadata: %@", error);
-}
-
-- (void)restClient:(DBRestClient*)client createdFolder:(DBMetadata*)folder;
-{
-    // Folder is the metadata for the newly created folder
-    if ([folder.filename isEqualToString:[NSString stringWithFormat:@"/%@",parentFolder]])
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"firstFolderCheckDone" object:nil];
-    else
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"secondFolderCheckDone" object:nil];
-}
-
-- (void)restClient:(DBRestClient*)client createFolderFailedWithError:(NSError*)error;
-{
-    NSLog(@"Error create folder: %@", error);
-}
-
-- (DBRestClient *)restClient {
-    if (!_restClient) {
-        _restClient =
-        [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
-        _restClient.delegate = self;
-    }
-    return _restClient;
-}
+#pragma mark - Memory management
 
 - (void)didReceiveMemoryWarning
 {

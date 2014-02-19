@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <EventKit/EventKit.h>
+#import <FacebookSDK/FacebookSDK.h>
 
 @interface KidlendarAppDelegate : UIResponder <UIApplicationDelegate>
+
+//extern NSString *const FBSessionStateChangedNotification;
 
 @property (strong, nonatomic) UIWindow *window;
 
@@ -20,5 +23,8 @@
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
+- (void)sessionStateChanged:(FBSession *)session state:(FBSessionState) state error:(NSError *)error;
+- (void)userLoggedIn;
+- (void)userLoggedOut;
 
 @end

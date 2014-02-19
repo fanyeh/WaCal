@@ -17,21 +17,26 @@
 		4C12B2F718A1FDC40046C5EC /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2F618A1FDC40046C5EC /* libz.dylib */; };
 		4C12B2F918A1FDE60046C5EC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2F818A1FDE60046C5EC /* SystemConfiguration.framework */; };
 		4C12B2FE18A200790046C5EC /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2FD18A200790046C5EC /* libc++.dylib */; };
-		4C12B30018A201450046C5EC /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4C12B2FF18A201450046C5EC /* GoogleMaps.bundle */; };
+		4C1E40A618B459E500A273A1 /* Dropbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1E40A518B459E500A273A1 /* Dropbox.framework */; };
+		4C1E40A818B459F700A273A1 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1E40A718B459F700A273A1 /* FacebookSDK.framework */; };
+		4C1E40BE18B4619B00A273A1 /* libGPUImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1E40B918B4616300A273A1 /* libGPUImage.a */; };
+		4C23963918B3295600BB87E7 /* FacebookModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23963818B3295600BB87E7 /* FacebookModel.m */; };
+		4C23963E18B3304100BB87E7 /* DropboxModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23963D18B3304100BB87E7 /* DropboxModel.m */; };
+		4C23964618B3B5E800BB87E7 /* TempDiaryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23964518B3B5E800BB87E7 /* TempDiaryData.m */; };
 		4C2E83BD1890BB450051215F /* CalendarStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2E83BC1890BB450051215F /* CalendarStore.m */; };
 		4C2FEC101889697600D37F18 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2FEC0E1889697600D37F18 /* EventViewController.m */; };
 		4C2FEC111889697600D37F18 /* EventViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C2FEC0F1889697600D37F18 /* EventViewController.xib */; };
 		4C315C7B18AB298800A2A363 /* PhotoLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C315C7A18AB298800A2A363 /* PhotoLoader.m */; };
 		4C3E3EAB18865B6D00D02397 /* EventTitleAndTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3E3EAA18865B6D00D02397 /* EventTitleAndTimeView.m */; };
 		4C3E3EB118865C0C00D02397 /* EventLocationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3E3EB018865C0C00D02397 /* EventLocationView.m */; };
-		4C3F26241896AF97000E05F9 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3F26231896AF97000E05F9 /* FacebookSDK.framework */; };
 		4C417E7618714A4C000878FC /* DiaryDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C417E7518714A4C000878FC /* DiaryDataStore.m */; };
 		4C48FFAA188D65580038AE6F /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFA9188D65580038AE6F /* CoreMedia.framework */; };
 		4C48FFAC188D65620038AE6F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFAB188D65620038AE6F /* CoreVideo.framework */; };
 		4C48FFAD188D656F0038AE6F /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFA7188D61C40038AE6F /* OpenGLES.framework */; };
 		4C48FFAF188D65820038AE6F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFAE188D65820038AE6F /* AVFoundation.framework */; };
-		4C515D2718973C27002E8DEE /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C515D2518973C27002E8DEE /* ShareViewController.m */; };
-		4C515D2818973C27002E8DEE /* ShareViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C515D2618973C27002E8DEE /* ShareViewController.xib */; };
+		4C50B72F18B19CAD0065434A /* LocationData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C50B72E18B19CAD0065434A /* LocationData.m */; };
+		4C50B73418B19DE50065434A /* LocationDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C50B73318B19DE50065434A /* LocationDataStore.m */; };
+		4C50B73718B1BB3D0065434A /* MapKitHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C50B73618B1BB3D0065434A /* MapKitHelpers.m */; };
 		4C51761D186FF309002F6F6D /* KidlendarModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4C51761B186FF309002F6F6D /* KidlendarModel.xcdatamodeld */; };
 		4C51761F186FF707002F6F6D /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C51761E186FF707002F6F6D /* CoreData.framework */; };
 		4C52952F188D002300471B43 /* EventCreateViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C52952E188D002300471B43 /* EventCreateViewController.xib */; };
@@ -75,11 +80,7 @@
 		4CB3DD9718521DC500673478 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB3DD7F18521DC400673478 /* UIKit.framework */; };
 		4CB3DD9F18521DC500673478 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CB3DD9D18521DC500673478 /* InfoPlist.strings */; };
 		4CB3DDA118521DC500673478 /* KidlendarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB3DDA018521DC500673478 /* KidlendarTests.m */; };
-		4CC3A7E4188D6ECF000BAE1A /* libGPUImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC3A7DF188D6EAF000BAE1A /* libGPUImage.a */; };
-		4CD2B91F18A492B5002DA9E4 /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD2B91E18A492B5002DA9E4 /* DropboxSDK.framework */; };
 		4CD2B92318A492E6002DA9E4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD2B92218A492E6002DA9E4 /* Security.framework */; };
-		4CD2B92C18A497BF002DA9E4 /* BackupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD2B92A18A497BF002DA9E4 /* BackupViewController.m */; };
-		4CD2B92D18A497BF002DA9E4 /* BackupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CD2B92B18A497BF002DA9E4 /* BackupViewController.xib */; };
 		4CD2B93018A4B8FD002DA9E4 /* DropboxBackUp.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD2B92F18A4B8FD002DA9E4 /* DropboxBackUp.m */; };
 		4CD2B93218A4CF69002DA9E4 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD2B93118A4CF69002DA9E4 /* CFNetwork.framework */; };
 		4CDA810F18A3C61F00898266 /* 951-baby-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CDA810E18A3C61F00898266 /* 951-baby-selected@2x.png */; };
@@ -96,33 +97,33 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		4C1E40B818B4616300A273A1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C1E40B218B4616300A273A1 /* GPUImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BCF1A33414DDB1EC00852800;
+			remoteInfo = GPUImage;
+		};
+		4C1E40BA18B4616300A273A1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C1E40B218B4616300A273A1 /* GPUImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BCF1A34414DDB1EC00852800;
+			remoteInfo = GPUImageTests;
+		};
+		4C1E40BC18B4618A00A273A1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C1E40B218B4616300A273A1 /* GPUImage.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BCF1A33314DDB1EC00852800;
+			remoteInfo = GPUImage;
+		};
 		4CB3DD9818521DC500673478 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4CB3DD7018521DC400673478 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 4CB3DD7718521DC400673478;
 			remoteInfo = Kidlendar;
-		};
-		4CC3A7DE188D6EAF000BAE1A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4CC3A7D8188D6EAF000BAE1A /* GPUImage.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = BCF1A33414DDB1EC00852800;
-			remoteInfo = GPUImage;
-		};
-		4CC3A7E0188D6EAF000BAE1A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4CC3A7D8188D6EAF000BAE1A /* GPUImage.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = BCF1A34414DDB1EC00852800;
-			remoteInfo = GPUImageTests;
-		};
-		4CC3A7E2188D6EC4000BAE1A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4CC3A7D8188D6EAF000BAE1A /* GPUImage.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = BCF1A33314DDB1EC00852800;
-			remoteInfo = GPUImage;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -138,7 +139,15 @@
 		4C12B2F618A1FDC40046C5EC /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		4C12B2F818A1FDE60046C5EC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		4C12B2FD18A200790046C5EC /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
-		4C12B2FF18A201450046C5EC /* GoogleMaps.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle; sourceTree = "<group>"; };
+		4C1E40A518B459E500A273A1 /* Dropbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Dropbox.framework; sourceTree = "<group>"; };
+		4C1E40A718B459F700A273A1 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		4C1E40B218B4616300A273A1 /* GPUImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPUImage.xcodeproj; path = "../../Downloads/GPUImage-master-2/framework/GPUImage.xcodeproj"; sourceTree = "<group>"; };
+		4C23963718B3295600BB87E7 /* FacebookModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookModel.h; sourceTree = "<group>"; };
+		4C23963818B3295600BB87E7 /* FacebookModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FacebookModel.m; sourceTree = "<group>"; };
+		4C23963C18B3304100BB87E7 /* DropboxModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxModel.h; sourceTree = "<group>"; };
+		4C23963D18B3304100BB87E7 /* DropboxModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxModel.m; sourceTree = "<group>"; };
+		4C23964418B3B5E800BB87E7 /* TempDiaryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TempDiaryData.h; sourceTree = "<group>"; };
+		4C23964518B3B5E800BB87E7 /* TempDiaryData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TempDiaryData.m; sourceTree = "<group>"; };
 		4C2E83BB1890BB450051215F /* CalendarStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarStore.h; sourceTree = "<group>"; };
 		4C2E83BC1890BB450051215F /* CalendarStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarStore.m; sourceTree = "<group>"; };
 		4C2FEC0D1889697600D37F18 /* EventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventViewController.h; sourceTree = "<group>"; };
@@ -150,16 +159,18 @@
 		4C3E3EAA18865B6D00D02397 /* EventTitleAndTimeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTitleAndTimeView.m; sourceTree = "<group>"; };
 		4C3E3EAF18865C0C00D02397 /* EventLocationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventLocationView.h; sourceTree = "<group>"; };
 		4C3E3EB018865C0C00D02397 /* EventLocationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventLocationView.m; sourceTree = "<group>"; };
-		4C3F26231896AF97000E05F9 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		4C417E7418714A4C000878FC /* DiaryDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiaryDataStore.h; path = ../DiaryDataStore.h; sourceTree = "<group>"; };
 		4C417E7518714A4C000878FC /* DiaryDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiaryDataStore.m; path = ../DiaryDataStore.m; sourceTree = "<group>"; };
 		4C48FFA7188D61C40038AE6F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		4C48FFA9188D65580038AE6F /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		4C48FFAB188D65620038AE6F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		4C48FFAE188D65820038AE6F /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		4C515D2418973C27002E8DEE /* ShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShareViewController.h; sourceTree = "<group>"; };
-		4C515D2518973C27002E8DEE /* ShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShareViewController.m; sourceTree = "<group>"; };
-		4C515D2618973C27002E8DEE /* ShareViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ShareViewController.xib; sourceTree = "<group>"; };
+		4C50B72D18B19CAD0065434A /* LocationData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LocationData.h; path = ../LocationData.h; sourceTree = "<group>"; };
+		4C50B72E18B19CAD0065434A /* LocationData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LocationData.m; path = ../LocationData.m; sourceTree = "<group>"; };
+		4C50B73218B19DE50065434A /* LocationDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationDataStore.h; sourceTree = "<group>"; };
+		4C50B73318B19DE50065434A /* LocationDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationDataStore.m; sourceTree = "<group>"; };
+		4C50B73518B1BB3D0065434A /* MapKitHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapKitHelpers.h; sourceTree = "<group>"; };
+		4C50B73618B1BB3D0065434A /* MapKitHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapKitHelpers.m; sourceTree = "<group>"; };
 		4C51761C186FF309002F6F6D /* KidlendarModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = KidlendarModel.xcdatamodel; sourceTree = "<group>"; };
 		4C51761E186FF707002F6F6D /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		4C52952E188D002300471B43 /* EventCreateViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventCreateViewController.xib; sourceTree = "<group>"; };
@@ -224,12 +235,7 @@
 		4CB3DD9C18521DC500673478 /* KidlendarTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "KidlendarTests-Info.plist"; sourceTree = "<group>"; };
 		4CB3DD9E18521DC500673478 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4CB3DDA018521DC500673478 /* KidlendarTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KidlendarTests.m; sourceTree = "<group>"; };
-		4CC3A7D8188D6EAF000BAE1A /* GPUImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPUImage.xcodeproj; path = "../../Downloads/GPUImage-master/framework/GPUImage.xcodeproj"; sourceTree = "<group>"; };
-		4CD2B91E18A492B5002DA9E4 /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DropboxSDK.framework; sourceTree = "<group>"; };
 		4CD2B92218A492E6002DA9E4 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		4CD2B92918A497BF002DA9E4 /* BackupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackupViewController.h; sourceTree = "<group>"; };
-		4CD2B92A18A497BF002DA9E4 /* BackupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackupViewController.m; sourceTree = "<group>"; };
-		4CD2B92B18A497BF002DA9E4 /* BackupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BackupViewController.xib; sourceTree = "<group>"; };
 		4CD2B92E18A4B8FD002DA9E4 /* DropboxBackUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxBackUp.h; sourceTree = "<group>"; };
 		4CD2B92F18A4B8FD002DA9E4 /* DropboxBackUp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxBackUp.m; sourceTree = "<group>"; };
 		4CD2B93118A4CF69002DA9E4 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -257,18 +263,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C1E40BE18B4619B00A273A1 /* libGPUImage.a in Frameworks */,
 				4CD2B93218A4CF69002DA9E4 /* CFNetwork.framework in Frameworks */,
 				4CD2B92318A492E6002DA9E4 /* Security.framework in Frameworks */,
 				4C12B2FE18A200790046C5EC /* libc++.dylib in Frameworks */,
 				4C12B2F918A1FDE60046C5EC /* SystemConfiguration.framework in Frameworks */,
-				4CD2B91F18A492B5002DA9E4 /* DropboxSDK.framework in Frameworks */,
 				4C48FFAD188D656F0038AE6F /* OpenGLES.framework in Frameworks */,
+				4C1E40A818B459F700A273A1 /* FacebookSDK.framework in Frameworks */,
 				4C12B2F718A1FDC40046C5EC /* libz.dylib in Frameworks */,
 				4C12B2F518A1FDBA0046C5EC /* libicucore.dylib in Frameworks */,
 				4C12B2F318A1FDAA0046C5EC /* ImageIO.framework in Frameworks */,
 				4C12B2F118A1FDA20046C5EC /* GLKit.framework in Frameworks */,
 				4C12B2EF18A1FD960046C5EC /* CoreText.framework in Frameworks */,
-				4CC3A7E4188D6ECF000BAE1A /* libGPUImage.a in Frameworks */,
 				4C48FFAF188D65820038AE6F /* AVFoundation.framework in Frameworks */,
 				4C48FFAC188D65620038AE6F /* CoreVideo.framework in Frameworks */,
 				4C48FFAA188D65580038AE6F /* CoreMedia.framework in Frameworks */,
@@ -276,11 +282,11 @@
 				4CFB6DC8186A6BAC001C8F05 /* CoreLocation.framework in Frameworks */,
 				4C0C38CA18673AD60001CC08 /* AssetsLibrary.framework in Frameworks */,
 				4C12B2ED18A1FC280046C5EC /* GoogleMaps.framework in Frameworks */,
-				4C3F26241896AF97000E05F9 /* FacebookSDK.framework in Frameworks */,
 				4C5420F01857FC9D006D2DE4 /* QuartzCore.framework in Frameworks */,
 				4CB3DD7E18521DC400673478 /* CoreGraphics.framework in Frameworks */,
 				4CB3DD8018521DC400673478 /* UIKit.framework in Frameworks */,
 				4CB3DD7C18521DC400673478 /* Foundation.framework in Frameworks */,
+				4C1E40A618B459E500A273A1 /* Dropbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +309,15 @@
 				4C417E7C18714ACA000878FC /* View */,
 			);
 			name = Diary;
+			sourceTree = "<group>";
+		};
+		4C1E40B318B4616300A273A1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4C1E40B918B4616300A273A1 /* libGPUImage.a */,
+				4C1E40BB18B4616300A273A1 /* GPUImageTests.octest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		4C315C7C18AB299500A2A363 /* Model */ = {
@@ -330,6 +345,8 @@
 			children = (
 				4C6AC2DA187161CC004FA1E4 /* DiaryData.h */,
 				4C6AC2DB187161CC004FA1E4 /* DiaryData.m */,
+				4C23964418B3B5E800BB87E7 /* TempDiaryData.h */,
+				4C23964518B3B5E800BB87E7 /* TempDiaryData.m */,
 				4C417E7418714A4C000878FC /* DiaryDataStore.h */,
 				4C417E7518714A4C000878FC /* DiaryDataStore.m */,
 				4CD2B92E18A4B8FD002DA9E4 /* DropboxBackUp.h */,
@@ -409,6 +426,10 @@
 				4C12B2E818A1E4570046C5EC /* FileManager.m */,
 				4C315C7918AB298800A2A363 /* PhotoLoader.h */,
 				4C315C7A18AB298800A2A363 /* PhotoLoader.m */,
+				4C23963718B3295600BB87E7 /* FacebookModel.h */,
+				4C23963818B3295600BB87E7 /* FacebookModel.m */,
+				4C23963C18B3304100BB87E7 /* DropboxModel.h */,
+				4C23963D18B3304100BB87E7 /* DropboxModel.m */,
 			);
 			name = "Other Model";
 			sourceTree = "<group>";
@@ -442,13 +463,14 @@
 		4CB3DD6F18521DC400673478 = {
 			isa = PBXGroup;
 			children = (
+				4C1E40B218B4616300A273A1 /* GPUImage.xcodeproj */,
 				4CFFD5891897800A0070C33C /* lookup_amatorka.png */,
-				4CC3A7D8188D6EAF000BAE1A /* GPUImage.xcodeproj */,
 				4CB3DD8118521DC400673478 /* Kidlendar */,
+				4CB3DD8218521DC400673478 /* Supporting Files */,
 				4CB3DD9A18521DC500673478 /* KidlendarTests */,
 				4CB3DD7A18521DC400673478 /* Frameworks */,
-				4CB3DD7918521DC400673478 /* Products */,
 				4C51761B186FF309002F6F6D /* KidlendarModel.xcdatamodeld */,
+				4CB3DD7918521DC400673478 /* Products */,
 				4CB3DD8D18521DC400673478 /* Images.xcassets */,
 			);
 			sourceTree = "<group>";
@@ -465,10 +487,10 @@
 		4CB3DD7A18521DC400673478 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C1E40A718B459F700A273A1 /* FacebookSDK.framework */,
+				4C1E40A518B459E500A273A1 /* Dropbox.framework */,
 				4CD2B93118A4CF69002DA9E4 /* CFNetwork.framework */,
 				4CD2B92218A492E6002DA9E4 /* Security.framework */,
-				4CD2B91E18A492B5002DA9E4 /* DropboxSDK.framework */,
-				4C12B2FF18A201450046C5EC /* GoogleMaps.bundle */,
 				4C12B2FD18A200790046C5EC /* libc++.dylib */,
 				4C12B2F818A1FDE60046C5EC /* SystemConfiguration.framework */,
 				4C12B2F618A1FDC40046C5EC /* libz.dylib */,
@@ -477,7 +499,6 @@
 				4C12B2F018A1FDA20046C5EC /* GLKit.framework */,
 				4C12B2EE18A1FD960046C5EC /* CoreText.framework */,
 				4C12B2EC18A1FC280046C5EC /* GoogleMaps.framework */,
-				4C3F26231896AF97000E05F9 /* FacebookSDK.framework */,
 				4C48FFAE188D65820038AE6F /* AVFoundation.framework */,
 				4C48FFAB188D65620038AE6F /* CoreVideo.framework */,
 				4C48FFA9188D65580038AE6F /* CoreMedia.framework */,
@@ -499,18 +520,11 @@
 			children = (
 				4CB3DD8A18521DC400673478 /* KidlendarAppDelegate.h */,
 				4CB3DD8B18521DC400673478 /* KidlendarAppDelegate.m */,
-				4CD2B92918A497BF002DA9E4 /* BackupViewController.h */,
-				4CD2B92A18A497BF002DA9E4 /* BackupViewController.m */,
-				4CD2B92B18A497BF002DA9E4 /* BackupViewController.xib */,
-				4C515D2418973C27002E8DEE /* ShareViewController.h */,
-				4C515D2518973C27002E8DEE /* ShareViewController.m */,
-				4C515D2618973C27002E8DEE /* ShareViewController.xib */,
+				4C0C38C518673A240001CC08 /* Diary */,
 				4C315C7C18AB299500A2A363 /* Model */,
 				4CB3BD2E18A331BD0006AFD4 /* Setting */,
 				4C3E3EA818865AFE00D02397 /* Event */,
 				4C92155E185AD445009A3090 /* Calendar */,
-				4C0C38C518673A240001CC08 /* Diary */,
-				4CB3DD8218521DC400673478 /* Supporting Files */,
 			);
 			path = Kidlendar;
 			sourceTree = "<group>";
@@ -529,6 +543,7 @@
 				4CB3DD8918521DC400673478 /* Kidlendar-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			path = Kidlendar;
 			sourceTree = "<group>";
 		};
 		4CB3DD9A18521DC500673478 /* KidlendarTests */ = {
@@ -549,18 +564,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		4CC3A7D9188D6EAF000BAE1A /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				4CC3A7DF188D6EAF000BAE1A /* libGPUImage.a */,
-				4CC3A7E1188D6EAF000BAE1A /* GPUImageTests.octest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		4CFB0869187E68D600456D5D /* Calendar Model */ = {
 			isa = PBXGroup;
 			children = (
+				4C50B73518B1BB3D0065434A /* MapKitHelpers.h */,
+				4C50B73618B1BB3D0065434A /* MapKitHelpers.m */,
+				4C50B73218B19DE50065434A /* LocationDataStore.h */,
+				4C50B73318B19DE50065434A /* LocationDataStore.m */,
+				4C50B72D18B19CAD0065434A /* LocationData.h */,
+				4C50B72E18B19CAD0065434A /* LocationData.m */,
 				4CFB086A187E696A00456D5D /* DateModel.h */,
 				4CFB086B187E696A00456D5D /* DateModel.m */,
 				4CFB086D187E6BFB00456D5D /* MonthModel.h */,
@@ -585,7 +597,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				4CC3A7E3188D6EC4000BAE1A /* PBXTargetDependency */,
+				4C1E40BD18B4618A00A273A1 /* PBXTargetDependency */,
 			);
 			name = Kidlendar;
 			productName = Kidlendar;
@@ -638,8 +650,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 4CC3A7D9188D6EAF000BAE1A /* Products */;
-					ProjectRef = 4CC3A7D8188D6EAF000BAE1A /* GPUImage.xcodeproj */;
+					ProductGroup = 4C1E40B318B4616300A273A1 /* Products */;
+					ProjectRef = 4C1E40B218B4616300A273A1 /* GPUImage.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -651,18 +663,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		4CC3A7DF188D6EAF000BAE1A /* libGPUImage.a */ = {
+		4C1E40B918B4616300A273A1 /* libGPUImage.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libGPUImage.a;
-			remoteRef = 4CC3A7DE188D6EAF000BAE1A /* PBXContainerItemProxy */;
+			remoteRef = 4C1E40B818B4616300A273A1 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		4CC3A7E1188D6EAF000BAE1A /* GPUImageTests.octest */ = {
+		4C1E40BB18B4616300A273A1 /* GPUImageTests.octest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = GPUImageTests.octest;
-			remoteRef = 4CC3A7E0188D6EAF000BAE1A /* PBXContainerItemProxy */;
+			remoteRef = 4C1E40BA18B4616300A273A1 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -682,16 +694,13 @@
 				4C2FEC111889697600D37F18 /* EventViewController.xib in Resources */,
 				4C5BA25B1861731A00528843 /* 929-film-1@2x.png in Resources */,
 				4C86E939188F977F00137B6A /* RecurrenceViewController.xib in Resources */,
-				4C12B30018A201450046C5EC /* GoogleMaps.bundle in Resources */,
 				4C86E934188F973800137B6A /* AlarmViewController.xib in Resources */,
 				4CFFD58A1897800A0070C33C /* lookup_amatorka.png in Resources */,
 				4C5B01F718ACBD7F0030FCCC /* DiaryCreateViewController.xib in Resources */,
 				4CB27D57188ED88800F34E7A /* IMG_1725.jpg in Resources */,
-				4C515D2818973C27002E8DEE /* ShareViewController.xib in Resources */,
 				4CB3DD8618521DC400673478 /* InfoPlist.strings in Resources */,
 				4CB3BD2D18A330D80006AFD4 /* SettingViewController.xib in Resources */,
 				4CB3DD8E18521DC400673478 /* Images.xcassets in Resources */,
-				4CD2B92D18A497BF002DA9E4 /* BackupViewController.xib in Resources */,
 				4CF592E1186D5BE500F1BEEB /* MonthViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -714,6 +723,7 @@
 				4C86E92A188F91D700137B6A /* EventLocationViewController.m in Sources */,
 				4CB3DD8818521DC400673478 /* main.m in Sources */,
 				4CFB086C187E696A00456D5D /* DateModel.m in Sources */,
+				4C23963E18B3304100BB87E7 /* DropboxModel.m in Sources */,
 				4C12B2E918A1E4570046C5EC /* FileManager.m in Sources */,
 				4C5C8FFC18A8730100B40F7E /* DiaryEntryViewController.m in Sources */,
 				4C86E933188F973800137B6A /* AlarmViewController.m in Sources */,
@@ -725,24 +735,27 @@
 				4CA2506F1869517400AEA94E /* DiaryPhotoCell.m in Sources */,
 				4CB3DD8C18521DC400673478 /* KidlendarAppDelegate.m in Sources */,
 				4CA888331896478C00FAA799 /* DiaryVideoViewController.m in Sources */,
+				4C50B73418B19DE50065434A /* LocationDataStore.m in Sources */,
 				4C88B387188E56E100F4F47E /* DiaryCell.m in Sources */,
 				4C2E83BD1890BB450051215F /* CalendarStore.m in Sources */,
 				4C2FEC101889697600D37F18 /* EventViewController.m in Sources */,
 				4C6C49C4186DDDDF0042EB61 /* DiaryViewController.m in Sources */,
 				4C6C49C0186DDB680042EB61 /* DiaryTableViewController.m in Sources */,
-				4C515D2718973C27002E8DEE /* ShareViewController.m in Sources */,
+				4C50B72F18B19CAD0065434A /* LocationData.m in Sources */,
 				4CF592E0186D5BE500F1BEEB /* MonthViewController.m in Sources */,
 				4CB3BD2C18A330D80006AFD4 /* SettingViewController.m in Sources */,
-				4CD2B92C18A497BF002DA9E4 /* BackupViewController.m in Sources */,
 				4C86E938188F977F00137B6A /* RecurrenceViewController.m in Sources */,
 				4C3E3EAB18865B6D00D02397 /* EventTitleAndTimeView.m in Sources */,
 				4C86E927188F8ADE00137B6A /* EventTitleAndTimeViewController.m in Sources */,
+				4C23964618B3B5E800BB87E7 /* TempDiaryData.m in Sources */,
 				4CFFD584189775270070C33C /* DiaryPhotoViewController.m in Sources */,
+				4C23963918B3295600BB87E7 /* FacebookModel.m in Sources */,
 				4C51761D186FF309002F6F6D /* KidlendarModel.xcdatamodeld in Sources */,
 				4CF46E4D18878E3800B22888 /* CustomTextField.m in Sources */,
 				4C5B01F618ACBD7F0030FCCC /* DiaryCreateViewController.m in Sources */,
 				4C6AC2DC187161CC004FA1E4 /* DiaryData.m in Sources */,
 				4C315C7B18AB298800A2A363 /* PhotoLoader.m in Sources */,
+				4C50B73718B1BB3D0065434A /* MapKitHelpers.m in Sources */,
 				4CA2506C1869377000AEA94E /* UIImage+Resize.m in Sources */,
 				4C91918718AF3A4900ED4695 /* ImageStore.m in Sources */,
 				4C92155A185AD39E009A3090 /* MonthCalendarView.m in Sources */,
@@ -761,15 +774,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		4C1E40BD18B4618A00A273A1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GPUImage;
+			targetProxy = 4C1E40BC18B4618A00A273A1 /* PBXContainerItemProxy */;
+		};
 		4CB3DD9918521DC500673478 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 4CB3DD7718521DC400673478 /* Kidlendar */;
 			targetProxy = 4CB3DD9818521DC500673478 /* PBXContainerItemProxy */;
-		};
-		4CC3A7E3188D6EC4000BAE1A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = GPUImage;
-			targetProxy = 4CC3A7E2188D6EC4000BAE1A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -826,6 +839,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"/Users/JackYeh/Downloads/GPUImage-master/framework/**",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
@@ -860,6 +878,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"/Users/JackYeh/Downloads/GPUImage-master/framework/**",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
@@ -881,7 +904,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"/Users/JackYeh/Desktop/Kidlendar/source/**",
+					"/Users/JackYeh/Downloads/GPUImage-master-2/framework/**",
 				);
 				INFOPLIST_FILE = "Kidlendar/Kidlendar-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
@@ -904,7 +927,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"/Users/JackYeh/Desktop/Kidlendar/source/**",
+					"/Users/JackYeh/Downloads/GPUImage-master-2/framework/**",
 				);
 				INFOPLIST_FILE = "Kidlendar/Kidlendar-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";

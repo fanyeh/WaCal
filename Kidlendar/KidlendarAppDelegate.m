@@ -12,11 +12,9 @@
 #import "CalendarStore.h"
 #import <CoreData/CoreData.h>
 #import <FacebookSDK/FacebookSDK.h>
-#import "ShareViewController.h"
-#import <GoogleMaps/GoogleMaps.h>
 #import "SettingViewController.h"
-#import <DropboxSDK/DropboxSDK.h>
-#import "BackupViewController.h"
+//#import <DropboxSDK/DropboxSDK.h>
+#import <Dropbox/Dropbox.h>
 #import "DiaryCreateViewController.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
@@ -29,27 +27,19 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
-    // Google map
-    [GMSServices provideAPIKey:@"AIzaSyBm7gHFT7u0OC0pny4uR32lz0_hOR8RQko"];
-//
-//    // Dropbox Core API
+    // Override point for customization after application launch.
+
+//    // Dropbox
 //    DBSession* dbSession = [[DBSession alloc]initWithAppKey:@"rb186yqaya1ijp8"
 //                                                   appSecret:@"3eibrlmh4x2keim"
-//                                                        root:kDBRootAppFolder] // either kDBRootAppFolder or kDBRootDropbox
-//     ;
+//                                                       root:kDBRootAppFolder]; // either kDBRootAppFolder or kDBRootDropbox
+//    
 //    [DBSession setSharedSession:dbSession];
-//    
-//    BackupViewController *backupController = [[BackupViewController alloc]init];
-//    [self.window setRootViewController:backupController];
-//    // Override point for customization after application launch.
-//    
-//    [FBProfilePictureView class];
-//
-//    ShareViewController *svc = [[ShareViewController alloc]init];
-//    [self.window setRootViewController:svc];
     
-     
+    DBAccountManager *accountManager =
+    [[DBAccountManager alloc] initWithAppKey:@"rb186yqaya1ijp8" secret:@"3eibrlmh4x2keim"];
+    [DBAccountManager setSharedManager:accountManager];
+    
     // Init Calendar store
     [CalendarStore sharedStore];
     
@@ -71,37 +61,6 @@
     
     return YES;
 }
-
-// Facebook
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation {
-    
-    /*
-    // Call FBAppCall's handleOpenURL:sourceApplication to handle Facebook app responses
-    BOOL wasHandled = [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
-    
-    // You can add your app-specific url handling code here if needed
-    
-    return wasHandled;
-    */
-    
-    NSLog(@"Souce application %@",sourceApplication);
-    if ([sourceApplication isEqual: @"com.getdropbox.Dropbox"]) {
-        if ([[DBSession sharedSession] handleOpenURL:url]) {
-            if ([[DBSession sharedSession] isLinked]) {
-                NSLog(@"App linked successfully!");
-                // At this point you can start making API calls
-            }
-            return YES;
-        }
-        // Add whatever other url handling code your app requires here
-        return NO;
-    }
-    return NO;
-}
-
 
 - (void)createAllViewControllers
 {
@@ -154,12 +113,14 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    [FBSession.activeSession handleDidBecomeActive];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     [self saveContext];
+    [FBSession.activeSession close];
 }
 
 - (void)saveContext
@@ -248,6 +209,139 @@
     
     return _persistentStoreCoordinator;
 }
+
+#pragma mark - Facebook Session
+
+/*
+ * If we have a valid session at the time of openURL call, we handle
+ * Facebook transitions by passing the url argument to handleOpenURL
+ */
+// Facebook
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation {
+    
+    if ([sourceApplication isEqual: @"com.facebook.Facebook"]) {
+     // Call FBAppCall's handleOpenURL:sourceApplication to handle Facebook app responses
+        return [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
+    }
+    
+    if ([sourceApplication isEqual: @"com.getdropbox.Dropbox"]) {
+//        if ([[DBSession sharedSession] handleOpenURL:url]) {
+//            if ([[DBSession sharedSession] isLinked]) {
+//                NSLog(@"App linked successfully!");
+//                // At this point you can start making API calls
+//            }
+//            return YES;
+//        }
+//        // Add whatever other url handling code your app requires here
+//        return NO;
+        DBAccount *account = [[DBAccountManager sharedManager] handleOpenURL:url];
+        if (account) {
+            NSLog(@"App linked successfully!");
+            return YES;
+        }
+        return NO;
+    }
+    return NO;
+}
+
+//- (void)closeSession {
+//    [FBSession.activeSession closeAndClearTokenInformation];
+//}
+#pragma mark - Facebook
+// This method will handle ALL the session state changes in the app
+- (void)sessionStateChanged:(FBSession *)session state:(FBSessionState) state error:(NSError *)error
+{
+    // If the session was opened successfully
+    if (!error && state == FBSessionStateOpen){
+        NSLog(@"Session opened");
+        // Show the user the logged-in UI
+        [self userLoggedIn];
+        return;
+    }
+    if (state == FBSessionStateClosed || state == FBSessionStateClosedLoginFailed){
+        // If the session is closed
+        NSLog(@"Session closed");
+        // Show the user the logged-out UI
+        [self userLoggedOut];
+    }
+    
+    // Handle errors
+    if (error){
+        NSLog(@"Error");
+        NSString *alertText;
+        NSString *alertTitle;
+        // If the error requires people using an app to make an action outside of the app in order to recover
+        if ([FBErrorUtility shouldNotifyUserForError:error] == YES){
+            alertTitle = @"Something went wrong";
+            alertText = [FBErrorUtility userMessageForError:error];
+            [self showMessage:alertText withTitle:alertTitle];
+        } else {
+            
+            // If the user cancelled login, do nothing
+            if ([FBErrorUtility errorCategoryForError:error] == FBErrorCategoryUserCancelled) {
+                NSLog(@"User cancelled login");
+                
+                // Handle session closures that happen outside of the app
+            } else if ([FBErrorUtility errorCategoryForError:error] == FBErrorCategoryAuthenticationReopenSession){
+                alertTitle = @"Session Error";
+                alertText = @"Your current session is no longer valid. Please log in again.";
+                [self showMessage:alertText withTitle:alertTitle];
+                
+                // For simplicity, here we just show a generic message for all other errors
+                // You can learn how to handle other errors using our guide: https://developers.facebook.com/docs/ios/errors
+            } else {
+                //Get more error information from the error
+                NSDictionary *errorInformation = [[[error.userInfo objectForKey:@"com.facebook.sdk:ParsedJSONResponseKey"] objectForKey:@"body"] objectForKey:@"error"];
+                
+                // Show the user an error message
+                alertTitle = @"Something went wrong";
+                alertText = [NSString stringWithFormat:@"Please retry. \n\n If the problem persists contact us and mention this error code: %@", [errorInformation objectForKey:@"message"]];
+                [self showMessage:alertText withTitle:alertTitle];
+            }
+        }
+        // Clear this token
+        [FBSession.activeSession closeAndClearTokenInformation];
+        // Show the user the logged-out UI
+        [self userLoggedOut];
+    }
+}
+
+// Show the user the logged-out UI
+- (void)userLoggedOut
+{
+    // Set the button title as "Log in with Facebook"
+//    UIButton *loginButton = [self.customLoginViewController loginButton];
+//    [loginButton setTitle:@"Log in with Facebook" forState:UIControlStateNormal];
+    
+    // Confirm logout message
+    [self showMessage:@"You're now logged out" withTitle:@""];
+}
+
+// Show the user the logged-in UI
+- (void)userLoggedIn
+{
+    // Set the button title as "Log out"
+//    UIButton *loginButton = self.customLoginViewController.loginButton;
+//    [loginButton setTitle:@"Log out" forState:UIControlStateNormal];
+    
+    // Welcome message
+    [self showMessage:@"You're now logged in" withTitle:@"Welcome!"];
+    
+}
+
+// Show an alert message
+- (void)showMessage:(NSString *)text withTitle:(NSString *)title
+{
+    [[[UIAlertView alloc] initWithTitle:title
+                                message:text
+                               delegate:self
+                      cancelButtonTitle:@"OK!"
+                      otherButtonTitles:nil] show];
+}
+
 
 #pragma mark - Application's Documents directory
 

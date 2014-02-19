@@ -7,12 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-@class DBRestClient;
 @class DiaryData;
 
 @interface DiaryViewController : UIViewController
 @property (strong,nonatomic) DiaryData *diaryData;
 @property NSInteger index;
-@property (nonatomic, strong) DBRestClient *restClient;
 
 @end

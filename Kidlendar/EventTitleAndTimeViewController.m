@@ -79,11 +79,27 @@
     titleAndTimeView.endTimeField.dateLabel.text = [dateFormatter stringFromDate:_event.endDate];
     titleAndTimeView.endTimeField.text = [timeFormatter stringFromDate:_event.endDate];
     
+    [titleAndTimeView.allDayButton addTarget:self action:@selector(setEventToAllDay:) forControlEvents:UIControlEventTouchUpInside];
+    
     // Put save button on navigation bar
     UIBarButtonItem *saveButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSave
                                                                                  target:self
                                                                                  action:@selector(saveEvent)];
     self.navigationItem.rightBarButtonItem = saveButton;
+}
+
+- (void)setEventToAllDay:(UIButton *)sender
+{
+    if (sender.isSelected) {
+        _event.allDay = NO;
+        sender.backgroundColor = [UIColor yellowColor];
+        sender.selected = NO;
+
+    } else {
+        _event.allDay = YES;
+        sender.backgroundColor = [UIColor redColor];
+        sender.selected = YES;
+    }
 }
 
 - (void)saveEvent

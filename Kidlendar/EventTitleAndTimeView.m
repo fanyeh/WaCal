@@ -36,10 +36,16 @@
         _saveButton.titleLabel.textColor = [UIColor whiteColor];
         [_saveButton setTitle:@"Save" forState:UIControlStateNormal];
         
+        _allDayButton = [[UIButton alloc]initWithFrame:CGRectMake(10, 202, 70, 50)];
+        _allDayButton.backgroundColor = [UIColor yellowColor];
+        _allDayButton.titleLabel.textColor = [UIColor whiteColor];
+        [_allDayButton setTitle:@"AllDay" forState:UIControlStateNormal];
+        
         [self addSubview:_startTimeField];
         [self addSubview:_endTimeField];
         [self addSubview:_titleField];
         [self addSubview:_saveButton];
+        [self addSubview:_allDayButton];
     }
     return self;
 }

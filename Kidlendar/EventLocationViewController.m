@@ -11,6 +11,9 @@
 #import "CalendarStore.h"
 #import "ImageStore.h"
 #import <MapKit/MapKit.h>
+#import "LocationData.h"
+#import "LocationDataStore.h"
+#import "MapKitHelpers.h"
 
 typedef void (^LocationCallback)(CLLocationCoordinate2D);
 
@@ -24,6 +27,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     NSArray* places;
     UIActivityIndicatorView *activityIndicator;
     LocationCallback _foundLocationCallback;
+    MKPointAnnotation *destinationAnnotation;
 }
 @end
 
@@ -109,6 +113,13 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 
 - (void)saveLocation
 {
+    // Store event location
+    LocationData *locationData = [[LocationDataStore sharedStore]createItemWithKey:_event.eventIdentifier];
+    locationData.latitude = destinationAnnotation.coordinate.latitude;
+    locationData.longitude = destinationAnnotation.coordinate.longitude;
+    [[LocationDataStore sharedStore]saveChanges];
+    
+    // Save event location as destination name
     _event.location = locationView.locationField.text;
     
     // Store image in the BNRImageStore with this key
@@ -201,7 +212,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
         sourceAnnotation.coordinate = userLocation;
         sourceAnnotation.title = @"Start";
         
-        MKPointAnnotation *destinationAnnotation = [MKPointAnnotation new];
+        destinationAnnotation = [MKPointAnnotation new];
         destinationAnnotation.coordinate = item.placemark.coordinate;
         destinationAnnotation.title = @"End";
         
@@ -309,8 +320,6 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 }
 
 - (MKOverlayRenderer*)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay {
-    NSLog(@"Renderer %@",overlay);
-
     if ([overlay isKindOfClass:[MKPolyline class]]) {
         MKPolylineRenderer *renderer = [[MKPolylineRenderer alloc] initWithPolyline:(MKPolyline*)overlay];
         renderer.strokeColor = [UIColor blueColor];
@@ -318,29 +327,4 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     }
     return nil;
 }
-
-
-MKCoordinateRegion CoordinateRegionBoundingMapPoints(MKMapPoint *points, NSUInteger count) {
-    if (count == 0) {
-        return MKCoordinateRegionForMapRect(MKMapRectWorld);
-    }
-    
-    MKMapRect boundingMapRect;
-    boundingMapRect.origin = points[0];
-    boundingMapRect.size = MKMapSizeMake(0.0, 0.0);
-    
-    for (NSUInteger i = 1; i < count; i++) {
-        MKMapPoint point = points[i];
-        if (!MKMapRectContainsPoint(boundingMapRect, point)) {
-            boundingMapRect = MKMapRectUnion(boundingMapRect, (MKMapRect){.origin=point,.size={0.0,0.0}});
-        }
-    }
-    
-    MKCoordinateRegion region = MKCoordinateRegionForMapRect(boundingMapRect);
-    region.span.latitudeDelta = MAX(region.span.latitudeDelta, 0.001);
-    region.span.longitudeDelta = MAX(region.span.longitudeDelta, 0.001);
-    
-    return region;
-}
-
 @end

@@ -163,6 +163,11 @@
     [[NSNotificationCenter defaultCenter]addObserver:self
                                             selector:@selector(refreshDiary:)
                                                 name:@"diaryChange" object:nil];
+    
+    // Add observer to monitor event when switch EKCalendar
+    [[NSNotificationCenter defaultCenter]addObserver:self
+                                            selector:@selector(switchEKCalendar:)
+                                                name:@"EKCalendarSwitch" object:nil];
     // Reload diary images
     [self reloadDiaryImages];
 }
@@ -264,6 +269,18 @@
 {
     [self reloadDiaryImages];
     [_diaryCollectionView reloadData];
+}
+
+- (void)switchEKCalendar:(NSNotification *)notification
+{
+    // Re construct month model
+    monthModel = [[MonthModel alloc]initMonthCalendarWithDate:[NSDate date] andCalendar:_gregorian];
+    
+    // Refresh calendar view
+    [_monthView initCalendar:monthModel];
+    
+    [self resetCalendar];
+
 }
 
 

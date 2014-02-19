@@ -9,8 +9,8 @@
                 <outlet property="alarmLabel" destination="0h6-kU-IMF" id="eDn-RM-RW9"/>
                 <outlet property="dateLabel" destination="6TO-x2-R1c" id="RPQ-Xr-p2x"/>
                 <outlet property="eventDetailView" destination="gOh-X5-6sN" id="U0R-FE-99Q"/>
-                <outlet property="locationImageView" destination="gCU-Yz-zqf" id="oBj-ra-lCw"/>
                 <outlet property="locationLabel" destination="0Hz-Uc-zC3" id="LXq-PP-ke9"/>
+                <outlet property="locationMapView" destination="DcJ-RD-HOc" id="0Wz-Xc-tnO"/>
                 <outlet property="recurrenceLabel" destination="kxw-Cl-xJT" id="fts-Hh-M6f"/>
                 <outlet property="timeLabel" destination="eYt-gS-lPP" id="p9Y-HT-h6g"/>
                 <outlet property="titleLabel" destination="hc1-UK-ihi" id="CnR-z5-fQc"/>
@@ -80,10 +80,10 @@
                                 <action selector="deleteBtn:" destination="-1" eventType="touchUpInside" id="ov5-kr-Ijd"/>
                             </connections>
                         </button>
-                        <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gCU-Yz-zqf" userLabel="Location Image View">
-                            <rect key="frame" x="10" y="180" width="300" height="210"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        </imageView>
+                        <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DcJ-RD-HOc">
+                            <rect key="frame" x="10" y="189" width="300" height="212"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        </mapView>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>

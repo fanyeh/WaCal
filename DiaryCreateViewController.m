@@ -633,7 +633,6 @@
 {
     UICollectionReusableView *reusableview = nil;
     if (kind ==UICollectionElementKindSectionHeader && collectionView.tag == 1) {
-        NSLog(@"tag %ld",collectionView.tag);
         UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView" forIndexPath:indexPath];
         //headerView.backgroundColor = [UIColor redColor];
         UINavigationBar *navBar = [[UINavigationBar alloc]initWithFrame:headerView.frame];
@@ -699,7 +698,6 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSLog(@"album count %ld",[photoLoader.sourceDictionary count]);
     return [photoLoader.sourceDictionary count];
 }
 

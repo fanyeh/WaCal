@@ -14,4 +14,6 @@
 @property (strong,nonatomic) CustomTextField *startTimeField;
 @property (strong,nonatomic) CustomTextField *endTimeField;
 @property (strong,nonatomic) UIButton *saveButton;
+@property (strong,nonatomic) UIButton *allDayButton;
+
 @end

@@ -162,7 +162,7 @@
     
     [allItems addObject:d];
     
-    // Create sub directory name using key for profile under document directory
+    // Create sub directory name using key for diary under document directory
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0]; // Get documents folder
     NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:key];
