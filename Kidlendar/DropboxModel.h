@@ -7,18 +7,26 @@
 //
 
 #import <Foundation/Foundation.h>
+@class DBAccount;
 @class DiaryData;
 
+typedef void (^LinkHandler)(void);
+typedef void (^ListAllCloudDiarys)(NSMutableArray *diarysFromCloud);
+
+
 @interface DropboxModel : NSObject
-@property (nonatomic,strong) DiaryData *diaryData;
 
 + (DropboxModel *)shareModel;
 
-- (void)linkToDropBox:(UIViewController *)controller;
-- (void)createFolder;
+- (void)linkToDropBox:(LinkHandler)linkComplete fromController:(UIViewController *)controller;
+- (void)setupFileSysteAndStore:(DBAccount *)account complete:(void(^)(void))completeSetUp;
+- (void)checkDiaryFolder:(void(^)(void))completeFolderCheck;
+- (void)createFolder:(void(^)(void))completeFolderCreate;
+- (void)uploadDiaryToFilesystem:(DiaryData *)diary image:(UIImage *)diaryImage;
+- (void )listAllCloudDiarys:(ListAllCloudDiarys)completeDownloadList;
+
 
 - (void)createDiaryRecord:(NSString *)key diaryText:(NSString *)text;
-- (BOOL)checkDiaryFolder;
 
 
 @end

@@ -9,6 +9,7 @@
 #import "DiaryDataStore.h"
 #import "DiaryData.h"
 #import "KidlendarAppDelegate.h"
+#import "CloudData.h"
 
 @implementation DiaryDataStore
 + (DiaryDataStore *)sharedStore
@@ -86,6 +87,7 @@
         [[NSFileManager defaultManager] removeItemAtPath:dataPath error:nil]; //Delete folder
     NSLog(@"Delete DatePath %@",dataPath);
     [allItems removeObjectIdenticalTo:d];
+    [context deleteObject:d.cloudRelationship];
     [context deleteObject:d];
     [self saveChanges];
 }
@@ -146,6 +148,10 @@
     
     DiaryData *d = [NSEntityDescription insertNewObjectForEntityForName:@"DiaryData"
                                                    inManagedObjectContext:context];
+    
+    d.cloudRelationship = [NSEntityDescription insertNewObjectForEntityForName:@"CloudData"
+                                                 inManagedObjectContext:context];
+
     [d setOrderingValue:order];
     
     // Create a CFUUID object - it knows how to create unique identifier strings

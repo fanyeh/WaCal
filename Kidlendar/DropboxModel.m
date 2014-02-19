@@ -33,7 +33,7 @@
     return [self shareModel];
 }
 
-- (void)linkToDropBox:(UIViewController *)controller
+- (void)linkToDropBox:(LinkHandler)linkComplete fromController:(UIViewController *)controller
 {
     DBAccount *account = [DBAccountManager sharedManager].linkedAccount;
     if (!account || !account.linked) {
@@ -41,50 +41,85 @@
         [[DBAccountManager sharedManager] linkFromController:controller];
     } else {
         NSLog(@"There's already DB account linked");
-        [self setupFileSysteAndStore];
-//        [self createFolder];
-        [self checkDiaryFolder];
+        [self setupFileSysteAndStore:account complete:linkComplete];
     }
 }
 
-- (void)setupFileSysteAndStore
+- (void)setupFileSysteAndStore:(DBAccount *)account complete:(void(^)(void))completeSetUp
 {
-    DBAccount *account = [[DBAccountManager sharedManager] linkedAccount];
-    
-    if (account) {
-        DBFilesystem *filesystem = [[DBFilesystem alloc] initWithAccount:account];
-        [DBFilesystem setSharedFilesystem:filesystem];
-        dataStore = [DBDatastore openDefaultStoreForAccount:account error:nil];
-//        [[NSNotificationCenter defaultCenter] postNotificationName:@"insertDiary" object:nil];
+    DBFilesystem *filesystem = [[DBFilesystem alloc] initWithAccount:account];
+    [DBFilesystem setSharedFilesystem:filesystem];
+    dataStore = [DBDatastore openDefaultStoreForAccount:account error:nil];
+    completeSetUp();
+}
+
+- (void)uploadDiaryToFilesystem:(DiaryData *)diary image:(UIImage *)diaryImage
+{
+    [self checkDiaryFolder:^{
+        // Create new DBFile use diary key
+        NSString *uploadFilePath = [NSString stringWithFormat:@"Diary/%@.png",diary.diaryKey];
+        DBPath *newPath = [[DBPath root] childPath:uploadFilePath];
+        DBFile *file = [[DBFilesystem sharedFilesystem] createFile:newPath error:nil];
+        
+        DBFileStatus *status = file.status;
+        if (!status.cached) {
+            [file addObserver:self block:^() {
+                // Check file.status and read if it's ready
+                NSLog(@"Uploading progress %f", status.progress);
+            }];
+            // Check if the status.cached is now YES to ensure nothing
+            // was missed while adding the observer
+        }
+        
+        // Upload diary image to DBFilesystem
+        NSData *diaryImageData = UIImagePNGRepresentation(diaryImage);
+        [file writeData:diaryImageData error:nil];
+        
+        
+        // Create new record in datastore
+        [self createDiaryRecord:diary.diaryKey diaryText:diary.diaryText];
+        NSLog(@"file has successfully uploaded");
+    }];
+}
+
+- (void)checkDiaryFolder:(void(^)(void))completeFolderCheck
+{
+    BOOL hasDiaryFolder = NO;
+    NSArray *fileInfoArray = [[DBFilesystem sharedFilesystem]listFolder:[DBPath root] error:nil];
+    for (DBFileInfo *fileInfo in fileInfoArray) {
+        if (fileInfo.isFolder) {
+            if ([fileInfo.path.name isEqualToString:@"Diary"])
+                hasDiaryFolder = YES;
+        }
+    }
+    if(!hasDiaryFolder) {
+        [self createFolder:completeFolderCheck];
+    } else {
+        completeFolderCheck();
     }
 }
+
+- (void)createFolder:(void(^)(void))completeFolderCreate
+{
+    NSLog(@"Creating new folder");
+    DBPath *newFolderPath = [[DBPath root] childPath:@"Diary"];
+    NSLog(@"folder path %@", newFolderPath);
+    DBError *error;
+    if ([[DBFilesystem sharedFilesystem] createFolder:newFolderPath error:&error]) {
+        NSLog(@"Create folder succeed");
+        completeFolderCreate();
+    }
+    else {
+        NSLog(@"Create folder failed with error :%@",error);
+    }
+}
+
 
 - (void)createDiaryRecord:(NSString *)key diaryText:(NSString *)text
 {
     DBTable *diaryTable = [dataStore getTable:@"Diary"];
-//    DBRecord *firstDiary = [diaryTable insert:@{ @"diarykey": key, @"diarytext": text }];
     [diaryTable insert:@{ @"diarykey": key, @"diarytext": text }];
     [dataStore sync:nil];
-}
-
-- (void)uploadDiaryToFilesystem:(UIImage *)diaryImage
-{
-    // Check if diary folder exists
-    if (![self checkDiaryFolder]) {
-        [self createFolder];
-    }
-    
-    // Create new DBFile use diary key
-    NSString *uploadFilePath = [NSString stringWithFormat:@"Diary/%@.png",_diaryData.diaryKey];
-    DBPath *newPath = [[DBPath root] childPath:uploadFilePath];
-    DBFile *file = [[DBFilesystem sharedFilesystem] createFile:newPath error:nil];
-    
-    // Upload diary image to DBFilesystem
-    NSData *diaryImageData = UIImagePNGRepresentation(diaryImage);
-    [file writeData:diaryImageData error:nil];
-    
-    // Create new record in datastore
-    [self createDiaryRecord:_diaryData.diaryKey diaryText:_diaryData.diaryText];
 }
 
 - (void)downloadDiaryFromFilesystem:(NSString *)key
@@ -176,39 +211,47 @@
     return undownloadDiarys;
 }
 
-- (void)createFolder
+
+
+- (void )listAllCloudDiarys:(ListAllCloudDiarys)completeDownloadList
 {
-    NSLog(@"Creating new folder");
-    DBPath *newFolderPath = [[DBPath root] childPath:@"Diary"];
-    NSLog(@"folder path %@", newFolderPath);
-    DBError *error;
-    if ([[DBFilesystem sharedFilesystem] createFolder:newFolderPath error:&error]) {
-        NSLog(@"Create folder succeed");
+    NSMutableArray *diarysFromCloud = [[NSMutableArray alloc]init];
+    
+    // Get datastore table
+    DBTable *diaryTable = [dataStore getTable:@"Diary"];
+    NSLog(@"DBTable %@",diaryTable);
+    
+    // Get all diary keys from DB datastore
+    NSMutableArray *dataStoreKeys = [[NSMutableArray alloc]init];
+    NSMutableArray *dataStoreTexts = [[NSMutableArray alloc]init];
+    
+    // Query for all table's records
+    NSArray *results = [diaryTable query:nil error:nil];
+    
+    // Get all data store keys from result
+    for (DBRecord *r in results) {
+        [dataStoreKeys addObject:[r objectForKey:@"diarykey"]];
+        [dataStoreTexts addObject:[r objectForKey:@"diarytext"]];
     }
-    else {
-        NSLog(@"Create folder failed with error :%@",error);
+    
+    for (int i = 0 ; i < [dataStoreKeys count];i++) {
+        NSString *downloadFilePath = [NSString stringWithFormat:@"Diary/%@.png",[dataStoreKeys objectAtIndex:i]];
+        DBPath *existingPath = [[DBPath root] childPath:downloadFilePath];
+        DBFile *file = [[DBFilesystem sharedFilesystem] openFile:existingPath error:nil];
+        NSData *diaryImageData = [file readData:nil];
+        UIImage *diaryImage = [UIImage imageWithData:diaryImageData];
+        TempDiaryData *tempDiaryData = [[TempDiaryData alloc]init];
+        tempDiaryData.diaryKey = [dataStoreKeys objectAtIndex:i];
+        tempDiaryData.diaryText = [dataStoreTexts objectAtIndex:i];
+        [tempDiaryData setThumbnailDataFromImage:diaryImage];
+        [diarysFromCloud addObject:tempDiaryData];
     }
+    
+    NSLog(@"Diarys from cloud %@",diarysFromCloud);
+
+    
+    completeDownloadList(diarysFromCloud);
 }
 
-- (BOOL)checkDiaryFolder
-{
-    BOOL hasDiaryFolder = NO;
-    NSArray *fileInfoArray = [[DBFilesystem sharedFilesystem]listFolder:[DBPath root] error:nil];
-    for (DBFileInfo *fileInfo in fileInfoArray) {
-        if (fileInfo.isFolder) {
-            if ([fileInfo.path.name isEqualToString:@"Diary"])
-                hasDiaryFolder = YES;
-        }
-    }
-    return hasDiaryFolder;
-}
-
-- (void)readFromFile
-{
-    DBPath *existingPath = [[DBPath root] childPath:@"hello.txt"];
-    DBFile *file = [[DBFilesystem sharedFilesystem] openFile:existingPath error:nil];
-    NSString *contents = [file readString:nil];
-    NSLog(@"%@", contents);
-}
 
 @end

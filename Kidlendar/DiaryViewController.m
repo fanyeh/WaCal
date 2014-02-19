@@ -12,6 +12,7 @@
 #import <FacebookSDK/FacebookSDK.h>
 #import "KidlendarAppDelegate.h"
 #import "DropboxModel.h"
+#import <Dropbox/Dropbox.h>
 
 @interface DiaryViewController () <FBLoginViewDelegate>
 {
@@ -58,18 +59,6 @@
                                                                                  action:@selector(shareDiary)];
     
     self.navigationItem.rightBarButtonItems = @[faceBookButton,backupButton];
-    
-    
-    //[[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(insertDiary:) name:@"insertDiary" object:nil];
-    
-    
-    
-}
-
-- (void)insertDiary:(NSNotification *)notification
-{
-    [[DropboxModel shareModel] createDiaryRecord:_diaryData.diaryKey diaryText:_diaryData.diaryText];
-    NSLog(@"insert diary done");
 }
 
 - (void)shareDiary
@@ -79,7 +68,11 @@
 
 - (void)backupDiary
 {
-    [[DropboxModel shareModel] linkToDropBox:self];
+    [[DropboxModel shareModel] linkToDropBox:^{
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [[DropboxModel shareModel] uploadDiaryToFilesystem:_diaryData image:_diaryPhoto.image];
+        });
+    } fromController:self];
 }
 
 #pragma mark - Memory management

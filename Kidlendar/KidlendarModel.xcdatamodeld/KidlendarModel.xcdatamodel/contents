@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13B42" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="CloudData" representedClassName="CloudData" syncable="YES">
+        <attribute name="baidu" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="dropbox" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="googledrive" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="icloud" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <relationship name="diaryRelationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DiaryData" inverseName="cloudRelationship" inverseEntity="DiaryData" syncable="YES"/>
+    </entity>
     <entity name="DiaryData" representedClassName="DiaryData" syncable="YES">
         <attribute name="dateCreated" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="diaryKey" optional="YES" attributeType="String" syncable="YES"/>
@@ -8,6 +15,7 @@
         <attribute name="subject" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="thumbnail" optional="YES" transient="YES" syncable="YES"/>
         <attribute name="thumbnailData" optional="YES" attributeType="Binary" syncable="YES"/>
+        <relationship name="cloudRelationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CloudData" inverseName="diaryRelationship" inverseEntity="CloudData" syncable="YES"/>
     </entity>
     <entity name="LocationData" representedClassName="LocationData" syncable="YES">
         <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
@@ -18,5 +26,6 @@
     <elements>
         <element name="DiaryData" positionX="0" positionY="0" width="0" height="0"/>
         <element name="LocationData" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="CloudData" positionX="0" positionY="0" width="0" height="0"/>
     </elements>
 </model>

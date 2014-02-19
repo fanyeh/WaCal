@@ -47,7 +47,6 @@
 		4C5BA25D1861745D00528843 /* 929-film-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BA25C1861745D00528843 /* 929-film-1.png */; };
 		4C5C8FFC18A8730100B40F7E /* DiaryEntryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5C8FFA18A8730100B40F7E /* DiaryEntryViewController.m */; };
 		4C5C8FFD18A8730100B40F7E /* DiaryEntryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C5C8FFB18A8730100B40F7E /* DiaryEntryViewController.xib */; };
-		4C6AC2DC187161CC004FA1E4 /* DiaryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6AC2DB187161CC004FA1E4 /* DiaryData.m */; };
 		4C6C49C0186DDB680042EB61 /* DiaryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C49BF186DDB680042EB61 /* DiaryTableViewController.m */; };
 		4C6C49C4186DDDDF0042EB61 /* DiaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C49C2186DDDDF0042EB61 /* DiaryViewController.m */; };
 		4C6C49C5186DDDDF0042EB61 /* DiaryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C6C49C3186DDDDF0042EB61 /* DiaryViewController.xib */; };
@@ -81,9 +80,10 @@
 		4CB3DD9F18521DC500673478 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CB3DD9D18521DC500673478 /* InfoPlist.strings */; };
 		4CB3DDA118521DC500673478 /* KidlendarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB3DDA018521DC500673478 /* KidlendarTests.m */; };
 		4CD2B92318A492E6002DA9E4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD2B92218A492E6002DA9E4 /* Security.framework */; };
-		4CD2B93018A4B8FD002DA9E4 /* DropboxBackUp.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD2B92F18A4B8FD002DA9E4 /* DropboxBackUp.m */; };
 		4CD2B93218A4CF69002DA9E4 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD2B93118A4CF69002DA9E4 /* CFNetwork.framework */; };
 		4CDA810F18A3C61F00898266 /* 951-baby-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CDA810E18A3C61F00898266 /* 951-baby-selected@2x.png */; };
+		4CEEB9F818B4656100C7FA80 /* DiaryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEEB9F718B4656100C7FA80 /* DiaryData.m */; };
+		4CEEB9FE18B47BAF00C7FA80 /* CloudData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEEB9FD18B47BAF00C7FA80 /* CloudData.m */; };
 		4CF46E4D18878E3800B22888 /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF46E4C18878E3800B22888 /* CustomTextField.m */; };
 		4CF592C9186D3B4700F1BEEB /* EventCreateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF592C7186D3B4700F1BEEB /* EventCreateViewController.m */; };
 		4CF592E0186D5BE500F1BEEB /* MonthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF592DE186D5BE500F1BEEB /* MonthViewController.m */; };
@@ -183,8 +183,6 @@
 		4C5C8FF918A8730100B40F7E /* DiaryEntryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryEntryViewController.h; sourceTree = "<group>"; };
 		4C5C8FFA18A8730100B40F7E /* DiaryEntryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryEntryViewController.m; sourceTree = "<group>"; };
 		4C5C8FFB18A8730100B40F7E /* DiaryEntryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiaryEntryViewController.xib; sourceTree = "<group>"; };
-		4C6AC2DA187161CC004FA1E4 /* DiaryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiaryData.h; path = ../DiaryData.h; sourceTree = "<group>"; };
-		4C6AC2DB187161CC004FA1E4 /* DiaryData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiaryData.m; path = ../DiaryData.m; sourceTree = "<group>"; };
 		4C6C49BE186DDB680042EB61 /* DiaryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryTableViewController.h; sourceTree = "<group>"; };
 		4C6C49BF186DDB680042EB61 /* DiaryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryTableViewController.m; sourceTree = "<group>"; };
 		4C6C49C1186DDDDF0042EB61 /* DiaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryViewController.h; sourceTree = "<group>"; };
@@ -236,10 +234,12 @@
 		4CB3DD9E18521DC500673478 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4CB3DDA018521DC500673478 /* KidlendarTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KidlendarTests.m; sourceTree = "<group>"; };
 		4CD2B92218A492E6002DA9E4 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		4CD2B92E18A4B8FD002DA9E4 /* DropboxBackUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxBackUp.h; sourceTree = "<group>"; };
-		4CD2B92F18A4B8FD002DA9E4 /* DropboxBackUp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxBackUp.m; sourceTree = "<group>"; };
 		4CD2B93118A4CF69002DA9E4 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		4CDA810E18A3C61F00898266 /* 951-baby-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "951-baby-selected@2x.png"; sourceTree = "<group>"; };
+		4CEEB9F618B4656100C7FA80 /* DiaryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiaryData.h; path = ../DiaryData.h; sourceTree = "<group>"; };
+		4CEEB9F718B4656100C7FA80 /* DiaryData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiaryData.m; path = ../DiaryData.m; sourceTree = "<group>"; };
+		4CEEB9FC18B47BAF00C7FA80 /* CloudData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudData.h; sourceTree = "<group>"; };
+		4CEEB9FD18B47BAF00C7FA80 /* CloudData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloudData.m; sourceTree = "<group>"; };
 		4CF46E4B18878E3800B22888 /* CustomTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTextField.h; sourceTree = "<group>"; };
 		4CF46E4C18878E3800B22888 /* CustomTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTextField.m; sourceTree = "<group>"; };
 		4CF592C6186D3B4700F1BEEB /* EventCreateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventCreateViewController.h; sourceTree = "<group>"; };
@@ -343,14 +343,12 @@
 		4C417E7A18714A69000878FC /* Diary Model */ = {
 			isa = PBXGroup;
 			children = (
-				4C6AC2DA187161CC004FA1E4 /* DiaryData.h */,
-				4C6AC2DB187161CC004FA1E4 /* DiaryData.m */,
+				4CEEB9F618B4656100C7FA80 /* DiaryData.h */,
+				4CEEB9F718B4656100C7FA80 /* DiaryData.m */,
 				4C23964418B3B5E800BB87E7 /* TempDiaryData.h */,
 				4C23964518B3B5E800BB87E7 /* TempDiaryData.m */,
 				4C417E7418714A4C000878FC /* DiaryDataStore.h */,
 				4C417E7518714A4C000878FC /* DiaryDataStore.m */,
-				4CD2B92E18A4B8FD002DA9E4 /* DropboxBackUp.h */,
-				4CD2B92F18A4B8FD002DA9E4 /* DropboxBackUp.m */,
 			);
 			name = "Diary Model";
 			sourceTree = "<group>";
@@ -420,6 +418,9 @@
 		4C91918818AF3D3100ED4695 /* Other Model */ = {
 			isa = PBXGroup;
 			children = (
+				4C51761B186FF309002F6F6D /* KidlendarModel.xcdatamodeld */,
+				4CEEB9FC18B47BAF00C7FA80 /* CloudData.h */,
+				4CEEB9FD18B47BAF00C7FA80 /* CloudData.m */,
 				4C91918518AF3A4900ED4695 /* ImageStore.h */,
 				4C91918618AF3A4900ED4695 /* ImageStore.m */,
 				4C12B2E718A1E4570046C5EC /* FileManager.h */,
@@ -469,7 +470,6 @@
 				4CB3DD8218521DC400673478 /* Supporting Files */,
 				4CB3DD9A18521DC500673478 /* KidlendarTests */,
 				4CB3DD7A18521DC400673478 /* Frameworks */,
-				4C51761B186FF309002F6F6D /* KidlendarModel.xcdatamodeld */,
 				4CB3DD7918521DC400673478 /* Products */,
 				4CB3DD8D18521DC400673478 /* Images.xcassets */,
 			);
@@ -725,11 +725,11 @@
 				4CFB086C187E696A00456D5D /* DateModel.m in Sources */,
 				4C23963E18B3304100BB87E7 /* DropboxModel.m in Sources */,
 				4C12B2E918A1E4570046C5EC /* FileManager.m in Sources */,
+				4CEEB9F818B4656100C7FA80 /* DiaryData.m in Sources */,
 				4C5C8FFC18A8730100B40F7E /* DiaryEntryViewController.m in Sources */,
 				4C86E933188F973800137B6A /* AlarmViewController.m in Sources */,
 				4C417E7618714A4C000878FC /* DiaryDataStore.m in Sources */,
 				4C9214CB185AAA29009A3090 /* DateView.m in Sources */,
-				4CD2B93018A4B8FD002DA9E4 /* DropboxBackUp.m in Sources */,
 				4CF592C9186D3B4700F1BEEB /* EventCreateViewController.m in Sources */,
 				4CFB086F187E6BFB00456D5D /* MonthModel.m in Sources */,
 				4CA2506F1869517400AEA94E /* DiaryPhotoCell.m in Sources */,
@@ -753,13 +753,13 @@
 				4C51761D186FF309002F6F6D /* KidlendarModel.xcdatamodeld in Sources */,
 				4CF46E4D18878E3800B22888 /* CustomTextField.m in Sources */,
 				4C5B01F618ACBD7F0030FCCC /* DiaryCreateViewController.m in Sources */,
-				4C6AC2DC187161CC004FA1E4 /* DiaryData.m in Sources */,
 				4C315C7B18AB298800A2A363 /* PhotoLoader.m in Sources */,
 				4C50B73718B1BB3D0065434A /* MapKitHelpers.m in Sources */,
 				4CA2506C1869377000AEA94E /* UIImage+Resize.m in Sources */,
 				4C91918718AF3A4900ED4695 /* ImageStore.m in Sources */,
 				4C92155A185AD39E009A3090 /* MonthCalendarView.m in Sources */,
 				4C3E3EB118865C0C00D02397 /* EventLocationView.m in Sources */,
+				4CEEB9FE18B47BAF00C7FA80 /* CloudData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1017,8 +1017,7 @@
 				4C51761C186FF309002F6F6D /* KidlendarModel.xcdatamodel */,
 			);
 			currentVersion = 4C51761C186FF309002F6F6D /* KidlendarModel.xcdatamodel */;
-			name = KidlendarModel.xcdatamodeld;
-			path = Kidlendar/KidlendarModel.xcdatamodeld;
+			path = KidlendarModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
