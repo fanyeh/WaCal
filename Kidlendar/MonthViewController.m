@@ -91,11 +91,16 @@
     [_diaryCollectionView registerClass:[DiaryCell class] forCellWithReuseIdentifier:@"DiaryCell"];
     
     //Transparent navigation bar
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage new]
-                             forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.shadowImage = [UIImage new];
-    self.navigationController.navigationBar.translucent = YES;
-    self.navigationController.view.backgroundColor = [UIColor clearColor];
+//    [self.navigationController.navigationBar setBackgroundImage:[UIImage new]
+//                             forBarMetrics:UIBarMetricsDefault];
+//    self.navigationController.navigationBar.shadowImage = [UIImage new];
+//    self.navigationController.navigationBar.translucent = YES;
+//    self.navigationController.view.backgroundColor = [UIColor clearColor];
+    
+//    // Extend view from navigation bar
+//    if ([self respondsToSelector:@selector(edgesForExtendedLayout)])
+//        self.edgesForExtendedLayout = UIRectEdgeNone;
+    self.navigationController.navigationBar.clipsToBounds = YES;
     
     _selectedDate = [monthModel dateModelForDate:[NSDate date]].date;
     [_monthView initCalendar:monthModel];
@@ -121,9 +126,7 @@
     [_monthView addGestureRecognizer:swipeUp];
     [_monthView addGestureRecognizer:swipeDown];
     
-    // Extend view from navigation bar
-    if ([self respondsToSelector:@selector(edgesForExtendedLayout)])
-        self.edgesForExtendedLayout = UIRectEdgeNone;
+
     
      
     // Set up table for events

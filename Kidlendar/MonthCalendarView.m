@@ -89,14 +89,14 @@ CGFloat weekdayViewHeight;
         
         // Configure color for dates not in current month
         if (dateModel.isCurrentMonth)
-            dateView.dateLabel.textColor = [UIColor grayColor];
+            dateView.dateLabel.textColor = [UIColor blackColor];
         else
             dateView.dateLabel.textColor = [UIColor colorWithWhite:0.500 alpha:0.500];
         
         // Configure color for today
         if (dateModel.isToday) {
             dateView.isToday = YES;
-            dateView.dateLabel.textColor = Rgb2UIColor(253, 160, 153);
+            //dateView.dateLabel.textColor = Rgb2UIColor(253, 160, 153);
         }
         
         if (_shrink && i%7==0) {
@@ -149,26 +149,27 @@ CGFloat weekdayViewHeight;
 {
     DateView *view =[self viewFromDate:date];
     view.dateLabel.layer.cornerRadius = view.dateLabel.frame.size.width/2;
-    if (view.isToday) {
-        view.dateLabel.backgroundColor = Rgb2UIColor(253, 160, 153);
-        view.dateLabel.textColor = [UIColor grayColor];
-    } else {
-        view.dateLabel.backgroundColor = Rgb2UIColor(45, 196, 245);
-    }
+    view.dateLabel.backgroundColor = Rgb2UIColor(139, 195, 254);
+    view.dateLabel.textColor = [UIColor whiteColor];
     view.isSelected = YES;
+    
+    if (view.isToday) {
+
+        view.dateLabel.layer.borderColor = [[UIColor grayColor]CGColor];
+        view.dateLabel.layer.borderWidth = 2.0f;
+    }
 }
 
 - (void)setAppearanceOnDeselectDate:(NSDate *)date dateNotInCurrentMonth:(BOOL)inMonth
 {
     DateView *view =[self viewFromDate:date];
-    if (view.isToday)
-        view.dateLabel.textColor = Rgb2UIColor(253, 160, 153);
-    else if (!inMonth)
+    if (!inMonth)
         view.dateLabel.textColor = [UIColor colorWithWhite:0.500 alpha:0.500];
     else
-        view.dateLabel.textColor = [UIColor grayColor];
+        view.dateLabel.textColor = [UIColor blackColor];
     
-    view.dateLabel.layer.cornerRadius = 0;
+    if (!view.isToday)
+        view.dateLabel.layer.cornerRadius = 0;
     view.dateLabel.backgroundColor =[UIColor clearColor];
     view.isSelected = NO;
 }

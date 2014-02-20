@@ -13,9 +13,9 @@
 #import <CoreData/CoreData.h>
 #import <FacebookSDK/FacebookSDK.h>
 #import "SettingViewController.h"
-//#import <DropboxSDK/DropboxSDK.h>
 #import <Dropbox/Dropbox.h>
 #import "DiaryCreateViewController.h"
+#import "DropboxModel.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 
@@ -37,7 +37,7 @@
 //    [DBSession setSharedSession:dbSession];
     
     DBAccountManager *accountManager =
-    [[DBAccountManager alloc] initWithAppKey:@"rb186yqaya1ijp8" secret:@"3eibrlmh4x2keim"];
+    [[DBAccountManager alloc] initWithAppKey:@"hsvuk547mb46ady" secret:@"z0bw1iew9vssq6r"];
     [DBAccountManager setSharedManager:accountManager];
     
     // Init Calendar store
@@ -59,6 +59,10 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
+    [[UINavigationBar appearance] setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setBackgroundColor:Rgb2UIColor(33, 138, 251)];
+//    [[UINavigationBar appearance] setBarTintColor:Rgb2UIColor(33, 138, 251)]; //is the bar color
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]]; //is the buttons text color
     return YES;
 }
 
@@ -228,15 +232,6 @@
     }
     
     if ([sourceApplication isEqual: @"com.getdropbox.Dropbox"]) {
-//        if ([[DBSession sharedSession] handleOpenURL:url]) {
-//            if ([[DBSession sharedSession] isLinked]) {
-//                NSLog(@"App linked successfully!");
-//                // At this point you can start making API calls
-//            }
-//            return YES;
-//        }
-//        // Add whatever other url handling code your app requires here
-//        return NO;
         DBAccount *account = [[DBAccountManager sharedManager] handleOpenURL:url];
         if (account) {
             NSLog(@"App linked successfully!");

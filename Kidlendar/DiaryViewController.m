@@ -13,6 +13,7 @@
 #import "KidlendarAppDelegate.h"
 #import "DropboxModel.h"
 #import <Dropbox/Dropbox.h>
+#import "CloudData.h"
 
 @interface DiaryViewController () <FBLoginViewDelegate>
 {
@@ -44,6 +45,7 @@
     
     // Put that image onto the screen in our image view
     _diaryPhoto.image = [fm loadCollectionImage];
+    NSLog(@"Image %@",_diaryPhoto.image);
     _diaryDetailTextView.text = _diaryData.diaryText;
 
     
@@ -68,11 +70,15 @@
 
 - (void)backupDiary
 {
-    [[DropboxModel shareModel] linkToDropBox:^{
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [[DropboxModel shareModel] uploadDiaryToFilesystem:_diaryData image:_diaryPhoto.image];
-        });
-    } fromController:self];
+    if (!_diaryData.cloudRelationship.dropbox) {
+        [[DropboxModel shareModel] linkToDropBox:^(BOOL linked) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [[DropboxModel shareModel] uploadDiaryToFilesystem:_diaryData image:_diaryPhoto.image complete:^{
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"uploadComplete" object:nil];
+                }];
+            });
+        } fromController:self];
+    }
 }
 
 #pragma mark - Memory management
