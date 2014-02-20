@@ -15,7 +15,6 @@
 #import "TempDiaryData.h"
 #import <Dropbox/Dropbox.h>
 #import "CloudData.h"
-#import "FileManager.h"
 
 @interface DiaryTableViewController ()
 {
@@ -235,15 +234,11 @@
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [[DropboxModel shareModel] downloadDiaryFromFilesystem:t.diaryKey complete:^(NSData *imageData) {
                 UIImage *diaryImage = [UIImage imageWithData:imageData];
-                DiaryData *downloadedDiary = [[DiaryDataStore sharedStore]createItem];
-                downloadedDiary.diaryKey = t.diaryKey;
-                downloadedDiary.diaryText = t.diaryText;
-                [downloadedDiary setThumbnailDataFromImage:diaryImage];
-                NSLog(@"d image %@",diaryImage);
+                DiaryData *d = [[DiaryDataStore sharedStore]createItem];
+                d.diaryKey = t.diaryKey;
+                d.diaryText = t.diaryText;
+                [d setDiaryImageDataFromImage:diaryImage];
                 [[DiaryDataStore sharedStore]saveChanges];
-                
-                FileManager *fm = [[FileManager alloc]initWithKey:t.diaryKey];
-                [fm saveCollectionImage:diaryImage];
                 
                 [localTable reloadData];
                 NSLog(@"Download completed");

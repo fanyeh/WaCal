@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4C0C38CA18673AD60001CC08 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C0C38C918673AD60001CC08 /* AssetsLibrary.framework */; };
-		4C12B2E918A1E4570046C5EC /* FileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C12B2E818A1E4570046C5EC /* FileManager.m */; };
 		4C12B2ED18A1FC280046C5EC /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2EC18A1FC280046C5EC /* GoogleMaps.framework */; };
 		4C12B2EF18A1FD960046C5EC /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2EE18A1FD960046C5EC /* CoreText.framework */; };
 		4C12B2F118A1FDA20046C5EC /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2F018A1FDA20046C5EC /* GLKit.framework */; };
@@ -129,8 +128,6 @@
 
 /* Begin PBXFileReference section */
 		4C0C38C918673AD60001CC08 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
-		4C12B2E718A1E4570046C5EC /* FileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileManager.h; sourceTree = "<group>"; };
-		4C12B2E818A1E4570046C5EC /* FileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileManager.m; sourceTree = "<group>"; };
 		4C12B2EC18A1FC280046C5EC /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMaps.framework; sourceTree = "<group>"; };
 		4C12B2EE18A1FD960046C5EC /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		4C12B2F018A1FDA20046C5EC /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
@@ -423,8 +420,6 @@
 				4CEEB9FD18B47BAF00C7FA80 /* CloudData.m */,
 				4C91918518AF3A4900ED4695 /* ImageStore.h */,
 				4C91918618AF3A4900ED4695 /* ImageStore.m */,
-				4C12B2E718A1E4570046C5EC /* FileManager.h */,
-				4C12B2E818A1E4570046C5EC /* FileManager.m */,
 				4C315C7918AB298800A2A363 /* PhotoLoader.h */,
 				4C315C7A18AB298800A2A363 /* PhotoLoader.m */,
 				4C23963718B3295600BB87E7 /* FacebookModel.h */,
@@ -724,7 +719,6 @@
 				4CB3DD8818521DC400673478 /* main.m in Sources */,
 				4CFB086C187E696A00456D5D /* DateModel.m in Sources */,
 				4C23963E18B3304100BB87E7 /* DropboxModel.m in Sources */,
-				4C12B2E918A1E4570046C5EC /* FileManager.m in Sources */,
 				4CEEB9F818B4656100C7FA80 /* DiaryData.m in Sources */,
 				4C5C8FFC18A8730100B40F7E /* DiaryEntryViewController.m in Sources */,
 				4C86E933188F973800137B6A /* AlarmViewController.m in Sources */,

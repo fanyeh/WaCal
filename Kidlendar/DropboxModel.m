@@ -8,10 +8,8 @@
 
 #import <Dropbox/Dropbox.h>
 #import "DropboxModel.h"
-#import "FileManager.h"
 #import "DiaryData.h"
 #import "DiaryDataStore.h"
-#import "FileManager.h"
 #import "TempDiaryData.h"
 #import "CloudData.h"
 

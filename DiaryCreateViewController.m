@@ -10,7 +10,6 @@
 #import "CreateViewController.h"
 #import "PhotoLoader.h"
 #import "UIImage+Resize.h"
-#import "FileManager.h"
 #import "DiaryPhotoCell.h"
 #import "DiaryPhotoViewController.h"
 #import "DiaryEntryViewController.h"
@@ -341,27 +340,12 @@
 {
     _diary = [[DiaryDataStore sharedStore]createItem];
     
-    // Store image in the ImageStore with this key
-    FileManager *fm = [[FileManager alloc]initWithKey:_diary.diaryKey];
-    
-    // Save raw image in local document directory
-    for (int i=0;i < [selectedPhotoOrderingInfo count];i++) {
-        NSArray *imageInfo = selectedPhotoOrderingInfo[i];
-        NSMutableDictionary *selectedPhotoDict = [selectedPhotoInfo objectForKey:imageInfo[1]];
-        UIImage *image = [selectedPhotoDict objectForKey:imageInfo[0]];
-        [fm saveDiaryImage:image index:i];
-    }
-    
     // Create Image from collection view
     UIGraphicsBeginImageContextWithOptions(diaryPhotosView.bounds.size, YES, [UIScreen mainScreen].scale);
     [diaryPhotosView.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage *collectionViewImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
-    // Save collection view image to document
-    [fm saveCollectionImage:collectionViewImage];
-    
-    [_diary setThumbnailDataFromImage:collectionViewImage];
+    [_diary setDiaryImageDataFromImage:collectionViewImage];
     [[DiaryDataStore sharedStore]saveChanges];
     
     // Send out notification for new diary added

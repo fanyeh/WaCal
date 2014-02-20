@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface DiaryCell : UICollectionViewCell
-@property (strong,nonatomic)UILabel *subjectLabel;
-- (void)setupImages:(NSMutableArray *)selectedphotos;
-
+@property (strong,nonatomic) UILabel *subjectLabel;
+@property (strong,nonatomic) UIImageView *diaryImageView;
 @end

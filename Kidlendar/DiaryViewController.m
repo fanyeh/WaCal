@@ -8,7 +8,6 @@
 
 #import "DiaryViewController.h"
 #import "DiaryData.h"
-#import "FileManager.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import "KidlendarAppDelegate.h"
 #import "DropboxModel.h"
@@ -41,10 +40,9 @@
     // Do any additional setup after loading the view from its nib.
     
     // Get photo from  use diary data key
-    FileManager *fm = [[FileManager alloc]initWithKey:_diaryData.diaryKey];
     
     // Put that image onto the screen in our image view
-    _diaryPhoto.image = [fm loadCollectionImage];
+    _diaryPhoto.image = _diaryData.diaryImage;
     NSLog(@"Image %@",_diaryPhoto.image);
     _diaryDetailTextView.text = _diaryData.diaryText;
 

@@ -19,7 +19,6 @@
 #import "UIImage+Resize.h"
 #import "EventViewController.h"
 #import "DiaryCell.h"
-#import "FileManager.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 
@@ -171,26 +170,7 @@
     [[NSNotificationCenter defaultCenter]addObserver:self
                                             selector:@selector(switchEKCalendar:)
                                                 name:@"EKCalendarSwitch" object:nil];
-    // Reload diary images
-    [self reloadDiaryImages];
 }
-
--(void)reloadDiaryImages
-{
-    NSArray *diaryArray = [[DiaryDataStore sharedStore]allItems];
-    diaryArrayPhotos = [[NSMutableArray alloc]init];
-    for (DiaryData *d in diaryArray) {
-        FileManager *fm = [[FileManager alloc]initWithKey:d.diaryKey];
-        NSMutableArray *diaryPhotos = [[NSMutableArray alloc]init];
-        for (int i = 0;i <4;i++) {
-            UIImage *image = [fm loadDiaryImageWithIndex:i];
-            if (image)
-                [diaryPhotos addObject:[image resizeImageToSize:CGSizeMake(80, 80)]];
-        }
-        [diaryArrayPhotos addObject:diaryPhotos];
-    }
-}
-
 
 - (void)didReceiveMemoryWarning
 {
@@ -270,7 +250,6 @@
 
 -(void)refreshDiary:(NSNotification *)notification
 {
-    [self reloadDiaryImages];
     [_diaryCollectionView reloadData];
 }
 
@@ -524,7 +503,7 @@
     // Configure the cell...
     DiaryData *d = [[DiaryDataStore sharedStore]allItems][indexPath.row];
     cell.subjectLabel.text = d.diaryText;
-    [cell setupImages:diaryArrayPhotos[indexPath.row]];
+    cell.diaryImageView.image = d.diaryImage;
     return cell;
 }
 
