@@ -96,12 +96,12 @@ CGFloat weekdayViewHeight;
         // Configure color for today
         if (dateModel.isToday) {
             dateView.isToday = YES;
-            //dateView.dateLabel.textColor = Rgb2UIColor(253, 160, 153);
+            dateView.dateLabel.textColor = Rgb2UIColor(255, 0, 0);
         }
         
         if (_shrink && i%7==0) {
-            dateView.dateLabel.layer.cornerRadius = dateView.dateLabel.frame.size.width/2;
-            dateView.dateLabel.backgroundColor = Rgb2UIColor(45, 196, 245);
+//            dateView.dateLabel.layer.cornerRadius = dateView.dateLabel.frame.size.width/2;
+            dateView.dateLabel.backgroundColor = Rgb2UIColor(33, 138, 251);
         }
         
         // Add indicator if date has event
@@ -148,16 +148,19 @@ CGFloat weekdayViewHeight;
 - (void)setAppearanceOnSelectDate:(NSDate *)date
 {
     DateView *view =[self viewFromDate:date];
-    view.dateLabel.layer.cornerRadius = view.dateLabel.frame.size.width/2;
-    view.dateLabel.backgroundColor = Rgb2UIColor(139, 195, 254);
+//    view.dateLabel.layer.cornerRadius = view.dateLabel.frame.size.width/2;
+
+    if (view.isToday) {
+        view.dateLabel.backgroundColor = Rgb2UIColor(255, 0, 0);
+
+//        view.dateLabel.layer.borderColor = [[UIColor grayColor]CGColor];
+//        view.dateLabel.layer.borderWidth = 2.0f;
+    }
+    else
+        view.dateLabel.backgroundColor = Rgb2UIColor(33, 138, 251);
+    
     view.dateLabel.textColor = [UIColor whiteColor];
     view.isSelected = YES;
-    
-    if (view.isToday) {
-
-        view.dateLabel.layer.borderColor = [[UIColor grayColor]CGColor];
-        view.dateLabel.layer.borderWidth = 2.0f;
-    }
 }
 
 - (void)setAppearanceOnDeselectDate:(NSDate *)date dateNotInCurrentMonth:(BOOL)inMonth

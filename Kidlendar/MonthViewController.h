@@ -11,7 +11,7 @@
 #import <EventKit/EventKit.h>
 #import <CoreLocation/CoreLocation.h>
 
-@interface MonthViewController : UIViewController <UITableViewDataSource,UITableViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate>
+@interface MonthViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>
 @property (strong, nonatomic) IBOutlet MonthCalendarView *monthView;
 @property NSCalendar *gregorian;
 @property NSDate *selectedDate;

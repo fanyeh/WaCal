@@ -39,9 +39,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *comingEventTime;
 @property (weak, nonatomic) IBOutlet UILabel *comingEventTitle;
 @property (weak, nonatomic) IBOutlet UIView *comingEventView;
-@property (weak, nonatomic) IBOutlet UILabel *comingEventDate;
-@property (weak, nonatomic) IBOutlet UICollectionView *diaryCollectionView;
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
+@property (weak, nonatomic) IBOutlet UIView *dotView;
+@property (weak, nonatomic) IBOutlet UIImageView *diaryImageView;
+@property (weak, nonatomic) IBOutlet UIView *dotViewGray;
+@property (weak, nonatomic) IBOutlet UILabel *diaryTitle;
 
 @end
 
@@ -72,33 +74,14 @@
     timeFormatter.dateFormat = @"HH:mm";
     timeFormatter.timeZone = [NSTimeZone systemTimeZone];
     
-    // Add a bottomBorder.
-    CALayer *bottomBorder = [CALayer layer];
-    bottomBorder.frame = CGRectMake(0.0f,
-                                    _comingEventView.frame.size.height+2,
-                                    _comingEventView.frame.size.width,
-                                    1.0f);
-    bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
-    
-    [_comingEventView.layer addSublayer:bottomBorder];
+
     UITapGestureRecognizer *eventTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showEventView)];
     [_comingEventView addGestureRecognizer:eventTap];
+    _dotView.layer.cornerRadius = _dotView.frame.size.width/2;
+    _dotView.backgroundColor = Rgb2UIColor(251, 106, 119);
     
-    // Diary collecitonview
-    _diaryCollectionView.delegate = self;
-    _diaryCollectionView.dataSource = self;
-    [_diaryCollectionView registerClass:[DiaryCell class] forCellWithReuseIdentifier:@"DiaryCell"];
+    _dotViewGray.layer.cornerRadius = _dotView.frame.size.width/2;
     
-    //Transparent navigation bar
-//    [self.navigationController.navigationBar setBackgroundImage:[UIImage new]
-//                             forBarMetrics:UIBarMetricsDefault];
-//    self.navigationController.navigationBar.shadowImage = [UIImage new];
-//    self.navigationController.navigationBar.translucent = YES;
-//    self.navigationController.view.backgroundColor = [UIColor clearColor];
-    
-//    // Extend view from navigation bar
-//    if ([self respondsToSelector:@selector(edgesForExtendedLayout)])
-//        self.edgesForExtendedLayout = UIRectEdgeNone;
     self.navigationController.navigationBar.clipsToBounds = YES;
     
     _selectedDate = [monthModel dateModelForDate:[NSDate date]].date;
@@ -170,6 +153,8 @@
     [[NSNotificationCenter defaultCenter]addObserver:self
                                             selector:@selector(switchEKCalendar:)
                                                 name:@"EKCalendarSwitch" object:nil];
+    
+    [self showDiary];
 }
 
 - (void)didReceiveMemoryWarning
@@ -250,7 +235,7 @@
 
 -(void)refreshDiary:(NSNotification *)notification
 {
-    [_diaryCollectionView reloadData];
+//    [_diaryCollectionView reloadData];
 }
 
 - (void)switchEKCalendar:(NSNotification *)notification
@@ -297,7 +282,7 @@
     if (!_monthView.shrink) {
         eventTableView.hidden = NO;
         _comingEventView.hidden = YES;
-        _diaryCollectionView.hidden = YES;
+//        _diaryCollectionView.hidden = YES;
         _monthView.shrink = YES;
         [self showEventTable];
     }
@@ -308,7 +293,7 @@
     if (_monthView.shrink) {
         eventTableView.hidden = YES;
         _comingEventView.hidden = NO;
-        _diaryCollectionView.hidden = NO;
+//        _diaryCollectionView.hidden = NO;
         _monthView.shrink = NO;
         [self resetCalendar];
     }
@@ -458,13 +443,21 @@
 
 - (void)showComingEvent
 {
+
+    NSDateFormatter *onlydateFormatter = [[NSDateFormatter alloc]init];
+    onlydateFormatter.dateFormat = @"hh:mm aa";
+    onlydateFormatter.timeZone = [NSTimeZone systemTimeZone];
+
     [monthModel checkEventForDate:_selectedDate];
     if ([monthModel.eventsInDate count]> 0) {
         for (EKEvent *comingUpEvent in monthModel.eventsInDate) {
             if (comingUpEvent.startDate >[NSDate date]) {
                 _comingUpEvent = comingUpEvent;
-                _comingEventTime.text = [timeFormatter stringFromDate:comingUpEvent.startDate];
-                _comingEventDate.text = [dateFormatter stringFromDate:comingUpEvent.startDate];
+//                _comingEventTime.text = [timeFormatter stringFromDate:comingUpEvent.startDate];
+//                _comingEventDate.text = [dateFormatter stringFromDate:comingUpEvent.startDate];
+                
+                _comingEventTime.text  = [onlydateFormatter stringFromDate:comingUpEvent.startDate];
+                
                 _comingEventTitle.text = comingUpEvent.title;
                 _locationLabel.text = comingUpEvent.location;
                 break;
@@ -472,7 +465,6 @@
         }
     }
    else {
-       _comingEventDate.text = nil;
         _comingEventTime.text = nil;
         _comingEventTitle.text = nil;
     }
@@ -481,30 +473,9 @@
 -(void)showDiary
 {
     // Check if there's diary available
-}
-
-#pragma mark - UICollectionViewDataSource
-
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
-{
-    return 1;
-}
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    return [[[DiaryDataStore sharedStore]allItems]count];
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *CellIdentifier = @"DiaryCell";
-    DiaryCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
-    
-    // Configure the cell...
-    DiaryData *d = [[DiaryDataStore sharedStore]allItems][indexPath.row];
-    cell.subjectLabel.text = d.diaryText;
-    cell.diaryImageView.image = d.diaryImage;
-    return cell;
+    DiaryData *d = [[DiaryDataStore sharedStore]allItems][0];
+    _diaryImageView.image = d.diaryImage;
+    _diaryTitle.text = d.diaryText;
 }
 
 - (void)resetCalendar
@@ -550,8 +521,6 @@
     else
         [self showComingEvent];
 }
-
-#pragma mark - UICollectionViewDelegate
 
 -(void)addDiary
 {
