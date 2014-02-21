@@ -7,8 +7,28 @@
 //
 
 #import <Foundation/Foundation.h>
+@class DiaryData;
+
+typedef NS_ENUM(NSInteger, PermissionType)
+{
+    kPermissionTypeRead,
+    kPermissionTypePublish
+};
+
+typedef NS_ENUM(NSInteger, ActionType)
+{
+    kActionTypeShareLink,
+    kActionTypeSharePhoto,
+    kActionTypeFriendsBirthday
+};
 
 @interface FacebookModel : NSObject
-@property (nonatomic,strong) UIImage *shareIamge;
-@property (nonatomic,strong) NSString *shareText;
+
++ (FacebookModel *)shareModel;
+
+@property (nonatomic,strong) DiaryData *diaryData;
+
+- (void)startFacebookSession;
+- (void)ShareWithAPICalls:(NSArray *)permissionsNeeded action:(ActionType)actionType requestPermissionType:(PermissionType)permissionType;
+
 @end

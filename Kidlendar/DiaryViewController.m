@@ -13,6 +13,7 @@
 #import "DropboxModel.h"
 #import <Dropbox/Dropbox.h>
 #import "CloudData.h"
+#import "FacebookModel.h"
 
 @interface DiaryViewController () <FBLoginViewDelegate>
 {
@@ -63,7 +64,16 @@
 
 - (void)shareDiary
 {
-
+    // We will post on behalf of the user, these are the permissions we need:
+    //NSArray *permissionsNeeded = @[@"publish_actions"];
+    //NSArray *permissionsNeeded = @[@"user_birthday",@"friends_hometown", @"friends_birthday",@"friends_location"];
+    
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"Facebook"]) {
+        [FacebookModel shareModel].diaryData = _diaryData;
+        [[FacebookModel shareModel] ShareWithAPICalls:@[@"publish_actions"] action:kActionTypeSharePhoto requestPermissionType:kPermissionTypePublish];
+    } else {
+        [[FacebookModel shareModel] startFacebookSession];
+    }
 }
 
 - (void)backupDiary

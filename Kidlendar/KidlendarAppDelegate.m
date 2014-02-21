@@ -32,13 +32,33 @@
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"])
     {
         // app already launched
+        DBAccount  *account = [DBAccountManager sharedManager].linkedAccount;
+        if (!account || !account.linked) {
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"Dropbox"];
+
+        } else {
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"Dropbox"];
+        }
+        
+        if (FBSession.activeSession.state == FBSessionStateOpen
+            || FBSession.activeSession.state == FBSessionStateOpenTokenExtended) {
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"Facebook"];
+
+        } else {
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"Facebook"];
+        }
+        
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
     else
     {
+        // This is the first launch ever
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"FaceDetection"];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"Dropbox"];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"Facebook"];
+
         [[NSUserDefaults standardUserDefaults] synchronize];
-        // This is the first launch ever
     }
     
     DBAccountManager *accountManager = [[DBAccountManager alloc] initWithAppKey:@"hsvuk547mb46ady" secret:@"z0bw1iew9vssq6r"];
@@ -239,6 +259,7 @@
         DBAccount *account = [[DBAccountManager sharedManager] handleOpenURL:url];
         if (account) {
             NSLog(@"App linked successfully!");
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"Dropbox"];
             return YES;
         }
         return NO;
@@ -256,11 +277,13 @@
     // If the session was opened successfully
     if (!error && state == FBSessionStateOpen){
         NSLog(@"Session opened");
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"Facebook"];
         // Show the user the logged-in UI
         [self userLoggedIn];
         return;
     }
     if (state == FBSessionStateClosed || state == FBSessionStateClosedLoginFailed){
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"Facebook"];
         // If the session is closed
         NSLog(@"Session closed");
         // Show the user the logged-out UI

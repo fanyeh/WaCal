@@ -10,9 +10,13 @@
 #import "CalendarStore.h"
 #import <EventKit/EventKit.h>
 #import "SwitchCell.h"
+#import <Dropbox/Dropbox.h>
+#import "FacebookModel.h"
 
 @interface SettingViewController ()
-
+{
+    NSArray *social;
+}
 @end
 
 @implementation SettingViewController
@@ -37,6 +41,12 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     [self.tableView registerClass:[SwitchCell class] forCellReuseIdentifier:@"SwitchCell"];
+    social = @[@"Facebook",@"Dropbox"];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:YES];
+    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning
@@ -50,7 +60,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -58,6 +68,8 @@
     // Return the number of rows in the section.
     if (section==0)
         return [[[CalendarStore sharedStore]allCalendars]count];
+    else if (section==2)
+        return [social count];
     else
         return 1;
 }
@@ -84,7 +96,7 @@
         cell.textLabel.text = calendar.title;
         return cell;
     }
-    else {
+    else if (indexPath.section== 1) {
         static NSString *CellIdentifier = @"SwitchCell";
         SwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
@@ -92,8 +104,30 @@
         }
 
         cell.textLabel.text =@"Face Detection";
-        cell.cellSwitch.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"FaceDetection"];
+        [cell.cellSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"FaceDetection"]];
         [cell.cellSwitch addTarget:self action:@selector(disableFaceDetection:) forControlEvents:UIControlEventValueChanged];
+        return cell;
+    }
+    else {
+        static NSString *CellIdentifier = @"SwitchCell";
+        SwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[SwitchCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        }
+        
+        cell.textLabel.text = [social objectAtIndex:indexPath.row];
+        cell.cellSwitch.tag = indexPath.row;
+        [cell.cellSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:[social objectAtIndex:indexPath.row]]];
+        switch (indexPath.row) {
+            case 0:
+                [cell.cellSwitch addTarget:self action:@selector(facebookConnection:) forControlEvents:UIControlEventValueChanged];
+                break;
+            case 1:
+                [cell.cellSwitch addTarget:self action:@selector(dropboxConnection:) forControlEvents:UIControlEventValueChanged];
+                break;
+            default:
+                break;
+        }
         return cell;
     }
 }
@@ -107,9 +141,26 @@
         NSLog(@"Switch off");
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"FaceDetection"];
     }
-    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+- (void)facebookConnection:(UISwitch *)sender
+{
+    [[FacebookModel shareModel] startFacebookSession];
+}
+
+- (void)dropboxConnection:(UISwitch *)sender
+{
+    NSString *key = [social objectAtIndex:sender.tag];
+
+    if (sender.on) {
+        NSLog(@"connection on");
+        [[DBAccountManager sharedManager] linkFromController:self];
+     } else {
+        NSLog(@"connection off");
+         [[[DBAccountManager sharedManager]linkedAccount]unlink];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:key];
+    }
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

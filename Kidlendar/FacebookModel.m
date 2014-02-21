@@ -9,22 +9,32 @@
 #import <FacebookSDK/FacebookSDK.h>
 #import "FacebookModel.h"
 #import "KidlendarAppDelegate.h"
-
-typedef NS_ENUM(NSInteger, PermissionType)
-{
-    kPermissionTypeRead,
-    kPermissionTypePublish
-};
-
-typedef NS_ENUM(NSInteger, ActionType)
-{
-    kActionTypeShareLink,
-    kActionTypeSharePhoto,
-    kActionTypeFriendsBirthday
-};
-
+#import "DiaryData.h"
 
 @implementation FacebookModel
+
++ (FacebookModel *)shareModel
+{
+    static FacebookModel *shareModel = nil;
+    if(!shareModel)
+        shareModel = [[super allocWithZone:nil] init];
+    
+    return shareModel;
+}
+
++ (id)allocWithZone:(NSZone *)zone
+{
+    return [self shareModel];
+}
+
+- (id)init
+{
+    self = [super init];
+    if(self) {
+        
+    }
+    return self;
+}
 
 - (void)startFacebookSession
 {
@@ -59,7 +69,7 @@ typedef NS_ENUM(NSInteger, ActionType)
 
 
 
-- (void)ShareLinkWithAPICalls:(NSArray *)permissionsNeeded action:(ActionType)actionType requestPermissionType:(PermissionType)permissionType
+- (void)ShareWithAPICalls:(NSArray *)permissionsNeeded action:(ActionType)actionType requestPermissionType:(PermissionType)permissionType
 {
     // Request the permissions the user currently has
     [FBRequestConnection startWithGraphPath:@"/me/permissions"
@@ -86,6 +96,7 @@ typedef NS_ENUM(NSInteger, ActionType)
                                                                               completionHandler:^(FBSession *session, NSError *error) {
                                                                                   if (!error) {
                                                                                       // Permission granted, we can request the user information
+                                                                                      [self executeAction:actionType];
                                                                                   }
                                                                                   else {
                                                                                       // An error occurred, handle the error
@@ -100,7 +111,7 @@ typedef NS_ENUM(NSInteger, ActionType)
                                                                             completionHandler:^(FBSession *session, NSError *error) {
                                                                                 if (!error) {
                                                                                     // Permission granted, we can request the user information
-                                                                                    
+                                                                                    [self executeAction:actionType];
                                                                                 }
                                                                                 else {
                                                                                     // An error occurred, handle the error
@@ -114,20 +125,7 @@ typedef NS_ENUM(NSInteger, ActionType)
                                   }
                                   else {
                                       // Permissions are present, we can request the user information
-                                      switch (actionType) {
-                                          case kActionTypeShareLink:
-                                              [self shareLink];
-                                              break;
-                                          case kActionTypeSharePhoto:
-                                              [self sharePhoto];
-                                              break;
-                                          case kActionTypeFriendsBirthday:
-                                              [self getFriendBirthday];
-                                              break;
-                                              
-                                          default:
-                                              break;
-                                      }
+                                      [self executeAction:actionType];
                                   }
                               }
                               else {
@@ -136,6 +134,24 @@ typedef NS_ENUM(NSInteger, ActionType)
                                   NSLog(@"%@", error.description);
                               }
                           }];
+}
+
+- (void)executeAction:(ActionType)type
+{
+    switch (type) {
+        case kActionTypeShareLink:
+            [self shareLink];
+            break;
+        case kActionTypeSharePhoto:
+            [self sharePhoto];
+            break;
+        case kActionTypeFriendsBirthday:
+            [self getFriendBirthday];
+            break;
+            
+        default:
+            break;
+    }
 }
 
 - (void)shareLink {
@@ -171,10 +187,7 @@ typedef NS_ENUM(NSInteger, ActionType)
 
 - (void)sharePhoto
 {
-    // Photo to share
-    NSData* imageData = UIImageJPEGRepresentation(_shareIamge, 90);
-    
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:_shareText, @"message",imageData, @"picture", nil];
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:_diaryData.diaryText, @"message",_diaryData.diaryImageData, @"picture", nil];
     
     [FBRequestConnection startWithGraphPath:@"me/photos"
                                  parameters:params
