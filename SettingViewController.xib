@@ -21,5 +21,9 @@
                 <outlet property="delegate" destination="-1" id="7"/>
             </connections>
         </tableView>
+        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="5QR-nx-bUw">
+            <rect key="frame" x="0.0" y="0.0" width="51" height="31"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+        </switch>
     </objects>
 </document>

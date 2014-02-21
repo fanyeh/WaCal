@@ -44,7 +44,6 @@
     UITableView *photoAlbumTable;
     
     UIActivityIndicatorView *faceDetectingActivity;
-    BOOL faceDetectionEnabled;
 }
 
 @end
@@ -131,8 +130,6 @@
     faceDetectingActivity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     faceDetectingActivity.frame = self.view.frame;
     [self.view addSubview:faceDetectingActivity];
-    
-    faceDetectionEnabled = YES;
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -186,7 +183,7 @@
         
         UIImage *cellImage;
         
-        if (faceDetectionEnabled)
+        if ([[NSUserDefaults standardUserDefaults]boolForKey:@"FaceDetection"])
             cellImage = [resizeImage cropWithFaceDetect:size];
         else
             cellImage = [resizeImage cropWithoutFaceOutDetect:size];
@@ -205,7 +202,7 @@
     
     UIImage *cellImage;
     
-    if (faceDetectionEnabled)
+    if ([[NSUserDefaults standardUserDefaults]boolForKey:@"FaceDetection"])
         cellImage = [fullScreenImage cropWithFaceDetect:size];
     else
         cellImage = [fullScreenImage cropWithoutFaceOutDetect:size];
@@ -622,7 +619,6 @@
         UINavigationBar *navBar = [[UINavigationBar alloc]initWithFrame:headerView.frame];
         UINavigationItem *navItem = [[UINavigationItem alloc]initWithTitle:assetGroupPropertyName];
         navItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(showTable)];
-        navItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(disableFaceDetection)];
         [navBar setItems:@[navItem]];
         [headerView addSubview:navBar];
         return headerView;
@@ -639,20 +635,6 @@
     photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, 320, 0);
 }
 
-- (void)disableFaceDetection
-{
-    if (faceDetectionEnabled) {
-        faceDetectionEnabled = NO;
-        NSLog(@"face detection disabled");
-
-    }
-    else {
-        faceDetectionEnabled = YES;
-        NSLog(@"face detection enabled");
-
-
-    }
-}
 
 #pragma mark - UITableViewDataSource
 

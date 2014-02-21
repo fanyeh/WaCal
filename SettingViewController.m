@@ -9,6 +9,7 @@
 #import "SettingViewController.h"
 #import "CalendarStore.h"
 #import <EventKit/EventKit.h>
+#import "SwitchCell.h"
 
 @interface SettingViewController ()
 
@@ -34,6 +35,8 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    [self.tableView registerClass:[SwitchCell class] forCellReuseIdentifier:@"SwitchCell"];
 }
 
 - (void)didReceiveMemoryWarning
@@ -47,35 +50,66 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [[[CalendarStore sharedStore]allCalendars]count];
+    if (section==0)
+        return [[[CalendarStore sharedStore]allCalendars]count];
+    else
+        return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
-    }
+    if (indexPath.section == 0) {
+
+        static NSString *CellIdentifier = @"Cell";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
+        }
     
-    // Configure the cell...
-    NSArray *allCalendars = [[CalendarStore sharedStore]allCalendars];
-    EKCalendar *calendar = allCalendars[indexPath.row];
-    if (calendar == [[CalendarStore sharedStore]calendar]){
-        cell.detailTextLabel.text = @"This is current calendar";
-    } else {
-        cell.detailTextLabel.text = nil;
+        // Configure the cell...
+           NSArray *allCalendars = [[CalendarStore sharedStore]allCalendars];
+        EKCalendar *calendar = allCalendars[indexPath.row];
+        if (calendar == [[CalendarStore sharedStore]calendar]){
+            cell.detailTextLabel.text = @"This is current calendar";
+        } else {
+            cell.detailTextLabel.text = nil;
+        }
+        
+        cell.textLabel.text = calendar.title;
+        return cell;
     }
-    
-    cell.textLabel.text = calendar.title;
-    return cell;
+    else {
+        static NSString *CellIdentifier = @"SwitchCell";
+        SwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[SwitchCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        }
+
+        cell.textLabel.text =@"Face Detection";
+        cell.cellSwitch.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"FaceDetection"];
+        [cell.cellSwitch addTarget:self action:@selector(disableFaceDetection:) forControlEvents:UIControlEventValueChanged];
+        return cell;
+    }
 }
+
+- (void)disableFaceDetection:(UISwitch *)sender
+{
+    if (sender.on) {
+        NSLog(@"Switch on");
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"FaceDetection"];
+    } else {
+        NSLog(@"Switch off");
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"FaceDetection"];
+    }
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

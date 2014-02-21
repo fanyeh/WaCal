@@ -13,7 +13,7 @@
 @class DBDatastore;
 
 typedef void (^LinkHandler)(BOOL linked);
-typedef void (^ListAllCloudDiarys)(NSMutableArray *diarysFromCloud);
+typedef void (^ListAllCloudDiarys)(NSMutableDictionary *diarysFromCloud);
 typedef void (^DownloadBlock)(NSData *imageData);
 
 @interface DropboxModel : NSObject
@@ -30,9 +30,5 @@ typedef void (^DownloadBlock)(NSData *imageData);
 - (void)listAllCloudDiarys:(ListAllCloudDiarys)completeDownloadList;
 - (void)listUndownloadDiary:(ListAllCloudDiarys)completeDownloadList;
 - (void)downloadDiaryFromFilesystem:(NSString *)key complete:(DownloadBlock)downloadComplete;
-
-
-- (void)createDiaryRecord:(NSString *)key diaryText:(NSString *)text;
-
 
 @end

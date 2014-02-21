@@ -46,6 +46,7 @@
 		4C5BA25D1861745D00528843 /* 929-film-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BA25C1861745D00528843 /* 929-film-1.png */; };
 		4C5C8FFC18A8730100B40F7E /* DiaryEntryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5C8FFA18A8730100B40F7E /* DiaryEntryViewController.m */; };
 		4C5C8FFD18A8730100B40F7E /* DiaryEntryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C5C8FFB18A8730100B40F7E /* DiaryEntryViewController.xib */; };
+		4C67BAD718B6FBC300452539 /* SwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C67BAD618B6FBC300452539 /* SwitchCell.m */; };
 		4C6C49C0186DDB680042EB61 /* DiaryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C49BF186DDB680042EB61 /* DiaryTableViewController.m */; };
 		4C6C49C4186DDDDF0042EB61 /* DiaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C49C2186DDDDF0042EB61 /* DiaryViewController.m */; };
 		4C6C49C5186DDDDF0042EB61 /* DiaryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C6C49C3186DDDDF0042EB61 /* DiaryViewController.xib */; };
@@ -180,6 +181,8 @@
 		4C5C8FF918A8730100B40F7E /* DiaryEntryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryEntryViewController.h; sourceTree = "<group>"; };
 		4C5C8FFA18A8730100B40F7E /* DiaryEntryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryEntryViewController.m; sourceTree = "<group>"; };
 		4C5C8FFB18A8730100B40F7E /* DiaryEntryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiaryEntryViewController.xib; sourceTree = "<group>"; };
+		4C67BAD518B6FBC300452539 /* SwitchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwitchCell.h; sourceTree = "<group>"; };
+		4C67BAD618B6FBC300452539 /* SwitchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwitchCell.m; sourceTree = "<group>"; };
 		4C6C49BE186DDB680042EB61 /* DiaryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryTableViewController.h; sourceTree = "<group>"; };
 		4C6C49BF186DDB680042EB61 /* DiaryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryTableViewController.m; sourceTree = "<group>"; };
 		4C6C49C1186DDDDF0042EB61 /* DiaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryViewController.h; sourceTree = "<group>"; };
@@ -452,6 +455,8 @@
 				4CB3BD2918A330D80006AFD4 /* SettingViewController.h */,
 				4CB3BD2A18A330D80006AFD4 /* SettingViewController.m */,
 				4CB3BD2B18A330D80006AFD4 /* SettingViewController.xib */,
+				4C67BAD518B6FBC300452539 /* SwitchCell.h */,
+				4C67BAD618B6FBC300452539 /* SwitchCell.m */,
 			);
 			name = Setting;
 			sourceTree = "<group>";
@@ -724,6 +729,7 @@
 				4C86E933188F973800137B6A /* AlarmViewController.m in Sources */,
 				4C417E7618714A4C000878FC /* DiaryDataStore.m in Sources */,
 				4C9214CB185AAA29009A3090 /* DateView.m in Sources */,
+				4C67BAD718B6FBC300452539 /* SwitchCell.m in Sources */,
 				4CF592C9186D3B4700F1BEEB /* EventCreateViewController.m in Sources */,
 				4CFB086F187E6BFB00456D5D /* MonthModel.m in Sources */,
 				4CA2506F1869517400AEA94E /* DiaryPhotoCell.m in Sources */,

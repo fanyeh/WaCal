@@ -29,15 +29,19 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
 
-//    // Dropbox
-//    DBSession* dbSession = [[DBSession alloc]initWithAppKey:@"rb186yqaya1ijp8"
-//                                                   appSecret:@"3eibrlmh4x2keim"
-//                                                       root:kDBRootAppFolder]; // either kDBRootAppFolder or kDBRootDropbox
-//    
-//    [DBSession setSharedSession:dbSession];
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"])
+    {
+        // app already launched
+    }
+    else
+    {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"FaceDetection"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        // This is the first launch ever
+    }
     
-    DBAccountManager *accountManager =
-    [[DBAccountManager alloc] initWithAppKey:@"hsvuk547mb46ady" secret:@"z0bw1iew9vssq6r"];
+    DBAccountManager *accountManager = [[DBAccountManager alloc] initWithAppKey:@"hsvuk547mb46ady" secret:@"z0bw1iew9vssq6r"];
     [DBAccountManager setSharedManager:accountManager];
     
     // Init Calendar store

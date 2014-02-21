@@ -20,7 +20,8 @@
 {
     UITableView *cloudTable;
     UITableView *localTable;
-    NSMutableArray *cloudDiarys;
+    NSMutableDictionary *cloudDiarys;
+    BOOL currentTableIsLocal;
 }
 @end
 
@@ -56,94 +57,64 @@
     
     
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
-    self.tableView.tag = 0;
-    localTable = self.tableView;
+
+    cloudDiarys = [[NSMutableDictionary alloc]init];
     
-    cloudTable = [[UITableView alloc]initWithFrame:self.tableView.frame];
-    cloudTable.contentInset = UIEdgeInsetsMake(44, 0, 0, 0);
-    cloudTable.dataSource = self;
-    cloudTable.delegate = self;
-    cloudTable.tag = 1;
-    [cloudTable registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
-    
-    cloudDiarys = [[NSMutableArray alloc]init];
-    
-    [[DBAccountManager sharedManager] addObserver:self
-                                            block:^(DBAccount *account) {
-                                                //
-                                                if (account.isLinked) {
-                                                    
-                                                    NSLog(@"Account linked from website");
-                                                    [[DropboxModel shareModel] setupFileSystemAndStore:^(BOOL linked) {
-                                                        if (linked) {
-                                                            [[DBFilesystem sharedFilesystem] addObserver:self block:^{
-                                                                //            DBSyncStatusDownloading	At least 1 file is currently downloading
-                                                                //            DBSyncStatusUploading	At least 1 file is currently uploading
-                                                                //            DBSyncStatusSyncing	Dropbox is currently sending new file information
-                                                                //            DBSyncStatusActive	The Sync API is actively monitoring for changes from Dropbox. This will be true when there are pending uploads or downloads, when DBFiles are open, or when path observers are registered.
-                                                                NSLog(@"File system status change %ld",[DBFilesystem sharedFilesystem].status);
-                                                            }];
-                                                            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                                                                [[DropboxModel shareModel] listAllCloudDiarys:^(NSMutableArray *diarysFromCloud) {
-                                                                    cloudDiarys = diarysFromCloud;
-                                                                    NSLog(@"Cloud diarys %@",cloudDiarys);
-                                                                    [cloudTable reloadData];
-                                                                }];
-                                                                
-                                                            });
-                                                        }
-                                                    }];
-                                                }
-                                                    
-                                            }];
-    
-    [[DropboxModel shareModel] linkToDropBox:^(BOOL linked) {
-        if (linked) {
-            
-            [[[DropboxModel shareModel]dataStore] addObserver:self block:^{
-                NSLog(@"DS status %ld", [[DropboxModel shareModel]dataStore].status);
-            }];
-            
-            [[DBFilesystem sharedFilesystem] addObserver:self block:^{
-                NSLog(@"File system status change %ld",[DBFilesystem sharedFilesystem].status);
-            }];
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                //            [[DropboxModel shareModel] listUndownloadDiary:^(NSMutableArray *diarysFromCloud) {
-                //                cloudDiarys = diarysFromCloud;
-                //                NSLog(@"Cloud diarys %@",cloudDiarys);
-                //                [cloudTable reloadData];
-                //            }];
-                
-                [[DropboxModel shareModel] listAllCloudDiarys:^(NSMutableArray *diarysFromCloud) {
-                    cloudDiarys = diarysFromCloud;
-                    NSLog(@"Cloud diarys %@",cloudDiarys);
-                    [cloudTable reloadData];
-                }];
-                
-            });
-        }
-        
-    } fromController:self];
-    
+    // Current table
+    currentTableIsLocal = YES;
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshCloud:) name:@"uploadComplete" object:nil];
 }
 
 - (void)refreshCloud:(NSNotification *)notification
 {
-    [[DropboxModel shareModel] listAllCloudDiarys:^(NSMutableArray *diarysFromCloud) {
+    [[DropboxModel shareModel] listAllCloudDiarys:^(NSMutableDictionary *diarysFromCloud) {
         cloudDiarys = diarysFromCloud;
         NSLog(@"Cloud diarys %@",cloudDiarys);
-        [cloudTable reloadData];
+        [self.tableView reloadData];
     }];
+}
+
+- (void)fetchFromCloud
+{
+    [[DropboxModel shareModel] linkToDropBox:^(BOOL linked) {
+        if (linked) {
+            
+            [[DBFilesystem sharedFilesystem] addObserver:self block:^{
+                NSLog(@"File system status change %ld",(unsigned long)[DBFilesystem sharedFilesystem].status);
+            }];
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                            [[DropboxModel shareModel] listUndownloadDiary:^(NSMutableDictionary *diarysFromCloud) {
+                                cloudDiarys = diarysFromCloud;
+                                [self.tableView reloadData];
+                            }];
+            });
+        }
+        
+    } fromController:self];
+
+}
+
+- (void)listUndownloadDairy
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [[DropboxModel shareModel] listUndownloadDiary:^(NSMutableDictionary *diarysFromCloud) {
+            cloudDiarys = diarysFromCloud;
+            [self.tableView reloadData];
+        }];
+    });
 }
 
 - (void)segmentControlAction:(UISegmentedControl *)sender
 {
     if (sender.selectedSegmentIndex == 0) {
-        self.tableView = localTable;
+//        self.tableView = localTable;
+        currentTableIsLocal = YES;
     } else {
-        self.tableView = cloudTable;
+//        self.tableView = cloudTable;
+        currentTableIsLocal = NO;
+        [self fetchFromCloud];
     }
 }
 
@@ -169,10 +140,9 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    if (tableView.tag == 0)
+    if (currentTableIsLocal)
         return [[[DiaryDataStore sharedStore]allItems]count];
     else {
-        NSLog(@"Cloud diary count %ld",[cloudDiarys count]);
         return [cloudDiarys count];
     }
 }
@@ -184,7 +154,7 @@
     if (!cell)
         cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
     
-    if (tableView.tag == 0) {
+    if (currentTableIsLocal) {
         // Configure the cell...
         DiaryData *d = [DiaryDataStore sharedStore].allItems[indexPath.row];
         cell.imageView.image = d.thumbnail;
@@ -193,9 +163,10 @@
         if (d.cloudRelationship.dropbox)
             cell.detailTextLabel.text = @"Dropbox Synced";
         return cell;
+        
     } else {
         // Configure the cell...
-        TempDiaryData *t = [cloudDiarys objectAtIndex:indexPath.row];
+        TempDiaryData *t = [[cloudDiarys allValues] objectAtIndex:indexPath.row];
         cell.imageView.image = t.thumbnail;
         cell.textLabel.text = t.diaryText;
         return cell;
@@ -205,7 +176,7 @@
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (tableView.tag == 0) {
+    if (currentTableIsLocal) {
         if (editingStyle == UITableViewCellEditingStyleDelete) {
             // Delete the row from the data source
             DiaryData *d = [[[DiaryDataStore sharedStore]allItems]objectAtIndex:[indexPath row]];
@@ -223,14 +194,14 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (tableView.tag == 0) {
+    if (currentTableIsLocal) {
         DiaryViewController *controller = [[DiaryViewController alloc]init];
         controller.diaryData = [[DiaryDataStore sharedStore]allItems][indexPath.row];
         [self.navigationController pushViewController:controller animated:NO];
     } else {
         // Download from cloud
         // Get tempdata
-        TempDiaryData *t = [cloudDiarys objectAtIndex:indexPath.row];
+        TempDiaryData *t = [[cloudDiarys allValues] objectAtIndex:indexPath.row];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [[DropboxModel shareModel] downloadDiaryFromFilesystem:t.diaryKey complete:^(NSData *imageData) {
                 UIImage *diaryImage = [UIImage imageWithData:imageData];
@@ -240,6 +211,7 @@
                 [d setDiaryImageDataFromImage:diaryImage];
                 [[DiaryDataStore sharedStore]saveChanges];
                 
+                [self listUndownloadDairy];
                 [localTable reloadData];
                 NSLog(@"Download completed");
             }];
