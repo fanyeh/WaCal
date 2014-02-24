@@ -47,6 +47,7 @@
 		4C5C8FFC18A8730100B40F7E /* DiaryEntryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5C8FFA18A8730100B40F7E /* DiaryEntryViewController.m */; };
 		4C5C8FFD18A8730100B40F7E /* DiaryEntryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C5C8FFB18A8730100B40F7E /* DiaryEntryViewController.xib */; };
 		4C67BAD718B6FBC300452539 /* SwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C67BAD618B6FBC300452539 /* SwitchCell.m */; };
+		4C68364B18BAE4B200FAA259 /* AlbumPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C68364A18BAE4B200FAA259 /* AlbumPhotoCell.m */; };
 		4C6C49C0186DDB680042EB61 /* DiaryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C49BF186DDB680042EB61 /* DiaryTableViewController.m */; };
 		4C6C49C4186DDDDF0042EB61 /* DiaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C49C2186DDDDF0042EB61 /* DiaryViewController.m */; };
 		4C6C49C5186DDDDF0042EB61 /* DiaryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C6C49C3186DDDDF0042EB61 /* DiaryViewController.xib */; };
@@ -60,6 +61,8 @@
 		4C91918718AF3A4900ED4695 /* ImageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C91918618AF3A4900ED4695 /* ImageStore.m */; };
 		4C9214CB185AAA29009A3090 /* DateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9214CA185AAA29009A3090 /* DateView.m */; };
 		4C92155A185AD39E009A3090 /* MonthCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C921559185AD39E009A3090 /* MonthCalendarView.m */; };
+		4CA0368C18B7A12100015184 /* DiaryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0368B18B7A12100015184 /* DiaryTableViewCell.m */; };
+		4CA0369018B7A29F00015184 /* DiaryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CA0368F18B7A29F00015184 /* DiaryTableViewCell.xib */; };
 		4CA2506C1869377000AEA94E /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA2506B1869377000AEA94E /* UIImage+Resize.m */; };
 		4CA2506F1869517400AEA94E /* DiaryPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA2506E1869517400AEA94E /* DiaryPhotoCell.m */; };
 		4CA888331896478C00FAA799 /* DiaryVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA888311896478C00FAA799 /* DiaryVideoViewController.m */; };
@@ -183,6 +186,8 @@
 		4C5C8FFB18A8730100B40F7E /* DiaryEntryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiaryEntryViewController.xib; sourceTree = "<group>"; };
 		4C67BAD518B6FBC300452539 /* SwitchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwitchCell.h; sourceTree = "<group>"; };
 		4C67BAD618B6FBC300452539 /* SwitchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwitchCell.m; sourceTree = "<group>"; };
+		4C68364918BAE4B200FAA259 /* AlbumPhotoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumPhotoCell.h; sourceTree = "<group>"; };
+		4C68364A18BAE4B200FAA259 /* AlbumPhotoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumPhotoCell.m; sourceTree = "<group>"; };
 		4C6C49BE186DDB680042EB61 /* DiaryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryTableViewController.h; sourceTree = "<group>"; };
 		4C6C49BF186DDB680042EB61 /* DiaryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryTableViewController.m; sourceTree = "<group>"; };
 		4C6C49C1186DDDDF0042EB61 /* DiaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryViewController.h; sourceTree = "<group>"; };
@@ -206,6 +211,9 @@
 		4C9214CA185AAA29009A3090 /* DateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateView.m; sourceTree = "<group>"; };
 		4C921558185AD39E009A3090 /* MonthCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthCalendarView.h; sourceTree = "<group>"; };
 		4C921559185AD39E009A3090 /* MonthCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonthCalendarView.m; sourceTree = "<group>"; };
+		4CA0368A18B7A12100015184 /* DiaryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryTableViewCell.h; sourceTree = "<group>"; };
+		4CA0368B18B7A12100015184 /* DiaryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryTableViewCell.m; sourceTree = "<group>"; };
+		4CA0368F18B7A29F00015184 /* DiaryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiaryTableViewCell.xib; sourceTree = "<group>"; };
 		4CA2506A1869377000AEA94E /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
 		4CA2506B1869377000AEA94E /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resize.m"; sourceTree = "<group>"; };
 		4CA2506D1869517400AEA94E /* DiaryPhotoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryPhotoCell.h; sourceTree = "<group>"; };
@@ -358,12 +366,17 @@
 			children = (
 				4C5B01F318ACBD7E0030FCCC /* DiaryCreateViewController.h */,
 				4C5B01F418ACBD7E0030FCCC /* DiaryCreateViewController.m */,
+				4C68364918BAE4B200FAA259 /* AlbumPhotoCell.h */,
+				4C68364A18BAE4B200FAA259 /* AlbumPhotoCell.m */,
 				4C5B01F518ACBD7E0030FCCC /* DiaryCreateViewController.xib */,
 				4CA888301896478C00FAA799 /* DiaryVideoViewController.h */,
 				4CA888311896478C00FAA799 /* DiaryVideoViewController.m */,
 				4CA888321896478C00FAA799 /* DiaryVideoViewController.xib */,
 				4C6C49BE186DDB680042EB61 /* DiaryTableViewController.h */,
 				4C6C49BF186DDB680042EB61 /* DiaryTableViewController.m */,
+				4CA0368A18B7A12100015184 /* DiaryTableViewCell.h */,
+				4CA0368B18B7A12100015184 /* DiaryTableViewCell.m */,
+				4CA0368F18B7A29F00015184 /* DiaryTableViewCell.xib */,
 				4C5C8FF918A8730100B40F7E /* DiaryEntryViewController.h */,
 				4C5C8FFA18A8730100B40F7E /* DiaryEntryViewController.m */,
 				4C5C8FFB18A8730100B40F7E /* DiaryEntryViewController.xib */,
@@ -696,6 +709,7 @@
 				4C86E939188F977F00137B6A /* RecurrenceViewController.xib in Resources */,
 				4C86E934188F973800137B6A /* AlarmViewController.xib in Resources */,
 				4CFFD58A1897800A0070C33C /* lookup_amatorka.png in Resources */,
+				4CA0369018B7A29F00015184 /* DiaryTableViewCell.xib in Resources */,
 				4C5B01F718ACBD7F0030FCCC /* DiaryCreateViewController.xib in Resources */,
 				4CB27D57188ED88800F34E7A /* IMG_1725.jpg in Resources */,
 				4CB3DD8618521DC400673478 /* InfoPlist.strings in Resources */,
@@ -723,6 +737,7 @@
 				4C86E92A188F91D700137B6A /* EventLocationViewController.m in Sources */,
 				4CB3DD8818521DC400673478 /* main.m in Sources */,
 				4CFB086C187E696A00456D5D /* DateModel.m in Sources */,
+				4CA0368C18B7A12100015184 /* DiaryTableViewCell.m in Sources */,
 				4C23963E18B3304100BB87E7 /* DropboxModel.m in Sources */,
 				4CEEB9F818B4656100C7FA80 /* DiaryData.m in Sources */,
 				4C5C8FFC18A8730100B40F7E /* DiaryEntryViewController.m in Sources */,
@@ -737,6 +752,7 @@
 				4CA888331896478C00FAA799 /* DiaryVideoViewController.m in Sources */,
 				4C50B73418B19DE50065434A /* LocationDataStore.m in Sources */,
 				4C88B387188E56E100F4F47E /* DiaryCell.m in Sources */,
+				4C68364B18BAE4B200FAA259 /* AlbumPhotoCell.m in Sources */,
 				4C2E83BD1890BB450051215F /* CalendarStore.m in Sources */,
 				4C2FEC101889697600D37F18 /* EventViewController.m in Sources */,
 				4C6C49C4186DDDDF0042EB61 /* DiaryViewController.m in Sources */,

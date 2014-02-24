@@ -21,6 +21,7 @@ CGRect monthViewFrame;
 CGFloat calendarWidth;
 CGFloat calendarHeight;
 CGFloat weekdayViewHeight;
+CGRect shrinkFrame;
 
 
 - (id)initWithFrame:(CGRect)frame
@@ -39,13 +40,14 @@ CGFloat weekdayViewHeight;
     _monthModel = monthModel;
     CGFloat xOffSet = 0.0f;
     CGFloat yOffSet = 0.0f;
-    calendarWidth = 320;
-    calendarHeight = 250;
+    calendarWidth = self.frame.size.width;
+    calendarHeight = self.frame.size.height - weekdayViewHeight;
     
     dateViewWidth = calendarWidth/7;
-    dateViewHeight = calendarHeight/6;
+    dateViewHeight = calendarHeight/7;
     weekdayViewHeight = 20;
-    NSArray *weekDay = @[@"M",@"T",@"W",@"T",@"F",@"S",@"S"];
+    
+    NSArray *weekDay = @[@"Mon",@"Tue",@"Wed",@"Thu",@"Fri",@"Sat",@"Sun"];
     
     // Set weekdays
     for (int i=1;i<8;i++) {
@@ -59,7 +61,7 @@ CGFloat weekdayViewHeight;
         dateView.row = -1;
     }
     monthViewFrame = self.frame;
-    
+    shrinkFrame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, weekdayViewHeight + dateViewHeight);
     // Init date labels
     [self setupCalendar:_monthModel];
 }
@@ -68,6 +70,7 @@ CGFloat weekdayViewHeight;
 {
     [self removeCalendarView];
     _monthModel = monthModel;
+    self.frame = monthViewFrame;
     // Define x , y offset for date view
     CGFloat xOffSet = 0;
     CGFloat yOffSet = weekdayViewHeight;
@@ -127,10 +130,9 @@ CGFloat weekdayViewHeight;
     }
 }
 
-- (CGRect)shrinkCalendarWithRow:(int)row
+- (void)shrinkCalendarWithRow:(int)row
 {
     // Expand the calendar based on select row
-    CGFloat viewHeight = self.frame.size.height - dateViewHeight*2+5;
     for (DateView *view in self.subviews) {
         if (view.row != row && view.row > -1) {
             [view removeFromSuperview];
@@ -141,8 +143,7 @@ CGFloat weekdayViewHeight;
             view.frame = expandPosition;
         }
     }
-    CGRect detailViewFrame = CGRectMake(0, dateViewHeight*2+5, calendarWidth, viewHeight);
-    return detailViewFrame;
+    self.frame = shrinkFrame;
 }
 
 - (void)setAppearanceOnSelectDate:(NSDate *)date

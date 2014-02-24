@@ -40,7 +40,7 @@
 -(void)addHasEventView
 {
     UIView *hasEventView = [[UIView alloc]initWithFrame:CGRectMake(_dateLabel.center.x -self.frame.size.width/7-2,
-                                                                   _dateLabel.frame.size.height+2,
+                                                                   _dateLabel.frame.size.height+1,
                                                                    self.frame.size.width/7,
                                                                    self.frame.size.width/7)];
     
@@ -55,7 +55,7 @@
 -(void)addHasDiaryView
 {
     UIView *hasDiaryView = [[UIView alloc]initWithFrame:CGRectMake(_dateLabel.center.x +2,
-                                                                   _dateLabel.frame.size.height+2,
+                                                                   _dateLabel.frame.size.height+1,
                                                                    self.frame.size.width/7,
                                                                    self.frame.size.width/7)];
     

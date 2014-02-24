@@ -16,7 +16,7 @@
 @property MonthModel *monthModel;
 
 - (void)removeCalendarView;
-- (CGRect)shrinkCalendarWithRow:(int)row;
+- (void)shrinkCalendarWithRow:(int)row;
 - (void)initCalendar:(MonthModel *)monthModel;
 - (void)setupCalendar:(MonthModel *)monthModel;
 - (void)setAppearanceOnSelectDate:(NSDate *)date;

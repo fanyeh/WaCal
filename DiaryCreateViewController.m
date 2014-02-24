@@ -13,6 +13,11 @@
 #import "DiaryPhotoCell.h"
 #import "DiaryPhotoViewController.h"
 #import "DiaryEntryViewController.h"
+#import "AlbumPhotoCell.h"
+#define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
+#define GrayUIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:0.5]
+
+
 
 @interface DiaryCreateViewController () <UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,filterImageDelegate,UITableViewDataSource,UITableViewDelegate>
 {
@@ -42,6 +47,10 @@
     PhotoLoader *photoLoader;
     CGFloat swipeOffset;
     UITableView *photoAlbumTable;
+    UINavigationItem *navItem ;
+    UINavigationBar *navBar ;
+    
+    BOOL showAlbumTable;
     
     UIActivityIndicatorView *faceDetectingActivity;
 }
@@ -69,9 +78,9 @@
     // Do any additional setup after loading the view from its nib.
     self.automaticallyAdjustsScrollViewInsets = NO;
     // Set up diary photo collection view
-    diaryCollectionViewInset = UIEdgeInsetsMake(5, 0, 5, 0);
-    diaryMinimunCellSpace = 5.0;
-    diaryMinimunLineSpace = 5.0;
+    diaryCollectionViewInset = UIEdgeInsetsMake(2, 2, 2, 2);
+    diaryMinimunCellSpace = 2.0;
+    diaryMinimunLineSpace = 2.0;
 
     UICollectionViewFlowLayout *diaryFlowLayout = [[UICollectionViewFlowLayout alloc]init];
     diaryPhotosView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 44, 320, 320) collectionViewLayout:diaryFlowLayout];
@@ -79,6 +88,7 @@
     diaryPhotosView.dataSource = self;
     diaryPhotosView.tag = 0;
     diaryPhotosView.allowsMultipleSelection = NO;
+    diaryPhotosView.backgroundColor = [UIColor whiteColor];
     [diaryPhotosView registerClass:[DiaryPhotoCell class] forCellWithReuseIdentifier:@"DiaryPhotoCell"];
     selectedPhotoInfo = [[NSMutableDictionary alloc]init];
     fullScreenImageArray = [[NSMutableArray alloc]init];
@@ -87,29 +97,46 @@
     [self.view addSubview:diaryPhotosView];
 
     // Scroll control for photo collection view
-    UIView *scroller = [[UIView alloc]initWithFrame:CGRectMake(0, 364 , 320, 44)];
-    scroller.backgroundColor = [UIColor grayColor];
+    UIView *scroller = [[UIView alloc]initWithFrame:CGRectMake(0, 364 , 320, 54)];
+    scroller.backgroundColor = [UIColor blackColor];
     UISwipeGestureRecognizer *swipGesture = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipePhotoCollection:)];
     swipGesture.direction = UISwipeGestureRecognizerDirectionUp;
     [scroller addGestureRecognizer:swipGesture];
+    swipeOffset = diaryPhotosView.frame.size.height-20;
     [self.view addSubview:scroller];
+    
+    UILabel *scrollerBar = [[UILabel alloc]initWithFrame:CGRectMake(scroller.center.x - 20, 4, 40, 6)];
+    scrollerBar.backgroundColor = [UIColor whiteColor];
+    scrollerBar.layer.cornerRadius = 3;
+    [scroller addSubview:scrollerBar];
+    
+    navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 10 , 320, 44)];
+    navBar.backgroundColor = [UIColor blackColor];
+    navBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+    navItem = [[UINavigationItem alloc]init];
+    navItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"◀︎" style:UIBarButtonItemStyleBordered target:self action:@selector(showTable)];
+    
+    navItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"0/5" style:UIBarButtonItemStyleBordered target:nil action:nil];
+
+    [navBar setItems:@[navItem]];
+    [scroller addSubview:navBar];
 
     // Set up photo album collection view
-    photoCollectionViewInset = UIEdgeInsetsMake(2, 0, 2, 0);
+    photoCollectionViewInset = UIEdgeInsetsMake(2, 2, 2, 2);
     photoMinimunCellSpace = 1;
     photoMinimunLineSpace = 1;
 
     UICollectionViewFlowLayout *photoFlowLayout = [[UICollectionViewFlowLayout alloc]init];
-    photoCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 408, 320, self.view.frame.size.height-44) collectionViewLayout:photoFlowLayout];
+    photoCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 428, 320, self.view.frame.size.height-44) collectionViewLayout:photoFlowLayout];
     photoCollectionView.delegate = self;
     photoCollectionView.dataSource = self;
     photoCollectionView.tag = 1;
+    photoCollectionView.backgroundColor = [UIColor whiteColor];
     photoCollectionView.showsVerticalScrollIndicator = NO;
-    [photoCollectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"Cell"];
+    [photoCollectionView registerClass:[AlbumPhotoCell class] forCellWithReuseIdentifier:@"AlbumPhotoCell"];
     photoCollectionView.allowsMultipleSelection = YES;
-    swipeOffset = diaryPhotosView.frame.size.height;
-    [photoCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView"];
-    photoFlowLayout.headerReferenceSize = CGSizeMake(photoCollectionView.frame.size.width, 44);
+//    [photoCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView"];
+//    photoFlowLayout.headerReferenceSize = CGSizeMake(photoCollectionView.frame.size.width, 44);
     [self.view addSubview:photoCollectionView];
     
     photoAlbumTable = [[UITableView alloc]initWithFrame:CGRectMake(-320, 408,320,self.view.frame.size.height-44) style:UITableViewStyleGrouped];
@@ -118,7 +145,8 @@
     [photoAlbumTable registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
     photoAlbumTable.contentInset = UIEdgeInsetsMake(-1.0f, 0.0f, 0.0f, 0.0);
     [self.view addSubview:photoAlbumTable];
-    
+    showAlbumTable = NO;
+
     scrollToBottom = NO;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupPhotoCollectionView) name:@"loadLibraySourceDone" object:nil];
@@ -148,7 +176,11 @@
         sender.direction = UISwipeGestureRecognizerDirectionDown;
         [UIView animateWithDuration:0.5 animations:^{
             sender.view.frame = CGRectOffset(sender.view.frame, 0, -swipeOffset);
+            if ([cellImageArray count]>0)
+                sender.view.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.60];
             photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, 0, -swipeOffset);
+            photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, 0, -swipeOffset);
+
 
         } completion:^(BOOL finished) {
             //
@@ -159,7 +191,10 @@
         sender.direction = UISwipeGestureRecognizerDirectionUp;
         [UIView animateWithDuration:0.5 animations:^{
             sender.view.frame = CGRectOffset(sender.view.frame, 0, swipeOffset);
+            sender.view.backgroundColor = [UIColor blackColor];
             photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, 0, swipeOffset);
+            photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, 0, swipeOffset);
+
             
         } completion:^(BOOL finished) {
             //
@@ -376,6 +411,8 @@
     NSString *sourceKey = sourceKeys[1];
     assetGroupPropertyName = sourceKey;
     photoAssets = [photoLoader.sourceDictionary objectForKey:sourceKey];
+    navItem.title = assetGroupPropertyName;
+//    navItem.leftBarButtonItem.title = [NSString stringWithFormat:@"◀︎ %@", assetGroupPropertyName];
     [photoCollectionView reloadData];
 }
 
@@ -421,6 +458,10 @@
     // Resize the image
 //    UIImage *resizedImage =  [image resizeImageToSize:CGSizeMake(640, 1136)];
     [fullScreenImageArray addObject:image];
+    navItem.rightBarButtonItem.title = [NSString stringWithFormat:@"%ld/5",[fullScreenImageArray count]];
+    
+    AlbumPhotoCell *cell = (AlbumPhotoCell *)[photoCollectionView cellForItemAtIndexPath:indexPath];
+    cell.selectNumber.text = [NSString stringWithFormat:@"%ld",[fullScreenImageArray count]];
     
     // Perform face detection and setup diary collection view
     [faceDetectingActivity startAnimating];
@@ -458,21 +499,12 @@
         return cell;
         
     } else {
-        static NSString *CellIdentifier = @"Cell";
-        UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
+        static NSString *CellIdentifier = @"AlbumPhotoCell";
+        AlbumPhotoCell *cell = (AlbumPhotoCell *)[collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
         ALAsset *asset =  [photoAssets objectAtIndex:indexPath.row];
         UIImageView *cellPhoto = [[UIImageView alloc]initWithImage:[UIImage imageWithCGImage: asset.thumbnail]];
-        cellPhoto.frame = CGRectMake(2, 2, cell.frame.size.width -4, cell.frame.size.height-4);
+        cellPhoto.frame = cell.contentView.frame;
         [cell.contentView addSubview:cellPhoto];
-        
-        UIView* backgroundView = [[UIView alloc] initWithFrame:cell.bounds];
-        backgroundView.backgroundColor = [UIColor blackColor];
-        cell.backgroundView = backgroundView;
-        
-        UIView* selectedBGView = [[UIView alloc] initWithFrame:cell.bounds];
-        selectedBGView.backgroundColor = [UIColor grayColor];
-        cell.selectedBackgroundView = selectedBGView;
-
         return cell;
     }
 }
@@ -492,7 +524,6 @@
                 
                 // Remove image from resize image array
                 [fullScreenImageArray removeObjectAtIndex:indexPath.row];
-                
                 [collectionView deleteItemsAtIndexPaths:@[indexPath]];
                 
             } completion:^(BOOL finished) {
@@ -516,9 +547,6 @@
     // Photo collection view select
     else {
         [self selectedPhoto:indexPath];
-//        UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
-//        cell.layer.borderColor = [[UIColor blueColor]CGColor];
-//        cell.layer.borderWidth = 3.0f;
     }
 }
 
@@ -526,9 +554,6 @@
 {
     if (collectionView.tag==1) {
         [self removePhotoWithIndexPath:indexPath];
-//        UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
-//        cell.layer.borderColor = nil;
-//        cell.layer.borderWidth = 0.0f;
     }
 }
 
@@ -548,9 +573,17 @@
             // Remove image from resize image array
             NSUInteger index = [selectedPhotoOrderingInfo indexOfObject:imageInfo];
             [fullScreenImageArray removeObjectAtIndex:index];
+            navItem.rightBarButtonItem.title = [NSString stringWithFormat:@"%ld/5",[fullScreenImageArray count]];
 
             // Remove image info from ordering info
             [selectedPhotoOrderingInfo removeObject:imageInfo];
+            
+            
+            for (int i = 0; i < [selectedPhotoOrderingInfo count] ; i++) {
+                NSArray *n = [selectedPhotoOrderingInfo objectAtIndex:i];
+                AlbumPhotoCell *cell = (AlbumPhotoCell *)[photoCollectionView cellForItemAtIndexPath:n[0]];
+                cell.selectNumber.text = [NSString stringWithFormat:@"%d",i+1];
+            }
             
             [self processFaceDetection];
             break;
@@ -610,29 +643,37 @@
         return photoMinimunCellSpace;
 }
 
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
-{
-    UICollectionReusableView *reusableview = nil;
-    if (kind ==UICollectionElementKindSectionHeader && collectionView.tag == 1) {
-        UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView" forIndexPath:indexPath];
-        //headerView.backgroundColor = [UIColor redColor];
-        UINavigationBar *navBar = [[UINavigationBar alloc]initWithFrame:headerView.frame];
-        UINavigationItem *navItem = [[UINavigationItem alloc]initWithTitle:assetGroupPropertyName];
-        navItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(showTable)];
-        [navBar setItems:@[navItem]];
-        [headerView addSubview:navBar];
-        return headerView;
-    }
-    return reusableview;
-}
+//- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+//{
+//    UICollectionReusableView *reusableview = nil;
+//    if (kind ==UICollectionElementKindSectionHeader && collectionView.tag == 1) {
+//        UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView" forIndexPath:indexPath];
+//
+//        navBar = [[UINavigationBar alloc]initWithFrame:headerView.frame];
+//        navBar.backgroundColor = [UIColor blackColor];
+//        navBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+//        navItem = [[UINavigationItem alloc]initWithTitle:assetGroupPropertyName];
+//        navItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(showTable)];
+//        [navBar setItems:@[navItem]];
+//        [headerView addSubview:navBar];
+//        return headerView;
+//    }
+//    return reusableview;
+//}
 
 - (void)showTable
 {
-    NSLog(@"show table");
     [photoAlbumTable reloadData];
-    photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, 320, 0);
 
-    photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, 320, 0);
+    if (!showAlbumTable) {
+        photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, 320, 0);
+        photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, 320, 0);
+        showAlbumTable = YES;
+    } else {
+        photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, -320, 0);
+        photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, -320, 0);
+        showAlbumTable = NO;
+    }
 }
 
 
@@ -673,10 +714,13 @@
 {
     NSArray *souceKeys = photoLoader.sourceDictionary.allKeys;
     NSString *key = souceKeys[indexPath.row];
+    assetGroupPropertyName = key;
+    navItem.title = assetGroupPropertyName;
     NSMutableArray *photoAlbum = [[photoLoader sourceDictionary] objectForKey:key];
     [self reloadPhotoCollectionView:photoAlbum];
     tableView.frame = CGRectOffset(tableView.frame, -320, 0);
     photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, -320, 0);
+    showAlbumTable = NO;
 
 }
 

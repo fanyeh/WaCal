@@ -429,15 +429,10 @@
 - (void)showEventTable
 {
     [monthModel checkEventForDate:_selectedDate];
-    CGRect detailViewFrame = [_monthView shrinkCalendarWithRow:[monthModel rowNumberForDate:_selectedDate]];
-    CGSize detailSize = CGSizeMake (detailViewFrame.size.width,detailViewFrame.size.height);
-    CGRect eventDetailViewFrame = CGRectMake(detailViewFrame.origin.x,
-                                             detailViewFrame.origin.y,
-                                             detailSize.width,
-                                             detailSize.height);
-    
+    [_monthView shrinkCalendarWithRow:[monthModel rowNumberForDate:_selectedDate]];
+
     // Opens event and diary details on tap date
-    eventTableView.frame = eventDetailViewFrame;
+    eventTableView.frame = CGRectMake(0, _monthView.frame.origin.y+_monthView.frame.size.height, self.view.frame.size.width, 200);
     [eventTableView reloadData];
 }
 
