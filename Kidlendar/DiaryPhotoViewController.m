@@ -8,12 +8,16 @@
 
 #import "DiaryPhotoViewController.h"
 #import "GPUImage.h"
+#import "FilterCell.h"
+#import "UIImage+Resize.h"
 
-@interface DiaryPhotoViewController () 
+@interface DiaryPhotoViewController () <UICollectionViewDataSource,UICollectionViewDelegate>
 {
-    UIImage *filterImage;
+    NSArray *filterContainter;
+    NSArray *filterName;
 }
 @property (weak, nonatomic) IBOutlet UIImageView *photoImageView;
+@property (weak, nonatomic) IBOutlet UICollectionView *filterCollectionView;
 
 @end
 
@@ -38,12 +42,30 @@
                                                                                action:@selector(done)];
     
     self.navigationItem.rightBarButtonItem = saveButton;
+    
+    _filterCollectionView.allowsMultipleSelection = NO;
+    [_filterCollectionView registerClass:[FilterCell class] forCellWithReuseIdentifier:@"FilterCell"];
+    _filterCollectionView.delegate = self;
+    _filterCollectionView.dataSource = self;
+    
+    
+    _photoImage = [_photoImage cropWithFaceDetect:_photoImageView.frame.size];
+    _photoImageView.image = _photoImage;
+    
+    GPUImagePolkaDotFilter *polkaDotFilter = [[GPUImagePolkaDotFilter alloc]init];
+    GPUImageAmatorkaFilter *AmatorkaFilter = [[GPUImageAmatorkaFilter alloc]init];
+    GPUImageSketchFilter *SketchFilter = [[GPUImageSketchFilter alloc]init];
+    GPUImageSmoothToonFilter *SmoothToonFilter = [[GPUImageSmoothToonFilter alloc]init];
+    GPUImagePinchDistortionFilter *pinchDistortionFilter = [[GPUImagePinchDistortionFilter alloc]init];
+    GPUImageContrastFilter *contrastFilter = [[GPUImageContrastFilter alloc]init];
+    GPUImageExposureFilter *exposureFilter = [[GPUImageExposureFilter alloc]init];
+    exposureFilter.exposure = 1;
+    
+    filterName = @[@"Origin",@"Polka", @"Amatorka",@"Sketch",@"SmoothToon",@"Pinch",@"Contrast",@"Exposure"];
+    filterContainter = @[_photoImage,polkaDotFilter,AmatorkaFilter,SketchFilter,SmoothToonFilter,pinchDistortionFilter,contrastFilter,exposureFilter];
+    
+    self.view.backgroundColor = [UIColor blackColor];
 
-    
-    [_photoImageView setContentMode:UIViewContentModeScaleAspectFit];
-    [_photoImageView setImage:_photoImage];
-    
-    //filterImage = [[UIImage alloc]initWithData:UIImagePNGRepresentation(_photoImage)];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -62,53 +84,38 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)filterActBtn:(UIButton *)sender
-{
-    switch (sender.tag) {
-        case 0:
-            // Polkadot
-        {
-            GPUImagePolkaDotFilter *filter = [[GPUImagePolkaDotFilter alloc]init];
-            _photoImageView.image = [filter imageByFilteringImage:_photoImage];
-        }
-            break;
-        case 1:
-            // Amortorka
-        {
-            GPUImageAmatorkaFilter *filter = [[GPUImageAmatorkaFilter alloc]init];
-            _photoImageView.image = [filter imageByFilteringImage:_photoImage];
-        }
-            break;
-        case 2:
-            // Sketch
-        {
-            GPUImageSketchFilter *filter = [[GPUImageSketchFilter alloc]init];
-            _photoImageView.image = [filter imageByFilteringImage:_photoImage];
-        }
-            break;
-        case 3:
-            // SmoothToon
-        {
-            GPUImageSmoothToonFilter *filter = [[GPUImageSmoothToonFilter alloc]init];
-            _photoImageView.image = [filter imageByFilteringImage:_photoImage];
-        }
-            break;
-        case 4:
-            // Pinch
-        {
-            GPUImagePinchDistortionFilter *filter = [[GPUImagePinchDistortionFilter alloc]init];
-            _photoImageView.image = [filter imageByFilteringImage:_photoImage];
-        }
-            break;
-        default:
-            break;
-    }
-}
-
 - (void)done
 {
     [_delegate filteredImage:_photoImageView.image indexPath:_indexPath];
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - UICollectionViewDelegate
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    FilterCell *cell = (FilterCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    _photoImageView.image = cell.cellImageView.image;
+}
+
+#pragma mark - UIColeectionViewDataSource
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return [filterName count];
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    FilterCell *cell = (FilterCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"FilterCell" forIndexPath:indexPath];
+    if (indexPath.row == 0)
+        cell.cellImageView.image = [filterContainter objectAtIndex:indexPath.row];
+    else
+        cell.cellImageView.image =[[filterContainter objectAtIndex:indexPath.row]imageByFilteringImage:_photoImage];
+    
+    cell.filterNameLabel.text = [filterName objectAtIndex:indexPath.row];
+    
+    return cell;
 }
 
 @end

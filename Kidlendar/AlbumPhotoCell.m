@@ -32,7 +32,7 @@
         _selectNumber.textColor = [UIColor whiteColor];
         
         highlightMask = [[UIView alloc]initWithFrame:self.contentView.frame];
-        highlightMask.layer.borderWidth = 2.0f;
+        highlightMask.layer.borderWidth = 3.0f;
         highlightMask.layer.borderColor = [_selectNumber.backgroundColor CGColor];
         [highlightMask addSubview:_selectNumber];
         [self addSubview:highlightMask];
