@@ -14,6 +14,8 @@
 @property DateView *titleLabel;
 @property BOOL shrink;
 @property MonthModel *monthModel;
+@property (nonatomic,strong) UIView *dateGroupView;
+
 
 - (void)removeCalendarView;
 - (void)shrinkCalendarWithRow:(int)row;

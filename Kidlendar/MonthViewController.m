@@ -34,6 +34,8 @@
     NSDateFormatter *dateFormatter;
     NSDateFormatter *timeFormatter;
     NSMutableArray *diaryArrayPhotos;
+    UILabel *monthLabel;
+    UILabel *yearLabel;
 }
 
 @property (weak, nonatomic) IBOutlet UILabel *comingEventTime;
@@ -44,6 +46,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *diaryImageView;
 @property (weak, nonatomic) IBOutlet UIView *dotViewGray;
 @property (weak, nonatomic) IBOutlet UILabel *diaryTitle;
+@property (weak, nonatomic) IBOutlet UIView *backgroundView;
 
 @end
 
@@ -65,6 +68,8 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+//    self.view.layer.borderColor = [Rgb2UIColor(33, 138, 251) CGColor];
+//    self.view.layer.borderWidth = 5.0f;
     
     dateFormatter = [[NSDateFormatter alloc]init];
     dateFormatter.dateFormat = @"MM月dd日 EEEE";
@@ -107,10 +112,7 @@
     [_monthView addGestureRecognizer:swipeRight];
     [_monthView addGestureRecognizer:swipeUp];
     [_monthView addGestureRecognizer:swipeDown];
-    
 
-    
-     
     // Set up table for events
     eventTableView = [[UITableView alloc]initWithFrame:self.view.frame style:UITableViewStyleGrouped];
     eventTableView.dataSource = self;
@@ -125,19 +127,24 @@
     UIBarButtonItem *addEventButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
                                                                                    target:self
                                                                                    action:@selector(addEvent)];
-    
-    UIBarButtonItem *addDiaryButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks
+    UIBarButtonItem *addDiaryButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize
                                                                                    target:self
                                                                                    action:@selector(addDiary)];
-    
     self.navigationItem.rightBarButtonItems = @[addEventButton,addDiaryButton];
     
-    UIBarButtonItem *monthButton = [[UIBarButtonItem alloc]initWithTitle:@"Month" style:UIBarButtonItemStylePlain
-                                                                  target:nil
-                                                                  action:nil ];
-    
+    // Custom navgation left button view
+    UIView *leftBarButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 150, 44)];
+    monthLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 5, 150, 24)];
+    monthLabel.textColor = [UIColor whiteColor];
+    monthLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
+    [leftBarButtonView addSubview:monthLabel];
+    yearLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 24, 100, 20)];
+    yearLabel.textColor = [UIColor whiteColor];
+    yearLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:15];
+    [leftBarButtonView addSubview:yearLabel];
+    UIBarButtonItem *monthButton = [[UIBarButtonItem alloc]initWithCustomView:leftBarButtonView];
     self.navigationItem.leftBarButtonItem = monthButton;
-    
+    [self setNavgationBarTitle];
     
     // Add observer to monitor event when new calendar event is created or removed
     [[NSNotificationCenter defaultCenter]addObserver:self
@@ -173,9 +180,35 @@
                                                      )
                                            fromDate:_selectedDate];
     
-    NSArray *monthArray = @[@"Jan",@"Feb",@"Mar",@"Apr",@"May",@"Jun",@"Jul",@"Aug",@"Sep",@"Oct",@"Nov",@"Dec"];
+    NSArray *monthArray = @[@"January",@"February",@"March",@"April",@"May",@"June",@"July",@"August",@"September",@"October",@"November",@"December"];
     NSString *month = monthArray[[comp month]-1];
-    [self.navigationItem.leftBarButtonItem setTitle:[NSString stringWithFormat:@"%lu %@",(long)[comp year],month]];
+    NSInteger currentMonth = [monthArray indexOfObject:monthLabel.text];
+    NSInteger currentYear = [yearLabel.text integerValue];
+    
+    
+    // Add transition (must be called after myLabel has been displayed)
+    CATransition *animation = [CATransition animation];
+    animation.duration = 0.8;
+    animation.type = kCATransitionPush;
+    
+    // Forward or Rewind month
+    if (currentMonth > ([comp month]-1))
+        animation.subtype = kCATransitionFromLeft;
+    else
+        animation.subtype = kCATransitionFromRight;
+    
+    // Forward or Rewind year
+    if (currentYear > [comp year])
+        animation.subtype = kCATransitionFromLeft;
+    else if (currentYear < [comp year])
+        animation.subtype = kCATransitionFromRight;
+
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    [monthLabel.layer addAnimation:animation forKey:@"changeTextTransition"];
+    
+    // Change the text
+    monthLabel.text = month;
+    yearLabel.text = [NSString stringWithFormat:@"%ld",[comp year]];
 }
 
 #pragma mark - UITableViewDataSource
@@ -282,9 +315,8 @@
     if (!_monthView.shrink) {
         eventTableView.hidden = NO;
         _comingEventView.hidden = YES;
-//        _diaryCollectionView.hidden = YES;
-        _monthView.shrink = YES;
         [self showEventTable];
+        _monthView.shrink = YES;
     }
 }
 
@@ -293,9 +325,8 @@
     if (_monthView.shrink) {
         eventTableView.hidden = YES;
         _comingEventView.hidden = NO;
-//        _diaryCollectionView.hidden = NO;
         _monthView.shrink = NO;
-        [self resetCalendar];
+        [self resetCalendarByExpand];
     }
 }
 
@@ -311,19 +342,21 @@
                                                                )
                                                      fromDate:_selectedDate];
 
-    CATransition *transition = [CATransition animation];
-    transition.duration = 0.5f;
-    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
-    transition.type = kCATransitionReveal;
+    // Add transition (must be called after myLabel has been displayed)
+    CATransition *animation = [CATransition animation];
+    animation.duration = 0.8f;
+    animation.type = kCATransitionPush;
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    
     DateModel *selectedDateModel = [monthModel dateModelForDate:_selectedDate];
     // Rewind = 0 , Forward = 1
     if (forwardOrRewind==0) {
-        transition.subtype = kCATransitionFromLeft;
+        animation.subtype = kCATransitionFromLeft;
         if (selectedDateModel.isCurrentMonth)
             [dateComponents setMonth:([dateComponents month] - 1)];
     }
     else {
-        transition.subtype = kCATransitionFromRight;
+        animation.subtype = kCATransitionFromRight;
         if (selectedDateModel.isCurrentMonth)
             [dateComponents setMonth:([dateComponents month] + 1)];
     }
@@ -331,6 +364,7 @@
     // Set _selected date to 1st date of previous/next month
     dateComponents.day = 1;
     _selectedDate = [_gregorian dateFromComponents:dateComponents];
+    [self.monthView.layer addAnimation:animation forKey:nil];
     [self resetCalendar];
 }
 
@@ -348,15 +382,17 @@
     _selectedDate = [_gregorian dateFromComponents:dateComponents];
     long row = [monthModel rowNumberForDate:_selectedDate];
 
-    CATransition *transition = [CATransition animation];
-    transition.duration = 0.5f;
-    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
-    transition.type = kCATransitionReveal;
+    // Add transition (must be called after myLabel has been displayed)
+    CATransition *animation = [CATransition animation];
+    animation.duration = 0.8f;
+    animation.type = kCATransitionPush;
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+
     DateModel *selectedDateModel = [monthModel dateModelForDate:_selectedDate];
 
     // Rewind = 0 , Forward = 1
     if (forwardOrRewind==0) {
-        transition.subtype = kCATransitionFromLeft;
+        animation.subtype = kCATransitionFromLeft;
         row = row - 1;
         if (row <0) {
             // Update month model to previous month
@@ -372,7 +408,7 @@
         }
     }
     else {
-        transition.subtype = kCATransitionFromRight;
+        animation.subtype = kCATransitionFromRight;
         row = row + 1;
         DateModel *d = [monthModel.datesInMonth lastObject];
         if (row > d.row) {
@@ -389,7 +425,7 @@
         }
     }
     [self resetCalendar];
-    [self.monthView.layer addAnimation:transition forKey:nil];
+    [self.monthView.layer addAnimation:animation forKey:nil];
 }
 
 - (void)dateLabelTap:(UITapGestureRecognizer *)sender
@@ -417,7 +453,7 @@
 
 - (void)activateDateLabelGesture
 {
-    for (DateView *subview in [_monthView subviews]) {
+    for (DateView *subview in [_monthView.dateGroupView subviews]) {
         if (subview.row > -1) {
             UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                          action:@selector(dateLabelTap:)];
@@ -516,6 +552,45 @@
     else
         [self showComingEvent];
 }
+
+- (void)resetCalendarByExpand
+{
+    [_monthView setAppearanceOnDeselectDate:previousDateModel.date dateNotInCurrentMonth:previousDateModel.isCurrentMonth];
+    previousDateModel.isSelected = NO;
+    // Reset monthmodel
+    [monthModel createMonthWithSelectedDate:_selectedDate];
+    // Refresh Month view
+    [_monthView setupCalendar:monthModel];
+    
+    // Adjust selected date to monday of the week if month view is shrinked
+    // Weekday Sunday = 1 , Saturday = 6
+    if (_monthView.shrink) {
+        NSDateComponents *dateComponents = [_gregorian components:(
+                                                                   NSYearCalendarUnit |
+                                                                   NSMonthCalendarUnit|
+                                                                   NSDayCalendarUnit  |
+                                                                   NSWeekdayCalendarUnit |
+                                                                   NSWeekOfMonthCalendarUnit
+                                                                   )
+                                                         fromDate:_selectedDate];
+        if ([dateComponents weekday]==1) {
+            dateComponents.day -= 6;
+        }
+        else {
+            dateComponents.day -= ([dateComponents weekday]-2);
+        }
+        _selectedDate = [_gregorian dateFromComponents:dateComponents];
+    }
+    
+    // Set up previous date view and model
+    previousDateModel = [monthModel dateModelForDate:_selectedDate];
+    previousDateModel.isSelected = YES;
+    [_monthView setAppearanceOnSelectDate:previousDateModel.date];
+    // Activate date view in month view
+    [self activateDateLabelGesture];
+    [self showComingEvent];
+}
+
 
 -(void)addDiary
 {

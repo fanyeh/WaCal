@@ -28,6 +28,7 @@
 		4C315C7B18AB298800A2A363 /* PhotoLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C315C7A18AB298800A2A363 /* PhotoLoader.m */; };
 		4C3E3EAB18865B6D00D02397 /* EventTitleAndTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3E3EAA18865B6D00D02397 /* EventTitleAndTimeView.m */; };
 		4C3E3EB118865C0C00D02397 /* EventLocationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3E3EB018865C0C00D02397 /* EventLocationView.m */; };
+		4C3ECBBD18BC3C75002CD2FB /* WeekdayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ECBBC18BC3C75002CD2FB /* WeekdayView.m */; };
 		4C417E7618714A4C000878FC /* DiaryDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C417E7518714A4C000878FC /* DiaryDataStore.m */; };
 		4C48FFAA188D65580038AE6F /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFA9188D65580038AE6F /* CoreMedia.framework */; };
 		4C48FFAC188D65620038AE6F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFAB188D65620038AE6F /* CoreVideo.framework */; };
@@ -161,6 +162,8 @@
 		4C3E3EAA18865B6D00D02397 /* EventTitleAndTimeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTitleAndTimeView.m; sourceTree = "<group>"; };
 		4C3E3EAF18865C0C00D02397 /* EventLocationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventLocationView.h; sourceTree = "<group>"; };
 		4C3E3EB018865C0C00D02397 /* EventLocationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventLocationView.m; sourceTree = "<group>"; };
+		4C3ECBBB18BC3C75002CD2FB /* WeekdayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeekdayView.h; sourceTree = "<group>"; };
+		4C3ECBBC18BC3C75002CD2FB /* WeekdayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeekdayView.m; sourceTree = "<group>"; };
 		4C417E7418714A4C000878FC /* DiaryDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiaryDataStore.h; path = ../DiaryDataStore.h; sourceTree = "<group>"; };
 		4C417E7518714A4C000878FC /* DiaryDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiaryDataStore.m; path = ../DiaryDataStore.m; sourceTree = "<group>"; };
 		4C48FFA7188D61C40038AE6F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -461,6 +464,8 @@
 				4C88B386188E56E100F4F47E /* DiaryCell.m */,
 				4C921558185AD39E009A3090 /* MonthCalendarView.h */,
 				4C921559185AD39E009A3090 /* MonthCalendarView.m */,
+				4C3ECBBB18BC3C75002CD2FB /* WeekdayView.h */,
+				4C3ECBBC18BC3C75002CD2FB /* WeekdayView.m */,
 				4C9214C9185AAA29009A3090 /* DateView.h */,
 				4C9214CA185AAA29009A3090 /* DateView.m */,
 			);
@@ -764,6 +769,7 @@
 				4C6C49C0186DDB680042EB61 /* DiaryTableViewController.m in Sources */,
 				4C50B72F18B19CAD0065434A /* LocationData.m in Sources */,
 				4CF592E0186D5BE500F1BEEB /* MonthViewController.m in Sources */,
+				4C3ECBBD18BC3C75002CD2FB /* WeekdayView.m in Sources */,
 				4CB3BD2C18A330D80006AFD4 /* SettingViewController.m in Sources */,
 				4C86E938188F977F00137B6A /* RecurrenceViewController.m in Sources */,
 				4C3E3EAB18865B6D00D02397 /* EventTitleAndTimeView.m in Sources */,

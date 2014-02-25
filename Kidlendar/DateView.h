@@ -12,6 +12,7 @@
 @property (strong,nonatomic) UILabel *dateLabel;
 @property (strong,nonatomic) NSDate *date;
 @property int row;
+@property int column;
 @property BOOL isSelected;
 @property BOOL isToday;
 @property BOOL hasEvent;

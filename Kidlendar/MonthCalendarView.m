@@ -10,18 +10,25 @@
 #import <EventKit/EventKit.h>
 #import "MonthModel.h"
 #import "DateModel.h"
+#import "WeekdayView.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 
 @implementation MonthCalendarView
-CGFloat dateViewWidth;
-CGFloat dateViewHeight;
-CGFloat weekdayComponentHeight;
-CGRect monthViewFrame;
-CGFloat calendarWidth;
-CGFloat calendarHeight;
-CGFloat weekdayViewHeight;
-CGRect shrinkFrame;
+{
+    CGFloat dateViewWidth;
+    CGFloat dateViewHeight;
+    CGFloat weekdayComponentHeight;
+    CGRect monthViewFrame;
+    CGFloat calendarWidth;
+    CGFloat calendarHeight;
+    CGFloat weekdayViewHeight;
+    CGRect shrinkFrame;
+    NSMutableArray *weekdayArray;
+    CGRect dateGroupFrame;
+    UIView *borderView ;
+    CGRect borderFrame;
+}
 
 
 - (id)initWithFrame:(CGRect)frame
@@ -45,24 +52,43 @@ CGRect shrinkFrame;
     
     dateViewWidth = calendarWidth/7;
     dateViewHeight = calendarHeight/7;
-    weekdayViewHeight = 20;
+    weekdayViewHeight = 40;
+    
+    _dateGroupView = [[UIView alloc]initWithFrame:CGRectMake(0, weekdayViewHeight, calendarWidth,calendarHeight-  weekdayViewHeight+1)];
+    _dateGroupView.backgroundColor = [UIColor whiteColor];
+    
+    dateGroupFrame = _dateGroupView.frame;
+    borderView = [[UIView alloc]initWithFrame:CGRectMake(10, weekdayViewHeight+dateGroupFrame.size.height, 300, 1)];
+    borderView.backgroundColor = [UIColor colorWithWhite:0.667 alpha:0.500];
+    borderFrame = borderView.frame;
+
+    
+    _dateGroupView.layer.borderColor = [[UIColor greenColor]CGColor];
+    _dateGroupView.layer.borderWidth = 2.0f;
+    
+    self.layer.borderColor = [[UIColor yellowColor]CGColor];
+    self.layer.borderWidth = 2.0f;
+    [self addSubview:_dateGroupView];
     
     NSArray *weekDay = @[@"Mon",@"Tue",@"Wed",@"Thu",@"Fri",@"Sat",@"Sun"];
+    weekdayArray = [[NSMutableArray alloc]init];
     
     // Set weekdays
     for (int i=1;i<8;i++) {
-        DateView *dateView = [[DateView alloc]initWithFrame:CGRectMake(xOffSet,yOffSet,dateViewWidth,weekdayViewHeight)];
+        WeekdayView *dateView = [[WeekdayView alloc]initWithFrame:CGRectMake(xOffSet,yOffSet,dateViewWidth,weekdayViewHeight)];
         [dateView.dateLabel setText:weekDay[i-1]];
         dateView.dateLabel.frame = CGRectMake(0,0, dateViewWidth, weekdayViewHeight);
-        dateView.dateLabel.textColor =  [UIColor colorWithWhite:0.702 alpha:1.000];
-        dateView.dateLabel.font = [UIFont fontWithName:@"Avenir-Light" size:15];
         [self addSubview:dateView];
         xOffSet += dateViewWidth;
         dateView.row = -1;
+        [weekdayArray addObject:dateView];
     }
     monthViewFrame = self.frame;
+    [self addSubview:borderView];
+
     shrinkFrame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, weekdayViewHeight + dateViewHeight);
     // Init date labels
+
     [self setupCalendar:_monthModel];
 }
 
@@ -71,9 +97,14 @@ CGRect shrinkFrame;
     [self removeCalendarView];
     _monthModel = monthModel;
     self.frame = monthViewFrame;
+    _dateGroupView.frame = dateGroupFrame;
+    borderView.frame = borderFrame;
+    
     // Define x , y offset for date view
     CGFloat xOffSet = 0;
-    CGFloat yOffSet = weekdayViewHeight;
+//    CGFloat yOffSet = weekdayViewHeight;
+    CGFloat yOffSet = 0;
+
     NSArray *datesInMonth  = _monthModel.datesInMonth;
     NSDateComponents *dateComp;
     DateModel *dateModel;
@@ -103,7 +134,6 @@ CGRect shrinkFrame;
         }
         
         if (_shrink && i%7==0) {
-//            dateView.dateLabel.layer.cornerRadius = dateView.dateLabel.frame.size.width/2;
             dateView.dateLabel.backgroundColor = Rgb2UIColor(33, 138, 251);
         }
         
@@ -111,7 +141,7 @@ CGRect shrinkFrame;
         if (dateModel.hasEvent)
             [dateView addHasEventView];
         
-        [self addSubview:dateView];
+//        [self addSubview:dateView];
         xOffSet += dateViewWidth;
 
         // Switch dateview Y position for week change
@@ -119,46 +149,94 @@ CGRect shrinkFrame;
             yOffSet += dateViewHeight;
             xOffSet = 0;
         }
+        dateView.column = i%7;
+        [_dateGroupView addSubview:dateView];
     }
 }
 
 - (void)removeCalendarView
 {
-    for (DateView *subview in [self subviews]) {
-        if (subview.row > -1)
+    for (DateView *subview in _dateGroupView.subviews) {
+//        if (subview.row > -1)
             [subview removeFromSuperview];
     }
 }
 
 - (void)shrinkCalendarWithRow:(int)row
 {
-    // Expand the calendar based on select row
-    for (DateView *view in self.subviews) {
-        if (view.row != row && view.row > -1) {
-            [view removeFromSuperview];
-        }
-        else if (view.row >-1) {
-            CGRect defaultPosition = view.frame;
-            CGRect expandPosition = CGRectMake(defaultPosition.origin.x,weekdayViewHeight, defaultPosition.size.width, defaultPosition.size.height);
-            view.frame = expandPosition;
-        }
+    if (!self.shrink) {
+        __block CGFloat shiftOffset = row * dateViewHeight;
+        NSMutableArray *removedView = [[NSMutableArray alloc]init];
+        
+        [UIView animateWithDuration:1.0f animations:^{
+            
+            _dateGroupView.frame = CGRectOffset(_dateGroupView.frame, 0, -shiftOffset);
+            borderView.frame = CGRectOffset(borderView.frame, 0, -shiftOffset);
+            
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.5f animations:^{
+                
+                _dateGroupView.frame = CGRectMake(dateGroupFrame.origin.x,
+                                                  _dateGroupView.frame.origin.y,
+                                                  dateGroupFrame.size.width,
+                                                  dateGroupFrame.size.height - dateViewHeight);
+                
+                
+                // Expand the calendar based on select row
+                for (DateView *view in _dateGroupView.subviews) {
+                    
+                    
+                    if (view.row != row && view.row > -1) {
+                        [removedView addObject:view];
+                        view.alpha = 0;
+                    }
+                    else if (view.row >-1) {
+                        //view.frame = CGRectOffset(view.frame, 0, -shiftOffset);
+                    }
+                }
+                
+                
+                
+                borderView.frame =CGRectMake(10 ,
+                                             dateGroupFrame.origin.y+dateViewHeight,
+                                             300,
+                                             1);
+                
+                
+                
+            } completion:^(BOOL finished) {
+                for (DateView *v in removedView) {
+                    [v removeFromSuperview];
+                }
+                self.frame = shrinkFrame;
+            }];
+        }];
     }
-    self.frame = shrinkFrame;
 }
 
 - (void)setAppearanceOnSelectDate:(NSDate *)date
 {
     DateView *view =[self viewFromDate:date];
-//    view.dateLabel.layer.cornerRadius = view.dateLabel.frame.size.width/2;
+    WeekdayView *weekdayView = weekdayArray[view.column];
+    weekdayView.selectedLabel.hidden = NO;
+
+    CATransition *animation = [CATransition animation];
+    animation.duration = 0.5f;
+    animation.type = kCATransitionFade;
+    animation.subtype = kCATransitionFromBottom;
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+
+    [view.dateLabel.layer addAnimation:animation forKey:nil];
+    [weekdayView.selectedLabel.layer addAnimation:animation forKey:nil];
 
     if (view.isToday) {
         view.dateLabel.backgroundColor = Rgb2UIColor(255, 0, 0);
-
-//        view.dateLabel.layer.borderColor = [[UIColor grayColor]CGColor];
-//        view.dateLabel.layer.borderWidth = 2.0f;
+        weekdayView.selectedLabel.backgroundColor = Rgb2UIColor(255, 0, 0);
     }
-    else
+    else {
         view.dateLabel.backgroundColor = Rgb2UIColor(33, 138, 251);
+        weekdayView.selectedLabel.backgroundColor = Rgb2UIColor(33, 138, 251);
+    }
     
     view.dateLabel.textColor = [UIColor whiteColor];
     view.isSelected = YES;
@@ -167,20 +245,30 @@ CGRect shrinkFrame;
 - (void)setAppearanceOnDeselectDate:(NSDate *)date dateNotInCurrentMonth:(BOOL)inMonth
 {
     DateView *view =[self viewFromDate:date];
+    WeekdayView *weekdayView = weekdayArray[view.column];
+    weekdayView.selectedLabel.hidden = YES;
+
+    CATransition *animation = [CATransition animation];
+    animation.duration = 0.5f;
+    animation.type = kCATransitionFade;
+    animation.subtype = kCATransitionFromTop;
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    
+    [view.dateLabel.layer addAnimation:animation forKey:nil];
+    [weekdayView.selectedLabel.layer addAnimation:animation forKey:nil];
+
     if (!inMonth)
         view.dateLabel.textColor = [UIColor colorWithWhite:0.500 alpha:0.500];
     else
         view.dateLabel.textColor = [UIColor blackColor];
-    
-    if (!view.isToday)
-        view.dateLabel.layer.cornerRadius = 0;
+
     view.dateLabel.backgroundColor =[UIColor clearColor];
     view.isSelected = NO;
 }
 
 - (DateView *)viewFromDate:(NSDate *)date
 {
-    for (DateView *d in self.subviews) {
+    for (DateView *d in _dateGroupView.subviews) {
         if (d.date==date)
             return d;
     }

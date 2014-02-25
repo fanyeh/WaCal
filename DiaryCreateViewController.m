@@ -452,14 +452,7 @@
     assetGroupPropertyName = sourceKey;
     photoAssets = [photoLoader.sourceDictionary objectForKey:sourceKey];
     navItem.title = assetGroupPropertyName;
-//    navItem.leftBarButtonItem.title = [NSString stringWithFormat:@"◀︎ %@", assetGroupPropertyName];
     [photoCollectionView reloadData];
-//    if ([photoAssets count] > 0 && !scrollToBottom) {
-//        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:([photoAssets count]-1) inSection:0];
-//        [photoCollectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
-//        scrollToBottom = YES;
-//    }
-
 }
 
 - (void)reloadPhotoCollectionView:(NSMutableArray *)selectedAlbum
@@ -468,15 +461,6 @@
     [photoCollectionView reloadData];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-//        NSMutableDictionary *photoDict = [selectedPhotoInfo objectForKey:assetGroupPropertyName];
-//        NSArray *allIndexes = photoDict.allKeys;
-//        for (NSIndexPath *path in allIndexes) {
-//            
-//            NSInteger selectNumber = [allIndexes indexOfObject:path]+1;
-//            [photoCollectionView selectItemAtIndexPath:path animated:NO scrollPosition:UICollectionViewScrollPositionCenteredVertically];
-//            AlbumPhotoCell *cell = (AlbumPhotoCell *)[photoCollectionView cellForItemAtIndexPath:path];
-//            cell.selectNumber.text = [NSString stringWithFormat:@"%ld", selectNumber];
-//        }
         
         for (int i = 0; i< [selectedPhotoOrderingInfo count];i++) {
             NSArray *imageInfo = [selectedPhotoOrderingInfo objectAtIndex:i];
@@ -490,15 +474,6 @@
             }
         }
     });
-}
-
--(void)viewDidLayoutSubviews
-{
-//    if ([photoAssets count] > 0 && !scrollToBottom) {
-//        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:([photoAssets count]-1) inSection:0];
-//        [photoCollectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
-//        scrollToBottom = YES;
-//    }
 }
 
 - (void)selectedPhoto:(NSIndexPath *)indexPath

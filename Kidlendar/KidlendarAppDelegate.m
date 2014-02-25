@@ -73,7 +73,10 @@
     else {
         [[[CalendarStore sharedStore]eventStore] requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
             if (granted) {
-                [self createAllViewControllers];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self createAllViewControllers];
+
+                });
             }
             else
                 NSLog(@"need permission , error %@",error);
@@ -85,8 +88,13 @@
     
     [[UINavigationBar appearance] setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance] setBackgroundColor:Rgb2UIColor(33, 138, 251)];
-//    [[UINavigationBar appearance] setBarTintColor:Rgb2UIColor(33, 138, 251)]; //is the bar color
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]]; //is the buttons text color
+    
+    [[UITabBar appearance] setBackgroundImage:[[UIImage alloc] init]];
+    [[UITabBar appearance] setShadowImage:[[UIImage alloc] init]];
+
+    [[UITabBar appearance] setBackgroundColor:Rgb2UIColor(33, 138, 251)];
+    [[UITabBar appearance] setTintColor:[UIColor whiteColor]]; //is the buttons text color
     return YES;
 }
 
