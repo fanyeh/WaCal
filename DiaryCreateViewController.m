@@ -606,16 +606,21 @@
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([fullScreenImageArray count]>4) {
-        UIAlertView *fullAlert = [[UIAlertView alloc]initWithTitle:nil
-                                                           message:@"You may select up to 5 photos"
-                                                          delegate:self
-                                                 cancelButtonTitle:@"OK"
-                                                 otherButtonTitles:nil, nil];
-        [fullAlert show];
-        return NO;
-    } else
+    if (collectionView.tag == 1) {
+        if ([fullScreenImageArray count]>4) {
+            UIAlertView *fullAlert = [[UIAlertView alloc]initWithTitle:nil
+                                                               message:@"You may select up to 5 photos"
+                                                              delegate:self
+                                                     cancelButtonTitle:@"OK"
+                                                     otherButtonTitles:nil, nil];
+            [fullAlert show];
+            return NO;
+        } else
+            return YES;
+
+    } else {
         return YES;
+    }
 }
 
 #pragma mark -Remove Photo

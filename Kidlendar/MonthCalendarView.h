@@ -17,8 +17,9 @@
 @property (nonatomic,strong) UIView *dateGroupView;
 
 
-- (void)removeCalendarView;
-- (void)shrinkCalendarWithRow:(int)row;
+//- (void)removeCalendarView;
+- (void)shrinkCalendarWithRow:(int)row withAnimation:(BOOL)animation complete:(void(^)(void))block;
+- (void)expandCalendarWithRow:(int)row withAnimation:(BOOL)animation complete:(void(^)(void))block;
 - (void)initCalendar:(MonthModel *)monthModel;
 - (void)setupCalendar:(MonthModel *)monthModel;
 - (void)setAppearanceOnSelectDate:(NSDate *)date;

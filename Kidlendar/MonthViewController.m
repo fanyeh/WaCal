@@ -39,6 +39,7 @@
 }
 
 @property (weak, nonatomic) IBOutlet UILabel *comingEventTime;
+@property (weak, nonatomic) IBOutlet UILabel *comingEventTimeEnd;
 @property (weak, nonatomic) IBOutlet UILabel *comingEventTitle;
 @property (weak, nonatomic) IBOutlet UIView *comingEventView;
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
@@ -46,7 +47,10 @@
 @property (weak, nonatomic) IBOutlet UIImageView *diaryImageView;
 @property (weak, nonatomic) IBOutlet UIView *dotViewGray;
 @property (weak, nonatomic) IBOutlet UILabel *diaryTitle;
-@property (weak, nonatomic) IBOutlet UIView *backgroundView;
+@property (weak, nonatomic) IBOutlet UILabel *diaryDate;
+@property (weak, nonatomic) IBOutlet UILabel *diaryLocation;
+@property (weak, nonatomic) IBOutlet UITextView *diaryDetail;
+@property (weak, nonatomic) IBOutlet UILabel *allDayLabel;
 
 @end
 
@@ -72,7 +76,7 @@
 //    self.view.layer.borderWidth = 5.0f;
     
     dateFormatter = [[NSDateFormatter alloc]init];
-    dateFormatter.dateFormat = @"MM月dd日 EEEE";
+    dateFormatter.dateFormat = @"yyyy/MM/dd";
     dateFormatter.timeZone = [NSTimeZone systemTimeZone];
     
     timeFormatter = [[NSDateFormatter alloc]init];
@@ -101,11 +105,11 @@
     [swipeRight setDirection:UISwipeGestureRecognizerDirectionRight];
     
     UISwipeGestureRecognizer *swipeUp = [[UISwipeGestureRecognizer alloc]initWithTarget:self
-                                                                                 action:@selector(shrinkMonth)];
+                                                                                 action:@selector(shrinkMonthWithAnimation)];
     [swipeUp setDirection:UISwipeGestureRecognizerDirectionUp];
     
     UISwipeGestureRecognizer *swipeDown = [[UISwipeGestureRecognizer alloc]initWithTarget:self
-                                                                                   action:@selector(expandMonth)];
+                                                                                   action:@selector(expandMonthWithAnimation)];
     [swipeDown setDirection:UISwipeGestureRecognizerDirectionDown];
     
     [_monthView addGestureRecognizer:swipeLeft];
@@ -260,10 +264,9 @@
     NSLog(@"event change");
     NSDate *eventDate = [notification.userInfo objectForKey:@"startDate"];;
     _selectedDate = eventDate;
+    [self resetCalendar];
     if (_monthView.shrink)
-        [self expandMonth];
-    else
-        [self resetCalendar];
+        [self expandMonthWithOutAnimation];
 }
 
 -(void)refreshDiary:(NSNotification *)notification
@@ -280,7 +283,8 @@
     [_monthView initCalendar:monthModel];
     
     [self resetCalendar];
-
+    if (_monthView.shrink)
+        [self expandMonthWithOutAnimation];
 }
 
 
@@ -310,23 +314,44 @@
         [self switchCalendarByMonth:0];
 }
 
-- (void)shrinkMonth
+- (void)shrinkMonthWithOutAnimation
 {
-    if (!_monthView.shrink) {
+
+    _comingEventView.hidden = YES;
+    [_monthView shrinkCalendarWithRow:[monthModel rowNumberForDate:_selectedDate]withAnimation:NO complete:^{
         eventTableView.hidden = NO;
-        _comingEventView.hidden = YES;
         [self showEventTable];
-        _monthView.shrink = YES;
-    }
+    }];
 }
 
--(void)expandMonth
+- (void)shrinkMonthWithAnimation
+{
+
+        _comingEventView.hidden = YES;
+        [_monthView shrinkCalendarWithRow:[monthModel rowNumberForDate:_selectedDate]withAnimation:YES complete:^{
+            eventTableView.hidden = NO;
+            [self showEventTable];
+        }];
+
+}
+
+-(void)expandMonthWithOutAnimation
 {
     if (_monthView.shrink) {
         eventTableView.hidden = YES;
-        _comingEventView.hidden = NO;
-        _monthView.shrink = NO;
-        [self resetCalendarByExpand];
+        [_monthView expandCalendarWithRow:[monthModel rowNumberForDate:_selectedDate]withAnimation:NO complete:^{
+            _comingEventView.hidden = NO;
+        }];
+    }
+}
+
+-(void)expandMonthWithAnimation
+{
+    if (_monthView.shrink) {
+        eventTableView.hidden = YES;
+        [_monthView expandCalendarWithRow:[monthModel rowNumberForDate:_selectedDate]withAnimation:YES complete:^{
+            _comingEventView.hidden = NO;
+        }];
     }
 }
 
@@ -425,6 +450,7 @@
         }
     }
     [self resetCalendar];
+    [self shrinkMonthWithOutAnimation];
     [self.monthView.layer addAnimation:animation forKey:nil];
 }
 
@@ -465,7 +491,6 @@
 - (void)showEventTable
 {
     [monthModel checkEventForDate:_selectedDate];
-    [_monthView shrinkCalendarWithRow:[monthModel rowNumberForDate:_selectedDate]];
 
     // Opens event and diary details on tap date
     eventTableView.frame = CGRectMake(0, _monthView.frame.origin.y+_monthView.frame.size.height, self.view.frame.size.width, 200);
@@ -475,20 +500,29 @@
 - (void)showComingEvent
 {
 
-    NSDateFormatter *onlydateFormatter = [[NSDateFormatter alloc]init];
-    onlydateFormatter.dateFormat = @"hh:mm aa";
-    onlydateFormatter.timeZone = [NSTimeZone systemTimeZone];
+    NSDateFormatter *eventTimeFormatter = [[NSDateFormatter alloc]init];
+    eventTimeFormatter.dateFormat = @"hh:mm aa";
+    eventTimeFormatter.timeZone = [NSTimeZone systemTimeZone];
 
     [monthModel checkEventForDate:_selectedDate];
     if ([monthModel.eventsInDate count]> 0) {
         for (EKEvent *comingUpEvent in monthModel.eventsInDate) {
             if (comingUpEvent.startDate >[NSDate date]) {
                 _comingUpEvent = comingUpEvent;
-//                _comingEventTime.text = [timeFormatter stringFromDate:comingUpEvent.startDate];
-//                _comingEventDate.text = [dateFormatter stringFromDate:comingUpEvent.startDate];
-                
-                _comingEventTime.text  = [onlydateFormatter stringFromDate:comingUpEvent.startDate];
-                
+                if (comingUpEvent.isAllDay) {
+                    _comingEventTime.hidden = YES;
+                    _comingEventTimeEnd.hidden = YES;
+                    _allDayLabel.hidden = NO;
+                    
+                } else {
+                    _comingEventTime.hidden = NO;
+                    _comingEventTimeEnd.hidden = NO;
+                    _allDayLabel.hidden = YES;
+
+                    _comingEventTime.text  = [eventTimeFormatter stringFromDate:comingUpEvent.startDate];
+                    _comingEventTimeEnd.text = [eventTimeFormatter stringFromDate:comingUpEvent.endDate];
+                }
+
                 _comingEventTitle.text = comingUpEvent.title;
                 _locationLabel.text = comingUpEvent.location;
                 break;
@@ -505,8 +539,12 @@
 {
     // Check if there's diary available
     DiaryData *d = [[DiaryDataStore sharedStore]allItems][0];
+    _diaryImageView.layer.cornerRadius = 5;;
+    _diaryImageView.layer.masksToBounds = YES;
     _diaryImageView.image = d.diaryImage;
     _diaryTitle.text = d.diaryText;
+    _diaryDetail.text = d.diaryText;
+    _diaryDate.text = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceReferenceDate:d.dateCreated]];
 }
 
 - (void)resetCalendar
@@ -552,45 +590,6 @@
     else
         [self showComingEvent];
 }
-
-- (void)resetCalendarByExpand
-{
-    [_monthView setAppearanceOnDeselectDate:previousDateModel.date dateNotInCurrentMonth:previousDateModel.isCurrentMonth];
-    previousDateModel.isSelected = NO;
-    // Reset monthmodel
-    [monthModel createMonthWithSelectedDate:_selectedDate];
-    // Refresh Month view
-    [_monthView setupCalendar:monthModel];
-    
-    // Adjust selected date to monday of the week if month view is shrinked
-    // Weekday Sunday = 1 , Saturday = 6
-    if (_monthView.shrink) {
-        NSDateComponents *dateComponents = [_gregorian components:(
-                                                                   NSYearCalendarUnit |
-                                                                   NSMonthCalendarUnit|
-                                                                   NSDayCalendarUnit  |
-                                                                   NSWeekdayCalendarUnit |
-                                                                   NSWeekOfMonthCalendarUnit
-                                                                   )
-                                                         fromDate:_selectedDate];
-        if ([dateComponents weekday]==1) {
-            dateComponents.day -= 6;
-        }
-        else {
-            dateComponents.day -= ([dateComponents weekday]-2);
-        }
-        _selectedDate = [_gregorian dateFromComponents:dateComponents];
-    }
-    
-    // Set up previous date view and model
-    previousDateModel = [monthModel dateModelForDate:_selectedDate];
-    previousDateModel.isSelected = YES;
-    [_monthView setAppearanceOnSelectDate:previousDateModel.date];
-    // Activate date view in month view
-    [self activateDateLabelGesture];
-    [self showComingEvent];
-}
-
 
 -(void)addDiary
 {

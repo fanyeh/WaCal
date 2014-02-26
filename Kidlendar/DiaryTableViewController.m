@@ -61,7 +61,7 @@
     [self.tableView registerNib:[UINib nibWithNibName:@"DiaryTableViewCell" bundle:nil]
          forCellReuseIdentifier:@"DiaryTableViewCell"]; 
     
-    self.tableView.backgroundColor =  [UIColor colorWithWhite:0.500 alpha:0.510];
+    self.tableView.backgroundColor =  [UIColor clearColor];
     
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -72,7 +72,7 @@
     headerLabel.text = @"February 2014";
     headerLabel.textColor = Rgb2UIColor(33, 138, 251);
     headerLabel.textAlignment = NSTextAlignmentCenter;
-    headerLabel.font = [UIFont fontWithName:@"ArialHebrew-Bold" size:25];
+    headerLabel.font = [UIFont fontWithName:@"Avenir" size:20];
     headerLabel.center = headerView.center;
     
     [headerView addSubview:headerLabel];

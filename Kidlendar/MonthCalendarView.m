@@ -66,8 +66,8 @@
     _dateGroupView.layer.borderColor = [[UIColor greenColor]CGColor];
     _dateGroupView.layer.borderWidth = 2.0f;
     
-    self.layer.borderColor = [[UIColor yellowColor]CGColor];
-    self.layer.borderWidth = 2.0f;
+//    self.layer.borderColor = [[UIColor yellowColor]CGColor];
+//    self.layer.borderWidth = 2.0f;
     [self addSubview:_dateGroupView];
     
     NSArray *weekDay = @[@"Mon",@"Tue",@"Wed",@"Thu",@"Fri",@"Sat",@"Sun"];
@@ -94,15 +94,17 @@
 
 - (void)setupCalendar:(MonthModel *)monthModel
 {
-    [self removeCalendarView];
-    _monthModel = monthModel;
     self.frame = monthViewFrame;
     _dateGroupView.frame = dateGroupFrame;
     borderView.frame = borderFrame;
     
+    for (DateView *subview in _dateGroupView.subviews) {
+        [subview removeFromSuperview];
+    }
+    _monthModel = monthModel;
+    
     // Define x , y offset for date view
     CGFloat xOffSet = 0;
-//    CGFloat yOffSet = weekdayViewHeight;
     CGFloat yOffSet = 0;
 
     NSArray *datesInMonth  = _monthModel.datesInMonth;
@@ -120,7 +122,9 @@
         dateView.tag = i; // Index to link view and date model
         dateView.date = dateModel.date;
         [dateView.dateLabel setText:[NSString stringWithFormat:@"%ld",(long)dateComp.day]];
-        
+        [_dateGroupView addSubview:dateView];
+
+
         // Configure color for dates not in current month
         if (dateModel.isCurrentMonth)
             dateView.dateLabel.textColor = [UIColor blackColor];
@@ -131,88 +135,152 @@
         if (dateModel.isToday) {
             dateView.isToday = YES;
             dateView.dateLabel.textColor = Rgb2UIColor(255, 0, 0);
-        }
-        
-        if (_shrink && i%7==0) {
-            dateView.dateLabel.backgroundColor = Rgb2UIColor(33, 138, 251);
+            dateView.dateLabel.layer.borderColor = [[UIColor redColor]CGColor];
+            dateView.dateLabel.layer.borderWidth = 1.0f;
         }
         
         // Add indicator if date has event
         if (dateModel.hasEvent)
             [dateView addHasEventView];
-        
-//        [self addSubview:dateView];
-        xOffSet += dateViewWidth;
 
         // Switch dateview Y position for week change
         if (i%7 == 6) {
             yOffSet += dateViewHeight;
             xOffSet = 0;
+        } else {
+            xOffSet += dateViewWidth;
         }
-        dateView.column = i%7;
-        [_dateGroupView addSubview:dateView];
-    }
-}
-
-- (void)removeCalendarView
-{
-    for (DateView *subview in _dateGroupView.subviews) {
-//        if (subview.row > -1)
-            [subview removeFromSuperview];
-    }
-}
-
-- (void)shrinkCalendarWithRow:(int)row
-{
-    if (!self.shrink) {
-        __block CGFloat shiftOffset = row * dateViewHeight;
-        NSMutableArray *removedView = [[NSMutableArray alloc]init];
         
-        [UIView animateWithDuration:1.0f animations:^{
-            
-            _dateGroupView.frame = CGRectOffset(_dateGroupView.frame, 0, -shiftOffset);
-            borderView.frame = CGRectOffset(borderView.frame, 0, -shiftOffset);
+        dateView.column = i%7;
+    }
+}
+
+- (void)shrinkCalendarWithRow:(int)row withAnimation:(BOOL)animation complete:(void(^)(void))block
+{
+    __block CGFloat shiftOffset = row * dateViewHeight;
+    __block CGFloat shrinkOffset = (5-row) * dateViewHeight;
+    NSLog(@"Row %d",row);
+
+    if (animation) {
+        
+        [UIView animateWithDuration:0.8 animations:^{
+            // 1. Shift original frame
+            _dateGroupView.frame = CGRectOffset(dateGroupFrame, 0, -shiftOffset);
+            borderView.frame = CGRectOffset(borderFrame, 0, -shiftOffset);
             
         } completion:^(BOOL finished) {
-            [UIView animateWithDuration:0.5f animations:^{
+            [UIView animateWithDuration:0.4 animations:^{
                 
-                _dateGroupView.frame = CGRectMake(dateGroupFrame.origin.x,
+                // 2. Shrink shifted frame
+                _dateGroupView.frame = CGRectMake(_dateGroupView.frame.origin.x,
                                                   _dateGroupView.frame.origin.y,
-                                                  dateGroupFrame.size.width,
-                                                  dateGroupFrame.size.height - dateViewHeight);
+                                                  _dateGroupView.frame.size.width,
+                                                  _dateGroupView.frame.size.height - shrinkOffset);
                 
-                
-                // Expand the calendar based on select row
+                // 3. Invis dates not in selected row
                 for (DateView *view in _dateGroupView.subviews) {
-                    
-                    
                     if (view.row != row && view.row > -1) {
-                        [removedView addObject:view];
                         view.alpha = 0;
                     }
-                    else if (view.row >-1) {
-                        //view.frame = CGRectOffset(view.frame, 0, -shiftOffset);
+                }
+                
+                // 4. Shift border to final position
+                borderView.frame =CGRectOffset(borderView.frame, 0, - shrinkOffset);
+            } completion:^(BOOL finished) {
+                block();
+            }];
+        }];
+        
+    } else {
+        // 1. Shift & Shrinkframe
+        _dateGroupView.frame = CGRectMake(_dateGroupView.frame.origin.x,
+                                          _dateGroupView.frame.origin.y-shiftOffset,
+                                          _dateGroupView.frame.size.width,
+                                          _dateGroupView.frame.size.height - shrinkOffset);
+        
+        borderView.frame =CGRectOffset(borderView.frame, 0, -shrinkOffset-shiftOffset);
+
+        
+        // 2. Invis dates not in selected row
+        for (DateView *view in _dateGroupView.subviews) {
+            if (view.row != row && view.row > -1) {
+                view.alpha = 0;
+            }
+        }
+        
+        block();
+
+    }
+    
+    self.frame = shrinkFrame;
+    _shrink = YES;
+}
+
+- (void)expandCalendarWithRow:(int)row withAnimation:(BOOL)animation complete:(void(^)(void))block
+{
+    __block CGFloat shiftOffset = row * dateViewHeight;
+    __block CGFloat expandOffset = (5-row) * dateViewHeight;
+    
+    if (animation) {
+        [UIView animateWithDuration:0.8 animations:^{
+            // 1. un invis dates
+            for (DateView *view in _dateGroupView.subviews) {
+                if (view.row < row ) {
+                    view.alpha = 1;
+                }
+            }
+            
+            // 2. Shift current frame to original poistion
+            _dateGroupView.frame = CGRectOffset(_dateGroupView.frame, 0, shiftOffset);
+            borderView.frame = CGRectOffset(borderView.frame, 0, shiftOffset);
+            
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.4 animations:^{
+                
+                // 3. Unhide bottom dates
+                for (DateView *view in _dateGroupView.subviews) {
+                    if (view.row > row ) {
+                        view.alpha = 1;
                     }
                 }
                 
+                // 4. Shift border to final position
+                borderView.frame =CGRectOffset(borderView.frame, 0, expandOffset);
                 
-                
-                borderView.frame =CGRectMake(10 ,
-                                             dateGroupFrame.origin.y+dateViewHeight,
-                                             300,
-                                             1);
-                
-                
-                
+                // 5. Expand frame
+                _dateGroupView.frame = CGRectMake(_dateGroupView.frame.origin.x,
+                                                  _dateGroupView.frame.origin.y,
+                                                  _dateGroupView.frame.size.width,
+                                                  _dateGroupView.frame.size.height + expandOffset);
             } completion:^(BOOL finished) {
-                for (DateView *v in removedView) {
-                    [v removeFromSuperview];
-                }
-                self.frame = shrinkFrame;
+                block();
             }];
         }];
+
+    } else {
+        // 1. Shift & Expand frame
+        _dateGroupView.frame = CGRectMake(_dateGroupView.frame.origin.x,
+                                          _dateGroupView.frame.origin.y+shiftOffset,
+                                          _dateGroupView.frame.size.width,
+                                          _dateGroupView.frame.size.height + expandOffset);
+        
+        borderView.frame =CGRectOffset(borderView.frame, 0, expandOffset+shiftOffset);
+
+        // 2. Unhide dates not in selected row
+        for (DateView *view in _dateGroupView.subviews) {
+            if (view.row != row && view.row > -1) {
+                view.alpha = 1;
+            }
+        }
+        
+        block();
+
     }
+    self.frame = monthViewFrame;
+    self.shrink = NO;
 }
+
+
 
 - (void)setAppearanceOnSelectDate:(NSDate *)date
 {
@@ -259,8 +327,15 @@
 
     if (!inMonth)
         view.dateLabel.textColor = [UIColor colorWithWhite:0.500 alpha:0.500];
-    else
-        view.dateLabel.textColor = [UIColor blackColor];
+    else {
+        if (view.isToday) {
+            view.dateLabel.textColor = [UIColor redColor];
+            view.dateLabel.layer.borderColor = [[UIColor redColor]CGColor];
+            view.dateLabel.layer.borderWidth = 1.0f;
+        }
+        else
+            view.dateLabel.textColor = [UIColor blackColor];
+    }
 
     view.dateLabel.backgroundColor =[UIColor clearColor];
     view.isSelected = NO;
