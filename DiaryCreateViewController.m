@@ -53,6 +53,7 @@
 //    CGRect photoCollectionViewExpandRect;
     CGFloat photoCollectionExpandHeight;
     CGFloat photoCollectionShrinkHeight;
+    NSMutableArray *imageMeta;
 
 
     BOOL showAlbumTable;
@@ -147,6 +148,8 @@
     [photoCollectionView registerClass:[AlbumPhotoCell class] forCellWithReuseIdentifier:@"AlbumPhotoCell"];
     photoCollectionView.allowsMultipleSelection = YES;
     [self.view addSubview:photoCollectionView];
+    
+    imageMeta = [[NSMutableArray alloc]init];
     
     photoAlbumTable = [[UITableView alloc]initWithFrame:CGRectMake(0, 418, 320, photoCollectionExpandHeight)
                                                   style:UITableViewStyleGrouped];
@@ -410,21 +413,15 @@
 #pragma mark -Diary relate
 - (void)doneSelection
 {
-    _diary = [[DiaryDataStore sharedStore]createItem];
-    
     // Create Image from collection view
     UIGraphicsBeginImageContextWithOptions(diaryPhotosView.bounds.size, YES, [UIScreen mainScreen].scale);
     [diaryPhotosView.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage *collectionViewImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    [_diary setDiaryImageDataFromImage:collectionViewImage];
-    [[DiaryDataStore sharedStore]saveChanges];
-    
-    // Send out notification for new diary added
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"diaryChange" object:nil];
-    
+
     DiaryEntryViewController *entryViewController = [[DiaryEntryViewController alloc]init];
-    entryViewController.diary = _diary;
+    entryViewController.diaryImage = collectionViewImage;
+    entryViewController.imageMeta = imageMeta;
     [self.navigationController pushViewController:entryViewController animated:YES];
 }
 
@@ -499,8 +496,10 @@
     NSArray *imageInfo = @[indexPath,assetGroupPropertyName];
     [selectedPhotoOrderingInfo addObject:imageInfo];
 
+    // Save image meta data
+    [imageMeta addObject:asset.defaultRepresentation.metadata];
+    
     // Resize the image
-//    UIImage *resizedImage =  [image resizeImageToSize:CGSizeMake(640, 1136)];
     [fullScreenImageArray addObject:image];
     navItem.rightBarButtonItem.title = [NSString stringWithFormat:@"%ld/5",[fullScreenImageArray count]];
     
@@ -600,7 +599,6 @@
 {
     if (collectionView.tag==1) {
         [self removePhotoWithIndexPath:indexPath];
-        NSLog(@"did deselect");
     }
 }
 
@@ -638,6 +636,7 @@
             
             // Remove image from resize image array
             NSUInteger index = [selectedPhotoOrderingInfo indexOfObject:imageInfo];
+            [imageMeta removeObjectAtIndex:index];
             [fullScreenImageArray removeObjectAtIndex:index];
             navItem.rightBarButtonItem.title = [NSString stringWithFormat:@"%ld/5",[fullScreenImageArray count]];
 

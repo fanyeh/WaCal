@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "DiaryData.h"
-#import "DiaryDataStore.h"
 
 @interface DiaryEntryViewController : UIViewController
-@property (strong,nonatomic) DiaryData *diary;
+@property (strong,nonatomic) UIImage *diaryImage;
+@property (strong,nonatomic) NSMutableArray *imageMeta;
 @end

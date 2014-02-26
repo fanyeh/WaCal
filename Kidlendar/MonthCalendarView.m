@@ -63,9 +63,9 @@
     borderFrame = borderView.frame;
 
     
-    _dateGroupView.layer.borderColor = [[UIColor greenColor]CGColor];
-    _dateGroupView.layer.borderWidth = 2.0f;
-    
+//    _dateGroupView.layer.borderColor = [[UIColor greenColor]CGColor];
+//    _dateGroupView.layer.borderWidth = 2.0f;
+//    
 //    self.layer.borderColor = [[UIColor yellowColor]CGColor];
 //    self.layer.borderWidth = 2.0f;
     [self addSubview:_dateGroupView];

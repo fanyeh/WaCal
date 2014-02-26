@@ -34,6 +34,8 @@
 		4C48FFAC188D65620038AE6F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFAB188D65620038AE6F /* CoreVideo.framework */; };
 		4C48FFAD188D656F0038AE6F /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFA7188D61C40038AE6F /* OpenGLES.framework */; };
 		4C48FFAF188D65820038AE6F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFAE188D65820038AE6F /* AVFoundation.framework */; };
+		4C4CE27418BDB1B5007217CA /* locationTag-24.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4CE27318BDB1B5007217CA /* locationTag-24.png */; };
+		4C4CE27818BDB21E007217CA /* calendar.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4CE27718BDB21E007217CA /* calendar.png */; };
 		4C50B72F18B19CAD0065434A /* LocationData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C50B72E18B19CAD0065434A /* LocationData.m */; };
 		4C50B73418B19DE50065434A /* LocationDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C50B73318B19DE50065434A /* LocationDataStore.m */; };
 		4C50B73718B1BB3D0065434A /* MapKitHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C50B73618B1BB3D0065434A /* MapKitHelpers.m */; };
@@ -170,6 +172,8 @@
 		4C48FFA9188D65580038AE6F /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		4C48FFAB188D65620038AE6F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		4C48FFAE188D65820038AE6F /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		4C4CE27318BDB1B5007217CA /* locationTag-24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "locationTag-24.png"; sourceTree = "<group>"; };
+		4C4CE27718BDB21E007217CA /* calendar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = calendar.png; sourceTree = "<group>"; };
 		4C50B72D18B19CAD0065434A /* LocationData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LocationData.h; path = ../LocationData.h; sourceTree = "<group>"; };
 		4C50B72E18B19CAD0065434A /* LocationData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LocationData.m; path = ../LocationData.m; sourceTree = "<group>"; };
 		4C50B73218B19DE50065434A /* LocationDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationDataStore.h; sourceTree = "<group>"; };
@@ -555,6 +559,8 @@
 		4CB3DD8218521DC400673478 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4C4CE27718BDB21E007217CA /* calendar.png */,
+				4C4CE27318BDB1B5007217CA /* locationTag-24.png */,
 				4CA2506A1869377000AEA94E /* UIImage+Resize.h */,
 				4CA2506B1869377000AEA94E /* UIImage+Resize.m */,
 				4CDA810E18A3C61F00898266 /* 951-baby-selected@2x.png */,
@@ -714,12 +720,14 @@
 				4CA888341896478C00FAA799 /* DiaryVideoViewController.xib in Resources */,
 				4C5BA25D1861745D00528843 /* 929-film-1.png in Resources */,
 				4C6C49C5186DDDDF0042EB61 /* DiaryViewController.xib in Resources */,
+				4C4CE27818BDB21E007217CA /* calendar.png in Resources */,
 				4C2FEC111889697600D37F18 /* EventViewController.xib in Resources */,
 				4C5BA25B1861731A00528843 /* 929-film-1@2x.png in Resources */,
 				4C86E939188F977F00137B6A /* RecurrenceViewController.xib in Resources */,
 				4C86E934188F973800137B6A /* AlarmViewController.xib in Resources */,
 				4CFFD58A1897800A0070C33C /* lookup_amatorka.png in Resources */,
 				4CA0369018B7A29F00015184 /* DiaryTableViewCell.xib in Resources */,
+				4C4CE27418BDB1B5007217CA /* locationTag-24.png in Resources */,
 				4C5B01F718ACBD7F0030FCCC /* DiaryCreateViewController.xib in Resources */,
 				4CB27D57188ED88800F34E7A /* IMG_1725.jpg in Resources */,
 				4CB3DD8618521DC400673478 /* InfoPlist.strings in Resources */,
