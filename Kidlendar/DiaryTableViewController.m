@@ -25,6 +25,8 @@
     UITableView *localTable;
     NSMutableDictionary *cloudDiarys;
     BOOL currentTableIsLocal;
+    NSDateFormatter *dateFormatter;
+    NSDateFormatter *weekdayFormatter;
 }
 @end
 
@@ -87,6 +89,11 @@
     currentTableIsLocal = YES;
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshCloud:) name:@"uploadComplete" object:nil];
+    
+    dateFormatter = [[NSDateFormatter alloc]init];
+    dateFormatter.dateFormat = @"dd";
+    weekdayFormatter = [[NSDateFormatter alloc]init];
+    weekdayFormatter.dateFormat = @"EEEE";
 }
 
 - (void)refreshCloud:(NSNotification *)notification
@@ -186,12 +193,21 @@
         DiaryTableViewCell *cell = (DiaryTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"DiaryTableViewCell"];
         if (!cell)
             cell =[[DiaryTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DiaryTableViewCell"];
-
+        cell.cellImageView.layer.cornerRadius = 5.0f;
+        cell.cellImageView.layer.masksToBounds = YES;
         cell.cellImageView.image = d.diaryImage;
         cell.cellView.layer.cornerRadius = 5.0f;
         cell.cellView.layer.shadowColor = [[UIColor blackColor]CGColor];
         cell.cellView.layer.shadowOpacity = 0.5f;
         cell.cellView.layer.shadowOffset = CGSizeMake(2 , 2);
+        
+        NSDate *diaryDate = [NSDate dateWithTimeIntervalSinceReferenceDate:d.dateCreated];
+        cell.dateLabel.text = [dateFormatter stringFromDate:diaryDate];
+        cell.weekdayLabel.adjustsFontSizeToFitWidth = YES;
+        cell.weekdayLabel.text = [weekdayFormatter stringFromDate:diaryDate];
+        cell.locationLabel.text = d.location;
+        cell.diaryDetail.text = d.diaryText;
+        cell.diarySubject.text = d.subject;
         return cell;
 
         

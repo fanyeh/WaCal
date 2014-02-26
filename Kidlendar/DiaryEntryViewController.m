@@ -8,7 +8,7 @@
 
 #import "DiaryEntryViewController.h"
 #import <MapKit/MapKit.h>
-#import <GoogleMaps/GoogleMaps.h>
+//#import <GoogleMaps/GoogleMaps.h>
 #import "DiaryData.h"
 #import "DiaryDataStore.h"
 #import "LocationDataStore.h"
@@ -206,6 +206,7 @@
     diary.diaryImageDataFromImage = _diaryImage;
     diary.diaryText = _diaryEntryView.text;
     diary.dateCreated = [[dateFormatter dateFromString: _diaryTimeField.text] timeIntervalSinceReferenceDate];
+    diary.location = _diaryLocationLabel.text;
     [[DiaryDataStore sharedStore]saveChanges];
     
     // Need location name field for diary

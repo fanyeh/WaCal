@@ -19,6 +19,8 @@
 #import "UIImage+Resize.h"
 #import "EventViewController.h"
 #import "DiaryCell.h"
+#import "LocationData.h"
+#import "LocationDataStore.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 
@@ -538,13 +540,16 @@
 -(void)showDiary
 {
     // Check if there's diary available
-    DiaryData *d = [[DiaryDataStore sharedStore]allItems][0];
-    _diaryImageView.layer.cornerRadius = 5;;
-    _diaryImageView.layer.masksToBounds = YES;
-    _diaryImageView.image = d.diaryImage;
-    _diaryTitle.text = d.diaryText;
-    _diaryDetail.text = d.diaryText;
-    _diaryDate.text = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceReferenceDate:d.dateCreated]];
+    if ([[[DiaryDataStore sharedStore]allItems]count] > 0) {
+        DiaryData *d = [[[DiaryDataStore sharedStore]allItems]lastObject];
+        _diaryImageView.layer.cornerRadius = 5;;
+        _diaryImageView.layer.masksToBounds = YES;
+        _diaryImageView.image = d.diaryImage;
+        _diaryTitle.text = d.subject;
+        _diaryDetail.text = d.diaryText;
+        _diaryDate.text = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceReferenceDate:d.dateCreated]];
+        _diaryLocation.text = d.location;
+    }
 }
 
 - (void)resetCalendar
@@ -594,7 +599,6 @@
 -(void)addDiary
 {
     DiaryCreateViewController *dcv = [[DiaryCreateViewController alloc]init];
-    dcv.diary = [[DiaryDataStore sharedStore]createItem];
     [self.navigationController pushViewController:dcv animated:YES];
 }
 

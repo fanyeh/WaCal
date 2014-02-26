@@ -341,6 +341,7 @@
 		4C315C7C18AB299500A2A363 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				4C51761B186FF309002F6F6D /* KidlendarModel.xcdatamodeld */,
 				4C91918818AF3D3100ED4695 /* Other Model */,
 				4CFB0869187E68D600456D5D /* Calendar Model */,
 				4C417E7A18714A69000878FC /* Diary Model */,
@@ -443,7 +444,6 @@
 		4C91918818AF3D3100ED4695 /* Other Model */ = {
 			isa = PBXGroup;
 			children = (
-				4C51761B186FF309002F6F6D /* KidlendarModel.xcdatamodeld */,
 				4CEEB9FC18B47BAF00C7FA80 /* CloudData.h */,
 				4CEEB9FD18B47BAF00C7FA80 /* CloudData.m */,
 				4C91918518AF3A4900ED4695 /* ImageStore.h */,

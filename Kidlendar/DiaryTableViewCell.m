@@ -14,11 +14,7 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        // Initialization code
-//        _cellView.layer.cornerRadius = 5.0f;
-//        _cellView.layer.shadowColor = [[UIColor redColor]CGColor];
-//        _cellView.layer.shadowOpacity = 0.5f;
-//        _cellView.layer.shadowOffset = CGSizeMake(5 , 5);
+
     }
     return self;
 }

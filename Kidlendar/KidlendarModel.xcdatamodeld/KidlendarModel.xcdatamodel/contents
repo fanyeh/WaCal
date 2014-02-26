@@ -13,6 +13,7 @@
         <attribute name="diaryImageData" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="diaryKey" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="diaryText" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="orderingValue" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="subject" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="thumbnail" optional="YES" transient="YES" syncable="YES"/>
