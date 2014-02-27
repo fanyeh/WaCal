@@ -189,7 +189,6 @@
 {
     if (sender.direction == UISwipeGestureRecognizerDirectionUp) {
         sender.direction = UISwipeGestureRecognizerDirectionDown;
-        
         photoCollectionView.frame = CGRectMake(photoCollectionView.frame.origin.x,
                                                photoCollectionView.frame.origin.y,
                                                320,
@@ -200,8 +199,6 @@
                                                photoAlbumTable.frame.origin.y,
                                                320,
                                                photoCollectionExpandHeight);
-
-        
         [UIView animateWithDuration:0.5 animations:^{
             
             if ([cellImageArray count]>0) {
@@ -219,9 +216,6 @@
     }
     else if (sender.direction == UISwipeGestureRecognizerDirectionDown) {
         sender.direction = UISwipeGestureRecognizerDirectionUp;
-        
-        
-
         [UIView animateWithDuration:0.5 animations:^{
             
             sender.view.backgroundColor = [UIColor blackColor];

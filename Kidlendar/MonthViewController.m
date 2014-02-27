@@ -8,7 +8,7 @@
 
 #import "MonthViewController.h"
 #import "DateView.h"
-#import "EventCreateViewController.h"
+#import "EventCreateController.h"
 #import <EventKit/EventKit.h>
 #import "DiaryCreateViewController.h"
 #import "DiaryDataStore.h"
@@ -17,7 +17,7 @@
 #import "DateModel.h"
 #import <AddressBook/AddressBook.h>
 #import "UIImage+Resize.h"
-#import "EventViewController.h"
+#import "EventReviewController.h"
 #import "DiaryCell.h"
 #import "LocationData.h"
 #import "LocationDataStore.h"
@@ -290,7 +290,7 @@
     _selectedDate = eventDate;
     [self resetCalendar];
     if (_monthView.shrink)
-        [self expandMonthWithOutAnimation];
+        [self shrinkMonthWithOutAnimation];
 }
 
 -(void)refreshDiary:(NSNotification *)notification
@@ -308,7 +308,7 @@
     
     [self resetCalendar];
     if (_monthView.shrink)
-        [self expandMonthWithOutAnimation];
+        [self shrinkMonthWithOutAnimation];
 }
 
 
@@ -316,7 +316,7 @@
 
 -(void)showEventView
 {
-    EventViewController *evc = [[EventViewController alloc]init];
+    EventReviewController *evc = [[EventReviewController alloc]init];
     evc.event = _comingUpEvent;
     evc.selectedDate = _selectedDate;
     [self.navigationController pushViewController:evc animated:YES];
@@ -364,6 +364,7 @@
     if (_monthView.shrink) {
         eventTableView.hidden = YES;
         [_monthView expandCalendarWithRow:[monthModel rowNumberForDate:_selectedDate]withAnimation:NO complete:^{
+            [self showComingEvent];
             _comingEventView.hidden = NO;
         }];
     }
@@ -374,6 +375,7 @@
     if (_monthView.shrink) {
         eventTableView.hidden = YES;
         [_monthView expandCalendarWithRow:[monthModel rowNumberForDate:_selectedDate]withAnimation:YES complete:^{
+            [self showComingEvent];
             _comingEventView.hidden = NO;
         }];
     }
@@ -522,7 +524,6 @@
 
 - (void)showComingEvent
 {
-
     [monthModel checkEventForDate:_selectedDate];
     if ([monthModel.eventsInDate count]> 0) {
         for (EKEvent *comingUpEvent in monthModel.eventsInDate) {
@@ -550,7 +551,10 @@
     }
    else {
         _comingEventTime.text = nil;
+       _comingEventTimeEnd.text = nil;
         _comingEventTitle.text = nil;
+       _allDayLabel.hidden = YES;
+       _locationLabel.text = nil;
     }
 }
 
@@ -621,7 +625,7 @@
 
 - (void)addEvent
 {
-    EventCreateViewController *newEventController = [[EventCreateViewController alloc]init];
+    EventCreateController *newEventController = [[EventCreateController alloc]init];
     newEventController.selectedDate = _selectedDate;
     [[self navigationController]pushViewController:newEventController animated:YES];
 }

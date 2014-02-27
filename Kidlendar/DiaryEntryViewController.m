@@ -159,7 +159,7 @@
 {
     _diaryLocationLabel.text = [places[indexPath.row] objectForKey:@"name"];
     locationLat =  [[[[places[indexPath.row] objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"] doubleValue];
-    locationLat =  [[[[places[indexPath.row] objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
+    locationLng =  [[[[places[indexPath.row] objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
     _maskView.hidden = YES;
 }
 
@@ -210,11 +210,13 @@
     [[DiaryDataStore sharedStore]saveChanges];
     
     // Need location name field for diary
-    
-    LocationData *location = [[LocationDataStore sharedStore]createItemWithKey:diary.diaryKey];
-    location.latitude = locationLat;
-    location.longitude = locationLng;
-    [[LocationDataStore sharedStore]saveChanges];
+    if (locationLat > 0 && locationLng > 0) {
+        LocationData *location = [[LocationDataStore sharedStore]createItemWithKey:diary.diaryKey];
+        location.latitude = locationLat;
+        location.longitude = locationLng;
+        [[LocationDataStore sharedStore]saveChanges];
+    }
+
     // Send out notification for new diary added
     [[NSNotificationCenter defaultCenter] postNotificationName:@"diaryChange" object:nil];
 

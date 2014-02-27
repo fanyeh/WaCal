@@ -236,7 +236,6 @@
         
         // Final rect from face detection
         CGRect CIfinalRect = CGRectMake(x,y,maxCropWidth,maxCropHeight);
-        NSValue *ci = [NSValue valueWithCGRect:CIfinalRect];
 //        NSLog(@"CIRect%@",ci);
         
         // Convert CIImage coordinate to UIImage coordinate
@@ -278,8 +277,6 @@
     CGAffineTransform t = CGAffineTransformMakeScale(1.0f / self.size.width, 1.0f / self.size.height);
     CGRect cropRegion = CGRectApplyAffineTransform(cropRect, t);
     
-    NSValue *c = [NSValue valueWithCGRect:cropRect];    
-//    NSLog(@"crop rect %@",c);
     
 //    // Process the filtering
     GPUImageCropFilter *cropFilter = [[GPUImageCropFilter alloc]init];
