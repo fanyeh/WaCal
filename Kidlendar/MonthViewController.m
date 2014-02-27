@@ -21,6 +21,7 @@
 #import "DiaryCell.h"
 #import "LocationData.h"
 #import "LocationDataStore.h"
+#import "EventTableCell.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 
@@ -38,6 +39,7 @@
     NSMutableArray *diaryArrayPhotos;
     UILabel *monthLabel;
     UILabel *yearLabel;
+    NSDateFormatter *eventTimeFormatter;
 }
 
 @property (weak, nonatomic) IBOutlet UILabel *comingEventTime;
@@ -85,6 +87,10 @@
     timeFormatter.dateFormat = @"HH:mm";
     timeFormatter.timeZone = [NSTimeZone systemTimeZone];
     
+    eventTimeFormatter = [[NSDateFormatter alloc]init];
+    eventTimeFormatter.dateFormat = @"hh:mm aa";
+    eventTimeFormatter.timeZone = [NSTimeZone systemTimeZone];
+    
 
     UITapGestureRecognizer *eventTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showEventView)];
     [_comingEventView addGestureRecognizer:eventTap];
@@ -125,8 +131,10 @@
     eventTableView.backgroundColor = [UIColor clearColor];
     eventTableView.hidden = YES;
     eventTableView.delegate = self;
-    eventTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [eventTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
+//    eventTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [eventTableView registerNib:[UINib nibWithNibName:@"EventTableCell" bundle:nil]
+         forCellReuseIdentifier:@"Cell"];
+
     [self.view addSubview:eventTableView];
     
     // Bar button for adding event
@@ -220,9 +228,23 @@
 #pragma mark - UITableViewDataSource
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+    EventTableCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     EKEvent *event = monthModel.eventsInDate[indexPath.row];
-    cell.textLabel.text = event.title;
+    cell.titleLabel.text = event.title;
+    cell.locationLabel.text = event.location;
+    
+    if (event.allDay) {
+        cell.alldayLabel.hidden = NO;
+        cell.startDateLabel.hidden = YES;
+        cell.endDateLabel.hidden = YES;
+    } else {
+        cell.alldayLabel.hidden = YES;
+        cell.startDateLabel.text = [eventTimeFormatter stringFromDate: event.startDate];
+        cell.endDateLabel.text = [eventTimeFormatter stringFromDate: event.endDate];
+        cell.startDateLabel.hidden = NO;
+        cell.endDateLabel.hidden = NO;
+    }
+
     return cell;
 }
 
@@ -493,18 +515,13 @@
 - (void)showEventTable
 {
     [monthModel checkEventForDate:_selectedDate];
-
     // Opens event and diary details on tap date
-    eventTableView.frame = CGRectMake(0, _monthView.frame.origin.y+_monthView.frame.size.height, self.view.frame.size.width, 200);
+    eventTableView.frame = CGRectMake(0, _monthView.shrinkFrame.origin.y+_monthView.shrinkFrame.size.height, self.view.frame.size.width, 200);
     [eventTableView reloadData];
 }
 
 - (void)showComingEvent
 {
-
-    NSDateFormatter *eventTimeFormatter = [[NSDateFormatter alloc]init];
-    eventTimeFormatter.dateFormat = @"hh:mm aa";
-    eventTimeFormatter.timeZone = [NSTimeZone systemTimeZone];
 
     [monthModel checkEventForDate:_selectedDate];
     if ([monthModel.eventsInDate count]> 0) {

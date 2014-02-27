@@ -49,6 +49,8 @@
 		4C5BA25D1861745D00528843 /* 929-film-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BA25C1861745D00528843 /* 929-film-1.png */; };
 		4C5C8FFC18A8730100B40F7E /* DiaryEntryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5C8FFA18A8730100B40F7E /* DiaryEntryViewController.m */; };
 		4C5C8FFD18A8730100B40F7E /* DiaryEntryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C5C8FFB18A8730100B40F7E /* DiaryEntryViewController.xib */; };
+		4C61325618BECAED0025FD00 /* EventTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C61325518BECAED0025FD00 /* EventTableCell.xib */; };
+		4C61325B18BECC8C0025FD00 /* EventTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C61325A18BECC8C0025FD00 /* EventTableCell.m */; };
 		4C67BAD718B6FBC300452539 /* SwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C67BAD618B6FBC300452539 /* SwitchCell.m */; };
 		4C68364B18BAE4B200FAA259 /* AlbumPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C68364A18BAE4B200FAA259 /* AlbumPhotoCell.m */; };
 		4C68365018BB0FD100FAA259 /* FilterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C68364F18BB0FD100FAA259 /* FilterCell.m */; };
@@ -192,6 +194,9 @@
 		4C5C8FF918A8730100B40F7E /* DiaryEntryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryEntryViewController.h; sourceTree = "<group>"; };
 		4C5C8FFA18A8730100B40F7E /* DiaryEntryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryEntryViewController.m; sourceTree = "<group>"; };
 		4C5C8FFB18A8730100B40F7E /* DiaryEntryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiaryEntryViewController.xib; sourceTree = "<group>"; };
+		4C61325518BECAED0025FD00 /* EventTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventTableCell.xib; sourceTree = "<group>"; };
+		4C61325918BECC8C0025FD00 /* EventTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventTableCell.h; sourceTree = "<group>"; };
+		4C61325A18BECC8C0025FD00 /* EventTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventTableCell.m; sourceTree = "<group>"; };
 		4C67BAD518B6FBC300452539 /* SwitchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwitchCell.h; sourceTree = "<group>"; };
 		4C67BAD618B6FBC300452539 /* SwitchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwitchCell.m; sourceTree = "<group>"; };
 		4C68364918BAE4B200FAA259 /* AlbumPhotoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumPhotoCell.h; sourceTree = "<group>"; };
@@ -464,6 +469,9 @@
 				4CF592DD186D5BE500F1BEEB /* MonthViewController.h */,
 				4CF592DE186D5BE500F1BEEB /* MonthViewController.m */,
 				4CF592DF186D5BE500F1BEEB /* MonthViewController.xib */,
+				4C61325518BECAED0025FD00 /* EventTableCell.xib */,
+				4C61325918BECC8C0025FD00 /* EventTableCell.h */,
+				4C61325A18BECC8C0025FD00 /* EventTableCell.m */,
 				4C88B385188E56E100F4F47E /* DiaryCell.h */,
 				4C88B386188E56E100F4F47E /* DiaryCell.m */,
 				4C921558185AD39E009A3090 /* MonthCalendarView.h */,
@@ -728,6 +736,7 @@
 				4CFFD58A1897800A0070C33C /* lookup_amatorka.png in Resources */,
 				4CA0369018B7A29F00015184 /* DiaryTableViewCell.xib in Resources */,
 				4C4CE27418BDB1B5007217CA /* locationTag-24.png in Resources */,
+				4C61325618BECAED0025FD00 /* EventTableCell.xib in Resources */,
 				4C5B01F718ACBD7F0030FCCC /* DiaryCreateViewController.xib in Resources */,
 				4CB27D57188ED88800F34E7A /* IMG_1725.jpg in Resources */,
 				4CB3DD8618521DC400673478 /* InfoPlist.strings in Resources */,
@@ -774,6 +783,7 @@
 				4C2E83BD1890BB450051215F /* CalendarStore.m in Sources */,
 				4C2FEC101889697600D37F18 /* EventViewController.m in Sources */,
 				4C6C49C4186DDDDF0042EB61 /* DiaryViewController.m in Sources */,
+				4C61325B18BECC8C0025FD00 /* EventTableCell.m in Sources */,
 				4C6C49C0186DDB680042EB61 /* DiaryTableViewController.m in Sources */,
 				4C50B72F18B19CAD0065434A /* LocationData.m in Sources */,
 				4CF592E0186D5BE500F1BEEB /* MonthViewController.m in Sources */,

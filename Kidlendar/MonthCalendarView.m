@@ -23,7 +23,6 @@
     CGFloat calendarWidth;
     CGFloat calendarHeight;
     CGFloat weekdayViewHeight;
-    CGRect shrinkFrame;
     NSMutableArray *weekdayArray;
     CGRect dateGroupFrame;
     UIView *borderView ;
@@ -65,7 +64,7 @@
     
 //    _dateGroupView.layer.borderColor = [[UIColor greenColor]CGColor];
 //    _dateGroupView.layer.borderWidth = 2.0f;
-//    
+//
 //    self.layer.borderColor = [[UIColor yellowColor]CGColor];
 //    self.layer.borderWidth = 2.0f;
     [self addSubview:_dateGroupView];
@@ -86,7 +85,7 @@
     monthViewFrame = self.frame;
     [self addSubview:borderView];
 
-    shrinkFrame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, weekdayViewHeight + dateViewHeight);
+    _shrinkFrame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, weekdayViewHeight + dateViewHeight);
     // Init date labels
 
     [self setupCalendar:_monthModel];
@@ -159,7 +158,6 @@
 {
     __block CGFloat shiftOffset = row * dateViewHeight;
     __block CGFloat shrinkOffset = (5-row) * dateViewHeight;
-    NSLog(@"Row %d",row);
 
     if (animation) {
         
@@ -207,12 +205,9 @@
                 view.alpha = 0;
             }
         }
-        
         block();
-
     }
-    
-    self.frame = shrinkFrame;
+    self.frame = _shrinkFrame;
     _shrink = YES;
 }
 
@@ -272,9 +267,7 @@
                 view.alpha = 1;
             }
         }
-        
         block();
-
     }
     self.frame = monthViewFrame;
     self.shrink = NO;

@@ -15,6 +15,7 @@
 @property BOOL shrink;
 @property MonthModel *monthModel;
 @property (nonatomic,strong) UIView *dateGroupView;
+@property CGRect shrinkFrame;
 
 
 //- (void)removeCalendarView;
