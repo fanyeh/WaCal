@@ -22,7 +22,7 @@
 
 typedef void (^LocationCallback)(CLLocationCoordinate2D);
 
-@interface EventReviewController () <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UISearchBarDelegate,MKMapViewDelegate>
+@interface EventReviewController () <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UISearchBarDelegate,MKMapViewDelegate,UIAlertViewDelegate>
 {
     NSDateFormatter *dateFormatter;
     NSDateFormatter *timeFormatter;
@@ -350,6 +350,22 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     return nil;
 }
 
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex==1) {
+        NSError *err;
+        if( [[[CalendarStore sharedStore]eventStore] removeEvent:_event span:EKSpanThisEvent commit:YES error:&err])
+            NSLog(@"Removed");
+        else
+            NSLog(@"Remove fail");
+        NSLog(@"Error From iCal : %@", [err description]);
+        NSDictionary *startDate = [NSDictionary dictionaryWithObject:_event.startDate forKey:@"startDate"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"eventChange" object:nil userInfo:startDate];
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }
+}
+
 #pragma mark - UITextFieldDelegate
 
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
@@ -398,15 +414,14 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 
 - (IBAction)deleteBtn:(id)sender
 {
-    NSError *err;
-    if( [[[CalendarStore sharedStore]eventStore] removeEvent:_event span:EKSpanThisEvent commit:YES error:&err])
-        NSLog(@"Removed");
-    else
-        NSLog(@"Remove fail");
-    NSLog(@"Error From iCal : %@", [err description]);
-    NSDictionary *startDate = [NSDictionary dictionaryWithObject:_event.startDate forKey:@"startDate"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"eventChange" object:nil userInfo:startDate];
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    
+    UIAlertView *deleteAlert = [[UIAlertView alloc]initWithTitle:@"Delete Event"
+                                                         message:@"Confirm to delete"
+                                                        delegate:self
+                                               cancelButtonTitle:@"Cancel"
+                                               otherButtonTitles:@"OK", nil];
+    
+    [deleteAlert show];
 }
 
 - (void)showMap
@@ -728,6 +743,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     
     // Update Apple map
     destination = CLLocationCoordinate2DMake(locationLat,locationLng);
+    [self calculateRouteToMapItem:_locationMapView.userLocation.location.coordinate userDestination:destination];
 }
 
 // Google search

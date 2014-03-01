@@ -9,10 +9,10 @@
                 <outlet property="diaryComposeView" destination="gmH-TQ-MtH" id="Cbw-zP-521"/>
                 <outlet property="diaryEntryView" destination="7ee-j6-VgJ" id="ebD-g0-vZK"/>
                 <outlet property="diaryLocationIconButton" destination="cNq-6h-oqW" id="VUm-9H-cCY"/>
-                <outlet property="diaryLocationLabel" destination="UBL-HY-VSc" id="hux-vF-KDu"/>
                 <outlet property="diarySubjectField" destination="aPc-K5-Mp3" id="2vg-Yn-AkJ"/>
                 <outlet property="diaryTimeField" destination="ggv-6Q-Bvg" id="gtf-kH-Zbf"/>
                 <outlet property="diaryTimeIcon" destination="xMD-A6-0i4" id="Lz4-Rx-koU"/>
+                <outlet property="locationField" destination="JjE-KJ-kih" id="dE7-8a-OIT"/>
                 <outlet property="locationSearchBar" destination="1dr-14-Kxw" id="Me6-sc-aUl"/>
                 <outlet property="locationSearchView" destination="sD9-Yg-F30" id="Vf5-9S-uxM"/>
                 <outlet property="maskView" destination="Vg6-3j-LEZ" id="3Tl-Hy-9Z6"/>
@@ -54,7 +54,7 @@
                             <textInputTraits key="textInputTraits"/>
                         </textField>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cNq-6h-oqW">
-                            <rect key="frame" x="5" y="250" width="25" height="25"/>
+                            <rect key="frame" x="5" y="254" width="25" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" backgroundImage="locationTag-24.png">
                                 <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -64,12 +64,12 @@
                                 <action selector="locationBtnAction:" destination="-1" eventType="touchUpInside" id="wTb-9p-rJ8"/>
                             </connections>
                         </button>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UBL-HY-VSc" userLabel="location - Label">
-                            <rect key="frame" x="38" y="252" width="267" height="21"/>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JjE-KJ-kih">
+                            <rect key="frame" x="38" y="252" width="267" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <nil key="highlightedColor"/>
-                        </label>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits"/>
+                        </textField>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                 </view>

@@ -16,6 +16,9 @@
 #import <Dropbox/Dropbox.h>
 #import "CloudData.h"
 #import "DiaryTableViewCell.h"
+#import "LocationData.h"
+#import "LocationDataStore.h"
+
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 
 
@@ -27,6 +30,8 @@
     BOOL currentTableIsLocal;
     NSDateFormatter *dateFormatter;
     NSDateFormatter *weekdayFormatter;
+    UILabel *headerLabel;
+    UISegmentedControl *diaryFilter;
 }
 @end
 
@@ -52,7 +57,7 @@
     self.navigationItem.leftBarButtonItem = editButton;
     self.navigationItem.leftBarButtonItem.tag = 0;
     
-    UISegmentedControl *diaryFilter = [[UISegmentedControl alloc] initWithItems:@[@"Local", @"Cloud"]];
+    diaryFilter = [[UISegmentedControl alloc] initWithItems:@[@"Local", @"Cloud"]];
     [diaryFilter sizeToFit];
     self.navigationItem.titleView = diaryFilter;
     
@@ -61,8 +66,8 @@
                forControlEvents:UIControlEventValueChanged];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"DiaryTableViewCell" bundle:nil]
-         forCellReuseIdentifier:@"DiaryTableViewCell"]; 
-    
+         forCellReuseIdentifier:@"DiaryTableViewCell"];
+        
     self.tableView.backgroundColor =  [UIColor clearColor];
     
     
@@ -70,7 +75,7 @@
     
     UIView *headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
     headerView.backgroundColor = [UIColor whiteColor];
-    UILabel *headerLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
+    headerLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
     headerLabel.text = @"February 2014";
     headerLabel.textColor = Rgb2UIColor(33, 138, 251);
     headerLabel.textAlignment = NSTextAlignmentCenter;
@@ -81,7 +86,7 @@
     
     self.tableView.tableHeaderView = headerView;
     
-//    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
 
     cloudDiarys = [[NSMutableDictionary alloc]init];
     
@@ -98,59 +103,69 @@
 
 - (void)refreshCloud:(NSNotification *)notification
 {
-    [[DropboxModel shareModel] listAllCloudDiarys:^(NSMutableDictionary *diarysFromCloud) {
-        cloudDiarys = diarysFromCloud;
-        NSLog(@"Cloud diarys %@",cloudDiarys);
-        [self.tableView reloadData];
-    }];
-}
-
-- (void)fetchFromCloud
-{
-    [[DropboxModel shareModel] linkToDropBox:^(BOOL linked) {
-        if (linked) {
-            
-            [[DBFilesystem sharedFilesystem] addObserver:self block:^{
-                NSLog(@"File system status change %ld",(unsigned long)[DBFilesystem sharedFilesystem].status);
-            }];
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                            [[DropboxModel shareModel] listUndownloadDiary:^(NSMutableDictionary *diarysFromCloud) {
-                                cloudDiarys = diarysFromCloud;
-                                [self.tableView reloadData];
-                            }];
-            });
-        }
-        
-    } fromController:self];
-
-}
-
-- (void)listUndownloadDairy
-{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[DropboxModel shareModel] listUndownloadDiary:^(NSMutableDictionary *diarysFromCloud) {
+        [[DropboxModel shareModel] listAllCloudDiarys:^(NSMutableDictionary *diarysFromCloud) {
             cloudDiarys = diarysFromCloud;
-            [self.tableView reloadData];
+            NSLog(@"Cloud diarys %@",cloudDiarys);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
         }];
     });
 }
 
+//- (void)fetchFromCloud
+//{
+//    [[DropboxModel shareModel] linkToDropBox:^(BOOL linked) {
+//        if (linked) {
+//            
+//            [[DBFilesystem sharedFilesystem] addObserver:self block:^{
+//                NSLog(@"File system status change %ld",(unsigned long)[DBFilesystem sharedFilesystem].status);
+//            }];
+//            
+//            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//                            [[DropboxModel shareModel] listUndownloadDiary:^(NSMutableDictionary *diarysFromCloud) {
+//                                cloudDiarys = diarysFromCloud;
+//                                [self.tableView reloadData];
+//                            }];
+//            });
+//        }
+//        
+//    } fromController:self];
+//
+//}
+
+//- (void)listUndownloadDairy
+//{
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        [[DropboxModel shareModel] listUndownloadDiary:^(NSMutableDictionary *diarysFromCloud) {
+//            cloudDiarys = diarysFromCloud;
+//            [self.tableView reloadData];
+//        }];
+//    });
+//}
+
 - (void)segmentControlAction:(UISegmentedControl *)sender
 {
     if (sender.selectedSegmentIndex == 0) {
-//        self.tableView = localTable;
         currentTableIsLocal = YES;
+        headerLabel.text = @"Local";
     } else {
-//        self.tableView = cloudTable;
         currentTableIsLocal = NO;
-        [self fetchFromCloud];
+        headerLabel.text = @"Cloud";
+        [[DropboxModel shareModel]linkToDropBox:^(BOOL linked) {
+            if (linked) {
+                [self refreshCloud:nil];
+            }
+        } fromController:self];
     }
+    [self.tableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [self.tableView reloadData];
+    [[self.tabBarController.tabBar.items objectAtIndex:1]setBadgeValue:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -179,9 +194,13 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    
+
+    // Local cell
     if (currentTableIsLocal) {
+        DiaryTableViewCell *cell = (DiaryTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"DiaryTableViewCell"];
+        if (!cell)
+            cell =[[DiaryTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DiaryTableViewCell"];
+
         // Configure the cell...
         DiaryData *d = [DiaryDataStore sharedStore].allItems[indexPath.row];
 //        cell.imageView.image = d.thumbnail;
@@ -190,9 +209,6 @@
 //        if (d.cloudRelationship.dropbox)
 //            cell.detailTextLabel.text = @"Dropbox Synced";
 //        return cell;
-        DiaryTableViewCell *cell = (DiaryTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"DiaryTableViewCell"];
-        if (!cell)
-            cell =[[DiaryTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DiaryTableViewCell"];
         cell.cellImageView.layer.cornerRadius = 5.0f;
         cell.cellImageView.layer.masksToBounds = YES;
         cell.cellImageView.image = d.diaryImage;
@@ -210,16 +226,32 @@
         cell.diarySubject.text = d.subject;
         return cell;
 
-        
-    } else {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    }
+    // Cloud cell
+    else {
+        DiaryTableViewCell *cell = (DiaryTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"DiaryTableViewCell"];
         if (!cell)
-            cell =[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
-
-        // Configure the cell...
+            cell =[[DiaryTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DiaryTableViewCell"];
+        
+        cell.cellImageView.layer.cornerRadius = 5.0f;
+        cell.cellImageView.layer.masksToBounds = YES;
+        cell.cellView.layer.cornerRadius = 5.0f;
+        cell.cellView.layer.shadowColor = [[UIColor blackColor]CGColor];
+        cell.cellView.layer.shadowOpacity = 0.5f;
+        cell.cellView.layer.shadowOffset = CGSizeMake(2 , 2);
+//
         TempDiaryData *t = [[cloudDiarys allValues] objectAtIndex:indexPath.row];
-        cell.imageView.image = t.thumbnail;
-        cell.textLabel.text = t.diaryText;
+//        NSLog(@"T %@",t);
+        NSDictionary *diaryData = t.diaryData;
+        NSDate *diaryDate = [NSDate dateWithTimeIntervalSinceReferenceDate:[(NSString *)[diaryData objectForKey:@"dateInterval"] doubleValue]];
+        cell.dateLabel.text = [dateFormatter stringFromDate:diaryDate];
+        cell.weekdayLabel.adjustsFontSizeToFitWidth = YES;
+        cell.weekdayLabel.text = [weekdayFormatter stringFromDate:diaryDate];
+        cell.cellImageView.image =t.thumbnail;
+        cell.locationLabel.text = [diaryData objectForKey:@"diaryLocationName"];
+        cell.diaryDetail.text = [diaryData objectForKey:@"diaryText"];
+        cell.diarySubject.text = [diaryData objectForKey:@"diarySubject"];
+
         return cell;
     }
 }
@@ -253,20 +285,50 @@
         // Download from cloud
         // Get tempdata
         TempDiaryData *t = [[cloudDiarys allValues] objectAtIndex:indexPath.row];
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [[DropboxModel shareModel] downloadDiaryFromFilesystem:t.diaryKey complete:^(NSData *imageData) {
-                UIImage *diaryImage = [UIImage imageWithData:imageData];
-                DiaryData *d = [[DiaryDataStore sharedStore]createItem];
-                d.diaryKey = t.diaryKey;
-                d.diaryText = t.diaryText;
-                [d setDiaryImageDataFromImage:diaryImage];
-                [[DiaryDataStore sharedStore]saveChanges];
-                
-                [self listUndownloadDairy];
-                [localTable reloadData];
-                NSLog(@"Download completed");
-            }];
-        });
+        BOOL download = YES;
+        // Check if diary already exist
+        for (DiaryData *d in [[DiaryDataStore sharedStore]allItems]) {
+            if ([d.diaryKey isEqualToString:t.diaryKey]) {
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Diary Exist"
+                                                               message:@"You already have this diary in phone"
+                                                              delegate:self cancelButtonTitle:@"OK"
+                                                     otherButtonTitles:nil, nil];
+                [alert show];
+                download = NO;
+                break;
+            }
+        }
+        if(download) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [[DropboxModel shareModel] downloadDiaryFromFilesystem:t.diaryKey complete:^(NSData *imageData) {
+                    UIImage *diaryImage = [UIImage imageWithData:imageData];
+                    
+                    DiaryData *d = [[DiaryDataStore sharedStore]createItem];
+                    NSDictionary *diaryData = t.diaryData;
+                    
+                    d.diaryKey = t.diaryKey;
+                    d.subject = [diaryData objectForKey:@"diarySubject"];
+                    d.location =  [diaryData objectForKey:@"diaryLocationName"];
+                    d.diaryText =  [diaryData objectForKey:@"diaryText"];
+                    d.dateCreated = [(NSString *)[diaryData objectForKey:@"dateInterval"] doubleValue];
+                    [d setDiaryImageDataFromImage:diaryImage];
+                    [[DiaryDataStore sharedStore]saveChanges];
+                    
+                    NSDictionary *l = [diaryData objectForKey:@"diaryLocatinoCoordinate"];
+                    if(l) {
+                        LocationData *diaryLocation = [[LocationDataStore sharedStore]createItemWithKey:t.diaryKey];
+                        diaryLocation.longitude = [(NSString *)[l objectForKey:@"longitude"] doubleValue];
+                        diaryLocation.latitude = [(NSString *)[l objectForKey:@"latitude"] doubleValue];
+                    }
+                    
+                    //                [self listUndownloadDairy];
+                    [localTable reloadData];
+                    diaryFilter.selectedSegmentIndex = 0;
+                    currentTableIsLocal = YES;
+                    NSLog(@"Download completed");
+                }];
+            });
+        }
     }
 }
 

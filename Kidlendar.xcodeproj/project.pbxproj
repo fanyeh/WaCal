@@ -25,6 +25,10 @@
 		4C2E83BD1890BB450051215F /* CalendarStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2E83BC1890BB450051215F /* CalendarStore.m */; };
 		4C315C7B18AB298800A2A363 /* PhotoLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C315C7A18AB298800A2A363 /* PhotoLoader.m */; };
 		4C3ECBBD18BC3C75002CD2FB /* WeekdayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ECBBC18BC3C75002CD2FB /* WeekdayView.m */; };
+		4C3EDA6B18C0CAB400FD7235 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3EDA6A18C0CAB400FD7235 /* Parse.framework */; };
+		4C3EDA6D18C0CB0000FD7235 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3EDA6C18C0CB0000FD7235 /* AudioToolbox.framework */; };
+		4C3EDA6F18C0CB1D00FD7235 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3EDA6E18C0CB1D00FD7235 /* MobileCoreServices.framework */; };
+		4C3EDA7118C0CB3B00FD7235 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3EDA7018C0CB3B00FD7235 /* StoreKit.framework */; };
 		4C417E7618714A4C000878FC /* DiaryDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C417E7518714A4C000878FC /* DiaryDataStore.m */; };
 		4C48FFAA188D65580038AE6F /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFA9188D65580038AE6F /* CoreMedia.framework */; };
 		4C48FFAC188D65620038AE6F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFAB188D65620038AE6F /* CoreVideo.framework */; };
@@ -157,6 +161,10 @@
 		4C315C7A18AB298800A2A363 /* PhotoLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoLoader.m; sourceTree = "<group>"; };
 		4C3ECBBB18BC3C75002CD2FB /* WeekdayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeekdayView.h; sourceTree = "<group>"; };
 		4C3ECBBC18BC3C75002CD2FB /* WeekdayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeekdayView.m; sourceTree = "<group>"; };
+		4C3EDA6A18C0CAB400FD7235 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
+		4C3EDA6C18C0CB0000FD7235 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		4C3EDA6E18C0CB1D00FD7235 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		4C3EDA7018C0CB3B00FD7235 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		4C417E7418714A4C000878FC /* DiaryDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiaryDataStore.h; path = ../DiaryDataStore.h; sourceTree = "<group>"; };
 		4C417E7518714A4C000878FC /* DiaryDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiaryDataStore.m; path = ../DiaryDataStore.m; sourceTree = "<group>"; };
 		4C48FFA7188D61C40038AE6F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -274,30 +282,34 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C1E40BE18B4619B00A273A1 /* libGPUImage.a in Frameworks */,
-				4CD2B93218A4CF69002DA9E4 /* CFNetwork.framework in Frameworks */,
-				4CD2B92318A492E6002DA9E4 /* Security.framework in Frameworks */,
-				4C12B2FE18A200790046C5EC /* libc++.dylib in Frameworks */,
-				4C12B2F918A1FDE60046C5EC /* SystemConfiguration.framework in Frameworks */,
-				4C48FFAD188D656F0038AE6F /* OpenGLES.framework in Frameworks */,
-				4C1E40A818B459F700A273A1 /* FacebookSDK.framework in Frameworks */,
-				4C12B2F718A1FDC40046C5EC /* libz.dylib in Frameworks */,
-				4C12B2F518A1FDBA0046C5EC /* libicucore.dylib in Frameworks */,
-				4C12B2F318A1FDAA0046C5EC /* ImageIO.framework in Frameworks */,
-				4C12B2F118A1FDA20046C5EC /* GLKit.framework in Frameworks */,
-				4C12B2EF18A1FD960046C5EC /* CoreText.framework in Frameworks */,
+				4C3EDA6D18C0CB0000FD7235 /* AudioToolbox.framework in Frameworks */,
+				4C0C38CA18673AD60001CC08 /* AssetsLibrary.framework in Frameworks */,
 				4C48FFAF188D65820038AE6F /* AVFoundation.framework in Frameworks */,
+				4CB3DD7E18521DC400673478 /* CoreGraphics.framework in Frameworks */,
+				4C12B2EF18A1FD960046C5EC /* CoreText.framework in Frameworks */,
 				4C48FFAC188D65620038AE6F /* CoreVideo.framework in Frameworks */,
 				4C48FFAA188D65580038AE6F /* CoreMedia.framework in Frameworks */,
 				4C51761F186FF707002F6F6D /* CoreData.framework in Frameworks */,
 				4CFB6DC8186A6BAC001C8F05 /* CoreLocation.framework in Frameworks */,
-				4C0C38CA18673AD60001CC08 /* AssetsLibrary.framework in Frameworks */,
-				4C12B2ED18A1FC280046C5EC /* GoogleMaps.framework in Frameworks */,
-				4C5420F01857FC9D006D2DE4 /* QuartzCore.framework in Frameworks */,
-				4CB3DD7E18521DC400673478 /* CoreGraphics.framework in Frameworks */,
-				4CB3DD8018521DC400673478 /* UIKit.framework in Frameworks */,
-				4CB3DD7C18521DC400673478 /* Foundation.framework in Frameworks */,
+				4CD2B93218A4CF69002DA9E4 /* CFNetwork.framework in Frameworks */,
+				4C12B2F118A1FDA20046C5EC /* GLKit.framework in Frameworks */,
 				4C1E40A618B459E500A273A1 /* Dropbox.framework in Frameworks */,
+				4CB3DD7C18521DC400673478 /* Foundation.framework in Frameworks */,
+				4C1E40A818B459F700A273A1 /* FacebookSDK.framework in Frameworks */,
+				4C12B2ED18A1FC280046C5EC /* GoogleMaps.framework in Frameworks */,
+				4C12B2F318A1FDAA0046C5EC /* ImageIO.framework in Frameworks */,
+				4C1E40BE18B4619B00A273A1 /* libGPUImage.a in Frameworks */,
+				4C12B2FE18A200790046C5EC /* libc++.dylib in Frameworks */,
+				4C12B2F718A1FDC40046C5EC /* libz.dylib in Frameworks */,
+				4C12B2F518A1FDBA0046C5EC /* libicucore.dylib in Frameworks */,
+				4C3EDA6F18C0CB1D00FD7235 /* MobileCoreServices.framework in Frameworks */,
+				4C48FFAD188D656F0038AE6F /* OpenGLES.framework in Frameworks */,
+				4C3EDA6B18C0CAB400FD7235 /* Parse.framework in Frameworks */,
+				4C5420F01857FC9D006D2DE4 /* QuartzCore.framework in Frameworks */,
+				4CD2B92318A492E6002DA9E4 /* Security.framework in Frameworks */,
+				4C3EDA7118C0CB3B00FD7235 /* StoreKit.framework in Frameworks */,
+				4C12B2F918A1FDE60046C5EC /* SystemConfiguration.framework in Frameworks */,
+				4CB3DD8018521DC400673478 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -491,11 +503,15 @@
 		4CB3DD7A18521DC400673478 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4C3EDA7018C0CB3B00FD7235 /* StoreKit.framework */,
+				4C3EDA6E18C0CB1D00FD7235 /* MobileCoreServices.framework */,
+				4C3EDA6C18C0CB0000FD7235 /* AudioToolbox.framework */,
 				4C1E40A718B459F700A273A1 /* FacebookSDK.framework */,
 				4C1E40A518B459E500A273A1 /* Dropbox.framework */,
 				4CD2B93118A4CF69002DA9E4 /* CFNetwork.framework */,
 				4CD2B92218A492E6002DA9E4 /* Security.framework */,
 				4C12B2FD18A200790046C5EC /* libc++.dylib */,
+				4C3EDA6A18C0CAB400FD7235 /* Parse.framework */,
 				4C12B2F818A1FDE60046C5EC /* SystemConfiguration.framework */,
 				4C12B2F618A1FDC40046C5EC /* libz.dylib */,
 				4C12B2F418A1FDBA0046C5EC /* libicucore.dylib */,
@@ -641,6 +657,9 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = MarriageKiller;
 				TargetAttributes = {
+					4CB3DD7718521DC400673478 = {
+						DevelopmentTeam = CH89446XPL;
+					};
 					4CB3DD9218521DC500673478 = {
 						TestTargetID = 4CB3DD7718521DC400673478;
 					};
@@ -837,7 +856,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development IOS Push Services: MK.Kidlendar";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development IOS Push Services: MK.Kidlendar";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -882,7 +902,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development IOS Push Services: MK.Kidlendar";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development IOS Push Services: MK.Kidlendar";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -909,6 +930,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/JackYeh/Desktop/Kidlendar,
@@ -923,6 +946,7 @@
 				INFOPLIST_FILE = "Kidlendar/Kidlendar-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -932,6 +956,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/JackYeh/Desktop/Kidlendar,
@@ -946,6 +972,7 @@
 				INFOPLIST_FILE = "Kidlendar/Kidlendar-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

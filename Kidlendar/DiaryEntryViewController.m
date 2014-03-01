@@ -31,7 +31,7 @@
 @property (weak, nonatomic) IBOutlet UIView *maskView;
 @property (weak, nonatomic) IBOutlet UIView *diaryComposeView;
 @property (weak, nonatomic) IBOutlet UITextField *diaryTimeField;
-@property (weak, nonatomic) IBOutlet UILabel *diaryLocationLabel;
+@property (weak, nonatomic) IBOutlet UITextField *locationField;
 @property (weak, nonatomic) IBOutlet UITextField *diarySubjectField;
 @property (weak, nonatomic) IBOutlet UIButton *diaryLocationIconButton;
 @property (weak, nonatomic) IBOutlet UIImageView *diaryTimeIcon;
@@ -85,6 +85,17 @@
     [_diarySubjectField becomeFirstResponder];
     _diarySubjectField.tag = 0;
     
+    _locationField.delegate = self;
+    _locationField.rightViewMode = UITextFieldViewModeWhileEditing;
+    UIView *locationRightView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
+    UITapGestureRecognizer *rightViewTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(searchLocation)];
+    [locationRightView addGestureRecognizer:rightViewTap];
+    UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 20, 20)];
+    imageView.image = [UIImage imageNamed:@"searchicon.png"];
+    [locationRightView addSubview:imageView];
+    _locationField.rightView = locationRightView;
+
+    
     _locationSearchBar.delegate = self;
     
     _diaryTimeField.delegate = self;
@@ -99,7 +110,6 @@
         NSDictionary *GPS = [meta objectForKey:@"{GPS}"];
         double longitude = [[GPS objectForKey:@"Longitude"] doubleValue];
         double latitude = [[GPS objectForKey:@"Latitude"] doubleValue];
-//        [self coordinateToPlaceLong:longitude andLat:latitude];
         [self queryGooglePlacesLongitude:longitude andLatitude:latitude withName:nil];
     }
     
@@ -117,11 +127,17 @@
     self.tabBarController.tabBar.hidden = YES;
 }
 
+- (void)searchLocation
+{
+    _locationSearchBar.text = _locationField.text;
+    [self queryGooglePlacesLongitude:0 andLatitude:0 withName:_locationField.text];
+    _maskView.hidden = NO;
+}
+
 #pragma mark - UISearchBarDelegate
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
-//    [self.view endEditing:YES];
-//    _searchResultTable.hidden = NO;
+    _locationField.text = searchBar.text;
     [self queryGooglePlacesLongitude:0 andLatitude:0 withName:searchBar.text];
 }
 
@@ -157,7 +173,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    _diaryLocationLabel.text = [places[indexPath.row] objectForKey:@"name"];
+    _locationField.text = [places[indexPath.row] objectForKey:@"name"];
     locationLat =  [[[[places[indexPath.row] objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"] doubleValue];
     locationLng =  [[[[places[indexPath.row] objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
     _maskView.hidden = YES;
@@ -206,7 +222,7 @@
     diary.diaryImageDataFromImage = _diaryImage;
     diary.diaryText = _diaryEntryView.text;
     diary.dateCreated = [[dateFormatter dateFromString: _diaryTimeField.text] timeIntervalSinceReferenceDate];
-    diary.location = _diaryLocationLabel.text;
+    diary.location = _locationField.text;
     [[DiaryDataStore sharedStore]saveChanges];
     
     // Need location name field for diary

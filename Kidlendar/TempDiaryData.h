@@ -9,13 +9,13 @@
 #import <Foundation/Foundation.h>
 
 @interface TempDiaryData : NSObject
-@property (nonatomic) NSTimeInterval dateCreated;
-@property (nonatomic, strong) NSString * diaryText;
-@property (nonatomic) double orderingValue;
-@property (nonatomic, strong) NSString * subject;
+//@property (nonatomic) NSTimeInterval dateCreated;
+//@property (nonatomic, strong) NSString * diaryText;
+//@property (nonatomic) double orderingValue;
+//@property (nonatomic, strong) NSString * subject;
 @property (nonatomic,strong) UIImage *thumbnail;
-@property (nonatomic, strong) NSData * thumbnailData;
+//@property (nonatomic, strong) NSData * thumbnailData;
 @property (nonatomic, strong) NSString * diaryKey;
+@property (nonatomic,strong) NSDictionary *diaryData;
 
-- (void)setThumbnailDataFromImage:(UIImage *)image;
 @end

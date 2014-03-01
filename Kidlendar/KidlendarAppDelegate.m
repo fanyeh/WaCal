@@ -16,10 +16,14 @@
 #import <Dropbox/Dropbox.h>
 #import "DiaryCreateViewController.h"
 #import "DropboxModel.h"
+//#import <Parse/Parse.h>
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 
 @implementation KidlendarAppDelegate
+{
+    UITabBarController *tbc;
+}
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
@@ -28,6 +32,12 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
+    
+    // Register for push notifications
+//    [application registerForRemoteNotificationTypes:
+//     UIRemoteNotificationTypeBadge |
+//     UIRemoteNotificationTypeAlert |
+//     UIRemoteNotificationTypeSound];
 
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"])
     {
@@ -69,12 +79,25 @@
     
     if ([EKEventStore authorizationStatusForEntityType:EKEntityTypeEvent]==EKAuthorizationStatusAuthorized) {
         [self createAllViewControllers];
+        
+        NSDictionary *notificationPayload = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
+        if(notificationPayload) {
+            
+            [[tbc.tabBar.items objectAtIndex:1] setBadgeValue:@"1"];
+            
+        }
     }
     else {
         [[[CalendarStore sharedStore]eventStore] requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
             if (granted) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self createAllViewControllers];
+                    NSDictionary *notificationPayload = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
+                    if(notificationPayload) {
+                        
+                        [[tbc.tabBar.items objectAtIndex:1] setBadgeValue:@"1"];
+                        
+                    }
 
                 });
             }
@@ -95,8 +118,43 @@
 
     [[UITabBar appearance] setBackgroundColor:Rgb2UIColor(33, 138, 251)];
     [[UITabBar appearance] setTintColor:[UIColor whiteColor]]; //is the buttons text color
+    
+//    [Parse setApplicationId:@"7utzGzNF3trLYTt20IxZfICqt53FG8w6H0G0uhkm"
+//                  clientKey:@"DKa0htgOp1uZF6eXPjjYyohbGNb2knhPlBxfycMP"];
+    
+
+    
+
+    
+//    // Create a pointer to the Photo object
+//    NSString *photoId = [notificationPayload objectForKey:@"p"];
+//    PFObject *targetPhoto = [PFObject objectWithoutDataWithClassName:@"Photo"
+//                                                            objectId:photoId];
+//    
+//    // Fetch photo object
+//    [targetPhoto fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+//        // Show photo view controller
+//        if (!error && [PFUser currentUser]) {
+//            PhotoVC *viewController = [[PhotoVC alloc] initWithPhoto:object];
+//            [self.navController pushViewController:viewController animated:YES];
+//        }
+//    }];
+    
     return YES;
 }
+
+//- (void)application:(UIApplication *)application
+//didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken {
+//    // Store the deviceToken in the current installation and save it to Parse.
+//    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+//    [currentInstallation setDeviceTokenFromData:newDeviceToken];
+//    [currentInstallation saveInBackground];
+//}
+
+//- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+//    [PFPush handlePush:userInfo];
+//    [[tbc.tabBar.items objectAtIndex:1]setBadgeValue:@"1"];
+//}
 
 - (void)createAllViewControllers
 {
@@ -121,7 +179,7 @@
     
     
     // Set up tab bar contoller for entire app
-    UITabBarController *tbc = [[UITabBarController alloc]init];
+    tbc = [[UITabBarController alloc]init];
     NSArray *viewControllers = [NSArray arrayWithObjects:calendarNavigationController,diaryNavigationController,settingNavigationController, nil];
     [tbc setViewControllers:viewControllers];
     
@@ -150,6 +208,12 @@
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     [FBSession.activeSession handleDidBecomeActive];
+    
+//    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+//    if (currentInstallation.badge != 0) {
+//        currentInstallation.badge = 0;
+//        [currentInstallation saveEventually];
+//    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -267,6 +331,13 @@
         DBAccount *account = [[DBAccountManager sharedManager] handleOpenURL:url];
         if (account) {
             NSLog(@"App linked successfully!");
+            
+//            // Add user to Parse channel use DB account ID
+//            PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+//            NSLog(@"channel %@",account.userId);
+//            [currentInstallation addUniqueObject:[NSString stringWithFormat:@"dropbox-%@",account.userId] forKey:@"channels"];
+            
+            // Set connection status in user default to YES
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"Dropbox"];
             return YES;
         }

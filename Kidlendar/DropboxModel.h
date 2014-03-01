@@ -15,6 +15,8 @@
 typedef void (^LinkHandler)(BOOL linked);
 typedef void (^ListAllCloudDiarys)(NSMutableDictionary *diarysFromCloud);
 typedef void (^DownloadBlock)(NSData *imageData);
+typedef void (^UploadBlock)(BOOL success);
+
 
 @interface DropboxModel : NSObject
 
@@ -26,9 +28,9 @@ typedef void (^DownloadBlock)(NSData *imageData);
 - (void)setupFileSystemAndStore:(void(^)(BOOL))completeSetUp;
 - (void)checkDiaryFolder:(void(^)(void))completeFolderCheck;
 - (void)createFolder:(void(^)(void))completeFolderCreate;
-- (void)uploadDiaryToFilesystem:(DiaryData *)diary image:(UIImage *)diaryImage complete:(void(^)(void))uploadComplete;
+- (void)uploadDiaryToFilesystem:(DiaryData *)diary image:(UIImage *)diaryImage complete:(UploadBlock)uploadComplete;
 - (void)listAllCloudDiarys:(ListAllCloudDiarys)completeDownloadList;
-- (void)listUndownloadDiary:(ListAllCloudDiarys)completeDownloadList;
+//- (void)listUndownloadDiary:(ListAllCloudDiarys)completeDownloadList;
 - (void)downloadDiaryFromFilesystem:(NSString *)key complete:(DownloadBlock)downloadComplete;
 
 @end

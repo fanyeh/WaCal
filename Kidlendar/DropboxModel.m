@@ -12,6 +12,8 @@
 #import "DiaryDataStore.h"
 #import "TempDiaryData.h"
 #import "CloudData.h"
+#import "LocationDataStore.h"
+#import "LocationData.h"
 
 @implementation DropboxModel
 {
@@ -69,27 +71,61 @@
     completeSetUp(YES);
 }
 
-- (void)uploadDiaryToFilesystem:(DiaryData *)diary image:(UIImage *)diaryImage complete:(void(^)(void))uploadComplete
+- (void)uploadDiaryToFilesystem:(DiaryData *)diary image:(UIImage *)diaryImage complete:(UploadBlock)uploadComplete
 {
-    [self checkDiaryFolder:^{
-        
-        // Upload diary image to DBFilesystem
-        NSString *uploadFilePath = [NSString stringWithFormat:@"%@/%@.png",folder,diary.diaryKey];
-        DBPath *newPath = [[DBPath root] childPath:uploadFilePath];
-        DBFile *file = [[DBFilesystem sharedFilesystem] createFile:newPath error:nil];
-        NSData *diaryImageData = UIImagePNGRepresentation(diaryImage);
-        [file writeData:diaryImageData error:nil];
-        
-        // Upload diary text to DBFilesystem
-        uploadFilePath = [NSString stringWithFormat:@"%@/%@.txt",folder,diary.diaryKey];
-        newPath = [[DBPath root] childPath:uploadFilePath];
-        file = [[DBFilesystem sharedFilesystem] createFile:newPath error:nil];
-        [file writeString:diary.diaryText error:nil];
-
-        NSLog(@"file has successfully uploaded");
-        diary.cloudRelationship.dropbox = YES;
-        uploadComplete();
-    }];
+    if([self checkFile:diary.diaryKey]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Duplicate File"
+                                                           message:@"You already have this diary on cloud"
+                                                          delegate:self cancelButtonTitle:@"OK"
+                                                 otherButtonTitles:nil, nil];
+            [alert show];
+        });
+        uploadComplete(NO);
+    } else {
+        [self checkDiaryFolder:^{
+            
+            // Get diary location
+            LocationData *diaryLocation = [[[LocationDataStore sharedStore]allItems]objectForKey:diary.diaryKey];
+            NSDictionary *location;
+            if (diaryLocation) {
+                location = [[NSDictionary alloc]initWithObjectsAndKeys:[NSString stringWithFormat:@"%f",diaryLocation.latitude],@"latitude",[NSString stringWithFormat:@"%f",diaryLocation.longitude],@"longitude", nil];
+            }
+            
+            // Create json dictionary
+            NSString *diaryDate = [NSString stringWithFormat:@"%f",diary.dateCreated];
+            NSDictionary *diaryDict = [[NSDictionary alloc]initWithObjectsAndKeys:
+                                       diary.subject,                                       @"diarySubject",
+                                       diary.diaryText,                                     @"diaryText",
+                                       diaryDate,                                           @"dateInterval",
+                                       location,                                       @"diaryLocationCoordinate",
+                                       diary.location,                                      @"diaryLocationName" ,
+                                       nil];
+            NSData *diaryData = [NSJSONSerialization dataWithJSONObject:diaryDict options:NSJSONWritingPrettyPrinted error:nil];
+            
+            // Upload diary image to DBFilesystem
+            NSString *uploadImagePath = [NSString stringWithFormat:@"%@/%@.png",folder,diary.diaryKey];
+            DBPath *newImagePath = [[DBPath root] childPath:uploadImagePath];
+            DBFile *imageFile = [[DBFilesystem sharedFilesystem] createFile:newImagePath error:nil];
+            NSData *diaryImageData = UIImagePNGRepresentation(diaryImage);
+            [imageFile writeData:diaryImageData error:nil];
+            
+            // Upload diary text to DBFilesystem
+            NSString *uploadDataPath = [NSString stringWithFormat:@"%@/%@.json",folder,diary.diaryKey];
+            DBPath *newDataPath = [[DBPath root] childPath:uploadDataPath];
+            DBFile *dataFile = [[DBFilesystem sharedFilesystem] createFile:newDataPath error:nil];
+            [dataFile writeData:diaryData error:nil];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Upload Done"
+                                                               message:@"You have successfully uploaded diary"
+                                                              delegate:self cancelButtonTitle:@"OK"
+                                                     otherButtonTitles:nil, nil];
+                [alert show];
+            });
+            diary.cloudRelationship.dropbox = YES;
+            uploadComplete(YES);
+        }];
+    }
 }
 
 - (void)checkDiaryFolder:(void(^)(void))completeFolderCheck
@@ -129,9 +165,21 @@
     NSString *downloadFilePath = [NSString stringWithFormat:@"%@/%@.png",folder,key];
     DBPath *existingPath = [[DBPath root] childPath:downloadFilePath];
     DBFile *file = [[DBFilesystem sharedFilesystem] openFile:existingPath error:nil];
-    
     NSData *diaryImageData = [file readData:nil];
+    
     downloadComplete(diaryImageData);
+}
+
+- (BOOL)checkFile:(NSString *)key
+{
+    NSString *filePath = [NSString stringWithFormat:@"%@/%@.png",folder,key];
+    DBPath *existingPath = [[DBPath root] childPath:filePath];
+    DBFile *file = [[DBFilesystem sharedFilesystem] openFile:existingPath error:nil];
+    if (file) {
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 - (void)listUndownloadDiary:(ListAllCloudDiarys)completeDownloadList
@@ -142,97 +190,78 @@
     DBPath *listFilePath = [[DBPath root] childPath:filePath];
     NSArray *listFiles = [filesystem listFolder:listFilePath error:nil];
     
-    NSMutableArray *allDBfilesystemKeys = [[NSMutableArray alloc]init];
     NSMutableArray *allDiaryKeys = [[NSMutableArray alloc]init];
-    
-    // Get all available keys from DB filesystem
-    for (DBFileInfo *info in listFiles) {
-        NSString *fileExtension = [info.path.name pathExtension];
-        if ([fileExtension isEqualToString:@"png"]) {
-            NSString *diaryKey = [info.path.name stringByDeletingPathExtension];
-            [allDBfilesystemKeys addObject:diaryKey];
-        }
-    }
     
     // Get all diary keys in core data
     for (DiaryData *d in [[DiaryDataStore sharedStore]allItems]) {
         [allDiaryKeys addObject:d.diaryKey];
     }
-   
-    // Compare both array to get undownloaded keys
-   [allDBfilesystemKeys removeObjectsInArray:allDiaryKeys];
     
+    // Get all available keys from DB filesystem
     for (DBFileInfo *info in listFiles) {
         
-        NSString *fileExtension = [info.path.name pathExtension];
         NSString *diaryKey = [info.path.name stringByDeletingPathExtension];
-        
-        if ([fileExtension isEqualToString:@"png"] && info.thumbExists && [allDBfilesystemKeys containsObject:diaryKey]) {
+        NSString *fileExtension = [info.path.name pathExtension];
+
+        if ([fileExtension isEqualToString:@"png"] && info.thumbExists && ![allDiaryKeys containsObject:diaryKey]) {
             
-            DBFile *file = [filesystem openThumbnail:info.path ofSize:DBThumbSizeXS inFormat:DBThumbFormatPNG error:nil];
-            NSData *diaryImageData = [file readData:nil];
+            // Get diary image thumbnail
+            DBFile *imageFile = [filesystem openThumbnail:info.path ofSize:DBThumbSizeXS inFormat:DBThumbFormatPNG error:nil];
+            NSData *diaryImageData = [imageFile readData:nil];
             UIImage *diaryImage = [UIImage imageWithData:diaryImageData];
+
+            // Get diary json
+            NSString *diaryDataPath = [NSString stringWithFormat:@"%@/%@.json",folder,diaryKey];
+            DBPath *existingPath = [[DBPath root] childPath:diaryDataPath];
+            DBFile *dataFile = [[DBFilesystem sharedFilesystem] openFile:existingPath error:nil];
+            
             TempDiaryData *t = [[TempDiaryData alloc]init];
             t.diaryKey = diaryKey;
             t.thumbnail = diaryImage;
-            t.thumbnailData = diaryImageData;
+            NSData *json = [dataFile readData:nil];
+            t.diaryData = [NSJSONSerialization JSONObjectWithData:json options:NSJSONReadingAllowFragments error:nil];
+            
             [diarysFromCloud setObject:t forKey:diaryKey];
-        }
-    }
-    
-    for (DBFileInfo *info in listFiles) {
-        
-        NSString *fileExtension = [info.path.name pathExtension];
-        NSString *diaryKey = [info.path.name stringByDeletingPathExtension];
-        
-        if ([fileExtension isEqualToString:@"txt"] && [allDBfilesystemKeys containsObject:diaryKey]) {
-            TempDiaryData *t = [diarysFromCloud objectForKey:diaryKey];
-            DBFile *file = [filesystem openFile:info.path error:nil];
-            NSString *diaryText = [file readString:nil];
-            NSLog(@"%@",diaryText);
-            t.diaryText = diaryText;
         }
     }
     completeDownloadList(diarysFromCloud);
 }
 
-
-
 - (void )listAllCloudDiarys:(ListAllCloudDiarys)completeDownloadList
 {
+    NSLog(@"list all diary");
     NSMutableDictionary *diarysFromCloud = [[NSMutableDictionary alloc]init];
 
     NSString *filePath = [NSString stringWithFormat:@"%@/",folder];
     DBPath *listFilePath = [[DBPath root] childPath:filePath];
     NSArray *listFiles = [filesystem listFolder:listFilePath error:nil];
+    NSLog(@"List %@",listFiles);
+    // Get all available keys from DB filesystem
     for (DBFileInfo *info in listFiles) {
         
+        NSString *diaryKey = [info.path.name stringByDeletingPathExtension];
         NSString *fileExtension = [info.path.name pathExtension];
         
-        if ([fileExtension isEqualToString:@"png"]&info.thumbExists) {
+        
+        if ([fileExtension isEqualToString:@"png"] && info.thumbExists) {
             
-            NSString *diaryKey = [info.path.name stringByDeletingPathExtension];
-            DBFile *file = [filesystem openThumbnail:info.path ofSize:DBThumbSizeXS inFormat:DBThumbFormatPNG error:nil];
-            NSData *diaryImageData = [file readData:nil];
+            // Get diary image thumbnail
+            DBFile *imageFile = [filesystem openThumbnail:info.path ofSize:DBThumbSizeM inFormat:DBThumbFormatPNG error:nil];
+            NSData *diaryImageData = [imageFile readData:nil];
             UIImage *diaryImage = [UIImage imageWithData:diaryImageData];
+            
+            // Get diary json
+            NSString *diaryDataPath = [NSString stringWithFormat:@"%@/%@.json",folder,diaryKey];
+            DBPath *existingPath = [[DBPath root] childPath:diaryDataPath];
+            DBFile *dataFile = [[DBFilesystem sharedFilesystem] openFile:existingPath error:nil];
+            
             TempDiaryData *t = [[TempDiaryData alloc]init];
             t.diaryKey = diaryKey;
             t.thumbnail = diaryImage;
-            t.thumbnailData = diaryImageData;
+            NSData *json = [dataFile readData:nil];
+            t.diaryData = [NSJSONSerialization JSONObjectWithData:json options:NSJSONReadingAllowFragments error:nil];
+            
             [diarysFromCloud setObject:t forKey:diaryKey];
-        }
-    }
-    for (DBFileInfo *info in listFiles) {
-        
-        NSString *fileExtension = [info.path.name pathExtension];
-
-        if ([fileExtension isEqualToString:@"txt"]) {
-            NSString *diaryKey = [info.path.name stringByDeletingPathExtension];
-            TempDiaryData *t = [diarysFromCloud objectForKey:diaryKey];
-            DBFile *file = [filesystem openFile:info.path error:nil];
-            NSString *diaryText = [file readString:nil];
-            NSLog(@"%@",diaryText);
-            t.diaryText = diaryText;
         }
     }
     completeDownloadList(diarysFromCloud);

@@ -563,6 +563,19 @@
     // Check if there's diary available
     if ([[[DiaryDataStore sharedStore]allItems]count] > 0) {
         DiaryData *d = [[[DiaryDataStore sharedStore]allItems]lastObject];
+
+//        UIFont* font = [UIFont
+//                        preferredFontForTextStyle:UIFontTextStyleSubheadline];
+//        
+//        NSDictionary *attrs =
+//  @{ NSForegroundColorAttributeName : [UIColor blackColor],
+//     NSFontAttributeName : font,
+//     NSTextEffectAttributeName : NSTextEffectLetterpressStyle
+//     };
+//        NSAttributedString* attrString = [[NSAttributedString alloc]
+//                                          initWithString:d.subject
+//                                          attributes:attrs];
+        
         _diaryImageView.layer.cornerRadius = 5;;
         _diaryImageView.layer.masksToBounds = YES;
         _diaryImageView.image = d.diaryImage;
