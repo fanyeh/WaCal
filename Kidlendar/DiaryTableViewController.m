@@ -30,7 +30,6 @@
     BOOL currentTableIsLocal;
     NSDateFormatter *dateFormatter;
     NSDateFormatter *weekdayFormatter;
-    UILabel *headerLabel;
     UISegmentedControl *diaryFilter;
 }
 @end
@@ -49,6 +48,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+//    self.automaticallyAdjustsScrollViewInsets = NO;
     
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self  action:@selector(createDiary)];
     self.navigationItem.rightBarButtonItem = addButton;
@@ -56,38 +56,28 @@
     UIBarButtonItem *editButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self  action:@selector(editDiaryTable)];
     self.navigationItem.leftBarButtonItem = editButton;
     self.navigationItem.leftBarButtonItem.tag = 0;
-    
+
+    // Segment controll
     diaryFilter = [[UISegmentedControl alloc] initWithItems:@[@"Local", @"Cloud"]];
     [diaryFilter sizeToFit];
-    self.navigationItem.titleView = diaryFilter;
-    
     [diaryFilter addTarget:self
                          action:@selector(segmentControlAction:)
                forControlEvents:UIControlEventValueChanged];
+    self.navigationItem.titleView = diaryFilter;
     
-    [self.tableView registerNib:[UINib nibWithNibName:@"DiaryTableViewCell" bundle:nil]
-         forCellReuseIdentifier:@"DiaryTableViewCell"];
-        
-    self.tableView.backgroundColor =  [UIColor clearColor];
+    cloudTable = [[UITableView alloc]initWithFrame:self.tableView.frame];
+    [cloudTable registerNib:[UINib nibWithNibName:@"DiaryTableViewCell" bundle:nil] forCellReuseIdentifier:@"DiaryTableViewCell"];
+    cloudTable.backgroundColor =  [UIColor clearColor];
+    cloudTable.separatorStyle = UITableViewCellSeparatorStyleNone;
+    cloudTable.contentInset = UIEdgeInsetsMake(44, 0, 0, 0);
     
+    localTable = [[UITableView alloc]initWithFrame:self.tableView.frame];
+    [localTable registerNib:[UINib nibWithNibName:@"DiaryTableViewCell" bundle:nil] forCellReuseIdentifier:@"DiaryTableViewCell"];
+    localTable.backgroundColor =  [UIColor clearColor];
+    localTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView = localTable;
     
-    UIView *headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
-    headerView.backgroundColor = [UIColor whiteColor];
-    headerLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
-    headerLabel.text = @"February 2014";
-    headerLabel.textColor = Rgb2UIColor(33, 138, 251);
-    headerLabel.textAlignment = NSTextAlignmentCenter;
-    headerLabel.font = [UIFont fontWithName:@"Avenir" size:20];
-    headerLabel.center = headerView.center;
-    
-    [headerView addSubview:headerLabel];
-    
-    self.tableView.tableHeaderView = headerView;
-    
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
-
     cloudDiarys = [[NSMutableDictionary alloc]init];
     
     // Current table
@@ -95,6 +85,7 @@
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshCloud:) name:@"uploadComplete" object:nil];
     
+    // Date formatters
     dateFormatter = [[NSDateFormatter alloc]init];
     dateFormatter.dateFormat = @"dd";
     weekdayFormatter = [[NSDateFormatter alloc]init];
@@ -114,45 +105,17 @@
     });
 }
 
-//- (void)fetchFromCloud
-//{
-//    [[DropboxModel shareModel] linkToDropBox:^(BOOL linked) {
-//        if (linked) {
-//            
-//            [[DBFilesystem sharedFilesystem] addObserver:self block:^{
-//                NSLog(@"File system status change %ld",(unsigned long)[DBFilesystem sharedFilesystem].status);
-//            }];
-//            
-//            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//                            [[DropboxModel shareModel] listUndownloadDiary:^(NSMutableDictionary *diarysFromCloud) {
-//                                cloudDiarys = diarysFromCloud;
-//                                [self.tableView reloadData];
-//                            }];
-//            });
-//        }
-//        
-//    } fromController:self];
-//
-//}
-
-//- (void)listUndownloadDairy
-//{
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        [[DropboxModel shareModel] listUndownloadDiary:^(NSMutableDictionary *diarysFromCloud) {
-//            cloudDiarys = diarysFromCloud;
-//            [self.tableView reloadData];
-//        }];
-//    });
-//}
-
 - (void)segmentControlAction:(UISegmentedControl *)sender
 {
+    
     if (sender.selectedSegmentIndex == 0) {
         currentTableIsLocal = YES;
-        headerLabel.text = @"Local";
+        self.tableView = localTable;
+        cloudTable.editing = NO;
     } else {
         currentTableIsLocal = NO;
-        headerLabel.text = @"Cloud";
+        self.tableView = cloudTable;
+        localTable.editing = NO;
         [[DropboxModel shareModel]linkToDropBox:^(BOOL linked) {
             if (linked) {
                 [self refreshCloud:nil];
@@ -194,30 +157,23 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
+    DiaryTableViewCell *cell = (DiaryTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"DiaryTableViewCell"];
+    if (!cell)
+        cell =[[DiaryTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DiaryTableViewCell"];
+    cell.cellImageView.layer.cornerRadius = 5.0f;
+    cell.cellImageView.layer.masksToBounds = YES;
+    cell.cellView.layer.shadowColor = [[UIColor blackColor]CGColor];
+    cell.cellView.layer.shadowOpacity = 0.5f;
+    cell.cellView.layer.shadowOffset = CGSizeMake(2 , 2);
+    
     // Local cell
     if (currentTableIsLocal) {
-        DiaryTableViewCell *cell = (DiaryTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"DiaryTableViewCell"];
-        if (!cell)
-            cell =[[DiaryTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DiaryTableViewCell"];
 
         // Configure the cell...
         DiaryData *d = [DiaryDataStore sharedStore].allItems[indexPath.row];
-//        cell.imageView.image = d.thumbnail;
-//        cell.textLabel.text = d.diaryText;
-//        
-//        if (d.cloudRelationship.dropbox)
-//            cell.detailTextLabel.text = @"Dropbox Synced";
-//        return cell;
-        cell.cellImageView.layer.cornerRadius = 5.0f;
-        cell.cellImageView.layer.masksToBounds = YES;
-        cell.cellImageView.image = d.diaryImage;
-        cell.cellView.layer.cornerRadius = 5.0f;
-        cell.cellView.layer.shadowColor = [[UIColor blackColor]CGColor];
-        cell.cellView.layer.shadowOpacity = 0.5f;
-        cell.cellView.layer.shadowOffset = CGSizeMake(2 , 2);
         
         NSDate *diaryDate = [NSDate dateWithTimeIntervalSinceReferenceDate:d.dateCreated];
+        cell.cellImageView.image = d.diaryImage;
         cell.dateLabel.text = [dateFormatter stringFromDate:diaryDate];
         cell.weekdayLabel.adjustsFontSizeToFitWidth = YES;
         cell.weekdayLabel.text = [weekdayFormatter stringFromDate:diaryDate];
@@ -229,25 +185,14 @@
     }
     // Cloud cell
     else {
-        DiaryTableViewCell *cell = (DiaryTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"DiaryTableViewCell"];
-        if (!cell)
-            cell =[[DiaryTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DiaryTableViewCell"];
-        
-        cell.cellImageView.layer.cornerRadius = 5.0f;
-        cell.cellImageView.layer.masksToBounds = YES;
-        cell.cellView.layer.cornerRadius = 5.0f;
-        cell.cellView.layer.shadowColor = [[UIColor blackColor]CGColor];
-        cell.cellView.layer.shadowOpacity = 0.5f;
-        cell.cellView.layer.shadowOffset = CGSizeMake(2 , 2);
-//
         TempDiaryData *t = [[cloudDiarys allValues] objectAtIndex:indexPath.row];
-//        NSLog(@"T %@",t);
+        
         NSDictionary *diaryData = t.diaryData;
         NSDate *diaryDate = [NSDate dateWithTimeIntervalSinceReferenceDate:[(NSString *)[diaryData objectForKey:@"dateInterval"] doubleValue]];
+        cell.cellImageView.image =t.thumbnail;
         cell.dateLabel.text = [dateFormatter stringFromDate:diaryDate];
         cell.weekdayLabel.adjustsFontSizeToFitWidth = YES;
         cell.weekdayLabel.text = [weekdayFormatter stringFromDate:diaryDate];
-        cell.cellImageView.image =t.thumbnail;
         cell.locationLabel.text = [diaryData objectForKey:@"diaryLocationName"];
         cell.diaryDetail.text = [diaryData objectForKey:@"diaryText"];
         cell.diarySubject.text = [diaryData objectForKey:@"diarySubject"];
@@ -280,7 +225,7 @@
     if (currentTableIsLocal) {
         DiaryViewController *controller = [[DiaryViewController alloc]init];
         controller.diaryData = [[DiaryDataStore sharedStore]allItems][indexPath.row];
-        [self.navigationController pushViewController:controller animated:NO];
+        [self.navigationController pushViewController:controller animated:YES];
     } else {
         // Download from cloud
         // Get tempdata
@@ -321,11 +266,15 @@
                         diaryLocation.latitude = [(NSString *)[l objectForKey:@"latitude"] doubleValue];
                     }
                     
-                    //                [self listUndownloadDairy];
                     [localTable reloadData];
-                    diaryFilter.selectedSegmentIndex = 0;
                     currentTableIsLocal = YES;
-                    NSLog(@"Download completed");
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Dwonload Completed"
+                                                                       message:nil
+                                                                      delegate:self cancelButtonTitle:@"OK"
+                                                             otherButtonTitles:nil, nil];
+                        [alert show];
+                    });
                 }];
             });
         }

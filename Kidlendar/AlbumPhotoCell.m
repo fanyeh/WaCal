@@ -48,12 +48,9 @@
     [super setSelected:selected];
     if (selected) {
         highlightMask.hidden = NO;
-        NSLog(@"Select");
     }
     else {
         highlightMask.hidden = YES;
-
-        NSLog(@"Deselect");
     }
 }
 

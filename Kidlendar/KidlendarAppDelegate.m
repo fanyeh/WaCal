@@ -39,38 +39,6 @@
 //     UIRemoteNotificationTypeAlert |
 //     UIRemoteNotificationTypeSound];
 
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"])
-    {
-        // app already launched
-        DBAccount  *account = [DBAccountManager sharedManager].linkedAccount;
-        if (!account || !account.linked) {
-            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"Dropbox"];
-
-        } else {
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"Dropbox"];
-        }
-        
-        if (FBSession.activeSession.state == FBSessionStateOpen
-            || FBSession.activeSession.state == FBSessionStateOpenTokenExtended) {
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"Facebook"];
-
-        } else {
-            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"Facebook"];
-        }
-        
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-    else
-    {
-        // This is the first launch ever
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"FaceDetection"];
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"Dropbox"];
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"Facebook"];
-
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-    
     DBAccountManager *accountManager = [[DBAccountManager alloc] initWithAppKey:@"hsvuk547mb46ady" secret:@"z0bw1iew9vssq6r"];
     [DBAccountManager setSharedManager:accountManager];
     

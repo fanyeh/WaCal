@@ -16,5 +16,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
 @property (weak, nonatomic) IBOutlet UITextView *diaryDetail;
 @property (weak, nonatomic) IBOutlet UILabel *diarySubject;
+@property (weak, nonatomic) IBOutlet UIView *dateBackgroundView;
 
 @end

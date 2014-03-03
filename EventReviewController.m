@@ -41,23 +41,38 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     NSArray *places;
     double locationLat;
     double locationLng;
+    
+    BOOL allday;
 }
 
 @property (weak, nonatomic) IBOutlet UITextField *subjectField;
 @property (weak, nonatomic) IBOutlet UITextField *locationField;
+
+@property (weak, nonatomic) IBOutlet UIView *startTimeView;
 @property (weak, nonatomic) IBOutlet UITextField *startTimeField;
+@property (weak, nonatomic) IBOutlet UILabel *startTimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *startDateLabel;
+
+@property (weak, nonatomic) IBOutlet UIView *endTimeView;
 @property (weak, nonatomic) IBOutlet UITextField *endTimeField;
 @property (weak, nonatomic) IBOutlet UILabel *endDateLabel;
+@property (weak, nonatomic) IBOutlet UILabel *endTimeLabel;
+
 @property (weak, nonatomic) IBOutlet UIView *reminderView;
 @property (weak, nonatomic) IBOutlet UIView *repeatView;
-@property (weak, nonatomic) IBOutlet UIButton *allDayBtn;
 @property (weak, nonatomic) IBOutlet UIView *eventDetailView;
+
+@property (weak, nonatomic) IBOutlet UIView *maskView;
+@property (weak, nonatomic) IBOutlet UIView *locationSearchView;
 @property (weak, nonatomic) IBOutlet UISearchBar *locationSearchBar;
 @property (weak, nonatomic) IBOutlet UITableView *searchResultTable;
-@property (weak, nonatomic) IBOutlet UIView *locationSearchView;
-@property (weak, nonatomic) IBOutlet UIView *maskView;
+
 @property (weak, nonatomic) IBOutlet MKMapView *locationMapView;
+
+@property (weak, nonatomic) IBOutlet UIView *alldayView;
+@property (weak, nonatomic) IBOutlet UILabel *allLabel;
+@property (weak, nonatomic) IBOutlet UILabel *dayLabel;
+
 @end
 
 @implementation EventReviewController
@@ -126,11 +141,11 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     hideFrame = reminder.frame;
     
     // Set up All Day button
-    [_allDayBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-    if (_event.isAllDay) {
-        _allDayBtn.backgroundColor = Rgb2UIColor(33, 138, 251);
-        _allDayBtn.selected = YES;
-    }
+    _alldayView.layer.cornerRadius = _alldayView.frame.size.width/2;
+    UITapGestureRecognizer *alldayTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(alldayAction)];
+    [_alldayView addGestureRecognizer:alldayTap];
+    _startTimeView.layer.cornerRadius = 5.0f;
+    _endTimeView.layer.cornerRadius = 5.0f;
     
     // Set up date formatter
     dateFormatter = [[NSDateFormatter alloc]init];
@@ -167,10 +182,10 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     _endTimeField.delegate = self;
     _endTimeField.inputView = _datePicker;
     
-    _startTimeField.text = [timeFormatter stringFromDate:_selectedDate];
+    _startTimeLabel.text = [timeFormatter stringFromDate:_selectedDate];
     _startDateLabel.text = [dateFormatter stringFromDate:_selectedDate];
     
-    _endTimeField.text = [timeFormatter stringFromDate:[NSDate dateWithTimeInterval:300 sinceDate:_selectedDate]];
+    _endTimeLabel.text = [timeFormatter stringFromDate:[NSDate dateWithTimeInterval:300 sinceDate:_selectedDate]];
     _endDateLabel.text =  [dateFormatter stringFromDate:[NSDate dateWithTimeInterval:300 sinceDate:_selectedDate]];
     
 }
@@ -180,8 +195,32 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     self.tabBarController.tabBar.hidden = YES;
     // Refresh label content based on event
     _subjectField.text = _event.title;
-    _startDateLabel.text = [NSString stringWithFormat:@"%@",[dateFormatter stringFromDate:_event.startDate]];
-    _startTimeField.text = [NSString stringWithFormat:@"%@",[timeFormatter stringFromDate:_event.startDate]];
+    NSValue *starFrame = [NSValue valueWithCGRect:_startDateLabel.frame];
+    NSLog(@"Start frame %@",starFrame);
+    if (_event.allDay) {
+        allday = YES;
+        _alldayView.backgroundColor = Rgb2UIColor(33, 138, 251);
+        _allLabel.textColor = [UIColor whiteColor];
+        _dayLabel.textColor = [UIColor whiteColor];
+        _startTimeLabel.hidden = YES;
+        _endTimeLabel.hidden = YES;
+        
+        _startDateLabel.frame = CGRectOffset(_startDateLabel.frame, 0 , -13);
+        starFrame = [NSValue valueWithCGRect:_startDateLabel.frame];
+        NSLog(@"Start frame %@",starFrame);
+
+        _endDateLabel.frame = CGRectOffset(_endDateLabel.frame, 0 , -13);
+        _startDateLabel.font = [UIFont systemFontOfSize:15];
+        _endDateLabel.font = [UIFont systemFontOfSize:15];
+        
+        _datePicker.datePickerMode = UIDatePickerModeDate;
+    } else {
+        allday = NO;
+        _allLabel.textColor = [UIColor grayColor];
+        _dayLabel.textColor = [UIColor grayColor];
+    }
+//    _startDateLabel.text = [NSString stringWithFormat:@"%@",[dateFormatter stringFromDate:_event.startDate]];
+//    _startTimeField.text = [NSString stringWithFormat:@"%@",[timeFormatter stringFromDate:_event.startDate]];
     
     // Check if there is location
     if (_event.location) {
@@ -199,13 +238,13 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
         hasDestination = YES;
     } else {
         hasDestination = NO;
-        NSLog(@"No location found for event");
     }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     self.tabBarController.tabBar.hidden = NO;
+    NSLog(@"event start date %@",_event.startDate);
 }
 - (void)didReceiveMemoryWarning
 {
@@ -406,6 +445,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     // update event
     _event.title = _subjectField.text;
     _event.location = _locationField.text;
+    _event.allDay = allday;
     [[[CalendarStore sharedStore]eventStore] saveEvent:_event span:EKSpanThisEvent commit:YES error:nil];
     NSDictionary *startDate = [NSDictionary dictionaryWithObject:_event.startDate forKey:@"startDate"];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"eventChange" object:nil userInfo:startDate];
@@ -415,6 +455,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 - (IBAction)deleteBtn:(id)sender
 {
     
+    [self showMap];
     UIAlertView *deleteAlert = [[UIAlertView alloc]initWithTitle:@"Delete Event"
                                                          message:@"Confirm to delete"
                                                         delegate:self
@@ -427,8 +468,11 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 - (void)showMap
 {
     [self.view endEditing:YES];
-    [self showReminder:NO];
-    [self showRepeat:NO];
+    reminder.show = NO;
+    reminder.frame = hideFrame;
+    
+    repeat.show = NO;
+    repeat.frame = hideFrame;
 }
 
 - (void)searchLocation
@@ -440,66 +484,98 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 
 -(void)showReminder
 {
-    [self showReminder:YES];
-}
-
--(void)showReminder:(BOOL)show
-{
-    if (show) {
+    if (!reminder.show) {
         [self.view endEditing:YES];
         repeat.frame = hideFrame;
+        repeat.show = NO;
         reminder.frame = CGRectOffset(reminder.frame, 0, -216);
-    } else {
-        reminder.frame = hideFrame;
-    }
-}
-
-- (void)showRepeat:(BOOL)show
-{
-    if (show) {
-        [self.view endEditing:YES];
-        reminder.frame = hideFrame;
-        repeat.frame = CGRectOffset(repeat.frame, 0, -216);
-    } else {
-        repeat.frame = hideFrame;
+        reminder.show = YES;
     }
 }
 
 -(void)showRepeat
 {
-    [self showRepeat:YES];
+    if (!repeat.show) {
+        [self.view endEditing:YES];
+        reminder.frame = hideFrame;
+        reminder.show = NO;
+        repeat.frame = CGRectOffset(repeat.frame, 0, -216);
+        repeat.show = YES;
+    }
 }
 
-- (IBAction)alldayBtn:(UIButton *)sender
+- (void)alldayAction
 {
-    if (sender.isSelected) {
-        _event.allDay = NO;
-        sender.backgroundColor = [UIColor whiteColor];
-        sender.selected = NO;
+    if (allday) {
+        allday = NO;
+        _alldayView.backgroundColor = [UIColor whiteColor];
+        _allLabel.textColor = [UIColor grayColor];
+        _dayLabel.textColor = [UIColor grayColor];
+        
+        _startDateLabel.frame = CGRectOffset(_startDateLabel.frame, 0, 13);
+        _endDateLabel.frame = CGRectOffset(_endDateLabel.frame, 0 , 13);
+        _startDateLabel.font = [UIFont systemFontOfSize:12];
+        _endDateLabel.font = [UIFont systemFontOfSize:12];
+        
+        _startTimeLabel.hidden = NO;
+        _endTimeLabel.hidden = NO;
+        
+        _datePicker.datePickerMode = UIDatePickerModeDateAndTime;
+        _datePicker.minuteInterval = 5;
+        
+        
     } else {
-        _event.allDay = YES;
-        sender.backgroundColor = Rgb2UIColor(33, 138, 251);
-        sender.selected = YES;
+        allday = YES;
+        _alldayView.backgroundColor = Rgb2UIColor(33, 138, 251);
+        _allLabel.textColor = [UIColor whiteColor];
+        _dayLabel.textColor = [UIColor whiteColor];
+        
+        _startDateLabel.frame = CGRectOffset(_startDateLabel.frame, 0 , -13);
+        _endDateLabel.frame = CGRectOffset(_endDateLabel.frame, 0 , -13);
+        _startDateLabel.font = [UIFont systemFontOfSize:15];
+        _endDateLabel.font = [UIFont systemFontOfSize:15];
+        
+        _startTimeLabel.hidden = YES;
+        _endTimeLabel.hidden = YES;
+        
+        _datePicker.datePickerMode = UIDatePickerModeDate;
     }
 }
 
 -(void)changeDate
 {
-    if (_startTimeField.isFirstResponder) {
-        _startDateLabel.text = [dateFormatter stringFromDate: _datePicker.date];
-        _startTimeField.text = [timeFormatter stringFromDate: _datePicker.date];
-        _event.startDate = _datePicker.date;
-        
-        // Minimum end time after start time is selected
-        minimumDate = [NSDate dateWithTimeInterval:300 sinceDate:_datePicker.date];
-        _endDateLabel.text = [dateFormatter stringFromDate:minimumDate];
-        _endTimeField.text = [timeFormatter stringFromDate:minimumDate];
-        _event.endDate = minimumDate;
+    if (!_event.allDay) {
+        if (_startTimeField.isFirstResponder) {
+            _startDateLabel.text = [dateFormatter stringFromDate: _datePicker.date];
+            _startTimeLabel.text = [timeFormatter stringFromDate: _datePicker.date];
+            _event.startDate = _datePicker.date;
+            
+            // Minimum end time after start time is selected
+            minimumDate = [NSDate dateWithTimeInterval:300 sinceDate:_datePicker.date];
+            _endDateLabel.text = [dateFormatter stringFromDate:minimumDate];
+            _endTimeLabel.text = [timeFormatter stringFromDate:minimumDate];
+            _event.endDate = minimumDate;
+        }
+        else {
+            _endTimeLabel.text = [timeFormatter stringFromDate: _datePicker.date];
+            _endDateLabel.text = [dateFormatter stringFromDate: _datePicker.date];
+            _event.endDate = _datePicker.date;
+        }
     }
     else {
-        _endTimeField.text = [timeFormatter stringFromDate: _datePicker.date];
-        _endDateLabel.text = [dateFormatter stringFromDate: _datePicker.date];
-        _event.endDate = _datePicker.date;
+        if (_startTimeField.isFirstResponder) {
+            _startDateLabel.text = [dateFormatter stringFromDate: _datePicker.date];
+            _event.startDate = _datePicker.date;
+            
+            // Minimum end time after start time is selected
+            minimumDate = [NSDate dateWithTimeInterval:60*60*24 sinceDate:_datePicker.date];
+            _endDateLabel.text = [dateFormatter stringFromDate:minimumDate];
+            _event.endDate = minimumDate;
+        }
+        else {
+            _endDateLabel.text = [dateFormatter stringFromDate: _datePicker.date];
+            _event.endDate = _datePicker.date;
+        }
     }
 }
 

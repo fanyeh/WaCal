@@ -42,6 +42,7 @@
 
 - (void)initCalendar:(MonthModel *)monthModel
 {
+    self.backgroundColor = [UIColor clearColor];
     // Initialization code
     _monthModel = monthModel;
     CGFloat xOffSet = 0.0f;
@@ -54,7 +55,7 @@
     weekdayViewHeight = 40;
     
     _dateGroupView = [[UIView alloc]initWithFrame:CGRectMake(0, weekdayViewHeight, calendarWidth,calendarHeight-  weekdayViewHeight+1)];
-    _dateGroupView.backgroundColor = [UIColor whiteColor];
+    _dateGroupView.backgroundColor = [UIColor clearColor];
     
     dateGroupFrame = _dateGroupView.frame;
     borderView = [[UIView alloc]initWithFrame:CGRectMake(10, weekdayViewHeight+dateGroupFrame.size.height, 300, 1)];

@@ -55,11 +55,12 @@
     CGFloat photoCollectionShrinkHeight;
     NSMutableArray *imageMeta;
 
-
     BOOL showAlbumTable;
     
     UIActivityIndicatorView *faceDetectingActivity;
 }
+@property (weak, nonatomic) IBOutlet UIView *noPhotoView;
+@property (weak, nonatomic) IBOutlet UIImageView *faceImageView;
 
 @end
 
@@ -83,6 +84,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.automaticallyAdjustsScrollViewInsets = NO;
+    
     // Set up diary photo collection view
     diaryCollectionViewInset = UIEdgeInsetsMake(2, 2, 2, 2);
     diaryMinimunCellSpace = 2.0;
@@ -111,19 +113,17 @@
     swipeOffset = diaryPhotosView.frame.size.height;
     [self.view addSubview:scroller];
     
+    // Scroller for photo collection
     UILabel *scrollerBar = [[UILabel alloc]initWithFrame:CGRectMake(scroller.center.x - 20, 4, 40, 6)];
     scrollerBar.backgroundColor = [UIColor whiteColor];
     scrollerBar.layer.cornerRadius = 3;
     [scroller addSubview:scrollerBar];
-    
     navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 10 , 320, 44)];
     navBar.backgroundColor = [UIColor clearColor];
     navBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
     navItem = [[UINavigationItem alloc]init];
     navItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"◀︎" style:UIBarButtonItemStyleBordered target:self action:@selector(showTable)];
-    
     navItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"0/5" style:UIBarButtonItemStyleBordered target:nil action:nil];
-
     [navBar setItems:@[navItem]];
     [scroller addSubview:navBar];
 
@@ -134,7 +134,6 @@
 
     photoCollectionExpandHeight = self.view.frame.size.height - 44 - scroller.frame.size.height;
     photoCollectionShrinkHeight = self.view.frame.size.height - 44 - diaryPhotosView.frame.size.height - scroller.frame.size.height;
-    
     
     UICollectionViewFlowLayout *photoFlowLayout = [[UICollectionViewFlowLayout alloc]init];
     photoCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 418, 320, photoCollectionExpandHeight)
@@ -151,6 +150,7 @@
     
     imageMeta = [[NSMutableArray alloc]init];
     
+    // Table view for change photo album
     photoAlbumTable = [[UITableView alloc]initWithFrame:CGRectMake(0, 418, 320, photoCollectionExpandHeight)
                                                   style:UITableViewStyleGrouped];
     photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, -320, 0);
@@ -170,19 +170,90 @@
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneSelection)];
     self.navigationItem.rightBarButtonItem = doneButton;
     
+    // Face detection
     faceDetectingActivity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     faceDetectingActivity.frame = self.view.frame;
     [self.view addSubview:faceDetectingActivity];
+    
+    UIPanGestureRecognizer *faceDetectPan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panFaceDetectView:)];
+    [_faceImageView addGestureRecognizer:faceDetectPan];
+    UITapGestureRecognizer *faceDetectTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapFaceDetectView:)];
+    [_faceImageView addGestureRecognizer:faceDetectTap];
+    _faceImageView.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.300];
+    _faceImageView.layer.borderColor = [[UIColor grayColor]CGColor];
+    _faceImageView.layer.borderWidth = 2.0f;
+    _faceImageView.layer.cornerRadius = 5.0f;
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"FaceDetection"]) {
+        _faceImageView.image = [UIImage imageNamed:@"face_yellow.png"];
+    } else {
+        _faceImageView.image = [UIImage imageNamed:@"face_white.png"];
+    }
+    
+    
+    
+    [self.view bringSubviewToFront:_faceImageView];
+    [self.view bringSubviewToFront:_noPhotoView];
+    [self.view bringSubviewToFront:photoCollectionView];
+    [self.view bringSubviewToFront:scroller];
+}
+
+-(void)panFaceDetectView:(UIPanGestureRecognizer *)sender
+{
+    CGPoint point = [sender locationInView:self.view];
+    if (sender.state == UIGestureRecognizerStateChanged) {
+        CGPoint center = sender.view.center;
+        center.x = point.x;
+        center.y = point.y;
+        sender.view.center = center;
+    }
+    
+    if (sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateCancelled) {
+        CGRect frame = sender.view.frame;
+        if (frame.origin.x < diaryPhotosView.frame.origin.x)
+            frame.origin.x = diaryPhotosView.frame.origin.x+5;
+        if (frame.origin.y < diaryPhotosView.frame.origin.y)
+            frame.origin.y = diaryPhotosView.frame.origin.y+5;
+        if (frame.origin.x+frame.size.width > diaryPhotosView.frame.origin.x+diaryPhotosView.frame.size.width)
+            frame.origin.x = diaryPhotosView.frame.origin.x+diaryPhotosView.frame.size.width-5-frame.size.width;
+        if (frame.origin.y+frame.size.height > diaryPhotosView.frame.origin.y+diaryPhotosView.frame.size.height)
+            frame.origin.y = diaryPhotosView.frame.origin.y+diaryPhotosView.frame.size.height-5-frame.size.height;
+        [UIView animateWithDuration:0.5f animations:^{
+            sender.view.frame = frame;
+        }];
+    }
+}
+
+-(void)tapFaceDetectView:(UITapGestureRecognizer *)sender
+{
+    BOOL faceDetection = [[NSUserDefaults standardUserDefaults] boolForKey:@"FaceDetection"];
+    if (faceDetection) {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"FaceDetection"];
+        _faceImageView.image = [UIImage imageNamed:@"face_white.png"];
+
+    } else {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"FaceDetection"];
+        _faceImageView.image = [UIImage imageNamed:@"face_yellow.png"];
+    }
+    
+    [self processFaceDetection];
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     self.tabBarController.tabBar.hidden = YES;
+    photoAlbumTable.hidden = YES;
+
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    photoAlbumTable.hidden = NO;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     self.tabBarController.tabBar.hidden = NO;
+    photoAlbumTable.hidden = YES;
 }
 
 - (void)swipePhotoCollection:(UISwipeGestureRecognizer *)sender
@@ -200,7 +271,6 @@
                                                320,
                                                photoCollectionExpandHeight);
         [UIView animateWithDuration:0.5 animations:^{
-            
             if ([cellImageArray count]>0) {
                 sender.view.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.60];
             }
@@ -215,9 +285,9 @@
         
     }
     else if (sender.direction == UISwipeGestureRecognizerDirectionDown) {
+
         sender.direction = UISwipeGestureRecognizerDirectionUp;
         [UIView animateWithDuration:0.5 animations:^{
-            
             sender.view.backgroundColor = [UIColor blackColor];
             sender.view.frame = CGRectOffset(sender.view.frame, 0, swipeOffset);
             photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, 0, swipeOffset);
@@ -225,6 +295,7 @@
 
             
         } completion:^(BOOL finished) {
+
             photoCollectionView.frame = CGRectMake(photoCollectionView.frame.origin.x,
                                                    photoCollectionView.frame.origin.y,
                                                    320,
@@ -469,6 +540,7 @@
 
 - (void)selectedPhoto:(NSIndexPath *)indexPath
 {
+    _noPhotoView.hidden = YES;
     ALAsset *asset =  [photoAssets objectAtIndex:indexPath.row];
 //    // Retrieve the image orientation from the ALAsset
 //    UIImageOrientation orientation = UIImageOrientationUp;
@@ -525,7 +597,10 @@
     if (collectionView.tag==0) {
         DiaryPhotoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"DiaryPhotoCell" forIndexPath:indexPath];
         [cell deletePhotoBadger:deleteDiaryPhotos];
-        cell.photoView.frame = cell.contentView.bounds;
+        [UIView animateWithDuration:0.5f animations:^{
+            cell.photoView.frame = cell.contentView.bounds;
+        }];
+
         if ([cellImageArray count] > 0)
             cell.photoView.image = cellImageArray[indexPath.row];
         
@@ -537,13 +612,16 @@
         
     } else {
         
-
         AlbumPhotoCell *cell = (AlbumPhotoCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"AlbumPhotoCell" forIndexPath:indexPath];
         ALAsset *asset =  [photoAssets objectAtIndex:indexPath.row];
         UIImageView *cellPhoto = [[UIImageView alloc]initWithImage:[UIImage imageWithCGImage: asset.thumbnail]];
         cellPhoto.frame = cell.contentView.frame;
         [cell.contentView addSubview:cellPhoto];
-        
+        for (int i = 0; i < [selectedPhotoOrderingInfo count] ; i++) {
+            NSArray *n = [selectedPhotoOrderingInfo objectAtIndex:i];
+            if(indexPath == n[0])
+                cell.selectNumber.text = [NSString stringWithFormat:@"%d",i+1];
+        }
         return cell;
     }
 }
@@ -580,7 +658,6 @@
             photoViewController.delegate = self;
             [self.navigationController pushViewController:photoViewController animated:YES];
         }
-        
     }
     
     // Photo collection view select
@@ -637,6 +714,8 @@
             // Remove image info from ordering info
             [selectedPhotoOrderingInfo removeObject:imageInfo];
             
+            if([selectedPhotoOrderingInfo count]==0)
+                _noPhotoView.hidden = NO;
             
             for (int i = 0; i < [selectedPhotoOrderingInfo count] ; i++) {
                 NSArray *n = [selectedPhotoOrderingInfo objectAtIndex:i];

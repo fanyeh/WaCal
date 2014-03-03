@@ -86,15 +86,6 @@
     _diarySubjectField.tag = 0;
     
     _locationField.delegate = self;
-    _locationField.rightViewMode = UITextFieldViewModeWhileEditing;
-    UIView *locationRightView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
-    UITapGestureRecognizer *rightViewTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(searchLocation)];
-    [locationRightView addGestureRecognizer:rightViewTap];
-    UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 20, 20)];
-    imageView.image = [UIImage imageNamed:@"searchicon.png"];
-    [locationRightView addSubview:imageView];
-    _locationField.rightView = locationRightView;
-
     
     _locationSearchBar.delegate = self;
     
@@ -127,12 +118,6 @@
     self.tabBarController.tabBar.hidden = YES;
 }
 
-- (void)searchLocation
-{
-    _locationSearchBar.text = _locationField.text;
-    [self queryGooglePlacesLongitude:0 andLatitude:0 withName:_locationField.text];
-    _maskView.hidden = NO;
-}
 
 #pragma mark - UISearchBarDelegate
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
@@ -242,6 +227,12 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
+    if (textField.returnKeyType == UIReturnKeySearch) {
+        _locationSearchBar.text = _locationField.text;
+        [self queryGooglePlacesLongitude:0 andLatitude:0 withName:_locationField.text];
+        _maskView.hidden = NO;
+        [_locationSearchBar becomeFirstResponder];
+    }
     [textField resignFirstResponder];
     if (textField.tag == 0) {
         [_diaryTimeField becomeFirstResponder];

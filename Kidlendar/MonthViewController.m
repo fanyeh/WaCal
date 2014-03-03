@@ -22,6 +22,7 @@
 #import "LocationData.h"
 #import "LocationDataStore.h"
 #import "EventTableCell.h"
+#import "DiaryViewController.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 
@@ -42,6 +43,7 @@
     NSDateFormatter *eventTimeFormatter;
 }
 
+@property (weak, nonatomic) IBOutlet UIView *diaryView;
 @property (weak, nonatomic) IBOutlet UILabel *comingEventTime;
 @property (weak, nonatomic) IBOutlet UILabel *comingEventTimeEnd;
 @property (weak, nonatomic) IBOutlet UILabel *comingEventTitle;
@@ -55,6 +57,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *diaryLocation;
 @property (weak, nonatomic) IBOutlet UITextView *diaryDetail;
 @property (weak, nonatomic) IBOutlet UILabel *allDayLabel;
+@property (weak, nonatomic) IBOutlet UIView *emptyDiaryView;
+@property (weak, nonatomic) IBOutlet UIView *emptyEventView;
 
 @end
 
@@ -78,6 +82,11 @@
     // Do any additional setup after loading the view from its nib.
 //    self.view.layer.borderColor = [Rgb2UIColor(33, 138, 251) CGColor];
 //    self.view.layer.borderWidth = 5.0f;
+    UITapGestureRecognizer *emptyEventTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(addEvent)];
+    UITapGestureRecognizer *emptyDiaryTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(addDiary)];
+
+    [_emptyDiaryView addGestureRecognizer:emptyDiaryTap];
+    [_emptyEventView addGestureRecognizer:emptyEventTap];
     
     dateFormatter = [[NSDateFormatter alloc]init];
     dateFormatter.dateFormat = @"yyyy/MM/dd";
@@ -124,6 +133,10 @@
     [_monthView addGestureRecognizer:swipeRight];
     [_monthView addGestureRecognizer:swipeUp];
     [_monthView addGestureRecognizer:swipeDown];
+    
+    // Show diary gesture
+    UITapGestureRecognizer *diaryTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(diaryTap)];
+    [_diaryView addGestureRecognizer:diaryTap];
 
     // Set up table for events
     eventTableView = [[UITableView alloc]initWithFrame:self.view.frame style:UITableViewStyleGrouped];
@@ -131,7 +144,6 @@
     eventTableView.backgroundColor = [UIColor clearColor];
     eventTableView.hidden = YES;
     eventTableView.delegate = self;
-//    eventTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [eventTableView registerNib:[UINib nibWithNibName:@"EventTableCell" bundle:nil]
          forCellReuseIdentifier:@"Cell"];
 
@@ -314,6 +326,14 @@
 
 #pragma mark -UIGesture
 
+-(void)diaryTap
+{
+    DiaryViewController *controller = [[DiaryViewController alloc]init];
+    controller.diaryData = [[[DiaryDataStore sharedStore]allItems]lastObject];
+    [self.navigationController pushViewController:controller animated:YES];
+
+}
+
 -(void)showEventView
 {
     EventReviewController *evc = [[EventReviewController alloc]init];
@@ -350,13 +370,11 @@
 
 - (void)shrinkMonthWithAnimation
 {
-
-        _comingEventView.hidden = YES;
-        [_monthView shrinkCalendarWithRow:[monthModel rowNumberForDate:_selectedDate]withAnimation:YES complete:^{
-            eventTableView.hidden = NO;
-            [self showEventTable];
-        }];
-
+    _comingEventView.hidden = YES;
+    [_monthView shrinkCalendarWithRow:[monthModel rowNumberForDate:_selectedDate]withAnimation:YES complete:^{
+        eventTableView.hidden = NO;
+        [self showEventTable];
+    }];
 }
 
 -(void)expandMonthWithOutAnimation
@@ -365,7 +383,6 @@
         eventTableView.hidden = YES;
         [_monthView expandCalendarWithRow:[monthModel rowNumberForDate:_selectedDate]withAnimation:NO complete:^{
             [self showComingEvent];
-            _comingEventView.hidden = NO;
         }];
     }
 }
@@ -376,7 +393,6 @@
         eventTableView.hidden = YES;
         [_monthView expandCalendarWithRow:[monthModel rowNumberForDate:_selectedDate]withAnimation:YES complete:^{
             [self showComingEvent];
-            _comingEventView.hidden = NO;
         }];
     }
 }
@@ -517,9 +533,25 @@
 - (void)showEventTable
 {
     [monthModel checkEventForDate:_selectedDate];
+    if ([monthModel.eventsInDate count]> 0) {
+        if (!_emptyEventView.hidden) {
+            [UIView animateWithDuration:0.5 animations:^{
+                _emptyEventView.alpha =0;
+            } completion:^(BOOL finished) {
+                _emptyEventView.hidden = YES;
+            }];
+        }
+    } else {
+        if (_emptyEventView.hidden) {
+            _emptyEventView.hidden = NO;
+            [UIView animateWithDuration:0.5 animations:^{
+                _emptyEventView.alpha =1;
+            }];
+        }
+    }
     // Opens event and diary details on tap date
-    eventTableView.frame = CGRectMake(0, _monthView.shrinkFrame.origin.y+_monthView.shrinkFrame.size.height, self.view.frame.size.width, 200);
-    [eventTableView reloadData];
+        eventTableView.frame = CGRectMake(0, _monthView.shrinkFrame.origin.y+_monthView.shrinkFrame.size.height, self.view.frame.size.width, 200);
+        [eventTableView reloadData];
 }
 
 - (void)showComingEvent
@@ -548,13 +580,30 @@
                 break;
             }
         }
+        if (_comingEventView.hidden) {
+            [UIView animateWithDuration:0.5 animations:^{
+                _emptyEventView.alpha =0;
+            } completion:^(BOOL finished) {
+                _emptyEventView.hidden = YES;
+                _comingEventView.alpha = 0;
+                [UIView animateWithDuration:0.5f animations:^{
+                    _comingEventView.hidden = NO;
+                    _comingEventView.alpha = 1;
+                }];
+            }];
+        }
     }
-   else {
-        _comingEventTime.text = nil;
-       _comingEventTimeEnd.text = nil;
-        _comingEventTitle.text = nil;
-       _allDayLabel.hidden = YES;
-       _locationLabel.text = nil;
+   else if (_emptyEventView.hidden) {
+       [UIView animateWithDuration:0.5 animations:^{
+           _comingEventView.alpha =0;
+       } completion:^(BOOL finished) {
+           _comingEventView.hidden = YES;
+           _emptyEventView.alpha = 0;
+           [UIView animateWithDuration:0.5f animations:^{
+               _emptyEventView.hidden = NO;
+               _emptyEventView.alpha = 1;
+           }];
+       }];
     }
 }
 
@@ -563,19 +612,6 @@
     // Check if there's diary available
     if ([[[DiaryDataStore sharedStore]allItems]count] > 0) {
         DiaryData *d = [[[DiaryDataStore sharedStore]allItems]lastObject];
-
-//        UIFont* font = [UIFont
-//                        preferredFontForTextStyle:UIFontTextStyleSubheadline];
-//        
-//        NSDictionary *attrs =
-//  @{ NSForegroundColorAttributeName : [UIColor blackColor],
-//     NSFontAttributeName : font,
-//     NSTextEffectAttributeName : NSTextEffectLetterpressStyle
-//     };
-//        NSAttributedString* attrString = [[NSAttributedString alloc]
-//                                          initWithString:d.subject
-//                                          attributes:attrs];
-        
         _diaryImageView.layer.cornerRadius = 5;;
         _diaryImageView.layer.masksToBounds = YES;
         _diaryImageView.image = d.diaryImage;
@@ -583,6 +619,30 @@
         _diaryDetail.text = d.diaryText;
         _diaryDate.text = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceReferenceDate:d.dateCreated]];
         _diaryLocation.text = d.location;
+        
+        if (_diaryView.hidden) {
+            [UIView animateWithDuration:0.5 animations:^{
+                _emptyDiaryView.alpha =0;
+            } completion:^(BOOL finished) {
+                _emptyDiaryView.hidden = YES;
+                _diaryView.alpha = 0;
+                [UIView animateWithDuration:0.5f animations:^{
+                    _diaryView.hidden = NO;
+                    _diaryView.alpha = 1;
+                }];
+            }];
+        }
+    } else if (_emptyDiaryView.hidden) {
+        [UIView animateWithDuration:0.5 animations:^{
+            _diaryView.alpha =0;
+        } completion:^(BOOL finished) {
+            _diaryView.hidden = YES;
+            _emptyDiaryView.alpha = 0;
+            [UIView animateWithDuration:0.5f animations:^{
+                _emptyDiaryView.hidden = NO;
+                _emptyDiaryView.alpha = 1;
+            }];
+        }];
     }
 }
 

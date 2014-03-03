@@ -29,6 +29,9 @@
 		4C3EDA6D18C0CB0000FD7235 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3EDA6C18C0CB0000FD7235 /* AudioToolbox.framework */; };
 		4C3EDA6F18C0CB1D00FD7235 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3EDA6E18C0CB1D00FD7235 /* MobileCoreServices.framework */; };
 		4C3EDA7118C0CB3B00FD7235 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3EDA7018C0CB3B00FD7235 /* StoreKit.framework */; };
+		4C3FBA5718C4CCFF0097C67D /* face_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C3FBA5518C4CCFF0097C67D /* face_white.png */; };
+		4C3FBA5818C4CCFF0097C67D /* face_yellow.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C3FBA5618C4CCFF0097C67D /* face_yellow.png */; };
+		4C3FBA5E18C4CF7D0097C67D /* backgroundText.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C3FBA5D18C4CF7D0097C67D /* backgroundText.png */; };
 		4C417E7618714A4C000878FC /* DiaryDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C417E7518714A4C000878FC /* DiaryDataStore.m */; };
 		4C48FFAA188D65580038AE6F /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFA9188D65580038AE6F /* CoreMedia.framework */; };
 		4C48FFAC188D65620038AE6F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFAB188D65620038AE6F /* CoreVideo.framework */; };
@@ -93,11 +96,20 @@
 		4CDA810F18A3C61F00898266 /* 951-baby-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CDA810E18A3C61F00898266 /* 951-baby-selected@2x.png */; };
 		4CEEB9F818B4656100C7FA80 /* DiaryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEEB9F718B4656100C7FA80 /* DiaryData.m */; };
 		4CEEB9FE18B47BAF00C7FA80 /* CloudData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEEB9FD18B47BAF00C7FA80 /* CloudData.m */; };
+		4CF5151918C2FCC70050E330 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF5151818C2FCC70050E330 /* Social.framework */; };
+		4CF5151D18C314430050E330 /* 41-picture-frame.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF5151C18C314430050E330 /* 41-picture-frame.png */; };
+		4CF5151F18C314500050E330 /* 42-photos.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF5151E18C314500050E330 /* 42-photos.png */; };
+		4CF5152118C314840050E330 /* 83-calendar.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF5152018C314840050E330 /* 83-calendar.png */; };
+		4CF5152618C325730050E330 /* fb_icon_325x325.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF5152218C325730050E330 /* fb_icon_325x325.png */; };
+		4CF5152718C325730050E330 /* twitter-bird-white-on-blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF5152318C325730050E330 /* twitter-bird-white-on-blue.png */; };
+		4CF5152818C325730050E330 /* SinaWeibo.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF5152418C325730050E330 /* SinaWeibo.png */; };
+		4CF5152918C325730050E330 /* MetroUI-Apps-Dropbox-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF5152518C325730050E330 /* MetroUI-Apps-Dropbox-icon.png */; };
 		4CF592E0186D5BE500F1BEEB /* MonthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF592DE186D5BE500F1BEEB /* MonthViewController.m */; };
 		4CF592E1186D5BE500F1BEEB /* MonthViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CF592DF186D5BE500F1BEEB /* MonthViewController.xib */; };
 		4CFB086C187E696A00456D5D /* DateModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFB086B187E696A00456D5D /* DateModel.m */; };
 		4CFB086F187E6BFB00456D5D /* MonthModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFB086E187E6BFB00456D5D /* MonthModel.m */; };
 		4CFB6DC8186A6BAC001C8F05 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CFB6DC7186A6BAC001C8F05 /* CoreLocation.framework */; };
+		4CFEB19418C2CF9C00CFE1A1 /* uploadicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CFEB19318C2CF9C00CFE1A1 /* uploadicon.png */; };
 		4CFF692E18BF2B2900337857 /* ReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF692D18BF2B2900337857 /* ReminderView.m */; };
 		4CFF693118BF3FC000337857 /* RepeatView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF693018BF3FC000337857 /* RepeatView.m */; };
 		4CFFD584189775270070C33C /* DiaryPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFFD582189775270070C33C /* DiaryPhotoViewController.m */; };
@@ -165,6 +177,9 @@
 		4C3EDA6C18C0CB0000FD7235 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		4C3EDA6E18C0CB1D00FD7235 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		4C3EDA7018C0CB3B00FD7235 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		4C3FBA5518C4CCFF0097C67D /* face_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = face_white.png; sourceTree = "<group>"; };
+		4C3FBA5618C4CCFF0097C67D /* face_yellow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = face_yellow.png; sourceTree = "<group>"; };
+		4C3FBA5D18C4CF7D0097C67D /* backgroundText.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backgroundText.png; sourceTree = "<group>"; };
 		4C417E7418714A4C000878FC /* DiaryDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiaryDataStore.h; path = ../DiaryDataStore.h; sourceTree = "<group>"; };
 		4C417E7518714A4C000878FC /* DiaryDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiaryDataStore.m; path = ../DiaryDataStore.m; sourceTree = "<group>"; };
 		4C48FFA7188D61C40038AE6F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -259,6 +274,14 @@
 		4CEEB9F718B4656100C7FA80 /* DiaryData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiaryData.m; path = ../DiaryData.m; sourceTree = "<group>"; };
 		4CEEB9FC18B47BAF00C7FA80 /* CloudData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudData.h; sourceTree = "<group>"; };
 		4CEEB9FD18B47BAF00C7FA80 /* CloudData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloudData.m; sourceTree = "<group>"; };
+		4CF5151818C2FCC70050E330 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		4CF5151C18C314430050E330 /* 41-picture-frame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "41-picture-frame.png"; sourceTree = "<group>"; };
+		4CF5151E18C314500050E330 /* 42-photos.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "42-photos.png"; sourceTree = "<group>"; };
+		4CF5152018C314840050E330 /* 83-calendar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "83-calendar.png"; sourceTree = "<group>"; };
+		4CF5152218C325730050E330 /* fb_icon_325x325.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fb_icon_325x325.png; sourceTree = "<group>"; };
+		4CF5152318C325730050E330 /* twitter-bird-white-on-blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "twitter-bird-white-on-blue.png"; sourceTree = "<group>"; };
+		4CF5152418C325730050E330 /* SinaWeibo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SinaWeibo.png; sourceTree = "<group>"; };
+		4CF5152518C325730050E330 /* MetroUI-Apps-Dropbox-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MetroUI-Apps-Dropbox-icon.png"; sourceTree = "<group>"; };
 		4CF592DD186D5BE500F1BEEB /* MonthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthViewController.h; sourceTree = "<group>"; };
 		4CF592DE186D5BE500F1BEEB /* MonthViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonthViewController.m; sourceTree = "<group>"; };
 		4CF592DF186D5BE500F1BEEB /* MonthViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MonthViewController.xib; sourceTree = "<group>"; };
@@ -267,6 +290,7 @@
 		4CFB086D187E6BFB00456D5D /* MonthModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthModel.h; sourceTree = "<group>"; };
 		4CFB086E187E6BFB00456D5D /* MonthModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonthModel.m; sourceTree = "<group>"; };
 		4CFB6DC7186A6BAC001C8F05 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		4CFEB19318C2CF9C00CFE1A1 /* uploadicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = uploadicon.png; sourceTree = "<group>"; };
 		4CFF692C18BF2B2900337857 /* ReminderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReminderView.h; sourceTree = "<group>"; };
 		4CFF692D18BF2B2900337857 /* ReminderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReminderView.m; sourceTree = "<group>"; };
 		4CFF692F18BF3FC000337857 /* RepeatView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RepeatView.h; sourceTree = "<group>"; };
@@ -307,6 +331,7 @@
 				4C3EDA6B18C0CAB400FD7235 /* Parse.framework in Frameworks */,
 				4C5420F01857FC9D006D2DE4 /* QuartzCore.framework in Frameworks */,
 				4CD2B92318A492E6002DA9E4 /* Security.framework in Frameworks */,
+				4CF5151918C2FCC70050E330 /* Social.framework in Frameworks */,
 				4C3EDA7118C0CB3B00FD7235 /* StoreKit.framework in Frameworks */,
 				4C12B2F918A1FDE60046C5EC /* SystemConfiguration.framework in Frameworks */,
 				4CB3DD8018521DC400673478 /* UIKit.framework in Frameworks */,
@@ -503,6 +528,7 @@
 		4CB3DD7A18521DC400673478 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4CF5151818C2FCC70050E330 /* Social.framework */,
 				4C3EDA7018C0CB3B00FD7235 /* StoreKit.framework */,
 				4C3EDA6E18C0CB1D00FD7235 /* MobileCoreServices.framework */,
 				4C3EDA6C18C0CB0000FD7235 /* AudioToolbox.framework */,
@@ -552,6 +578,15 @@
 		4CB3DD8218521DC400673478 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4C3FBA5D18C4CF7D0097C67D /* backgroundText.png */,
+				4CF5152218C325730050E330 /* fb_icon_325x325.png */,
+				4CF5152318C325730050E330 /* twitter-bird-white-on-blue.png */,
+				4CF5152418C325730050E330 /* SinaWeibo.png */,
+				4CF5152518C325730050E330 /* MetroUI-Apps-Dropbox-icon.png */,
+				4CF5152018C314840050E330 /* 83-calendar.png */,
+				4CF5151E18C314500050E330 /* 42-photos.png */,
+				4CF5151C18C314430050E330 /* 41-picture-frame.png */,
+				4CFEB19318C2CF9C00CFE1A1 /* uploadicon.png */,
 				4C73E01618BF91FC007ECCEC /* searchicon.png */,
 				4C61325C18BEE6200025FD00 /* clock.png */,
 				4C61325E18BEE6790025FD00 /* repeat.png */,
@@ -563,6 +598,8 @@
 				4C5BA25C1861745D00528843 /* 929-film-1.png */,
 				4C5BA25A1861731A00528843 /* 929-film-1@2x.png */,
 				4CB3DD8318521DC400673478 /* Kidlendar-Info.plist */,
+				4C3FBA5518C4CCFF0097C67D /* face_white.png */,
+				4C3FBA5618C4CCFF0097C67D /* face_yellow.png */,
 				4CB3DD8418521DC400673478 /* InfoPlist.strings */,
 				4CB3DD8718521DC400673478 /* main.m */,
 				4CB3DD8918521DC400673478 /* Kidlendar-Prefix.pch */,
@@ -715,16 +752,25 @@
 				4CFFD585189775270070C33C /* DiaryPhotoViewController.xib in Resources */,
 				4C5C8FFD18A8730100B40F7E /* DiaryEntryViewController.xib in Resources */,
 				4CDA810F18A3C61F00898266 /* 951-baby-selected@2x.png in Resources */,
+				4CF5152818C325730050E330 /* SinaWeibo.png in Resources */,
+				4CF5152718C325730050E330 /* twitter-bird-white-on-blue.png in Resources */,
 				4CA888341896478C00FAA799 /* DiaryVideoViewController.xib in Resources */,
 				4C61325D18BEE6200025FD00 /* clock.png in Resources */,
+				4CF5151D18C314430050E330 /* 41-picture-frame.png in Resources */,
+				4C3FBA5E18C4CF7D0097C67D /* backgroundText.png in Resources */,
 				4C5BA25D1861745D00528843 /* 929-film-1.png in Resources */,
 				4C6C49C5186DDDDF0042EB61 /* DiaryViewController.xib in Resources */,
+				4CF5152118C314840050E330 /* 83-calendar.png in Resources */,
 				4C4CE27818BDB21E007217CA /* calendar.png in Resources */,
+				4C3FBA5818C4CCFF0097C67D /* face_yellow.png in Resources */,
 				4C5BA25B1861731A00528843 /* 929-film-1@2x.png in Resources */,
+				4CF5151F18C314500050E330 /* 42-photos.png in Resources */,
 				4C61326D18BF16990025FD00 /* EventCreateController.xib in Resources */,
 				4CFFD58A1897800A0070C33C /* lookup_amatorka.png in Resources */,
 				4CA0369018B7A29F00015184 /* DiaryTableViewCell.xib in Resources */,
 				4C73E02118BFA5F3007ECCEC /* EventReviewController.xib in Resources */,
+				4CF5152618C325730050E330 /* fb_icon_325x325.png in Resources */,
+				4CFEB19418C2CF9C00CFE1A1 /* uploadicon.png in Resources */,
 				4C61325F18BEE6790025FD00 /* repeat.png in Resources */,
 				4C4CE27418BDB1B5007217CA /* locationTag-24.png in Resources */,
 				4C61325618BECAED0025FD00 /* EventTableCell.xib in Resources */,
@@ -732,7 +778,9 @@
 				4CB3DD8618521DC400673478 /* InfoPlist.strings in Resources */,
 				4CB3BD2D18A330D80006AFD4 /* SettingViewController.xib in Resources */,
 				4CB3DD8E18521DC400673478 /* Images.xcassets in Resources */,
+				4CF5152918C325730050E330 /* MetroUI-Apps-Dropbox-icon.png in Resources */,
 				4C73E01718BF91FC007ECCEC /* searchicon.png in Resources */,
+				4C3FBA5718C4CCFF0097C67D /* face_white.png in Resources */,
 				4CF592E1186D5BE500F1BEEB /* MonthViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

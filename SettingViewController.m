@@ -14,9 +14,7 @@
 #import "FacebookModel.h"
 
 @interface SettingViewController ()
-{
-    NSArray *social;
-}
+
 @end
 
 @implementation SettingViewController
@@ -41,7 +39,6 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     [self.tableView registerClass:[SwitchCell class] forCellReuseIdentifier:@"SwitchCell"];
-    social = @[@"Facebook",@"Dropbox"];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -68,8 +65,6 @@
     // Return the number of rows in the section.
     if (section==0)
         return [[[CalendarStore sharedStore]allCalendars]count];
-    else if (section==2)
-        return [social count];
     else
         return 1;
 }
@@ -96,7 +91,7 @@
         cell.textLabel.text = calendar.title;
         return cell;
     }
-    else if (indexPath.section== 1) {
+    else  {
         static NSString *CellIdentifier = @"SwitchCell";
         SwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
@@ -106,28 +101,6 @@
         cell.textLabel.text =@"Face Detection";
         [cell.cellSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"FaceDetection"]];
         [cell.cellSwitch addTarget:self action:@selector(disableFaceDetection:) forControlEvents:UIControlEventValueChanged];
-        return cell;
-    }
-    else {
-        static NSString *CellIdentifier = @"SwitchCell";
-        SwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            cell = [[SwitchCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        }
-        
-        cell.textLabel.text = [social objectAtIndex:indexPath.row];
-        cell.cellSwitch.tag = indexPath.row;
-        [cell.cellSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:[social objectAtIndex:indexPath.row]]];
-        switch (indexPath.row) {
-            case 0:
-                [cell.cellSwitch addTarget:self action:@selector(facebookConnection:) forControlEvents:UIControlEventValueChanged];
-                break;
-            case 1:
-                [cell.cellSwitch addTarget:self action:@selector(dropboxConnection:) forControlEvents:UIControlEventValueChanged];
-                break;
-            default:
-                break;
-        }
         return cell;
     }
 }
@@ -140,25 +113,6 @@
     } else {
         NSLog(@"Switch off");
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"FaceDetection"];
-    }
-}
-
-- (void)facebookConnection:(UISwitch *)sender
-{
-    [[FacebookModel shareModel] startFacebookSession];
-}
-
-- (void)dropboxConnection:(UISwitch *)sender
-{
-    NSString *key = [social objectAtIndex:sender.tag];
-
-    if (sender.on) {
-        NSLog(@"connection on");
-        [[DBAccountManager sharedManager] linkFromController:self];
-     } else {
-        NSLog(@"connection off");
-         [[[DBAccountManager sharedManager]linkedAccount]unlink];
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:key];
     }
 }
 
