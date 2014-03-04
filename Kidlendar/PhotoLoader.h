@@ -12,7 +12,8 @@
 typedef NS_ENUM(NSInteger, SourceType)
 {
     kSourceTypePhoto,
-    kSourceTypeVideo
+    kSourceTypeVideo,
+    kSourceTypeAll
 };
 
 @interface PhotoLoader : NSObject

@@ -16,12 +16,15 @@
 #import "FacebookModel.h"
 #import <Social/Social.h>
 //#import <Parse/Parse.h>
+#import <MediaPlayer/MediaPlayer.h>
 
 @interface DiaryViewController () <FBLoginViewDelegate>
 {
     DropboxModel *DBModel;
     UIBarButtonItem *backupButton;
     UIBarButtonItem *shareButton;
+    MPMoviePlayerViewController *videoPlayer;
+    UIAlertView *preparingAlertView;
 }
 @property (weak, nonatomic) IBOutlet UIImageView *diaryPhoto;
 @property (weak, nonatomic) IBOutlet UITextView *diaryDetailTextView;
@@ -57,10 +60,19 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    // Get photo from  use diary data key
-    
     // Put that image onto the screen in our image view
-    _diaryPhoto.image = _diaryData.diaryImage;
+    if (_diaryData.diaryVideoThumbnail) {
+        _diaryPhoto.image = _diaryData.diaryVideoThumbnail;
+        UITapGestureRecognizer *videoTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(playVideo)];
+        _diaryPhoto.userInteractionEnabled = YES;
+        [_diaryPhoto addGestureRecognizer:videoTap];
+        
+    } else {
+        _diaryPhoto.image = _diaryData.diaryImage;
+    }
+
+
+
    _diaryDetailTextView.text = _diaryData.diaryText;
     _subjectLabel.text = _diaryData.subject;
     _locationLabel.text= _diaryData.location;
@@ -109,6 +121,11 @@
     [_facebookImageView addGestureRecognizer:facebookTap];
 }
 
+- (void)playVideo
+{
+    [self playMovieWithURL:[NSURL URLWithString:_diaryData.diaryVideoPath]];
+}
+
 - (IBAction)cancelPopup:(id)sender
 {
     [self cancelAction];
@@ -144,22 +161,6 @@
     self.navigationItem.hidesBackButton = YES;
 }
 
-
-- (void)shareDiary
-{
-    // We will post on behalf of the user, these are the permissions we need:
-    //NSArray *permissionsNeeded = @[@"publish_actions"];
-    //NSArray *permissionsNeeded = @[@"user_birthday",@"friends_hometown", @"friends_birthday",@"friends_location"];
-    
-//    if([[NSUserDefaults standardUserDefaults] boolForKey:@"Facebook"]) {
-//        [FacebookModel shareModel].diaryData = _diaryData;
-//        [[FacebookModel shareModel] ShareWithAPICalls:@[@"publish_actions"] action:kActionTypeSharePhoto requestPermissionType:kPermissionTypePublish];
-//    } else {
-//        [[FacebookModel shareModel] startFacebookSession];
-//    }
-    
-}
-
 - (void)backupDiary
 {
     if (!_diaryData.cloudRelationship.dropbox) {
@@ -167,26 +168,6 @@
             if (linked) {
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                     [[DropboxModel shareModel] uploadDiaryToFilesystem:_diaryData image:_diaryPhoto.image complete:^(BOOL success) {
-                        
-                    
-                        
-//                        PFPush *push = [[PFPush alloc] init];
-//                        DBAccount *account = [[DBAccountManager sharedManager]linkedAccount];
-//                        NSString *channelName = [NSString stringWithFormat:@"dropbox-%@",account.userId];
-//                        NSArray *channel = @[channelName];
-//                        NSString *userName = [[UIDevice currentDevice]name];
-//                        NSString *message = [NSString stringWithFormat:@"%@ has uploaded new diary",userName];
-//                        
-//                        NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
-//                                              message, @"alert",
-//                                              @"Increment", @"badge",
-//                                              _diaryData.diaryKey, @"key",
-//                                              nil];
-//                        
-//                        // Be sure to use the plural 'setChannels'.
-//                        [push setChannels:channel];
-//                        [push setData:data];
-//                        [push sendPushInBackground];
                         if (success) {
                             [[NSNotificationCenter defaultCenter] postNotificationName:@"uploadComplete" object:nil];
                         }
@@ -268,5 +249,109 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark - Movie player
+#pragma mark
+
+-(void) playMovieWithURL: (NSURL*) theURL
+{
+    
+    videoPlayer = [[MPMoviePlayerViewController alloc] initWithContentURL: theURL];
+    [videoPlayer.moviePlayer setContentURL:theURL];
+    
+    [videoPlayer.moviePlayer requestThumbnailImagesAtTimes:@[[NSNumber numberWithFloat:1.0]] timeOption:MPMovieTimeOptionExact];
+    // Setup the player
+    videoPlayer.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
+    videoPlayer.moviePlayer.shouldAutoplay = NO;
+    
+    // Add Movie Player to parent's view
+//    [videoPlayer.view setFrame:CGRectMake(2, 46, 316, 320)];
+    videoPlayer.view.layer.borderColor = [[UIColor whiteColor]CGColor];
+    videoPlayer.view.layer.borderWidth = 2.0f;
+   [videoPlayer.moviePlayer setScalingMode:MPMovieScalingModeAspectFill];
+    
+    videoPlayer.moviePlayer.view.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+    [self presentMoviePlayerViewControllerAnimated:videoPlayer];
+
+    
+    // Register for the playback finished notification
+    [[NSNotificationCenter defaultCenter]   addObserver: self
+                                               selector: @selector(moviePreloadDidFinish:)
+                                                   name: MPMediaPlaybackIsPreparedToPlayDidChangeNotification
+                                                 object: videoPlayer.moviePlayer];
+    [[NSNotificationCenter defaultCenter]   addObserver: self
+                                               selector: @selector(moviePlayBackDidFinish:)
+                                                   name: MPMoviePlayerPlaybackDidFinishNotification
+                                                 object: videoPlayer.moviePlayer];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(moviePlayerEvent:)
+                                                 name:MPMoviePlayerLoadStateDidChangeNotification
+                                               object:videoPlayer.moviePlayer];
+    
+    [videoPlayer.moviePlayer prepareToPlay];
+    [videoPlayer.moviePlayer pause];
+    [self launchPreparingAlertViewAlert];
+}
+
+#pragma mark Media Playback Notification Methods
+-(void)moviePlayerEvent:(NSNotification*)aNotification
+{
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:NO];
+}
+
+
+- (void) moviePreloadDidFinish:(NSNotification*)notification
+{
+    [self dismissPreparingAlert];
+}
+
+-(void) moviePlayBackDidFinish: (NSNotification*) aNotification
+{
+    MPMoviePlayerController* moviePlayer=[aNotification object];
+    
+    // UnRegister for the playback finished notification
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: MPMediaPlaybackIsPreparedToPlayDidChangeNotification
+                                                  object: moviePlayer];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: MPMoviePlayerPlaybackDidFinishNotification
+                                                  object: moviePlayer];
+    
+    // Remove from the parent's view
+//    [moviePlayer.view removeFromSuperview];
+    
+    // Stop before release to workaround iOS's bug
+    [moviePlayer stop];
+}
+
+#pragma mark -
+#pragma mark preparingAlertView Methods
+
+- (void) launchPreparingAlertViewAlert {
+	// Launch Downloading Alert
+	if(preparingAlertView!=nil)	// Don't need to launch again
+		return;
+	
+	preparingAlertView = [[UIAlertView alloc] initWithTitle:@"" message:@"Movie Preparing..."
+                                                   delegate:self cancelButtonTitle:nil otherButtonTitles: nil];
+	
+	UIActivityIndicatorView *waitView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+	waitView.frame = CGRectMake(120, 50, 40, 40);
+	[waitView startAnimating];
+	
+	[preparingAlertView addSubview:waitView];
+	[preparingAlertView show];
+}
+
+- (void) dismissPreparingAlert {
+	if(preparingAlertView!=nil)
+	{
+		// Dismiss Downloading alert
+		[preparingAlertView dismissWithClickedButtonIndex:0 animated:YES];//important
+		preparingAlertView=nil;
+	}
+}
+
 
 @end

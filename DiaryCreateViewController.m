@@ -14,10 +14,10 @@
 #import "DiaryPhotoViewController.h"
 #import "DiaryEntryViewController.h"
 #import "AlbumPhotoCell.h"
+#import <MediaPlayer/MediaPlayer.h>
+
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 #define GrayUIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:0.5]
-
-
 
 @interface DiaryCreateViewController () <UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,filterImageDelegate,UITableViewDataSource,UITableViewDelegate>
 {
@@ -49,8 +49,6 @@
     UITableView *photoAlbumTable;
     UINavigationItem *navItem ;
     UINavigationBar *navBar ;
-//    CGRect photoCollectionViewRect;
-//    CGRect photoCollectionViewExpandRect;
     CGFloat photoCollectionExpandHeight;
     CGFloat photoCollectionShrinkHeight;
     NSMutableArray *imageMeta;
@@ -58,7 +56,18 @@
     BOOL showAlbumTable;
     
     UIActivityIndicatorView *faceDetectingActivity;
+    MPMoviePlayerViewController *videoPlayer;
+    UIAlertView *preparingAlertView;
+    UIView *scroller;
+    
+    NSIndexPath *videoIndexPath;
+    
+    MediaType selectedMediaType;
+    
+    UIView *videoView;
+    UIImageView *videoImageView;
 }
+
 @property (weak, nonatomic) IBOutlet UIView *noPhotoView;
 @property (weak, nonatomic) IBOutlet UIImageView *faceImageView;
 
@@ -84,6 +93,15 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.automaticallyAdjustsScrollViewInsets = NO;
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+    self.navigationItem.title = @"New Diary";
+    
+    videoView = [[UIView alloc]initWithFrame:CGRectMake(2, 46, 316, 316)];
+    videoImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 316, 316)];
+    [self.view addSubview:videoView];
+    [videoView addSubview:videoImageView];
+    UITapGestureRecognizer *videoTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(playMovie)];
+    [videoView addGestureRecognizer:videoTap];
     
     // Set up diary photo collection view
     diaryCollectionViewInset = UIEdgeInsetsMake(2, 2, 2, 2);
@@ -105,7 +123,7 @@
     [self.view addSubview:diaryPhotosView];
 
     // Scroll control for photo collection view
-    UIView *scroller = [[UIView alloc]initWithFrame:CGRectMake(0, 364 , 320, 54)];
+    scroller = [[UIView alloc]initWithFrame:CGRectMake(0, 364 , 320, 54)];
     scroller.backgroundColor = [UIColor blackColor];
     UISwipeGestureRecognizer *swipGesture = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipePhotoCollection:)];
     swipGesture.direction = UISwipeGestureRecognizerDirectionUp;
@@ -123,7 +141,7 @@
     navBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
     navItem = [[UINavigationItem alloc]init];
     navItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"◀︎" style:UIBarButtonItemStyleBordered target:self action:@selector(showTable)];
-    navItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"0/5" style:UIBarButtonItemStyleBordered target:nil action:nil];
+    navItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"Photo 0/5" style:UIBarButtonItemStyleBordered target:nil action:nil];
     [navBar setItems:@[navItem]];
     [scroller addSubview:navBar];
 
@@ -165,7 +183,7 @@
     scrollToBottom = NO;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupPhotoCollectionView) name:@"loadLibraySourceDone" object:nil];
-    photoLoader = [[PhotoLoader alloc]initWithSourceType:kSourceTypePhoto];
+    photoLoader = [[PhotoLoader alloc]initWithSourceType:kSourceTypeAll];
     
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneSelection)];
     self.navigationItem.rightBarButtonItem = doneButton;
@@ -189,10 +207,9 @@
         _faceImageView.image = [UIImage imageNamed:@"face_white.png"];
     }
     
-    
-    
     [self.view bringSubviewToFront:_faceImageView];
     [self.view bringSubviewToFront:_noPhotoView];
+    [self.view bringSubviewToFront:photoAlbumTable];
     [self.view bringSubviewToFront:photoCollectionView];
     [self.view bringSubviewToFront:scroller];
 }
@@ -478,15 +495,22 @@
 #pragma mark -Diary relate
 - (void)doneSelection
 {
-    // Create Image from collection view
-    UIGraphicsBeginImageContextWithOptions(diaryPhotosView.bounds.size, YES, [UIScreen mainScreen].scale);
-    [diaryPhotosView.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *collectionViewImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-
     DiaryEntryViewController *entryViewController = [[DiaryEntryViewController alloc]init];
-    entryViewController.diaryImage = collectionViewImage;
-    entryViewController.imageMeta = imageMeta;
+    entryViewController.selectedMediaType = selectedMediaType;
+
+    if (selectedMediaType == kMediaTypePhoto) {
+        // Create Image from collection view
+        UIGraphicsBeginImageContextWithOptions(diaryPhotosView.bounds.size, YES, [UIScreen mainScreen].scale);
+        [diaryPhotosView.layer renderInContext:UIGraphicsGetCurrentContext()];
+        UIImage *collectionViewImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        entryViewController.diaryImage = collectionViewImage;
+        entryViewController.imageMeta = imageMeta;
+    } else {
+        ALAsset *videoAsset = [photoAssets objectAtIndex:videoIndexPath.row];
+        entryViewController.asset = videoAsset;
+    }
     [self.navigationController pushViewController:entryViewController animated:YES];
 }
 
@@ -553,10 +577,6 @@
 //                                         scale:1 orientation:orientation];
     
     UIImage* image = [UIImage imageWithCGImage:[asset.defaultRepresentation fullScreenImage]];
-
-    // Put image selected photo dictionary
-    NSMutableDictionary *selectedPhotoDict =  [selectedPhotoInfo objectForKey:assetGroupPropertyName];
-    [selectedPhotoDict setObject:image forKey:indexPath];
     
     // Create info array for diary collection view
     NSArray *imageInfo = @[indexPath,assetGroupPropertyName];
@@ -567,7 +587,7 @@
     
     // Resize the image
     [fullScreenImageArray addObject:image];
-    navItem.rightBarButtonItem.title = [NSString stringWithFormat:@"%ld/5",[fullScreenImageArray count]];
+    navItem.rightBarButtonItem.title = [NSString stringWithFormat:@"Photo %ld/5",[fullScreenImageArray count]];
     
     AlbumPhotoCell *cell = (AlbumPhotoCell *)[photoCollectionView cellForItemAtIndexPath:indexPath];
     cell.selectNumber.text = [NSString stringWithFormat:@"%ld",[fullScreenImageArray count]];
@@ -575,6 +595,21 @@
     // Perform face detection and setup diary collection view
     [faceDetectingActivity startAnimating];
     [self performSelectorInBackground:@selector(processFaceDetection) withObject:nil];
+    
+}
+
+-(void)cancelPhotoSelection
+{
+    
+    for (int i = 0; i < [selectedPhotoOrderingInfo count] ; i++) {
+        NSArray *n = [selectedPhotoOrderingInfo objectAtIndex:i];
+        [photoCollectionView deselectItemAtIndexPath:n[0] animated:YES];
+    }
+    
+    [selectedPhotoOrderingInfo removeAllObjects];
+    [fullScreenImageArray removeAllObjects];
+    [cellImageArray removeAllObjects];
+    [diaryPhotosView reloadData];
 }
 
 #pragma mark - Collection Views
@@ -611,17 +646,23 @@
         return cell;
         
     } else {
-        
         AlbumPhotoCell *cell = (AlbumPhotoCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"AlbumPhotoCell" forIndexPath:indexPath];
         ALAsset *asset =  [photoAssets objectAtIndex:indexPath.row];
-        UIImageView *cellPhoto = [[UIImageView alloc]initWithImage:[UIImage imageWithCGImage: asset.thumbnail]];
-        cellPhoto.frame = cell.contentView.frame;
-        [cell.contentView addSubview:cellPhoto];
+        cell.asset = asset;
+        
+        cell.cellImageView.image = [UIImage imageWithCGImage: asset.thumbnail];
         for (int i = 0; i < [selectedPhotoOrderingInfo count] ; i++) {
             NSArray *n = [selectedPhotoOrderingInfo objectAtIndex:i];
             if(indexPath == n[0])
                 cell.selectNumber.text = [NSString stringWithFormat:@"%d",i+1];
         }
+        
+        if ([asset valueForProperty:ALAssetPropertyType]==ALAssetTypeVideo) {
+            [cell formatVideoInterval:[asset valueForProperty:ALAssetPropertyDuration]];
+        } else {
+            cell.videoTimeLabel.hidden = YES;
+        }
+        
         return cell;
     }
 }
@@ -662,15 +703,53 @@
     
     // Photo collection view select
     else {
-        [self selectedPhoto:indexPath];
+        ALAsset *asset =  [photoAssets objectAtIndex:indexPath.row];
+        if ([asset valueForProperty:ALAssetPropertyType]==ALAssetTypeVideo) {
+            if ([fullScreenImageArray count] > 0) {
+                [self cancelPhotoSelection];
+            }
+            if (videoIndexPath)
+                [photoCollectionView deselectItemAtIndexPath:videoIndexPath animated:YES];
+
+            navItem.rightBarButtonItem.title = @"Video 1/1";
+            videoIndexPath = indexPath;
+            selectedMediaType = kMediaTypeVideo;
+            UIImage *cellImage = [UIImage imageWithCGImage:[asset.defaultRepresentation fullScreenImage]];
+            videoImageView.image = [cellImage cropWithFaceDetect:videoImageView.frame.size];
+            videoView.hidden = NO;
+            [self.view bringSubviewToFront:videoView];
+            [self.view bringSubviewToFront:scroller];
+            [self.view bringSubviewToFront:photoAlbumTable];
+            [self.view bringSubviewToFront:photoCollectionView];
+            
+        } else {
+            [self cancelMPMoviePlayer];
+            videoIndexPath = nil;
+            selectedMediaType = kMediaTypePhoto;
+            [self selectedPhoto:indexPath];
+        }
     }
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (collectionView.tag==1) {
-        [self removePhotoWithIndexPath:indexPath];
+        ALAsset *asset =  [photoAssets objectAtIndex:indexPath.row];
+        if ([asset valueForProperty:ALAssetPropertyType]==ALAssetTypeVideo) {
+            [self cancelMPMoviePlayer];
+            navItem.rightBarButtonItem.title = @"Video 0/1";
+        } else {
+            [self removePhotoWithIndexPath:indexPath];
+        }
     }
+}
+
+- (void)cancelMPMoviePlayer
+{
+    [photoCollectionView deselectItemAtIndexPath:videoIndexPath animated:YES];
+    diaryPhotosView.hidden = NO;
+    [cellImageArray removeAllObjects];
+    videoView.hidden = YES;
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath
@@ -700,16 +779,12 @@
         // ImageInfo[0] = indexpath
         // ImageInfo[1] = assset group name
         if (imageInfo[0] == path) {
-
-            // Remove image from selectedPhotoDict - dict selected based on assetgroup name
-            NSMutableDictionary *selectedPhotoDict = [selectedPhotoInfo objectForKey:imageInfo[1]];
-            [selectedPhotoDict removeObjectForKey:path];
             
             // Remove image from resize image array
             NSUInteger index = [selectedPhotoOrderingInfo indexOfObject:imageInfo];
             [imageMeta removeObjectAtIndex:index];
             [fullScreenImageArray removeObjectAtIndex:index];
-            navItem.rightBarButtonItem.title = [NSString stringWithFormat:@"%ld/5",[fullScreenImageArray count]];
+            navItem.rightBarButtonItem.title = [NSString stringWithFormat:@"Photo %ld/5",[fullScreenImageArray count]];
 
             // Remove image info from ordering info
             [selectedPhotoOrderingInfo removeObject:imageInfo];
@@ -780,24 +855,6 @@
     else
         return photoMinimunCellSpace;
 }
-
-//- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
-//{
-//    UICollectionReusableView *reusableview = nil;
-//    if (kind ==UICollectionElementKindSectionHeader && collectionView.tag == 1) {
-//        UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView" forIndexPath:indexPath];
-//
-//        navBar = [[UINavigationBar alloc]initWithFrame:headerView.frame];
-//        navBar.backgroundColor = [UIColor blackColor];
-//        navBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
-//        navItem = [[UINavigationItem alloc]initWithTitle:assetGroupPropertyName];
-//        navItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemRewind target:self action:@selector(showTable)];
-//        [navBar setItems:@[navItem]];
-//        [headerView addSubview:navBar];
-//        return headerView;
-//    }
-//    return reusableview;
-//}
 
 - (void)showTable
 {
@@ -880,6 +937,105 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Movie player
+#pragma mark
+
+-(void) playMovie
+{
+    ALAsset *videoAsset = [photoAssets objectAtIndex:videoIndexPath.row];
+    diaryPhotosView.hidden = YES;
+    videoPlayer = [[MPMoviePlayerViewController alloc] initWithContentURL: videoAsset.defaultRepresentation.url];
+    [videoPlayer.moviePlayer setContentURL:videoAsset.defaultRepresentation.url];
+    
+    
+    [videoPlayer.moviePlayer requestThumbnailImagesAtTimes:@[[NSNumber numberWithFloat:1.0]] timeOption:MPMovieTimeOptionExact];
+    // Setup the player
+    videoPlayer.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
+    videoPlayer.moviePlayer.shouldAutoplay = NO;
+    
+    // Add Movie Player to parent's view
+    //    [videoPlayer.view setFrame:CGRectMake(2, 46, 316, 320)];
+    videoPlayer.view.layer.borderColor = [[UIColor whiteColor]CGColor];
+    videoPlayer.view.layer.borderWidth = 2.0f;
+    [videoPlayer.moviePlayer setScalingMode:MPMovieScalingModeAspectFill];
+    
+    videoPlayer.moviePlayer.view.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+    [self presentMoviePlayerViewControllerAnimated:videoPlayer];
+    
+    [self.view addSubview:videoPlayer.view];
+    [self.view bringSubviewToFront:photoAlbumTable];
+    [self.view bringSubviewToFront:photoCollectionView];
+    [self.view bringSubviewToFront:scroller];
+    
+    // Register for the playback finished notification
+    [[NSNotificationCenter defaultCenter]   addObserver: self
+                                               selector: @selector(moviePreloadDidFinish:)
+                                                   name: MPMediaPlaybackIsPreparedToPlayDidChangeNotification
+                                                 object: videoPlayer.moviePlayer];
+    [[NSNotificationCenter defaultCenter]   addObserver: self
+                                               selector: @selector(moviePlayBackDidFinish:)
+                                                   name: MPMoviePlayerPlaybackDidFinishNotification
+                                                 object: videoPlayer.moviePlayer];
+    [videoPlayer.moviePlayer prepareToPlay];
+    [videoPlayer.moviePlayer pause];
+    [self launchPreparingAlertViewAlert];
+}
+
+#pragma mark Media Playback Notification Methods
+
+- (void) moviePreloadDidFinish:(NSNotification*)notification
+{
+    [self dismissPreparingAlert];
+}
+
+-(void) moviePlayBackDidFinish: (NSNotification*) aNotification
+{
+    MPMoviePlayerController* moviePlayer=[aNotification object];
+    
+    // UnRegister for the playback finished notification
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: MPMediaPlaybackIsPreparedToPlayDidChangeNotification
+                                                  object: moviePlayer];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver: self
+                                                    name: MPMoviePlayerPlaybackDidFinishNotification
+                                                  object: moviePlayer];
+    
+    // Remove from the parent's view
+    [moviePlayer.view removeFromSuperview];
+    
+    // Stop before release to workaround iOS's bug
+    [moviePlayer stop];
+}
+
+#pragma mark -
+#pragma mark preparingAlertView Methods
+
+- (void) launchPreparingAlertViewAlert {
+	// Launch Downloading Alert
+	if(preparingAlertView!=nil)	// Don't need to launch again
+		return;
+	
+	preparingAlertView = [[UIAlertView alloc] initWithTitle:@"" message:@"Movie Preparing..."
+                                                   delegate:self cancelButtonTitle:nil otherButtonTitles: nil];
+	
+	UIActivityIndicatorView *waitView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+	waitView.frame = CGRectMake(120, 50, 40, 40);
+	[waitView startAnimating];
+	
+	[preparingAlertView addSubview:waitView];
+	[preparingAlertView show];
+}
+
+- (void) dismissPreparingAlert {
+	if(preparingAlertView!=nil)
+	{
+		// Dismiss Downloading alert
+		[preparingAlertView dismissWithClickedButtonIndex:0 animated:YES];//important
+		preparingAlertView=nil;
+	}
 }
 
 @end

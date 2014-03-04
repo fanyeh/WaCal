@@ -190,6 +190,11 @@
     [self showDiary];
 }
 
+-(void)viewDidLayoutSubviews
+{
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:NO];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -614,7 +619,10 @@
         DiaryData *d = [[[DiaryDataStore sharedStore]allItems]lastObject];
         _diaryImageView.layer.cornerRadius = 5;;
         _diaryImageView.layer.masksToBounds = YES;
-        _diaryImageView.image = d.diaryImage;
+        if (d.diaryVideoPath)
+            _diaryImageView.image = d.diaryVideoThumbnail;
+        else
+            _diaryImageView.image = d.diaryImage;
         _diaryTitle.text = d.subject;
         _diaryDetail.text = d.diaryText;
         _diaryDate.text = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceReferenceDate:d.dateCreated]];

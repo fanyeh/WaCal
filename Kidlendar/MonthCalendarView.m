@@ -142,6 +142,10 @@
         // Add indicator if date has event
         if (dateModel.hasEvent)
             [dateView addHasEventView];
+        
+        // Add indicator if date has diary
+        if (dateModel.hasDiary)
+            [dateView addHasDiaryView];
 
         // Switch dateview Y position for week change
         if (i%7 == 6) {

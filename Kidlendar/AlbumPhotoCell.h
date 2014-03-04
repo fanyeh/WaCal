@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+@class ALAsset;
 
 @interface AlbumPhotoCell : UICollectionViewCell
 @property (strong,nonatomic) UILabel *selectNumber;
+@property (strong,nonatomic) UILabel *videoTimeLabel;
+@property (strong,nonatomic) UIImageView *cellImageView;
+@property (strong,nonatomic) ALAsset *asset;
+- (void) formatVideoInterval: (NSNumber *) interval;
 @end

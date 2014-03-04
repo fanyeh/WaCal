@@ -13,11 +13,12 @@
 #import "DiaryDataStore.h"
 #import "LocationDataStore.h"
 #import "LocationData.h"
+#import <AssetsLibrary/AssetsLibrary.h>
+#import "UIImage+Resize.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 #define kGOOGLE_API_KEY @"AIzaSyAD9e182Fr19_2DcJFZYUHf6wEeXjxs_kQ"
 #define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
-
 
 @interface DiaryEntryViewController () <UITextViewDelegate,UITextFieldDelegate,UITableViewDataSource,UITableViewDelegate,UISearchBarDelegate>
 {
@@ -56,7 +57,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.automaticallyAdjustsScrollViewInsets = NO;
-
 
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                                                                target:self
@@ -118,6 +118,11 @@
     self.tabBarController.tabBar.hidden = YES;
 }
 
+-(void)viewWillDisappear:(BOOL)animated
+{
+    self.tabBarController.tabBar.hidden = NO;
+}
+
 
 #pragma mark - UISearchBarDelegate
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
@@ -170,30 +175,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-// Apple search
-//- (void)startSearchForText:(NSString*)searchText
-//{
-//    MKLocalSearchRequest *searchRequest = [[MKLocalSearchRequest alloc] init];
-//    searchRequest.naturalLanguageQuery = searchText;
-//    
-//    MKLocalSearch *search = [[MKLocalSearch alloc] initWithRequest:searchRequest];
-//    [search startWithCompletionHandler:^(MKLocalSearchResponse *response, NSError *error) {
-//        if (response.mapItems.count > 0) {
-//            places = [response.mapItems copy];
-//            [_searchResultTable reloadData];
-//            
-//        } else {
-//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oops!"
-//                                                            message:@"No search results found! Try again with a different query."
-//                                                           delegate:nil
-//                                                  cancelButtonTitle:nil
-//                                                  otherButtonTitles:@"OK", nil];
-//            [alert show];
-//        }
-//    }];
-//}
-
-
 -(void)changeDate
 {
     _diaryTimeField.text = [dateFormatter stringFromDate:datePicker.date];
@@ -203,11 +184,20 @@
 {
     // Update diary details
     DiaryData *diary = [[DiaryDataStore sharedStore]createItem];
+    
     diary.subject = _diarySubjectField.text;
-    diary.diaryImageDataFromImage = _diaryImage;
     diary.diaryText = _diaryEntryView.text;
     diary.dateCreated = [[dateFormatter dateFromString: _diaryTimeField.text] timeIntervalSinceReferenceDate];
     diary.location = _locationField.text;
+    
+    if (_selectedMediaType == kMediaTypePhoto) {
+        diary.diaryImageDataFromImage = _diaryImage;
+    } else {
+        diary.diaryVideoPath = [NSString stringWithFormat:@"%@",_asset.defaultRepresentation.url];
+        UIImage *image = [UIImage imageWithCGImage: _asset.defaultRepresentation.fullScreenImage];
+        [diary setDiaryVideoThumbDataFromImage:[image cropWithFaceDetect:CGSizeMake(320, 320)]];
+    }
+    
     [[DiaryDataStore sharedStore]saveChanges];
     
     // Need location name field for diary

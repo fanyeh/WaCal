@@ -75,8 +75,6 @@
 		4CA0369018B7A29F00015184 /* DiaryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CA0368F18B7A29F00015184 /* DiaryTableViewCell.xib */; };
 		4CA2506C1869377000AEA94E /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA2506B1869377000AEA94E /* UIImage+Resize.m */; };
 		4CA2506F1869517400AEA94E /* DiaryPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA2506E1869517400AEA94E /* DiaryPhotoCell.m */; };
-		4CA888331896478C00FAA799 /* DiaryVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA888311896478C00FAA799 /* DiaryVideoViewController.m */; };
-		4CA888341896478C00FAA799 /* DiaryVideoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CA888321896478C00FAA799 /* DiaryVideoViewController.xib */; };
 		4CB3BD2C18A330D80006AFD4 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB3BD2A18A330D80006AFD4 /* SettingViewController.m */; };
 		4CB3BD2D18A330D80006AFD4 /* SettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CB3BD2B18A330D80006AFD4 /* SettingViewController.xib */; };
 		4CB3DD7C18521DC400673478 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB3DD7B18521DC400673478 /* Foundation.framework */; };
@@ -245,9 +243,6 @@
 		4CA2506B1869377000AEA94E /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resize.m"; sourceTree = "<group>"; };
 		4CA2506D1869517400AEA94E /* DiaryPhotoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryPhotoCell.h; sourceTree = "<group>"; };
 		4CA2506E1869517400AEA94E /* DiaryPhotoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryPhotoCell.m; sourceTree = "<group>"; };
-		4CA888301896478C00FAA799 /* DiaryVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiaryVideoViewController.h; path = ../DiaryVideoViewController.h; sourceTree = "<group>"; };
-		4CA888311896478C00FAA799 /* DiaryVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiaryVideoViewController.m; path = ../DiaryVideoViewController.m; sourceTree = "<group>"; };
-		4CA888321896478C00FAA799 /* DiaryVideoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DiaryVideoViewController.xib; path = ../DiaryVideoViewController.xib; sourceTree = "<group>"; };
 		4CB3BD2918A330D80006AFD4 /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingViewController.h; path = ../SettingViewController.h; sourceTree = "<group>"; };
 		4CB3BD2A18A330D80006AFD4 /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingViewController.m; path = ../SettingViewController.m; sourceTree = "<group>"; };
 		4CB3BD2B18A330D80006AFD4 /* SettingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SettingViewController.xib; path = ../SettingViewController.xib; sourceTree = "<group>"; };
@@ -408,9 +403,6 @@
 				4C5B01F518ACBD7E0030FCCC /* DiaryCreateViewController.xib */,
 				4C68364918BAE4B200FAA259 /* AlbumPhotoCell.h */,
 				4C68364A18BAE4B200FAA259 /* AlbumPhotoCell.m */,
-				4CA888301896478C00FAA799 /* DiaryVideoViewController.h */,
-				4CA888311896478C00FAA799 /* DiaryVideoViewController.m */,
-				4CA888321896478C00FAA799 /* DiaryVideoViewController.xib */,
 				4C6C49BE186DDB680042EB61 /* DiaryTableViewController.h */,
 				4C6C49BF186DDB680042EB61 /* DiaryTableViewController.m */,
 				4CA0368A18B7A12100015184 /* DiaryTableViewCell.h */,
@@ -754,7 +746,6 @@
 				4CDA810F18A3C61F00898266 /* 951-baby-selected@2x.png in Resources */,
 				4CF5152818C325730050E330 /* SinaWeibo.png in Resources */,
 				4CF5152718C325730050E330 /* twitter-bird-white-on-blue.png in Resources */,
-				4CA888341896478C00FAA799 /* DiaryVideoViewController.xib in Resources */,
 				4C61325D18BEE6200025FD00 /* clock.png in Resources */,
 				4CF5151D18C314430050E330 /* 41-picture-frame.png in Resources */,
 				4C3FBA5E18C4CF7D0097C67D /* backgroundText.png in Resources */,
@@ -812,7 +803,6 @@
 				4CFB086F187E6BFB00456D5D /* MonthModel.m in Sources */,
 				4CA2506F1869517400AEA94E /* DiaryPhotoCell.m in Sources */,
 				4CB3DD8C18521DC400673478 /* KidlendarAppDelegate.m in Sources */,
-				4CA888331896478C00FAA799 /* DiaryVideoViewController.m in Sources */,
 				4C50B73418B19DE50065434A /* LocationDataStore.m in Sources */,
 				4CFF692E18BF2B2900337857 /* ReminderView.m in Sources */,
 				4C88B387188E56E100F4F47E /* DiaryCell.m in Sources */,

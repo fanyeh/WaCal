@@ -19,4 +19,6 @@
 @property BOOL hasDiary;
 
 - (void)addHasEventView;
+-(void)addHasDiaryView;
+
 @end

@@ -77,6 +77,8 @@
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveNewEvent)];
     self.navigationItem.title = @"New Event";
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+
     
     _locationSearchBar.delegate = self;
     
@@ -148,14 +150,6 @@
     _subjectField.delegate = self;
     [_subjectField becomeFirstResponder];
     _locationField.delegate = self;
-    _locationField.rightViewMode = UITextFieldViewModeWhileEditing;
-    UIView *locationRightView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
-    UITapGestureRecognizer *rightViewTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(searchLocation)];
-    [locationRightView addGestureRecognizer:rightViewTap];
-    UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 20, 20)];
-    imageView.image = [UIImage imageNamed:@"searchicon.png"];
-    [locationRightView addSubview:imageView];
-    _locationField.rightView = locationRightView;
     
     _startTimeField.delegate = self;
     _startTimeField.inputView = _datePicker;
@@ -598,6 +592,18 @@
     locationLat =  [[[[places[indexPath.row] objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"] doubleValue];
     locationLng =  [[[[places[indexPath.row] objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
     _maskView.hidden = YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    if (textField.returnKeyType == UIReturnKeySearch) {
+        _locationSearchBar.text = _locationField.text;
+        [self queryGooglePlacesLongitude:_locationField.text];
+        _maskView.hidden = NO;
+        [_locationSearchBar becomeFirstResponder];
+    }
+    [textField resignFirstResponder];
+    return YES;
 }
 
 // Google search

@@ -90,7 +90,9 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
+    self.navigationItem.title = _event.title;
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+
     _locationMapView.delegate = self;
     //_locationMapView.showsUserLocation = YES;
     _locationMapView.pitchEnabled = YES;
@@ -168,14 +170,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     _subjectField.delegate = self;
     [_subjectField becomeFirstResponder];
     _locationField.delegate = self;
-    _locationField.rightViewMode = UITextFieldViewModeWhileEditing;
-    UIView *locationRightView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
-    UITapGestureRecognizer *rightViewTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(searchLocation)];
-    [locationRightView addGestureRecognizer:rightViewTap];
-    UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 20, 20)];
-    imageView.image = [UIImage imageNamed:@"searchicon.png"];
-    [locationRightView addSubview:imageView];
-    _locationField.rightView = locationRightView;
+
     
     _startTimeField.delegate = self;
     _startTimeField.inputView = _datePicker;
@@ -430,6 +425,19 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     reminder.show = NO;
     return YES;
 }
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    if (textField.returnKeyType == UIReturnKeySearch) {
+        _locationSearchBar.text = _locationField.text;
+        [self queryGooglePlacesLongitude:_locationField.text];
+        _maskView.hidden = NO;
+        [_locationSearchBar becomeFirstResponder];
+    }
+    [textField resignFirstResponder];
+    return YES;
+}
+
 
 #pragma mark - User actions
 - (void)saveNewEvent

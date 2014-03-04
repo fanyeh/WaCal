@@ -142,7 +142,7 @@
     // Set up setting controller
     SettingViewController *settingController = [[SettingViewController alloc]init];
     UINavigationController *settingNavigationController = [[UINavigationController alloc]initWithRootViewController:settingController];
-    [settingNavigationController.navigationBar.topItem setTitle:@"Setting"];
+//    [settingNavigationController.navigationBar.topItem setTitle:@"Setting"];
     [settingNavigationController.tabBarItem setTitle:@"Setting"];
     
     

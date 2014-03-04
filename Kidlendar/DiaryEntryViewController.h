@@ -8,7 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSInteger, MediaType)
+{
+    kMediaTypePhoto,
+    kMediaTypeVideo
+};
+
+
+@class ALAsset;
+
 @interface DiaryEntryViewController : UIViewController
 @property (strong,nonatomic) UIImage *diaryImage;
 @property (strong,nonatomic) NSMutableArray *imageMeta;
+@property (strong,nonatomic) ALAsset *asset;
+@property MediaType selectedMediaType;
+
 @end

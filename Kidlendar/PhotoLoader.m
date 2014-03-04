@@ -45,6 +45,8 @@
             }
             else if (sourceType==kSourceTypeVideo) {
                 [group setAssetsFilter:[ALAssetsFilter allVideos]];
+            } else if (sourceType==kSourceTypeAll) {
+                [group setAssetsFilter:[ALAssetsFilter allAssets]];
             }
 
             [group enumerateAssetsUsingBlock:^(ALAsset *asset, NSUInteger index, BOOL *stop){

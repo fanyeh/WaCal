@@ -18,6 +18,8 @@
 #import "DiaryTableViewCell.h"
 #import "LocationData.h"
 #import "LocationDataStore.h"
+#import <MediaPlayer/MediaPlayer.h>
+#import <AVFoundation/AVFoundation.h>
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 
@@ -171,15 +173,19 @@
 
         // Configure the cell...
         DiaryData *d = [DiaryDataStore sharedStore].allItems[indexPath.row];
-        
         NSDate *diaryDate = [NSDate dateWithTimeIntervalSinceReferenceDate:d.dateCreated];
-        cell.cellImageView.image = d.diaryImage;
         cell.dateLabel.text = [dateFormatter stringFromDate:diaryDate];
         cell.weekdayLabel.adjustsFontSizeToFitWidth = YES;
         cell.weekdayLabel.text = [weekdayFormatter stringFromDate:diaryDate];
         cell.locationLabel.text = d.location;
         cell.diaryDetail.text = d.diaryText;
         cell.diarySubject.text = d.subject;
+        
+        if (d.diaryVideoPath) {
+            cell.cellImageView.image = d.diaryVideoThumbnail;
+        } else {
+            cell.cellImageView.image = d.diaryImage;
+        }
         return cell;
 
     }
