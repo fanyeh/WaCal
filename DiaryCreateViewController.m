@@ -493,9 +493,13 @@
     [selectedPhotoDict setObject:image forKey:imageInfo[0]];
     
     // Replace image in fullscreenimage array
-    fullScreenImageArray[path.row] = image;
-
-    [self processFaceDetectionWithIndexPath:path];
+//    fullScreenImageArray[path.row] = image;
+//
+//    [self processFaceDetectionWithIndexPath:path];
+    
+    CGSize cellSize = [sizeArray[path.row] CGSizeValue];
+    cellImageArray[path.row] =[image resizeImageToSize:cellSize];
+    [diaryPhotosView reloadData];
 }
 
 #pragma mark -Diary relate
@@ -701,6 +705,7 @@
             // Get image from selectedPhotoInfo
 //            UIImage *photo = [self getPhotoWithImageInfo:[selectedPhotoOrderingInfo objectAtIndex:indexPath.row]];
             UIImage *photo = [fullScreenImageArray objectAtIndex:indexPath.row];
+            photoViewController.cropRectSize = [sizeArray[indexPath.row] CGSizeValue];
             photoViewController.photoImage = photo;
             photoViewController.indexPath = indexPath;
             photoViewController.delegate = self;

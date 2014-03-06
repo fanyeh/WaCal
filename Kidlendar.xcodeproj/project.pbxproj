@@ -43,7 +43,6 @@
 		4C4AAB7A18C6B39000458908 /* newDiary@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4AAB7318C6B39000458908 /* newDiary@2x.png */; };
 		4C4AAB7B18C6B39000458908 /* write@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4AAB7418C6B39000458908 /* write@2x.png */; };
 		4C4AAB7C18C6B39000458908 /* reminder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4AAB7518C6B39000458908 /* reminder@2x.png */; };
-		4C4CE27418BDB1B5007217CA /* locationTag-24.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4CE27318BDB1B5007217CA /* locationTag-24.png */; };
 		4C4CE27818BDB21E007217CA /* calendar.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C4CE27718BDB21E007217CA /* calendar.png */; };
 		4C50B72F18B19CAD0065434A /* LocationData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C50B72E18B19CAD0065434A /* LocationData.m */; };
 		4C50B73418B19DE50065434A /* LocationDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C50B73318B19DE50065434A /* LocationDataStore.m */; };
@@ -66,8 +65,6 @@
 		4C67BAD718B6FBC300452539 /* SwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C67BAD618B6FBC300452539 /* SwitchCell.m */; };
 		4C68364B18BAE4B200FAA259 /* AlbumPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C68364A18BAE4B200FAA259 /* AlbumPhotoCell.m */; };
 		4C68365018BB0FD100FAA259 /* FilterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C68364F18BB0FD100FAA259 /* FilterCell.m */; };
-		4C68CAB618C62FC5003776D2 /* trash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C68CAB518C62FC5003776D2 /* trash@2x.png */; };
-		4C68CABB18C6350E003776D2 /* diaryTab@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C68CAB818C6350E003776D2 /* diaryTab@2x.png */; };
 		4C68CABC18C6350E003776D2 /* calendarTab@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C68CAB918C6350E003776D2 /* calendarTab@2x.png */; };
 		4C68CABD18C6350E003776D2 /* settingTab@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C68CABA18C6350E003776D2 /* settingTab@2x.png */; };
 		4C68CABF18C63A51003776D2 /* playButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C68CABE18C63A51003776D2 /* playButton@2x.png */; };
@@ -115,6 +112,10 @@
 		4CF592E1186D5BE500F1BEEB /* MonthViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CF592DF186D5BE500F1BEEB /* MonthViewController.xib */; };
 		4CFB086C187E696A00456D5D /* DateModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFB086B187E696A00456D5D /* DateModel.m */; };
 		4CFB086F187E6BFB00456D5D /* MonthModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFB086E187E6BFB00456D5D /* MonthModel.m */; };
+		4CFB1B8018C8092200EC443A /* trash35@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CFB1B7D18C8092200EC443A /* trash35@2x.png */; };
+		4CFB1B8118C8092200EC443A /* save35@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CFB1B7E18C8092200EC443A /* save35@2x.png */; };
+		4CFB1B8218C8092200EC443A /* diaryTab@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CFB1B7F18C8092200EC443A /* diaryTab@2x.png */; };
+		4CFB1B8418C8676300EC443A /* selectPhoto@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CFB1B8318C8676300EC443A /* selectPhoto@2x.png */; };
 		4CFB6DC8186A6BAC001C8F05 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CFB6DC7186A6BAC001C8F05 /* CoreLocation.framework */; };
 		4CFEB19418C2CF9C00CFE1A1 /* uploadicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CFEB19318C2CF9C00CFE1A1 /* uploadicon.png */; };
 		4CFF692E18BF2B2900337857 /* ReminderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF692D18BF2B2900337857 /* ReminderView.m */; };
@@ -199,7 +200,6 @@
 		4C4AAB7318C6B39000458908 /* newDiary@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "newDiary@2x.png"; sourceTree = "<group>"; };
 		4C4AAB7418C6B39000458908 /* write@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "write@2x.png"; sourceTree = "<group>"; };
 		4C4AAB7518C6B39000458908 /* reminder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reminder@2x.png"; sourceTree = "<group>"; };
-		4C4CE27318BDB1B5007217CA /* locationTag-24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "locationTag-24.png"; sourceTree = "<group>"; };
 		4C4CE27718BDB21E007217CA /* calendar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = calendar.png; sourceTree = "<group>"; };
 		4C50B72D18B19CAD0065434A /* LocationData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LocationData.h; path = ../LocationData.h; sourceTree = "<group>"; };
 		4C50B72E18B19CAD0065434A /* LocationData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LocationData.m; path = ../LocationData.m; sourceTree = "<group>"; };
@@ -232,8 +232,6 @@
 		4C68364A18BAE4B200FAA259 /* AlbumPhotoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumPhotoCell.m; sourceTree = "<group>"; };
 		4C68364E18BB0FD100FAA259 /* FilterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterCell.h; sourceTree = "<group>"; };
 		4C68364F18BB0FD100FAA259 /* FilterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterCell.m; sourceTree = "<group>"; };
-		4C68CAB518C62FC5003776D2 /* trash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "trash@2x.png"; sourceTree = "<group>"; };
-		4C68CAB818C6350E003776D2 /* diaryTab@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "diaryTab@2x.png"; sourceTree = "<group>"; };
 		4C68CAB918C6350E003776D2 /* calendarTab@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "calendarTab@2x.png"; sourceTree = "<group>"; };
 		4C68CABA18C6350E003776D2 /* settingTab@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settingTab@2x.png"; sourceTree = "<group>"; };
 		4C68CABE18C63A51003776D2 /* playButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "playButton@2x.png"; sourceTree = "<group>"; };
@@ -302,6 +300,10 @@
 		4CFB086B187E696A00456D5D /* DateModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateModel.m; sourceTree = "<group>"; };
 		4CFB086D187E6BFB00456D5D /* MonthModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthModel.h; sourceTree = "<group>"; };
 		4CFB086E187E6BFB00456D5D /* MonthModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonthModel.m; sourceTree = "<group>"; };
+		4CFB1B7D18C8092200EC443A /* trash35@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "trash35@2x.png"; sourceTree = "<group>"; };
+		4CFB1B7E18C8092200EC443A /* save35@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "save35@2x.png"; sourceTree = "<group>"; };
+		4CFB1B7F18C8092200EC443A /* diaryTab@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "diaryTab@2x.png"; sourceTree = "<group>"; };
+		4CFB1B8318C8676300EC443A /* selectPhoto@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "selectPhoto@2x.png"; sourceTree = "<group>"; };
 		4CFB6DC7186A6BAC001C8F05 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		4CFEB19318C2CF9C00CFE1A1 /* uploadicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = uploadicon.png; sourceTree = "<group>"; };
 		4CFF692C18BF2B2900337857 /* ReminderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReminderView.h; sourceTree = "<group>"; };
@@ -446,8 +448,8 @@
 		4C68CAB718C6303F003776D2 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4CFB1B8318C8676300EC443A /* selectPhoto@2x.png */,
 				4C68CABE18C63A51003776D2 /* playButton@2x.png */,
-				4C68CAB818C6350E003776D2 /* diaryTab@2x.png */,
 				4C68CAB918C6350E003776D2 /* calendarTab@2x.png */,
 				4C68CABA18C6350E003776D2 /* settingTab@2x.png */,
 				4C5BA25C1861745D00528843 /* 929-film-1.png */,
@@ -455,7 +457,6 @@
 				4CB3DD8318521DC400673478 /* Kidlendar-Info.plist */,
 				4C3FBA5518C4CCFF0097C67D /* face_white.png */,
 				4C3FBA5618C4CCFF0097C67D /* face_yellow.png */,
-				4C68CAB518C62FC5003776D2 /* trash@2x.png */,
 				4CF5152218C325730050E330 /* fb_icon_325x325.png */,
 				4C4AAB6F18C6B39000458908 /* backup@2x.png */,
 				4C4AAB7018C6B39000458908 /* share@2x.png */,
@@ -474,7 +475,6 @@
 				4C61325C18BEE6200025FD00 /* clock.png */,
 				4C61325E18BEE6790025FD00 /* repeat.png */,
 				4C4CE27718BDB21E007217CA /* calendar.png */,
-				4C4CE27318BDB1B5007217CA /* locationTag-24.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -551,6 +551,9 @@
 		4CB3DD6F18521DC400673478 = {
 			isa = PBXGroup;
 			children = (
+				4CFB1B7D18C8092200EC443A /* trash35@2x.png */,
+				4CFB1B7E18C8092200EC443A /* save35@2x.png */,
+				4CFB1B7F18C8092200EC443A /* diaryTab@2x.png */,
 				4C1E40B218B4616300A273A1 /* GPUImage.xcodeproj */,
 				4CFFD5891897800A0070C33C /* lookup_amatorka.png */,
 				4CB3DD8118521DC400673478 /* Kidlendar */,
@@ -783,12 +786,11 @@
 				4C4AAB7818C6B39000458908 /* locationTag20@2x.png in Resources */,
 				4C61325D18BEE6200025FD00 /* clock.png in Resources */,
 				4CF5151D18C314430050E330 /* 41-picture-frame.png in Resources */,
-				4C68CAB618C62FC5003776D2 /* trash@2x.png in Resources */,
-				4C68CABB18C6350E003776D2 /* diaryTab@2x.png in Resources */,
 				4C68CABD18C6350E003776D2 /* settingTab@2x.png in Resources */,
 				4C5BA25D1861745D00528843 /* 929-film-1.png in Resources */,
 				4C6C49C5186DDDDF0042EB61 /* DiaryViewController.xib in Resources */,
 				4CF5152118C314840050E330 /* 83-calendar.png in Resources */,
+				4CFB1B8018C8092200EC443A /* trash35@2x.png in Resources */,
 				4C4CE27818BDB21E007217CA /* calendar.png in Resources */,
 				4C3FBA5818C4CCFF0097C67D /* face_yellow.png in Resources */,
 				4C4AAB7918C6B39000458908 /* locationTag10@2x.png in Resources */,
@@ -797,6 +799,7 @@
 				4CF5151F18C314500050E330 /* 42-photos.png in Resources */,
 				4C61326D18BF16990025FD00 /* EventCreateController.xib in Resources */,
 				4C4AAB7B18C6B39000458908 /* write@2x.png in Resources */,
+				4CFB1B8218C8092200EC443A /* diaryTab@2x.png in Resources */,
 				4CFFD58A1897800A0070C33C /* lookup_amatorka.png in Resources */,
 				4C4AAB7C18C6B39000458908 /* reminder@2x.png in Resources */,
 				4CA0369018B7A29F00015184 /* DiaryTableViewCell.xib in Resources */,
@@ -807,10 +810,11 @@
 				4CFEB19418C2CF9C00CFE1A1 /* uploadicon.png in Resources */,
 				4C4AAB7618C6B39000458908 /* backup@2x.png in Resources */,
 				4C61325F18BEE6790025FD00 /* repeat.png in Resources */,
-				4C4CE27418BDB1B5007217CA /* locationTag-24.png in Resources */,
 				4C61325618BECAED0025FD00 /* EventTableCell.xib in Resources */,
 				4C5B01F718ACBD7F0030FCCC /* DiaryCreateViewController.xib in Resources */,
+				4CFB1B8418C8676300EC443A /* selectPhoto@2x.png in Resources */,
 				4CB3DD8618521DC400673478 /* InfoPlist.strings in Resources */,
+				4CFB1B8118C8092200EC443A /* save35@2x.png in Resources */,
 				4CB3BD2D18A330D80006AFD4 /* SettingViewController.xib in Resources */,
 				4CB3DD8E18521DC400673478 /* Images.xcassets in Resources */,
 				4C68CABC18C6350E003776D2 /* calendarTab@2x.png in Resources */,

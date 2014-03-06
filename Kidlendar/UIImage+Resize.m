@@ -151,7 +151,7 @@
         CGFloat x = (imageWidth - maxCropWidth)/2;
         CGRect cropRect = CGRectMake(x, y, maxCropWidth, maxCropHeight);
 
-        return [self cropImageWithRect:cropRect resize:size];
+        return [self cropImageWithRect:cropRect];
     }
     else {
         for(CIFaceFeature* faceFeature in features)
@@ -244,7 +244,7 @@
         CGRect cropRect = CGRectApplyAffineTransform(CIfinalRect, transform);
         
         // Crop
-        return [self cropImageWithRect:cropRect resize:size];
+        return [self cropImageWithRect:cropRect];
     }
 
 }
@@ -268,17 +268,29 @@
     CGFloat x = (imageWidth - maxCropWidth)/2;
     CGRect cropRect = CGRectMake(x, y, maxCropWidth, maxCropHeight);
     
-    return [self cropImageWithRect:cropRect resize:size];
+    return [self cropImageWithRect:cropRect];
 }
 
-- (UIImage *)cropImageWithRect:(CGRect)cropRect resize:(CGSize)size
+- (UIImage *)cropImageWithRect:(CGRect)cropRect
 {
     // Convert cropRect unit to cropRegion unit
     CGAffineTransform t = CGAffineTransformMakeScale(1.0f / self.size.width, 1.0f / self.size.height);
     CGRect cropRegion = CGRectApplyAffineTransform(cropRect, t);
     
+    // Process the filtering
+    GPUImageCropFilter *cropFilter = [[GPUImageCropFilter alloc]init];
+    cropFilter.cropRegion = cropRegion;
+    UIImage *cropImage =  [cropFilter imageByFilteringImage:self];
+    return cropImage;
+}
+
+- (UIImage *)cropImageWithRectImageView:(CGRect)cropRect view:(UIImageView *)imageView
+{
+    // Convert cropRect unit to cropRegion unit
+    CGAffineTransform t = CGAffineTransformMakeScale(1.0f / imageView.frame.size.width, 1.0f / imageView.frame.size.height);
+    CGRect cropRegion = CGRectApplyAffineTransform(cropRect, t);
     
-//    // Process the filtering
+    // Process the filtering
     GPUImageCropFilter *cropFilter = [[GPUImageCropFilter alloc]init];
     cropFilter.cropRegion = cropRegion;
     UIImage *cropImage =  [cropFilter imageByFilteringImage:self];

@@ -71,8 +71,6 @@
         _diaryPhoto.image = _diaryData.diaryImage;
     }
 
-
-
    _diaryDetailTextView.text = _diaryData.diaryText;
     _subjectLabel.text = _diaryData.subject;
     _locationLabel.text= _diaryData.location;
@@ -113,12 +111,17 @@
     _backupView.layer.cornerRadius = 10.0f;
     _shareView.layer.cornerRadius = 10.0f;
     
+    // Share
     UITapGestureRecognizer *twitterTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showShareSheet:)];
     [_twitterImageView addGestureRecognizer:twitterTap];
     UITapGestureRecognizer *weiboTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showShareSheet:)];
     [_weiboImageView addGestureRecognizer:weiboTap];
     UITapGestureRecognizer *facebookTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showShareSheet:)];
     [_facebookImageView addGestureRecognizer:facebookTap];
+    
+    // Backup
+    UITapGestureRecognizer *dropboxTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(backupDiary)];
+    [_dropboxImageView addGestureRecognizer:dropboxTap];
 }
 
 - (void)playVideo

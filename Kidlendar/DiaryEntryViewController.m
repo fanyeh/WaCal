@@ -65,6 +65,9 @@
     self.navigationItem.rightBarButtonItem = doneButton;
     
     _diaryComposeView.layer.cornerRadius = 5.0f;
+    _diaryComposeView.layer.shadowColor = [[UIColor blackColor]CGColor];
+    _diaryComposeView.layer.shadowOpacity = 0.5f;
+    _diaryComposeView.layer.shadowOffset = CGSizeMake(2 , 2);
     
     // Setup Date picker
     datePicker = [[UIDatePicker alloc]init];

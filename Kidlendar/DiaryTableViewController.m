@@ -51,7 +51,7 @@
 {
     [super viewDidLoad];
 //    self.automaticallyAdjustsScrollViewInsets = NO;
-    self.view.backgroundColor = Rgb2UIColor(27, 113, 183);
+    self.view.backgroundColor = Rgb2UIColor(236, 240, 241);
     
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self  action:@selector(createDiary)];
     self.navigationItem.rightBarButtonItem = addButton;

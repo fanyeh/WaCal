@@ -16,13 +16,13 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mev-Wy-dzg">
-                    <rect key="frame" x="0.0" y="46" width="320" height="320"/>
+                <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mev-Wy-dzg">
+                    <rect key="frame" x="2" y="46" width="316" height="364"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </imageView>
                 <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="zYQ-tK-FPJ">
-                    <rect key="frame" x="0.0" y="410" width="320" height="110"/>
+                    <rect key="frame" x="2" y="458" width="316" height="108"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="0.0" id="iQc-Sc-c0f">
                         <size key="itemSize" width="70" height="100"/>
@@ -32,23 +32,17 @@
                     </collectionViewFlowLayout>
                     <cells/>
                 </collectionView>
-                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mCE-kI-nyx">
-                    <rect key="frame" x="0.0" y="524" width="320" height="44"/>
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="teX-kD-SuE">
+                    <rect key="frame" x="0.0" y="412" width="320" height="44"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <color key="backgroundColor" red="0.12941176469999999" green="0.54117647059999996" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     <items>
-                        <barButtonItem title="Item" id="OHZ-0J-eZD"/>
+                        <barButtonItem title="Crop" id="sE1-Aj-ONQ">
+                            <connections>
+                                <action selector="enableCrop:" destination="-1" id="rY2-Mc-0WT"/>
+                            </connections>
+                        </barButtonItem>
                     </items>
-                    <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                </toolbar>
-                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SL2-Dm-FvO">
-                    <rect key="frame" x="0.0" y="366" width="320" height="44"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <color key="backgroundColor" red="0.12941176469999999" green="0.54117647059999996" blue="0.98431372549999996" alpha="1" colorSpace="calibratedRGB"/>
-                    <items>
-                        <barButtonItem title="Item" id="GrJ-me-fiZ"/>
-                    </items>
-                    <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </toolbar>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>

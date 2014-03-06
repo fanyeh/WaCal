@@ -91,6 +91,9 @@
 
     // Event detail view
     _eventDetailView.layer.cornerRadius = 5.0f;
+    _eventDetailView.layer.shadowColor = [[UIColor blackColor]CGColor];
+    _eventDetailView.layer.shadowOpacity = 0.5f;
+    _eventDetailView.layer.shadowOffset = CGSizeMake(2 , 2);
     
     // Reminder view
     _reminderView.layer.cornerRadius = 5.0f;

@@ -14,5 +14,6 @@
 - (UIImage *)transformOrientationForSave;
 - (UIImage *)cropWithFaceDetect:(CGSize)size;
 - (UIImage *)cropWithoutFaceOutDetect:(CGSize)size;
-
+- (UIImage *)cropImageWithRect:(CGRect)cropRect;
+- (UIImage *)cropImageWithRectImageView:(CGRect)cropRect view:(UIImageView *)imageView;
 @end
