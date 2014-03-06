@@ -100,11 +100,11 @@
     _diaryDetailTextView.textContainer.exclusionPaths = @[exclusionPathYear,exclusionPathDate,exclusionPathMonth];
 
     
-    backupButton = [[UIBarButtonItem alloc]initWithTitle:@"Backup" style:UIBarButtonItemStyleBordered
+    backupButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"backup.png"] style:UIBarButtonItemStyleBordered
                                                                                  target:self
                                                                                  action:@selector(showBackup)];
     
-    shareButton = [[UIBarButtonItem alloc]initWithTitle:@"Share" style:UIBarButtonItemStyleBordered
+    shareButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"share.png"] style:UIBarButtonItemStyleBordered
                                                                                  target:self
                                                                                  action:@selector(showShare)];
     

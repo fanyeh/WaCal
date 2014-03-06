@@ -78,13 +78,13 @@
     [self.window makeKeyAndVisible];
     
     [[UINavigationBar appearance] setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
-    [[UINavigationBar appearance] setBackgroundColor:Rgb2UIColor(33, 138, 251)];
+    [[UINavigationBar appearance] setBackgroundColor:Rgb2UIColor(29 , 113 , 183)];
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]]; //is the buttons text color
     
     [[UITabBar appearance] setBackgroundImage:[[UIImage alloc] init]];
     [[UITabBar appearance] setShadowImage:[[UIImage alloc] init]];
 
-    [[UITabBar appearance] setBackgroundColor:Rgb2UIColor(33, 138, 251)];
+    [[UITabBar appearance] setBackgroundColor:Rgb2UIColor(29 , 113 , 183)];
     [[UITabBar appearance] setTintColor:[UIColor whiteColor]]; //is the buttons text color
     
 //    [Parse setApplicationId:@"7utzGzNF3trLYTt20IxZfICqt53FG8w6H0G0uhkm"
@@ -132,18 +132,21 @@
     // Set up calendar controller
     MonthViewController *calendarController = [[MonthViewController alloc]init];
     UINavigationController *calendarNavigationController = [[UINavigationController alloc]initWithRootViewController:calendarController];
-    [calendarNavigationController.tabBarItem setTitle:@"Calendar"];
+    calendarNavigationController.tabBarItem = [[UITabBarItem alloc]initWithTitle:@"Calendar" image:[UIImage imageNamed:@"calendarTab.png"] selectedImage:[UIImage imageNamed:@"calendarTab.png"]];
+    
+//    [calendarNavigationController.tabBarItem setTitleTextAttributes:[NSDictionary
+//                                                                     dictionaryWithObjectsAndKeys:[UIColor colorWithWhite:0.702 alpha:1.000],NSForegroundColorAttributeName, nil]
+//                                             forState:UIControlStateNormal];
     
     // Set up diary controller
     DiaryTableViewController *diaryController = [[DiaryTableViewController alloc]init];
     UINavigationController *diaryNavigationController = [[UINavigationController alloc]initWithRootViewController:diaryController];
-    [diaryNavigationController.tabBarItem setTitle:@"Diary"];
+    diaryNavigationController.tabBarItem = [[UITabBarItem alloc]initWithTitle:@"Diary" image:[UIImage imageNamed:@"newDiary.png"] selectedImage:[UIImage imageNamed:@"newDiary.png"]];
     
     // Set up setting controller
     SettingViewController *settingController = [[SettingViewController alloc]init];
     UINavigationController *settingNavigationController = [[UINavigationController alloc]initWithRootViewController:settingController];
-//    [settingNavigationController.navigationBar.topItem setTitle:@"Setting"];
-    [settingNavigationController.tabBarItem setTitle:@"Setting"];
+    settingNavigationController.tabBarItem = [[UITabBarItem alloc]initWithTitle:@"Setting" image:[UIImage imageNamed:@"settingTab.png"] selectedImage:[UIImage imageNamed:@"settingTab.png"]];
     
     
     // Set up tab bar contoller for entire app

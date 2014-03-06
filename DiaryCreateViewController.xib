@@ -24,7 +24,7 @@
                 <view contentMode="scaleToFill" id="biw-ZG-Adq">
                     <rect key="frame" x="2" y="46" width="316" height="316"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" red="0.11511851847171783" green="0.44362565875053406" blue="0.71942895650863647" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>

@@ -54,6 +54,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *dayLabel;
 @property (weak, nonatomic) IBOutlet UIView *startTimeView;
 @property (weak, nonatomic) IBOutlet UIView *endTimeView;
+@property (weak, nonatomic) IBOutlet UIButton *saveButton;
 
 @end
 
@@ -75,10 +76,10 @@
     
     // Navgition save button
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveNewEvent)];
     self.navigationItem.title = @"New Event";
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
 
+    _saveButton.layer.cornerRadius = _saveButton.frame.size.width/2;
     
     _locationSearchBar.delegate = self;
     
@@ -120,7 +121,7 @@
     hideFrame = reminder.frame;
 
     // Set up All Day button
-    _alldayView.layer.cornerRadius = _alldayView.frame.size.width/2;
+    _alldayView.layer.cornerRadius = 5.0f;
     _allLabel.textColor = [UIColor grayColor];
     _dayLabel.textColor = [UIColor grayColor];
     UITapGestureRecognizer *alldayTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(alldayAction)];
@@ -150,6 +151,10 @@
     _subjectField.delegate = self;
     [_subjectField becomeFirstResponder];
     _locationField.delegate = self;
+    UIImageView *locationTag = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
+    locationTag.image = [UIImage imageNamed:@"locationTag20.png"];
+    _locationField.leftView = locationTag;
+    _locationField.leftViewMode = UITextFieldViewModeAlways;
     
     _startTimeField.delegate = self;
     _startTimeField.inputView = _datePicker;
@@ -220,7 +225,8 @@
 }
 
 #pragma mark - User actions
-- (void)saveNewEvent
+
+- (IBAction)saveEvent:(id)sender
 {
     if (locationLng > 0 && locationLat > 0) {
         LocationData *locationData = [[LocationDataStore sharedStore]createItemWithKey:event.eventIdentifier];

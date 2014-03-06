@@ -29,8 +29,10 @@
         
         _show = NO;
 
-        self.layer.borderWidth = 2.0f;
-        self.layer.borderColor = [Rgb2UIColor(33, 138, 251) CGColor];
+        self.backgroundColor = Rgb2UIColor(230, 230, 230) ;
+        self.layer.shadowColor = [[UIColor blackColor]CGColor];
+        self.layer.shadowOpacity = 0.5f;
+        self.layer.shadowOffset = CGSizeMake(2 , 2);
         
         CGFloat gapX = 35;
         CGFloat gapY = 32;

@@ -64,6 +64,8 @@
     
     self.navigationItem.rightBarButtonItem = doneButton;
     
+    _diaryComposeView.layer.cornerRadius = 5.0f;
+    
     // Setup Date picker
     datePicker = [[UIDatePicker alloc]init];
     [datePicker setDatePickerMode:UIDatePickerModeDateAndTime];
@@ -77,8 +79,8 @@
     dateFormatter.timeZone = [NSTimeZone systemTimeZone];
     
     _diaryEntryView.delegate = self;
-    _diaryEntryView.layer.borderColor = [[UIColor colorWithWhite:0.498 alpha:1.000] CGColor];
-    _diaryEntryView.layer.borderWidth = 1.0f;
+    _diaryEntryView.layer.borderColor = [[UIColor colorWithWhite:0.702 alpha:1.000] CGColor];
+    _diaryEntryView.layer.borderWidth = 0.5f;
     _diaryEntryView.layer.cornerRadius = 5.0f;
     
     _diarySubjectField.delegate = self;
@@ -86,12 +88,21 @@
     _diarySubjectField.tag = 0;
     
     _locationField.delegate = self;
+    UIImageView *locationTag = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
+    locationTag.image = [UIImage imageNamed:@"locationTag20.png"];
+    _locationField.leftView = locationTag;
+    _locationField.leftViewMode = UITextFieldViewModeAlways;
     
     _locationSearchBar.delegate = self;
     
     _diaryTimeField.delegate = self;
     _diaryTimeField.inputView = datePicker;
     _diaryTimeField.tag = 1;
+    UIImageView *timeTag = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
+    timeTag.image = [UIImage imageNamed:@"calendar.png"];
+    _diaryTimeField.leftView = timeTag;
+    _diaryTimeField.leftViewMode = UITextFieldViewModeAlways;
+
     
     _searchResultTable.delegate = self;
     _searchResultTable.dataSource = self;

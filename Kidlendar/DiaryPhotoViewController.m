@@ -15,6 +15,9 @@
 {
     NSArray *filterContainter;
     NSArray *filterName;
+    CAShapeLayer *_maskLayer;
+    CAShapeLayer *_cropLayer;
+    CGRect _cropRect;
 }
 @property (weak, nonatomic) IBOutlet UIImageView *photoImageView;
 @property (weak, nonatomic) IBOutlet UICollectionView *filterCollectionView;
@@ -65,7 +68,52 @@
     filterContainter = @[_photoImage,polkaDotFilter,AmatorkaFilter,SketchFilter,SmoothToonFilter,pinchDistortionFilter,contrastFilter,exposureFilter];
     
     self.view.backgroundColor = [UIColor blackColor];
+    
+    _cropRect = CGRectMake(80, 80, 200, 200);
 
+    // create layer mask for the image
+    
+    _maskLayer =[[CAShapeLayer alloc]init];
+    _maskLayer.frame = self.view.frame;
+    _maskLayer.fillRule = kCAFillRuleEvenOdd;
+    
+//    _photoImageView.layer.mask = _maskLayer;
+
+    CGMutablePathRef p1 = CGPathCreateMutable();
+    CGPathAddPath(p1, nil, CGPathCreateWithRect((CGRect){{100, 140}, {100, 150}}, nil));
+    CGPathAddPath(p1, nil, CGPathCreateWithRect((CGRect){{0, 0}, {320, 568}}, nil));
+    _maskLayer.path = p1;
+    
+    CALayer *imageLayer = [CALayer layer];
+    imageLayer.frame = _photoImageView.frame;
+    imageLayer.backgroundColor = [[UIColor colorWithWhite:0.000 alpha:0.510] CGColor];
+    imageLayer.mask = _maskLayer;
+    
+    [self.view.layer addSublayer:imageLayer];
+    // display the path of the masks the for screenshot
+    CAShapeLayer *pathLayer1 = [CAShapeLayer layer];
+    pathLayer1.path = CGPathCreateWithRect(CGRectMake(100, 140,100, 150),nil);
+    pathLayer1.lineWidth = 2.0;
+    pathLayer1.strokeColor = [UIColor yellowColor].CGColor;
+    pathLayer1.fillColor = [UIColor clearColor].CGColor;
+    [imageLayer addSublayer:pathLayer1];
+    
+    // create pan gesture
+    
+    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+    [_photoImageView addGestureRecognizer:pan];
+    _photoImageView.userInteractionEnabled = YES;
+}
+
+- (void)handlePan:(UIPanGestureRecognizer *)gesture
+{
+
+    CGPoint translation = [gesture translationInView:self.view];
+    gesture.view.center = CGPointMake(gesture.view.center.x + translation.x,
+                                         gesture.view.center.y + translation.y);
+    
+    [gesture setTranslation:CGPointMake(0, 0) inView:self.view];
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated

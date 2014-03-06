@@ -22,7 +22,6 @@
         _selectedLabel.hidden = YES;
         [self addSubview:_selectedLabel];
         
-        self.backgroundColor = [UIColor whiteColor];
         self.dateLabel.textColor =  [UIColor colorWithWhite:0.298 alpha:1.000];
         self.dateLabel.font = [UIFont fontWithName:@"Avenir" size:13];
     }

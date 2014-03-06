@@ -296,12 +296,12 @@
     [weekdayView.selectedLabel.layer addAnimation:animation forKey:nil];
 
     if (view.isToday) {
-        view.dateLabel.backgroundColor = Rgb2UIColor(255, 0, 0);
-        weekdayView.selectedLabel.backgroundColor = Rgb2UIColor(255, 0, 0);
+        view.dateLabel.backgroundColor = Rgb2UIColor(231, 76, 60);
+        weekdayView.selectedLabel.backgroundColor = Rgb2UIColor(231, 76, 60);
     }
     else {
-        view.dateLabel.backgroundColor = Rgb2UIColor(33, 138, 251);
-        weekdayView.selectedLabel.backgroundColor = Rgb2UIColor(33, 138, 251);
+        view.dateLabel.backgroundColor = Rgb2UIColor(29 , 113 , 183);
+        weekdayView.selectedLabel.backgroundColor = Rgb2UIColor(29 , 113 , 183);
     }
     
     view.dateLabel.textColor = [UIColor whiteColor];

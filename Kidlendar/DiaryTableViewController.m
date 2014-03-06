@@ -51,6 +51,7 @@
 {
     [super viewDidLoad];
 //    self.automaticallyAdjustsScrollViewInsets = NO;
+    self.view.backgroundColor = Rgb2UIColor(27, 113, 183);
     
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self  action:@selector(createDiary)];
     self.navigationItem.rightBarButtonItem = addButton;
@@ -131,6 +132,7 @@
 {
     [self.tableView reloadData];
     [[self.tabBarController.tabBar.items objectAtIndex:1]setBadgeValue:nil];
+    [self.tableView endEditing:YES];
 }
 
 - (void)didReceiveMemoryWarning

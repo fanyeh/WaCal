@@ -104,7 +104,6 @@
     UITapGestureRecognizer *eventTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showEventView)];
     [_comingEventView addGestureRecognizer:eventTap];
     _dotView.layer.cornerRadius = _dotView.frame.size.width/2;
-    _dotView.backgroundColor = Rgb2UIColor(251, 106, 119);
     
     _dotViewGray.layer.cornerRadius = _dotView.frame.size.width/2;
     
@@ -153,9 +152,9 @@
     UIBarButtonItem *addEventButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
                                                                                    target:self
                                                                                    action:@selector(addEvent)];
-    UIBarButtonItem *addDiaryButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize
-                                                                                   target:self
-                                                                                   action:@selector(addDiary)];
+    UIBarButtonItem *addDiaryButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"write.png"] style:UIBarButtonItemStylePlain target:self action:@selector(addDiary)];
+    
+    
     self.navigationItem.rightBarButtonItems = @[addEventButton,addDiaryButton];
     
     // Custom navgation left button view

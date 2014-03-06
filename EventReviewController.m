@@ -72,6 +72,9 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 @property (weak, nonatomic) IBOutlet UIView *alldayView;
 @property (weak, nonatomic) IBOutlet UILabel *allLabel;
 @property (weak, nonatomic) IBOutlet UILabel *dayLabel;
+@property (weak, nonatomic) IBOutlet UIButton *trashButton;
+@property (weak, nonatomic) IBOutlet UIView *mapMask;
+@property (weak, nonatomic) IBOutlet UIButton *saveButton;
 
 @end
 
@@ -93,14 +96,15 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     self.navigationItem.title = _event.title;
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
 
+    _trashButton.layer.cornerRadius = _trashButton.frame.size.width/2;
+    _saveButton.layer.cornerRadius = _saveButton.frame.size.width/2;
+    
     _locationMapView.delegate = self;
-    //_locationMapView.showsUserLocation = YES;
+    _locationMapView.showsUserLocation = YES;
     _locationMapView.pitchEnabled = YES;
     
-    self.navigationItem.rightBarButtonItems = @[
-                                                [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveNewEvent)],
-                                                [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showMap)]
-                                                ];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showMap)];
+    
     self.navigationItem.title = @"Event";
     
     _locationSearchBar.delegate = self;
@@ -113,6 +117,9 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     
     // Event detail view
     _eventDetailView.layer.cornerRadius = 5.0f;
+    _eventDetailView.layer.shadowColor = [[UIColor blackColor]CGColor];
+    _eventDetailView.layer.shadowOpacity = 0.5f;
+    _eventDetailView.layer.shadowOffset = CGSizeMake(2 , 2);
     
     // Reminder view
     _reminderView.layer.cornerRadius = 5.0f;
@@ -143,7 +150,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     hideFrame = reminder.frame;
     
     // Set up All Day button
-    _alldayView.layer.cornerRadius = _alldayView.frame.size.width/2;
+    _alldayView.layer.cornerRadius = 5.0f;
     UITapGestureRecognizer *alldayTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(alldayAction)];
     [_alldayView addGestureRecognizer:alldayTap];
     _startTimeView.layer.cornerRadius = 5.0f;
@@ -170,7 +177,10 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     _subjectField.delegate = self;
     [_subjectField becomeFirstResponder];
     _locationField.delegate = self;
-
+    UIImageView *locationTag = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
+    locationTag.image = [UIImage imageNamed:@"locationTag20.png"];
+    _locationField.leftView = locationTag;
+    _locationField.leftViewMode = UITextFieldViewModeAlways;
     
     _startTimeField.delegate = self;
     _startTimeField.inputView = _datePicker;
@@ -438,9 +448,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     return YES;
 }
 
-
-#pragma mark - User actions
-- (void)saveNewEvent
+- (IBAction)saveEvent:(id)sender
 {
     // Create new location
     if (locationLng > 0 && locationLat > 0) {
@@ -460,10 +468,11 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+#pragma mark - User actions
+
 - (IBAction)deleteBtn:(id)sender
 {
-    
-    [self showMap];
+//    [self showMap];
     UIAlertView *deleteAlert = [[UIAlertView alloc]initWithTitle:@"Delete Event"
                                                          message:@"Confirm to delete"
                                                         delegate:self
@@ -481,6 +490,8 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     
     repeat.show = NO;
     repeat.frame = hideFrame;
+    
+    _mapMask.hidden = NO;
 }
 
 - (void)searchLocation
@@ -868,5 +879,10 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
                            }];
 }
 
+- (IBAction)closeMap:(id)sender
+{
+    _mapMask.hidden = YES;
+    [_subjectField becomeFirstResponder];
+}
 
 @end

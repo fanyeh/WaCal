@@ -102,6 +102,10 @@
     [videoView addSubview:videoImageView];
     UITapGestureRecognizer *videoTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(playMovie)];
     [videoView addGestureRecognizer:videoTap];
+    UIImageView *playButtonView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];
+    playButtonView.image = [UIImage imageNamed:@"playButton.png"];
+    playButtonView.center = videoImageView.center;
+    [videoView addSubview:playButtonView];
     
     // Set up diary photo collection view
     diaryCollectionViewInset = UIEdgeInsetsMake(2, 2, 2, 2);
@@ -437,7 +441,7 @@
     // Enlarge cell when long pressed
     UICollectionViewCell *cell = (UICollectionViewCell *)sender.view;
     if (sender.state == UIGestureRecognizerStateBegan) {
-        cell.transform = CGAffineTransformScale(cell.transform, 1.1 , 1.1);
+        cell.transform = CGAffineTransformScale(cell.transform, 1.05 , 1.05);
     }
     
     // Pan the cell
@@ -454,6 +458,8 @@
     if (sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateCancelled)
     {
         cell.transform = CGAffineTransformIdentity;
+
+
         NSIndexPath *touchedCellPath = [diaryPhotosView indexPathForItemAtPoint:CGPointMake(sender.view.center.x, sender.view.center.y)];
         NSIndexPath *currentCellIndexPath = [diaryPhotosView indexPathForCell:cell];
         
@@ -693,7 +699,8 @@
             DiaryPhotoViewController *photoViewController = [[DiaryPhotoViewController alloc]init];
             
             // Get image from selectedPhotoInfo
-            UIImage *photo = [self getPhotoWithImageInfo:[selectedPhotoOrderingInfo objectAtIndex:indexPath.row]];
+//            UIImage *photo = [self getPhotoWithImageInfo:[selectedPhotoOrderingInfo objectAtIndex:indexPath.row]];
+            UIImage *photo = [fullScreenImageArray objectAtIndex:indexPath.row];
             photoViewController.photoImage = photo;
             photoViewController.indexPath = indexPath;
             photoViewController.delegate = self;
