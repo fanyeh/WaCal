@@ -441,7 +441,13 @@
     // Enlarge cell when long pressed
     UICollectionViewCell *cell = (UICollectionViewCell *)sender.view;
     if (sender.state == UIGestureRecognizerStateBegan) {
-        cell.transform = CGAffineTransformScale(cell.transform, 1.05 , 1.05);
+        cell.layer.borderColor = [[UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000]CGColor];
+        cell.layer.borderWidth = 3.0f;
+        [UIView animateWithDuration:0.2f animations:^{
+            cell.transform = CGAffineTransformScale(cell.transform, 1.05 , 1.05);
+        } completion:^(BOOL finished) {
+            cell.transform = CGAffineTransformIdentity;
+        }];
     }
     
     // Pan the cell
@@ -458,7 +464,8 @@
     if (sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateCancelled)
     {
         cell.transform = CGAffineTransformIdentity;
-
+//        cell.layer.borderColor = [[UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000]CGColor];
+        cell.layer.borderWidth = 0.0f;
 
         NSIndexPath *touchedCellPath = [diaryPhotosView indexPathForItemAtPoint:CGPointMake(sender.view.center.x, sender.view.center.y)];
         NSIndexPath *currentCellIndexPath = [diaryPhotosView indexPathForCell:cell];

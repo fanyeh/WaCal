@@ -29,6 +29,8 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     LocationCallback _foundLocationCallback;
     CLLocationCoordinate2D destination;
     MKPointAnnotation *previousSourceAnnotation;
+    MKPointAnnotation *previousDestinationAnnotation;
+
     MKRoute *previousUserLocationDirectRoute;
     BOOL hasDestination;
 
@@ -39,10 +41,10 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     EKRecurrenceRule *recurrenceRule;
     CGRect hideFrame;
     NSArray *places;
-    double locationLat;
-    double locationLng;
     
     BOOL allday;
+    
+    NSDictionary *selectedLocation;
 }
 
 @property (weak, nonatomic) IBOutlet UITextField *subjectField;
@@ -75,6 +77,13 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 @property (weak, nonatomic) IBOutlet UIButton *trashButton;
 @property (weak, nonatomic) IBOutlet UIView *mapMask;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
+@property (weak, nonatomic) IBOutlet UIView *dotView;
+
+@property (weak, nonatomic) IBOutlet UIView *mapLocationView;
+@property (weak, nonatomic) IBOutlet UILabel *mapLocationName;
+@property (weak, nonatomic) IBOutlet UILabel *destinationDistance;
+@property (weak, nonatomic) IBOutlet UITextView *mapLocationAddress;
+@property (weak, nonatomic) IBOutlet UILabel *locationPhone;
 
 @end
 
@@ -93,27 +102,18 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    // View controller
     self.navigationItem.title = _event.title;
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
-
-    _trashButton.layer.cornerRadius = _trashButton.frame.size.width/2;
-    _saveButton.layer.cornerRadius = _saveButton.frame.size.width/2;
-    
-    _locationMapView.delegate = self;
-    _locationMapView.showsUserLocation = YES;
-    _locationMapView.pitchEnabled = YES;
-    
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(showMap)];
-    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                                                                          target:self action:@selector(showMap)];
     self.navigationItem.title = @"Event";
     
-    _locationSearchBar.delegate = self;
-    
-    _searchResultTable.delegate = self;
-    _searchResultTable.dataSource = self;
-    [_searchResultTable registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
-    
-    _locationSearchView.layer.cornerRadius = 10.0f;
+    // Main view
+    _dotView.layer.cornerRadius = _dotView.frame.size.width/2;
+    _trashButton.layer.cornerRadius = 5.0f;
+    _saveButton.layer.cornerRadius = 5.0f;
     
     // Event detail view
     _eventDetailView.layer.cornerRadius = 5.0f;
@@ -193,27 +193,42 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     _endTimeLabel.text = [timeFormatter stringFromDate:[NSDate dateWithTimeInterval:300 sinceDate:_selectedDate]];
     _endDateLabel.text =  [dateFormatter stringFromDate:[NSDate dateWithTimeInterval:300 sinceDate:_selectedDate]];
     
+    // Map
+    _locationMapView.delegate = self;
+    _locationMapView.showsUserLocation = YES;
+    _locationMapView.pitchEnabled = YES;
+    _mapLocationView.layer.cornerRadius = 5.0f;
+    _mapLocationView.layer.shadowColor = [[UIColor blackColor]CGColor];
+    _mapLocationView.layer.shadowOpacity = 0.5f;
+    _mapLocationView.layer.shadowOffset = CGSizeMake(2 , 2);
+    
+    // Search
+    _locationSearchBar.delegate = self;
+    _searchResultTable.delegate = self;
+    _searchResultTable.dataSource = self;
+    [_searchResultTable registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
+    _locationSearchView.layer.cornerRadius = 10.0f;
+    selectedLocation = [[NSDictionary alloc]init];
+    
+    UITapGestureRecognizer *phoneTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(makeCall)];
+    [_locationPhone addGestureRecognizer:phoneTap];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     self.tabBarController.tabBar.hidden = YES;
+    
     // Refresh label content based on event
     _subjectField.text = _event.title;
-    NSValue *starFrame = [NSValue valueWithCGRect:_startDateLabel.frame];
-    NSLog(@"Start frame %@",starFrame);
     if (_event.allDay) {
         allday = YES;
-        _alldayView.backgroundColor = Rgb2UIColor(33, 138, 251);
+        _alldayView.backgroundColor = [UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000];
         _allLabel.textColor = [UIColor whiteColor];
         _dayLabel.textColor = [UIColor whiteColor];
         _startTimeLabel.hidden = YES;
         _endTimeLabel.hidden = YES;
         
         _startDateLabel.frame = CGRectOffset(_startDateLabel.frame, 0 , -13);
-        starFrame = [NSValue valueWithCGRect:_startDateLabel.frame];
-        NSLog(@"Start frame %@",starFrame);
-
         _endDateLabel.frame = CGRectOffset(_endDateLabel.frame, 0 , -13);
         _startDateLabel.font = [UIFont systemFontOfSize:15];
         _endDateLabel.font = [UIFont systemFontOfSize:15];
@@ -224,33 +239,39 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
         _allLabel.textColor = [UIColor grayColor];
         _dayLabel.textColor = [UIColor grayColor];
     }
-//    _startDateLabel.text = [NSString stringWithFormat:@"%@",[dateFormatter stringFromDate:_event.startDate]];
-//    _startTimeField.text = [NSString stringWithFormat:@"%@",[timeFormatter stringFromDate:_event.startDate]];
     
     // Check if there is location
     if (_event.location) {
         _locationField.text = _event.location;
+        
+        // Check if there's event location
+        NSMutableDictionary *allLocationItems = [[LocationDataStore sharedStore]allItems];
+        LocationData *eventLocation = [allLocationItems objectForKey:_event.eventIdentifier];
+        // If yes , update map
+        if (eventLocation) {
+            destination =  CLLocationCoordinate2DMake(eventLocation.latitude, eventLocation.longitude);
+            hasDestination = YES;
+            
+            // Update map info
+            _mapLocationName.text = eventLocation.locationName;
+            _mapLocationAddress.text = eventLocation.locationAddress;
+            
+        } else {
+            hasDestination = NO;
+        }
     }
     else {
         _locationField.placeholder = @"Select location";
-    }
-    
-    // Check if there's event location
-    NSMutableDictionary *allLocationItems = [[LocationDataStore sharedStore]allItems];
-    LocationData *eventLocation = [allLocationItems objectForKey:_event.eventIdentifier];
-    if (eventLocation) {
-        destination =  CLLocationCoordinate2DMake(eventLocation.latitude, eventLocation.longitude);
-        hasDestination = YES;
-    } else {
-        hasDestination = NO;
     }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     self.tabBarController.tabBar.hidden = NO;
-    NSLog(@"event start date %@",_event.startDate);
 }
+
+#pragma mark - Memory Management
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -303,14 +324,21 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
         if ([_locationMapView.annotations count]==1) {
             [_locationMapView addAnnotations:@[destinationAnnotation,sourceAnnotation]];
             previousSourceAnnotation = sourceAnnotation;
+            previousDestinationAnnotation = destinationAnnotation;
         }
+        // Remove then add source/desitination for latest location updates for route
         else {
             // Remove source annotation
             [_locationMapView removeAnnotation:previousSourceAnnotation];
+            [_locationMapView removeAnnotation:previousDestinationAnnotation];
             
             // Add new source annotation
             [_locationMapView addAnnotation:sourceAnnotation];
+            [_locationMapView addAnnotation:destinationAnnotation];
+
             previousSourceAnnotation = sourceAnnotation;
+            previousDestinationAnnotation = destinationAnnotation;
+
             [_locationMapView removeOverlay:previousUserLocationDirectRoute.polyline];
         }
         
@@ -326,6 +354,9 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
         boundingRegion.span.latitudeDelta *= 1.1f;
         boundingRegion.span.longitudeDelta *= 1.1f;
         [_locationMapView setRegion:boundingRegion animated:YES];
+        CLLocation *destinationLocation = [[CLLocation alloc]initWithLatitude:destination.latitude longitude:destination.longitude];
+        
+        _destinationDistance.text = [NSString stringWithFormat:@"%.1f KM",[_locationMapView.userLocation.location distanceFromLocation:destinationLocation]/1000];
     });
 }
 
@@ -395,6 +426,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 }
 
 #pragma mark - UIAlertViewDelegate
+
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex==1) {
@@ -440,7 +472,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 {
     if (textField.returnKeyType == UIReturnKeySearch) {
         _locationSearchBar.text = _locationField.text;
-        [self queryGooglePlacesLongitude:_locationField.text];
+        [self queryGooglePlaces:_locationField.text];
         _maskView.hidden = NO;
         [_locationSearchBar becomeFirstResponder];
     }
@@ -450,19 +482,22 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 
 - (IBAction)saveEvent:(id)sender
 {
-    // Create new location
-    if (locationLng > 0 && locationLat > 0) {
-        LocationData *locationData = [[LocationDataStore sharedStore]createItemWithKey:_event.eventIdentifier];
-        locationData.latitude = locationLat;
-        locationData.longitude = locationLng;
-        [[LocationDataStore sharedStore]saveChanges];
-    }
-    
     // update event
     _event.title = _subjectField.text;
     _event.location = _locationField.text;
     _event.allDay = allday;
     [[[CalendarStore sharedStore]eventStore] saveEvent:_event span:EKSpanThisEvent commit:YES error:nil];
+    
+    // Create new location
+    if ([selectedLocation count]>0) {
+        LocationData *eventLocation = [[LocationDataStore sharedStore]createItemWithKey:_event.eventIdentifier];
+        eventLocation.latitude =  [[[[selectedLocation objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"] doubleValue];
+        eventLocation.longitude = [[[[selectedLocation objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
+        eventLocation.locationName = [selectedLocation objectForKey:@"name"];
+        eventLocation.locationAddress = [selectedLocation objectForKey:@"formatted_address"];
+        [[LocationDataStore sharedStore]saveChanges];
+    }
+    
     NSDictionary *startDate = [NSDictionary dictionaryWithObject:_event.startDate forKey:@"startDate"];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"eventChange" object:nil userInfo:startDate];
     [self.navigationController popViewControllerAnimated:YES];
@@ -491,13 +526,17 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     repeat.show = NO;
     repeat.frame = hideFrame;
     
+    CLLocation *destinationLocation = [[CLLocation alloc]initWithLatitude:destination.latitude longitude:destination.longitude];
+    
+    _destinationDistance.text = [NSString stringWithFormat:@"%.1f KM",[_locationMapView.userLocation.location distanceFromLocation:destinationLocation]/1000];
+    
     _mapMask.hidden = NO;
 }
 
 - (void)searchLocation
 {
     _locationSearchBar.text = _locationField.text;
-    [self queryGooglePlacesLongitude:_locationField.text];
+    [self queryGooglePlaces:_locationField.text];
     _maskView.hidden = NO;
 }
 
@@ -507,7 +546,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
         [self.view endEditing:YES];
         repeat.frame = hideFrame;
         repeat.show = NO;
-        reminder.frame = CGRectOffset(reminder.frame, 0, -216);
+        reminder.frame = CGRectOffset(reminder.frame, 0, -236);
         reminder.show = YES;
     }
 }
@@ -518,7 +557,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
         [self.view endEditing:YES];
         reminder.frame = hideFrame;
         reminder.show = NO;
-        repeat.frame = CGRectOffset(repeat.frame, 0, -216);
+        repeat.frame = CGRectOffset(repeat.frame, 0, -236);
         repeat.show = YES;
     }
 }
@@ -545,7 +584,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
         
     } else {
         allday = YES;
-        _alldayView.backgroundColor = Rgb2UIColor(33, 138, 251);
+        _alldayView.backgroundColor = [UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000];
         _allLabel.textColor = [UIColor whiteColor];
         _dayLabel.textColor = [UIColor whiteColor];
         
@@ -617,7 +656,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
             for (ReminderButton *b in reminder.subviews) {
                 if ((b.tag==1&&a.absoluteDate)||(b.timeOffset == a.relativeOffset*-1)) {
                     [b setSelected:YES];
-                    b.backgroundColor = Rgb2UIColor(33, 138, 251);
+                    b.backgroundColor = [UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000];
                     break;
                 }
             }
@@ -631,11 +670,11 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     if([sender isSelected]){
         [sender setSelected:NO];
         if (sender.tag < 10)
-            sender.backgroundColor = [UIColor whiteColor];
+            sender.backgroundColor = [UIColor clearColor];
     } else {
         [sender setSelected:YES];
         if (sender.tag < 10) {
-            sender.backgroundColor = Rgb2UIColor(33, 138, 251);
+            sender.backgroundColor = [UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000];
             [self createAlarm:sender.tag];
         }
         
@@ -643,7 +682,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
         for (ReminderButton *b in reminder.subviews) {
             if (b.tag < 10 && b.tag != sender.tag) {
                 [b setSelected:NO];
-                b.backgroundColor = [UIColor whiteColor];
+                b.backgroundColor = [UIColor clearColor];
             }
         }
     }
@@ -694,12 +733,12 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     if([sender isSelected]){
         [sender setSelected:NO];
         if (sender.tag < 10)
-            sender.backgroundColor = [UIColor whiteColor];
+            sender.backgroundColor = [UIColor clearColor];
         
     } else {
         [sender setSelected:YES];
         if (sender.tag < 10) {
-            sender.backgroundColor = Rgb2UIColor(33, 138, 251);
+            sender.backgroundColor = [UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000];
             [self createRule:sender.tag];
         }
         
@@ -707,7 +746,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
         for (UIButton *b in repeat.subviews) {
             if (b.tag < 10 && b.tag != sender.tag) {
                 [b setSelected:NO];
-                b.backgroundColor = [UIColor whiteColor];
+                b.backgroundColor = [UIColor clearColor];
             }
         }
     }
@@ -758,7 +797,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     for (UIButton *b in self.view.subviews) {
         if (b.tag == tag) {
             [b setSelected:YES];
-            b.layer.borderColor = [[UIColor greenColor]CGColor];
+            b.layer.borderColor = [[UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000]CGColor];
             break;
         }
     }
@@ -790,14 +829,15 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
             break;
     }
     [self removeAllRules];
-    [_event addRecurrenceRule:recurrenceRule];
+    if (recurrenceRule)
+        [_event addRecurrenceRule:recurrenceRule];
 }
 
 #pragma mark - UISearchBarDelegate
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     _locationField.text = searchBar.text;
-    [self queryGooglePlacesLongitude:searchBar.text];
+    [self queryGooglePlaces:searchBar.text];
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
@@ -817,7 +857,6 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     // Configure the cell...
     NSString *locName = [places[indexPath.row] objectForKey:@"name"];
     NSString *address = [places[indexPath.row] objectForKey:@"formatted_address"];
-    
     cell.textLabel.text = locName;
     cell.detailTextLabel.text = address;
     
@@ -832,17 +871,25 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     _locationField.text = [places[indexPath.row] objectForKey:@"name"];
-    locationLat =  [[[[places[indexPath.row] objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"] doubleValue];
-    locationLng =  [[[[places[indexPath.row] objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
+    
+    selectedLocation = [places objectAtIndex:indexPath.row];
+    
+    // Update map info
+    _mapLocationName.text =[selectedLocation objectForKey:@"name"];
+    _mapLocationAddress.text = [selectedLocation objectForKey:@"formatted_address"];
+    [self queryGooglePlaceDetails:[selectedLocation objectForKey:@"reference"]];
+    
     _maskView.hidden = YES;
     
     // Update Apple map
-    destination = CLLocationCoordinate2DMake(locationLat,locationLng);
+    double lat =  [[[[selectedLocation objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"] doubleValue];
+    double lon = [[[[selectedLocation objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
+    destination = CLLocationCoordinate2DMake(lat,lon);
     [self calculateRouteToMapItem:_locationMapView.userLocation.location.coordinate userDestination:destination];
 }
 
 // Google search
--(void) queryGooglePlacesLongitude:(NSString *)name
+-(void)queryGooglePlaces:(NSString *)name
 {
     // Sensor = true means search using GPS
     NSString *url;
@@ -865,9 +912,43 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
                                                                                           error:&connectionError];
                                    //The results from Google will be an array obtained from the NSDictionary object with the key "results".
                                    places = [json objectForKey:@"results"];
-                                   //                                   NSLog(@"Places %@",places);
+                                   
                                    dispatch_async(dispatch_get_main_queue(), ^{
                                        [_searchResultTable reloadData];
+                                   });
+                                   
+                               } else if ([data length]==0 && connectionError==nil) {
+                                   //沒有資料，連線沒有錯誤
+                               } else if (connectionError != nil) {
+                                   //連線有錯誤
+                                   NSLog(@"error %@",connectionError);
+                               }
+                           }];
+}
+
+-(void)queryGooglePlaceDetails:(NSString *)reference
+{
+    // Sensor = true means search using GPS
+    NSString *url;
+    url = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/details/json?reference=%@&sensor=true&key=%@",reference,kGOOGLE_API_KEY];
+    //Formulate the string as a URL object.
+    NSURL *googleRequestURL=[NSURL URLWithString:[url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+    // Retrieve the results of the URL.
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:googleRequestURL];
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:queue
+                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+                               
+                               if ([data length]>0 && connectionError==nil) {
+                                   //收到正確的資料，連線沒有錯
+                                   NSDictionary* json = [NSJSONSerialization JSONObjectWithData:data
+                                                                                        options:NSJSONReadingAllowFragments
+                                                                                          error:&connectionError];
+                                   
+                                   dispatch_async(dispatch_get_main_queue(), ^{
+                                       _locationPhone.text = [[json objectForKey:@"result"] objectForKey:@"formatted_phone_number"];
                                    });
                                    
                                } else if ([data length]==0 && connectionError==nil) {
@@ -883,6 +964,12 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 {
     _mapMask.hidden = YES;
     [_subjectField becomeFirstResponder];
+}
+
+- (void)makeCall
+{
+    NSString *phoneNumber = [NSString stringWithFormat:@"tel:%@",[_locationPhone.text stringByReplacingOccurrencesOfString:@" " withString:@""]];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:phoneNumber]];
 }
 
 @end

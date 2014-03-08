@@ -56,9 +56,9 @@
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self  action:@selector(createDiary)];
     self.navigationItem.rightBarButtonItem = addButton;
     
-    UIBarButtonItem *editButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self  action:@selector(editDiaryTable)];
-    self.navigationItem.leftBarButtonItem = editButton;
-    self.navigationItem.leftBarButtonItem.tag = 0;
+//    UIBarButtonItem *editButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self  action:@selector(editDiaryTable)];
+//    self.navigationItem.leftBarButtonItem = editButton;
+//    self.navigationItem.leftBarButtonItem.tag = 0;
 
     // Segment controll
     diaryFilter = [[UISegmentedControl alloc] initWithItems:@[@"Local", @"Cloud"]];

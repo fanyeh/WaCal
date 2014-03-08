@@ -59,6 +59,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *allDayLabel;
 @property (weak, nonatomic) IBOutlet UIView *emptyDiaryView;
 @property (weak, nonatomic) IBOutlet UIView *emptyEventView;
+@property (weak, nonatomic) IBOutlet UIView *emptyEventButton;
+@property (weak, nonatomic) IBOutlet UIView *emptyDiaryButton;
 
 @end
 
@@ -87,6 +89,15 @@
 
     [_emptyDiaryView addGestureRecognizer:emptyDiaryTap];
     [_emptyEventView addGestureRecognizer:emptyEventTap];
+    _emptyDiaryButton.layer.cornerRadius = 5.0f;
+    _emptyDiaryButton.layer.shadowColor = [[UIColor blackColor]CGColor];
+    _emptyDiaryButton.layer.shadowOpacity = 0.5f;
+    _emptyDiaryButton.layer.shadowOffset = CGSizeMake(2 , 2);
+    
+    _emptyEventButton.layer.cornerRadius = 5.0f;
+    _emptyEventButton.layer.shadowColor = [[UIColor blackColor]CGColor];
+    _emptyEventButton.layer.shadowOpacity = 0.5f;
+    _emptyEventButton.layer.shadowOffset = CGSizeMake(2 , 2);
     
     dateFormatter = [[NSDateFormatter alloc]init];
     dateFormatter.dateFormat = @"yyyy/MM/dd";
@@ -143,6 +154,7 @@
     eventTableView.backgroundColor = [UIColor clearColor];
     eventTableView.hidden = YES;
     eventTableView.delegate = self;
+    eventTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [eventTableView registerNib:[UINib nibWithNibName:@"EventTableCell" bundle:nil]
          forCellReuseIdentifier:@"Cell"];
 
@@ -311,7 +323,7 @@
 
 -(void)refreshDiary:(NSNotification *)notification
 {
-//    [_diaryCollectionView reloadData];
+    [self showDiary];
 }
 
 - (void)switchEKCalendar:(NSNotification *)notification

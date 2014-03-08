@@ -9,6 +9,7 @@
                 <outlet property="allLabel" destination="ADX-Yk-xgf" id="YnU-3t-bzM"/>
                 <outlet property="alldayView" destination="3sh-J0-aXP" id="tV2-vd-QHm"/>
                 <outlet property="dayLabel" destination="JhP-bX-osB" id="yus-8I-fkw"/>
+                <outlet property="dotView" destination="caX-Ib-eVi" id="cQQ-Vb-jh3"/>
                 <outlet property="endDateLabel" destination="SEd-Gr-Rle" id="7ed-I8-j7u"/>
                 <outlet property="endTimeField" destination="L7N-Iv-ywp" id="wm9-c1-bNf"/>
                 <outlet property="endTimeLabel" destination="cxh-t1-YdX" id="hS8-Lf-NeQ"/>
@@ -43,11 +44,11 @@
                             <rect key="frame" x="0.0" y="9" width="300" height="259"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dme-ka-lkt" userLabel="Save - Button">
+                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dme-ka-lkt" userLabel="Save - Button">
                                     <rect key="frame" x="251" y="219" width="35" height="35"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    <state key="normal" title="V">
+                                    <color key="backgroundColor" red="0.11372549019607843" green="0.44313725490196076" blue="0.71764705882352942" alpha="1" colorSpace="calibratedRGB"/>
+                                    <state key="normal" image="v.png">
                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
@@ -72,15 +73,15 @@
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </view>
-                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Subject" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Vge-TY-tXk">
-                                    <rect key="frame" x="5" y="11" width="288" height="30"/>
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Subject" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Vge-TY-tXk" userLabel="Subject">
+                                    <rect key="frame" x="5" y="23" width="288" height="30"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                     <textInputTraits key="textInputTraits"/>
                                 </textField>
                                 <textField opaque="NO" clipsSubviews="YES" tag="3" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Select location" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Dla-ba-YMc">
-                                    <rect key="frame" x="14" y="57" width="273" height="30"/>
+                                    <rect key="frame" x="14" y="61" width="273" height="30"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
@@ -161,12 +162,12 @@
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </view>
                                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uue-XE-zdv" userLabel=" separator 1">
-                                    <rect key="frame" x="5" y="41" width="290" height="2"/>
+                                    <rect key="frame" x="5" y="54" width="290" height="2"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </view>
                                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fjI-Bu-uUP" userLabel="separator 2">
-                                    <rect key="frame" x="14" y="212" width="273" height="2"/>
+                                    <rect key="frame" x="14" y="210" width="273" height="2"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 </view>
@@ -188,6 +189,11 @@
                                         </label>
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                </view>
+                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="caX-Ib-eVi" userLabel="dot">
+                                    <rect key="frame" x="5" y="5" width="10" height="10"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" red="1" green="0.82745098039999998" blue="0.30588235289999999" alpha="1" colorSpace="calibratedRGB"/>
                                 </view>
                             </subviews>
                             <color key="backgroundColor" red="0.90196078431372551" green="0.90196078431372551" blue="0.90196078431372551" alpha="1" colorSpace="calibratedRGB"/>
@@ -229,5 +235,6 @@
     <resources>
         <image name="reminder.png" width="20" height="20"/>
         <image name="repeat.png" width="512" height="512"/>
+        <image name="v.png" width="35" height="35"/>
     </resources>
 </document>

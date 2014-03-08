@@ -20,12 +20,10 @@
         CGFloat cellHeight = self.contentView.frame.size.height;
         
         _cellImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0,0,cellWidth,cellWidth)];
-        
         _filterNameLabel = [[UILabel alloc]initWithFrame:CGRectMake(0,
                                                                     cellWidth + 10,
                                                                     cellWidth,
                                                                     cellHeight - cellWidth - 10)];
-
         _filterNameLabel.textColor = [UIColor whiteColor];
         _filterNameLabel.textAlignment = NSTextAlignmentCenter;
         

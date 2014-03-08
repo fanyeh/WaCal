@@ -81,11 +81,11 @@
     [[UINavigationBar appearance] setBackgroundColor:Rgb2UIColor(29 , 113 , 183)];
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]]; //is the buttons text color
     
-    [[UITabBar appearance] setBackgroundImage:[[UIImage alloc] init]];
-    [[UITabBar appearance] setShadowImage:[[UIImage alloc] init]];
-
-    [[UITabBar appearance] setBackgroundColor:Rgb2UIColor(29 , 113 , 183)];
-    [[UITabBar appearance] setTintColor:[UIColor whiteColor]]; //is the buttons text color
+//    [[UITabBar appearance] setBackgroundImage:[[UIImage alloc] init]];
+//    [[UITabBar appearance] setShadowImage:[[UIImage alloc] init]];
+//
+//    [[UITabBar appearance] setBackgroundColor:Rgb2UIColor(29 , 113 , 183)];
+    [[UITabBar appearance] setTintColor:Rgb2UIColor(29 , 113 , 183)]; //is the buttons text color
     
 //    [Parse setApplicationId:@"7utzGzNF3trLYTt20IxZfICqt53FG8w6H0G0uhkm"
 //                  clientKey:@"DKa0htgOp1uZF6eXPjjYyohbGNb2knhPlBxfycMP"];

@@ -38,7 +38,7 @@
         CGFloat gapX = 35;
         CGFloat gapY = 8;
         int alarmButtonCount = 10;
-        CGFloat alarmButtonX = 35;
+        CGFloat alarmButtonX = 25;
         CGFloat alarmButtonY = 8;
         CGFloat buttonSize = 60;
         
@@ -47,9 +47,9 @@
         for (int i = 1; i < alarmButtonCount ;i++) {
             ReminderButton *alarmButton = [[ReminderButton alloc]initWithFrame:CGRectMake(alarmButtonX, alarmButtonY, buttonSize, buttonSize)];
             [alarmButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-            [alarmButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            [alarmButton setTitleColor:[UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000] forState:UIControlStateNormal];
             alarmButton.titleLabel.font = [UIFont fontWithName:@"Avenir" size:14];
-            alarmButton.layer.borderColor = [[UIColor grayColor]CGColor];
+            alarmButton.layer.borderColor = [[UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000]CGColor];
             alarmButton.layer.borderWidth = 2.0f;
             alarmButton.layer.cornerRadius = buttonSize/2;
             alarmButton.tag = i;
@@ -63,7 +63,7 @@
             
             switch (i) {
                 case 1:
-                    [alarmButton setTitle:@"On Time" forState:UIControlStateNormal];
+                    [alarmButton setTitle:@"OnTime" forState:UIControlStateNormal];
                     break;
                 case 2:
                     [alarmButton setTitle:@"5 Min" forState:UIControlStateNormal];

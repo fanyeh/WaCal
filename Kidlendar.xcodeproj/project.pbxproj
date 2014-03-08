@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C07B2BE18C8BE1600911045 /* x@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C07B2BC18C8BE1600911045 /* x@2x.png */; };
+		4C07B2BF18C8BE1600911045 /* v@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C07B2BD18C8BE1600911045 /* v@2x.png */; };
 		4C0C38CA18673AD60001CC08 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C0C38C918673AD60001CC08 /* AssetsLibrary.framework */; };
 		4C12B2ED18A1FC280046C5EC /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2EC18A1FC280046C5EC /* GoogleMaps.framework */; };
 		4C12B2EF18A1FD960046C5EC /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2EE18A1FD960046C5EC /* CoreText.framework */; };
@@ -157,6 +159,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C07B2BC18C8BE1600911045 /* x@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "x@2x.png"; sourceTree = "<group>"; };
+		4C07B2BD18C8BE1600911045 /* v@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "v@2x.png"; sourceTree = "<group>"; };
 		4C0C38C918673AD60001CC08 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		4C12B2EC18A1FC280046C5EC /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMaps.framework; sourceTree = "<group>"; };
 		4C12B2EE18A1FD960046C5EC /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -627,6 +631,8 @@
 		4CB3DD8218521DC400673478 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4C07B2BC18C8BE1600911045 /* x@2x.png */,
+				4C07B2BD18C8BE1600911045 /* v@2x.png */,
 				4CA2506A1869377000AEA94E /* UIImage+Resize.h */,
 				4CA2506B1869377000AEA94E /* UIImage+Resize.m */,
 				4CB3DD8418521DC400673478 /* InfoPlist.strings */,
@@ -798,6 +804,7 @@
 				4C68CABF18C63A51003776D2 /* playButton@2x.png in Resources */,
 				4CF5151F18C314500050E330 /* 42-photos.png in Resources */,
 				4C61326D18BF16990025FD00 /* EventCreateController.xib in Resources */,
+				4C07B2BF18C8BE1600911045 /* v@2x.png in Resources */,
 				4C4AAB7B18C6B39000458908 /* write@2x.png in Resources */,
 				4CFB1B8218C8092200EC443A /* diaryTab@2x.png in Resources */,
 				4CFFD58A1897800A0070C33C /* lookup_amatorka.png in Resources */,
@@ -811,6 +818,7 @@
 				4C4AAB7618C6B39000458908 /* backup@2x.png in Resources */,
 				4C61325F18BEE6790025FD00 /* repeat.png in Resources */,
 				4C61325618BECAED0025FD00 /* EventTableCell.xib in Resources */,
+				4C07B2BE18C8BE1600911045 /* x@2x.png in Resources */,
 				4C5B01F718ACBD7F0030FCCC /* DiaryCreateViewController.xib in Resources */,
 				4CFB1B8418C8676300EC443A /* selectPhoto@2x.png in Resources */,
 				4CB3DD8618521DC400673478 /* InfoPlist.strings in Resources */,

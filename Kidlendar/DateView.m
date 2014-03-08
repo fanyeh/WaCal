@@ -26,6 +26,7 @@
         _dateLabel.font = [UIFont fontWithName:@"Avenir-Light" size:20];
         _dateLabel.textColor = Rgb2UIColor(255, 255, 255);
         _dateLabel.textAlignment = NSTextAlignmentCenter;
+//        _dateLabel.layer.cornerRadius = 5.0f;
         [self addSubview:_dateLabel];
         _isToday = NO;
         _isSelected = NO;
@@ -46,7 +47,7 @@
     
     hasEventView.layer.cornerRadius = hasEventView.frame.size.width/2;
     
-    hasEventView.backgroundColor = Rgb2UIColor(134, 133, 133);
+    hasEventView.backgroundColor = [UIColor colorWithRed:1.000 green:0.827 blue:0.306 alpha:1.000];
     [self addSubview:hasEventView];
     
 
@@ -61,7 +62,7 @@
     
     hasDiaryView.layer.cornerRadius = hasDiaryView.frame.size.width/2;
     
-    hasDiaryView.backgroundColor = Rgb2UIColor(251, 106, 119);
+    hasDiaryView.backgroundColor = Rgb2UIColor(176, 204, 153);
     [self addSubview:hasDiaryView];
 }
 

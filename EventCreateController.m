@@ -33,6 +33,9 @@
     NSArray *places;
     double locationLat;
     double locationLng;
+    
+    NSDictionary *selectedLocation;
+
 }
 @property (weak, nonatomic) IBOutlet UITextField *subjectField;
 @property (weak, nonatomic) IBOutlet UITextField *locationField;
@@ -55,6 +58,7 @@
 @property (weak, nonatomic) IBOutlet UIView *startTimeView;
 @property (weak, nonatomic) IBOutlet UIView *endTimeView;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
+@property (weak, nonatomic) IBOutlet UIView *dotView;
 
 @end
 
@@ -74,6 +78,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    _dotView.layer.cornerRadius = _dotView.frame.size.width/2;
     // Navgition save button
     
     self.navigationItem.title = @"New Event";
@@ -177,6 +182,9 @@
     event.startDate = _selectedDate;
     event.endDate = [NSDate dateWithTimeInterval:300 sinceDate:_selectedDate];
     event.allDay = NO;
+    
+    selectedLocation = [[NSDictionary alloc]init];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -231,19 +239,26 @@
 
 - (IBAction)saveEvent:(id)sender
 {
-    if (locationLng > 0 && locationLat > 0) {
-        LocationData *locationData = [[LocationDataStore sharedStore]createItemWithKey:event.eventIdentifier];
-        locationData.latitude = locationLat;
-        locationData.longitude = locationLng;
-        [[LocationDataStore sharedStore]saveChanges];
-    }
-    
     // Create new event
     event.title = _subjectField.text;
     event.location = _locationField.text;
     [[[CalendarStore sharedStore]eventStore] saveEvent:event span:EKSpanThisEvent commit:YES error:nil];
+    
+    // Create new location
+    if ([selectedLocation count] > 0) {
+        LocationData *eventLocation = [[LocationDataStore sharedStore]createItemWithKey:event.eventIdentifier];
+        eventLocation.latitude =  [[[[selectedLocation objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"] doubleValue];
+        eventLocation.longitude = [[[[selectedLocation objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
+        eventLocation.locationName = [selectedLocation objectForKey:@"name"];
+        eventLocation.locationAddress = [selectedLocation objectForKey:@"formatted_address"];
+        [eventLocation setLocatinoIconDataFromImage:[UIImage imageWithContentsOfFile:[selectedLocation objectForKey:@"icon"]]];
+        [[LocationDataStore sharedStore]saveChanges];
+        NSLog(@"Created new location");
+    }
+    
     NSDictionary *startDate = [NSDictionary dictionaryWithObject:event.startDate forKey:@"startDate"];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"eventChange" object:nil userInfo:startDate];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)searchLocation
@@ -259,7 +274,7 @@
         [self.view endEditing:YES];
         repeat.frame = hideFrame;
         repeat.show = NO;
-        reminder.frame = CGRectOffset(reminder.frame, 0, -216);
+        reminder.frame = CGRectOffset(reminder.frame, 0, -236);
         reminder.show = YES;
     }
 }
@@ -270,7 +285,7 @@
         [self.view endEditing:YES];
         reminder.frame = hideFrame;
         reminder.show = NO;
-        repeat.frame = CGRectOffset(repeat.frame, 0, -216);
+        repeat.frame = CGRectOffset(repeat.frame, 0, -236);
         repeat.show = YES;
     }
 }
@@ -297,7 +312,7 @@
 
     } else {
         event.allDay = YES;
-        _alldayView.backgroundColor = Rgb2UIColor(33, 138, 251);
+        _alldayView.backgroundColor = [UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000];
         _allLabel.textColor = [UIColor whiteColor];
         _dayLabel.textColor = [UIColor whiteColor];
         
@@ -383,7 +398,7 @@
             for (ReminderButton *b in reminder.subviews) {
                 if ((b.tag==1&&a.absoluteDate)||(b.timeOffset == a.relativeOffset*-1)) {
                     [b setSelected:YES];
-                    b.backgroundColor = Rgb2UIColor(33, 138, 251);
+                    b.backgroundColor = [UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000];
                     break;
                 }
             }
@@ -397,11 +412,11 @@
     if([sender isSelected]){
         [sender setSelected:NO];
         if (sender.tag < 10)
-            sender.backgroundColor = [UIColor whiteColor];
+            sender.backgroundColor = [UIColor clearColor];
     } else {
         [sender setSelected:YES];
         if (sender.tag < 10) {
-            sender.backgroundColor = Rgb2UIColor(33, 138, 251);
+            sender.backgroundColor = [UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000];
             [self createAlarm:sender.tag];
         }
         
@@ -409,7 +424,7 @@
         for (ReminderButton *b in reminder.subviews) {
             if (b.tag < 10 && b.tag != sender.tag) {
                 [b setSelected:NO];
-                b.backgroundColor = [UIColor whiteColor];
+                b.backgroundColor = [UIColor clearColor];
             }
         }
     }
@@ -460,12 +475,12 @@
     if([sender isSelected]){
         [sender setSelected:NO];
         if (sender.tag < 10)
-            sender.backgroundColor = [UIColor whiteColor];
+            sender.backgroundColor = [UIColor clearColor];
         
     } else {
         [sender setSelected:YES];
         if (sender.tag < 10) {
-            sender.backgroundColor = Rgb2UIColor(33, 138, 251);
+            sender.backgroundColor = [UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000];
             [self createRule:sender.tag];
         }
         
@@ -473,7 +488,7 @@
         for (UIButton *b in repeat.subviews) {
             if (b.tag < 10 && b.tag != sender.tag) {
                 [b setSelected:NO];
-                b.backgroundColor = [UIColor whiteColor];
+                b.backgroundColor = [UIColor clearColor];
             }
         }
     }
@@ -524,7 +539,7 @@
     for (UIButton *b in self.view.subviews) {
         if (b.tag == tag) {
             [b setSelected:YES];
-            b.layer.borderColor = [[UIColor greenColor]CGColor];
+            b.layer.borderColor = [[UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000]CGColor];
             break;
         }
     }
@@ -556,7 +571,8 @@
             break;
     }
     [self removeAllRules];
-    [event addRecurrenceRule:recurrenceRule];
+    if (recurrenceRule)
+        [event addRecurrenceRule:recurrenceRule];
 }
 
 #pragma mark - UISearchBarDelegate
@@ -598,9 +614,21 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     _locationField.text = [places[indexPath.row] objectForKey:@"name"];
-    locationLat =  [[[[places[indexPath.row] objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"] doubleValue];
-    locationLng =  [[[[places[indexPath.row] objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
+    
+    
+    selectedLocation = [places objectAtIndex:indexPath.row];
+    
+//    // Update map info
+//    _mapLocationName.text =[selectedLocation objectForKey:@"name"];
+//    _mapLocationAddress.text = [selectedLocation objectForKey:@"formatted_address"];
+//    _mapLocationIcon.image = [selectedLocation objectForKey:@"icon"];
+//    
     _maskView.hidden = YES;
+//
+//    // Update Apple map
+//    destination = CLLocationCoordinate2DMake(locationLat,locationLng);
+//    [self calculateRouteToMapItem:_locationMapView.userLocation.location.coordinate userDestination:destination];
+
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

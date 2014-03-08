@@ -34,10 +34,9 @@
 @property (weak, nonatomic) IBOutlet UITextField *diaryTimeField;
 @property (weak, nonatomic) IBOutlet UITextField *locationField;
 @property (weak, nonatomic) IBOutlet UITextField *diarySubjectField;
-@property (weak, nonatomic) IBOutlet UIButton *diaryLocationIconButton;
-@property (weak, nonatomic) IBOutlet UIImageView *diaryTimeIcon;
 @property (weak, nonatomic) IBOutlet UITableView *searchResultTable;
 @property (weak, nonatomic) IBOutlet UISearchBar *locationSearchBar;
+@property (weak, nonatomic) IBOutlet UIView *dotView;
 @property (weak, nonatomic) IBOutlet UITextView *diaryEntryView;
 @end
 
@@ -57,7 +56,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.automaticallyAdjustsScrollViewInsets = NO;
-
+    
+    _dotView.layer.cornerRadius = _dotView.frame.size.width/2;
+    
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                                                                target:self
                                                                                action:@selector(saveDiary)];

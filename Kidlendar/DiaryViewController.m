@@ -85,7 +85,12 @@
     
     _yearLabel.text = [NSString stringWithFormat:@"%ld",[dateComp year]];
     _monthLabel.text = [monthArray objectAtIndex: [dateComp month]-1];
+    NSInteger day = [dateComp day];
     _dateLabel.text = [NSString stringWithFormat:@"%ld",[dateComp day]];
+    if (day==1) {
+        _dateLabel.text = [NSString stringWithFormat:@"%ld st",[dateComp day]];
+    }
+    
     _weekdayLabel.text  = [weekdayFormatter stringFromDate:diaryDate];
     
     UIBezierPath *exclusionPathYear = [UIBezierPath bezierPathWithRect:[_diaryDetailTextView convertRect:_yearLabel.bounds

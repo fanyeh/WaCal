@@ -38,7 +38,7 @@
         CGFloat gapY = 32;
 
         int alarmButtonCount = 7;
-        CGFloat alarmButtonX = 35;
+        CGFloat alarmButtonX = 25;
         CGFloat alarmButtonY = 32;
         CGFloat buttonSize = 60;
         
@@ -47,10 +47,10 @@
 
             UIButton *alarmButton = [[UIButton alloc]initWithFrame:CGRectMake(alarmButtonX, alarmButtonY, buttonSize, buttonSize)];
             [alarmButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-            [alarmButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            [alarmButton setTitleColor:[UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000] forState:UIControlStateNormal];
             alarmButton.titleLabel.font = [UIFont fontWithName:@"Avenir" size:14];
             alarmButton.layer.cornerRadius = buttonSize/2;
-            alarmButton.layer.borderColor = [[UIColor grayColor]CGColor];
+            alarmButton.layer.borderColor = [[UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000]CGColor];
             alarmButton.layer.borderWidth = 2.0f;
             alarmButton.tag = i;
             [self addSubview:alarmButton];

@@ -137,6 +137,7 @@
             dateView.dateLabel.textColor = Rgb2UIColor(255, 0, 0);
             dateView.dateLabel.layer.borderColor = [[UIColor redColor]CGColor];
             dateView.dateLabel.layer.borderWidth = 1.0f;
+            dateView.dateLabel.layer.cornerRadius = 5.0f;
         }
         
         // Add indicator if date has event
@@ -304,6 +305,7 @@
         weekdayView.selectedLabel.backgroundColor = Rgb2UIColor(29 , 113 , 183);
     }
     
+    view.dateLabel.layer.cornerRadius = 5.0f;
     view.dateLabel.textColor = [UIColor whiteColor];
     view.isSelected = YES;
 }
@@ -334,6 +336,8 @@
         else
             view.dateLabel.textColor = [UIColor blackColor];
     }
+
+    view.dateLabel.layer.cornerRadius = 0.0f;
 
     view.dateLabel.backgroundColor =[UIColor clearColor];
     view.isSelected = NO;

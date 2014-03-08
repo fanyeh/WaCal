@@ -49,9 +49,10 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="nBZ-ob-P8o" userLabel="date - 19">
-                    <rect key="frame" x="256" y="500" width="59" height="41"/>
+                    <rect key="frame" x="259" y="500" width="59" height="41"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="50"/>
+                    <color key="textColor" red="0.1137254902" green="0.4431372549" blue="0.71764705880000002" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="September" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="02m-5v-KjY" userLabel="month - February">
@@ -60,7 +61,7 @@
                     <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="22"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="locationTag-24.png" id="H4n-Sn-R8x">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="locationTag10.png" id="H4n-Sn-R8x">
                     <rect key="frame" x="5" y="544" width="10" height="10"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
@@ -183,7 +184,7 @@
         <image name="MetroUI-Apps-Dropbox-icon.png" width="512" height="512"/>
         <image name="SinaWeibo.png" width="1000" height="800"/>
         <image name="fb_icon_325x325.png" width="325" height="325"/>
-        <image name="locationTag-24.png" width="512" height="512"/>
+        <image name="locationTag10.png" width="10" height="10"/>
         <image name="twitter-bird-white-on-blue.png" width="300" height="300"/>
     </resources>
 </document>

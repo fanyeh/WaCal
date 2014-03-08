@@ -44,12 +44,13 @@
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="locationTag-24.png" translatesAutoresizingMaskIntoConstraints="NO" id="qWS-SJ-vSo">
-                        <rect key="frame" x="128" y="31" width="15" height="15"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="locationTag10.png" translatesAutoresizingMaskIntoConstraints="NO" id="qWS-SJ-vSo">
+                        <rect key="frame" x="133" y="34" width="10" height="10"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
                 </subviews>
             </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <connections>
                 <outlet property="alldayLabel" destination="0wR-gP-0kE" id="DDp-Sv-tX5"/>
                 <outlet property="endDateLabel" destination="equ-Cu-EcK" id="WGH-H2-d8r"/>
@@ -60,6 +61,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="locationTag-24.png" width="512" height="512"/>
+        <image name="locationTag10.png" width="10" height="10"/>
     </resources>
 </document>

@@ -13,6 +13,13 @@
 @property (nonatomic) double longitude;
 @property (nonatomic) double latitude;
 @property (nonatomic) double orderingValue;
-@property (nonatomic, strong) NSString * locationKey;
+@property (nonatomic, strong) NSString *locationKey;
+@property (nonatomic, strong) NSString *locationAddress;
+@property (nonatomic, strong) NSString *locationName;
+@property (nonatomic, strong) UIImage *locationIcon;
+@property (nonatomic, strong) NSData *locationIconData;
+
+- (void)setLocatinoIconDataFromImage:(UIImage *)image;
+
 
 @end

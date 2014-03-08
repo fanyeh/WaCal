@@ -30,7 +30,7 @@
                                                                 labelSize,
                                                                 labelSize)
                          ];
-        _selectNumber.backgroundColor = Rgb2UIColor(33, 138, 251);
+        _selectNumber.backgroundColor = [UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000];
         _selectNumber.adjustsFontSizeToFitWidth = YES;
         _selectNumber.textAlignment = NSTextAlignmentCenter;
         _selectNumber.textColor = [UIColor whiteColor];

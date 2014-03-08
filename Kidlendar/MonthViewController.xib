@@ -19,7 +19,9 @@
                 <outlet property="diaryView" destination="rhp-AF-8j7" id="n4u-bY-R9q"/>
                 <outlet property="dotView" destination="ls6-nB-mkH" id="7w4-hk-kDp"/>
                 <outlet property="dotViewGray" destination="wdQ-ts-BQM" id="rx5-H4-STD"/>
+                <outlet property="emptyDiaryButton" destination="dls-CP-yFt" id="Wes-wR-T73"/>
                 <outlet property="emptyDiaryView" destination="5fp-Uf-A9B" id="JvL-I2-Che"/>
+                <outlet property="emptyEventButton" destination="GgW-Bb-jh3" id="erw-8y-eoS"/>
                 <outlet property="emptyEventView" destination="166-Px-c8h" id="qGI-k4-CJe"/>
                 <outlet property="locationLabel" destination="c4n-1d-WBk" id="c4d-PJ-iZx"/>
                 <outlet property="monthView" destination="Jg6-h3-3bP" id="BMR-Kh-e88"/>
@@ -32,15 +34,15 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5fp-Uf-A9B" userLabel="empty diary">
-                    <rect key="frame" x="0.0" y="411" width="320" height="50"/>
+                    <rect key="frame" x="0.0" y="438" width="320" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dls-CP-yFt">
-                            <rect key="frame" x="10" y="0.0" width="50" height="50"/>
+                            <rect key="frame" x="10" y="3" width="44" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="+" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Os-6b-gpb">
-                                    <rect key="frame" x="0.0" y="2" width="50" height="37"/>
+                                    <rect key="frame" x="0.0" y="-6" width="45" height="45"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -50,7 +52,7 @@
                             <color key="backgroundColor" red="0.69019607843137254" green="0.80000000000000004" blue="0.59999999999999998" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Add New Diary" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0t1-ac-TcV">
-                            <rect key="frame" x="100" y="14" width="150" height="21"/>
+                            <rect key="frame" x="85" y="14" width="150" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="20"/>
                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -65,21 +67,21 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GgW-Bb-jh3">
-                            <rect key="frame" x="10" y="0.0" width="50" height="50"/>
+                            <rect key="frame" x="10" y="3" width="44" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="+" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tu3-iB-OpY">
-                                    <rect key="frame" x="0.0" y="2" width="50" height="37"/>
+                                    <rect key="frame" x="0.0" y="-6" width="45" height="45"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
-                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="backgroundColor" red="1" green="0.82745098039215681" blue="0.30588235294117649" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Add New Event" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jK7-Zx-s1Z">
-                            <rect key="frame" x="100" y="14" width="150" height="21"/>
+                            <rect key="frame" x="85" y="14" width="150" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="20"/>
                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -115,7 +117,7 @@
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ls6-nB-mkH" userLabel="dot view">
                             <rect key="frame" x="10" y="20" width="10" height="10"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="backgroundColor" red="1" green="0.82745098039999998" blue="0.30588235289999999" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ypc-XW-7yv">
                             <rect key="frame" x="126" y="27" width="194" height="30"/>
@@ -138,8 +140,7 @@
                         <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="All Day" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s2W-gg-dJG">
                             <rect key="frame" x="42" y="-1" width="54" height="51"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="16"/>
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
