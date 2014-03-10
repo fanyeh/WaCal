@@ -491,6 +491,7 @@
 		4C86E92E188F96E600137B6A /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				4CFF692F18BF3FC000337857 /* RepeatView.h */,
 				4C73E01D18BFA5F3007ECCEC /* EventReviewController.h */,
 				4C73E01E18BFA5F3007ECCEC /* EventReviewController.m */,
 				4C73E01F18BFA5F3007ECCEC /* EventReviewController.xib */,
@@ -501,7 +502,6 @@
 				4CFF692D18BF2B2900337857 /* ReminderView.m */,
 				4C84A57118BF7278005A30AB /* ReminderButton.h */,
 				4C84A57218BF7278005A30AB /* ReminderButton.m */,
-				4CFF692F18BF3FC000337857 /* RepeatView.h */,
 				4CFF693018BF3FC000337857 /* RepeatView.m */,
 			);
 			name = Controller;

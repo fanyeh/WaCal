@@ -13,7 +13,7 @@
 
 @property (strong,nonatomic)  EKEventStore *eventStore;
 @property (strong,nonatomic)  EKCalendar *calendar;
-@property (strong,nonatomic)  NSArray *allCalendars;
+@property (strong,nonatomic)  NSMutableArray *allCalendars;
 
 + (CalendarStore *)sharedStore;
 

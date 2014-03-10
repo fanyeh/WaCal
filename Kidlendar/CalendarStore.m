@@ -27,6 +27,7 @@
     self = [super init];
     if(self) {
         self.eventStore = [[EKEventStore alloc]init];
+        _allCalendars = [[NSMutableArray alloc]init];
     }
     return self;
 }

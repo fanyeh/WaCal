@@ -45,26 +45,12 @@
     
     if ([EKEventStore authorizationStatusForEntityType:EKEntityTypeEvent]==EKAuthorizationStatusAuthorized) {
         [self createAllViewControllers];
-        
-        NSDictionary *notificationPayload = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
-        if(notificationPayload) {
-            
-            [[tbc.tabBar.items objectAtIndex:1] setBadgeValue:@"1"];
-            
-        }
     }
     else {
         [[[CalendarStore sharedStore]eventStore] requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
             if (granted) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self createAllViewControllers];
-                    NSDictionary *notificationPayload = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
-                    if(notificationPayload) {
-                        
-                        [[tbc.tabBar.items objectAtIndex:1] setBadgeValue:@"1"];
-                        
-                    }
-
                 });
             }
             else
@@ -124,7 +110,15 @@
 
 - (void)createAllViewControllers
 {
-    [[CalendarStore sharedStore]setAllCalendars:[[[CalendarStore sharedStore]eventStore] calendarsForEntityType:EKEntityTypeEvent]];
+    NSMutableArray *allCalendars = [[NSMutableArray alloc]initWithArray:[[[CalendarStore sharedStore]eventStore] calendarsForEntityType:EKEntityTypeEvent]];
+    for (EKCalendar *c in allCalendars) {
+        if (c.source.sourceType==EKSourceTypeCalDAV) {
+            [[[CalendarStore sharedStore]allCalendars] addObject:c];
+        }
+    }
+    
+//    [[CalendarStore sharedStore]setAllCalendars:[[[CalendarStore sharedStore]eventStore] calendarsForEntityType:EKEntityTypeEvent]];
+
     [[CalendarStore sharedStore]setCalendar:[CalendarStore sharedStore].allCalendars[0]];
 
     // Set up calendar controller

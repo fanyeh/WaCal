@@ -22,7 +22,7 @@
 
 typedef void (^LocationCallback)(CLLocationCoordinate2D);
 
-@interface EventReviewController () <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UISearchBarDelegate,MKMapViewDelegate,UIAlertViewDelegate>
+@interface EventReviewController () <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UISearchBarDelegate,MKMapViewDelegate,UIAlertViewDelegate,UIPickerViewDataSource,UIPickerViewDelegate>
 {
     NSDateFormatter *dateFormatter;
     NSDateFormatter *timeFormatter;
@@ -45,6 +45,9 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     BOOL allday;
     
     NSDictionary *selectedLocation;
+    
+    EKCalendar *selectedCalendar;
+
 }
 
 @property (weak, nonatomic) IBOutlet UITextField *subjectField;
@@ -85,6 +88,9 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 @property (weak, nonatomic) IBOutlet UITextView *mapLocationAddress;
 @property (weak, nonatomic) IBOutlet UILabel *locationPhone;
 
+@property (weak, nonatomic) IBOutlet UILabel *calendarName;
+@property (weak, nonatomic) IBOutlet UITextField *calendarNameField;
+
 @end
 
 @implementation EventReviewController
@@ -120,6 +126,15 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     _eventDetailView.layer.shadowColor = [[UIColor blackColor]CGColor];
     _eventDetailView.layer.shadowOpacity = 0.5f;
     _eventDetailView.layer.shadowOffset = CGSizeMake(2 , 2);
+    
+    // Calendar
+    _calendarName.text = [[[CalendarStore sharedStore]calendar]title];
+    UIPickerView *calendarPicker = [[UIPickerView alloc]init];
+    calendarPicker.delegate = self;
+    calendarPicker.dataSource = self;
+    _calendarNameField.delegate = self;
+    _calendarNameField.tintColor = [UIColor clearColor];
+    _calendarNameField.inputView = calendarPicker;
     
     // Reminder view
     _reminderView.layer.cornerRadius = 5.0f;
@@ -212,6 +227,31 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     
     UITapGestureRecognizer *phoneTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(makeCall)];
     [_locationPhone addGestureRecognizer:phoneTap];
+}
+
+#pragma mark - UIPickerViewDataSource
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return [[[CalendarStore sharedStore]allCalendars] count];
+}
+
+#pragma mark - UIPickerViewDelegate
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    EKCalendar *calendar = [[CalendarStore sharedStore]allCalendars][row];
+    return calendar.title;
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    selectedCalendar = [[CalendarStore sharedStore]allCalendars][row];
+    _calendarName.text = selectedCalendar.title;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -483,14 +523,36 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 - (IBAction)saveEvent:(id)sender
 {
     // update event
-    _event.title = _subjectField.text;
-    _event.location = _locationField.text;
-    _event.allDay = allday;
-    [[[CalendarStore sharedStore]eventStore] saveEvent:_event span:EKSpanThisEvent commit:YES error:nil];
+    NSString *eventIdentifier;
+    if (selectedCalendar) {
+        EKEvent  *newEvent = [EKEvent eventWithEventStore:[[CalendarStore sharedStore]eventStore]];
+        newEvent.timeZone = [NSTimeZone systemTimeZone];
+        newEvent.title = _event.title;
+        newEvent.calendar = selectedCalendar;
+        newEvent.startDate = _event.startDate;
+        newEvent.endDate = _event.endDate;
+        newEvent.allDay = _event.allDay;
+        newEvent.alarms = _event.alarms;
+        newEvent.recurrenceRules = _event.recurrenceRules;
+        [[[CalendarStore sharedStore]eventStore] saveEvent:newEvent span:EKSpanThisEvent commit:YES error:nil];
+        eventIdentifier = newEvent.eventIdentifier;
+        
+        [[[CalendarStore sharedStore]eventStore] removeEvent:_event span:EKSpanThisEvent commit:YES error:nil];
+        
+    } else {
+        _event.title = _subjectField.text;
+        _event.location = _locationField.text;
+        _event.allDay = allday;
+        [[[CalendarStore sharedStore]eventStore] saveEvent:_event span:EKSpanThisEvent commit:YES error:nil];
+        eventIdentifier = _event.eventIdentifier;
+    }
     
-    // Create new location
+    // Create new location if there isn't one, else update it
     if ([selectedLocation count]>0) {
-        LocationData *eventLocation = [[LocationDataStore sharedStore]createItemWithKey:_event.eventIdentifier];
+        LocationData *eventLocation = [[[LocationDataStore sharedStore]allItems] objectForKey:eventIdentifier];
+        if (!eventLocation) {
+            eventLocation = [[LocationDataStore sharedStore]createItemWithKey:eventIdentifier];
+        }
         eventLocation.latitude =  [[[[selectedLocation objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"] doubleValue];
         eventLocation.longitude = [[[[selectedLocation objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
         eventLocation.locationName = [selectedLocation objectForKey:@"name"];
