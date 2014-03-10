@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13B42" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="13C64" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="CloudData" representedClassName="CloudData" syncable="YES">
         <attribute name="baidu" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="dropbox" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
@@ -13,6 +13,7 @@
         <attribute name="diaryImageData" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="diaryKey" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="diaryText" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="diaryVideoData" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="diaryVideoPath" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="diaryVideoThumbData" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="diaryVideoThumbnail" optional="YES" transient="YES" attributeType="Transformable" syncable="YES"/>

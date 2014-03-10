@@ -205,9 +205,13 @@
     diary.dateCreated = [[dateFormatter dateFromString: _diaryTimeField.text] timeIntervalSinceReferenceDate];
     diary.location = _locationField.text;
     
+    
+    // Photo diary
     if (_selectedMediaType == kMediaTypePhoto) {
         diary.diaryImageDataFromImage = _diaryImage;
-    } else {
+    }
+    // Video diary
+    else {
         diary.diaryVideoPath = [NSString stringWithFormat:@"%@",_asset.defaultRepresentation.url];
         UIImage *image = [UIImage imageWithCGImage: _asset.defaultRepresentation.fullScreenImage];
         [diary setDiaryVideoThumbDataFromImage:[image cropWithFaceDetect:CGSizeMake(320, 320)]];

@@ -295,7 +295,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     
     MKPointAnnotation *destinationAnnotation = [MKPointAnnotation new];
     destinationAnnotation.coordinate = userDestination;
-    destinationAnnotation.title = @"End";
+    destinationAnnotation.title = _locationField.text;
     
     __block MKRoute *fromUserLocationDirectionsRoute = nil;
     

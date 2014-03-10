@@ -436,7 +436,7 @@
     }
 }
 
-- (void)enlargCell:(UILongPressGestureRecognizer *)sender
+- (void)movePhoto:(UILongPressGestureRecognizer *)sender
 {
     // Enlarge cell when long pressed
     UICollectionViewCell *cell = (UICollectionViewCell *)sender.view;
@@ -553,7 +553,10 @@
     
     NSString *sourceKey = sourceKeys[1];
     assetGroupPropertyName = sourceKey;
+//    NSArray *sourceAsset = [photoLoader.sourceDictionary objectForKey:sourceKey];
     photoAssets = [photoLoader.sourceDictionary objectForKey:sourceKey];
+
+
     navItem.title = assetGroupPropertyName;
     [photoCollectionView reloadData];
 }
@@ -658,7 +661,7 @@
         
         // Add gesture to each cell
         UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc]initWithTarget:self
-                                                                                               action:@selector(enlargCell:)];
+                                                                                               action:@selector(movePhoto:)];
         [cell addGestureRecognizer:longPress];
         return cell;
         

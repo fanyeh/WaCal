@@ -197,13 +197,19 @@
         
         NSDictionary *diaryData = t.diaryData;
         NSDate *diaryDate = [NSDate dateWithTimeIntervalSinceReferenceDate:[(NSString *)[diaryData objectForKey:@"dateInterval"] doubleValue]];
-        cell.cellImageView.image =t.thumbnail;
         cell.dateLabel.text = [dateFormatter stringFromDate:diaryDate];
         cell.weekdayLabel.adjustsFontSizeToFitWidth = YES;
         cell.weekdayLabel.text = [weekdayFormatter stringFromDate:diaryDate];
         cell.locationLabel.text = [diaryData objectForKey:@"diaryLocationName"];
         cell.diaryDetail.text = [diaryData objectForKey:@"diaryText"];
         cell.diarySubject.text = [diaryData objectForKey:@"diarySubject"];
+        
+        if ([[diaryData objectForKey:@"mediaType"]isEqualToString:@"video"]) {
+            UIView *playView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
+            playView.backgroundColor = [UIColor whiteColor];
+            playView.center = cell.center;
+            [cell.cellImageView addSubview:playView];
+        }
 
         return cell;
     }
@@ -239,6 +245,12 @@
         // Get tempdata
         TempDiaryData *t = [[cloudDiarys allValues] objectAtIndex:indexPath.row];
         BOOL download = YES;
+        SourceType type;
+        if ([t.mediaType isEqualToString:@"photo"]) {
+            type = kSourceTypePhoto;
+        } else{
+            type = kSourceTypeVideo;
+        }
         // Check if diary already exist
         for (DiaryData *d in [[DiaryDataStore sharedStore]allItems]) {
             if ([d.diaryKey isEqualToString:t.diaryKey]) {
@@ -253,8 +265,7 @@
         }
         if(download) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                [[DropboxModel shareModel] downloadDiaryFromFilesystem:t.diaryKey complete:^(NSData *imageData) {
-                    UIImage *diaryImage = [UIImage imageWithData:imageData];
+                [[DropboxModel shareModel] downloadDiaryFromFilesystem:t.diaryKey mediaType:type complete:^(NSData *data) {
                     
                     DiaryData *d = [[DiaryDataStore sharedStore]createItem];
                     NSDictionary *diaryData = t.diaryData;
@@ -264,7 +275,15 @@
                     d.location =  [diaryData objectForKey:@"diaryLocationName"];
                     d.diaryText =  [diaryData objectForKey:@"diaryText"];
                     d.dateCreated = [(NSString *)[diaryData objectForKey:@"dateInterval"] doubleValue];
-                    [d setDiaryImageDataFromImage:diaryImage];
+                    
+                    if (type == kSourceTypeVideo) {
+                        [d setDiaryVideoData:data];
+                        [d setDiaryVideoThumbDataFromImage:t.thumbnail];
+                        
+                    } else {
+                        [d setDiaryImageDataFromImage:[UIImage imageWithData:data]];
+                    }
+
                     [[DiaryDataStore sharedStore]saveChanges];
                     
                     NSDictionary *l = [diaryData objectForKey:@"diaryLocatinoCoordinate"];

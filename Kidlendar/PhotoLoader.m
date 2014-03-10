@@ -77,4 +77,5 @@
                                   failureBlock:assetGroupEnumberatorFailure];
     });
 }
+
 @end

@@ -14,6 +14,7 @@
 #import "CloudData.h"
 #import "LocationDataStore.h"
 #import "LocationData.h"
+#import "UIImage+Resize.h"
 
 @implementation DropboxModel
 {
@@ -71,7 +72,7 @@
     completeSetUp(YES);
 }
 
-- (void)uploadDiaryToFilesystem:(DiaryData *)diary image:(UIImage *)diaryImage complete:(UploadBlock)uploadComplete
+- (void)uploadDiaryToFilesystem:(DiaryData *)diary mediaData:(NSData *)data mediaType:(SourceType)type complete:(UploadBlock)uploadComplete
 {
     if([self checkFile:diary.diaryKey]) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -91,41 +92,92 @@
             if (diaryLocation) {
                 location = [[NSDictionary alloc]initWithObjectsAndKeys:[NSString stringWithFormat:@"%f",diaryLocation.latitude],@"latitude",[NSString stringWithFormat:@"%f",diaryLocation.longitude],@"longitude", nil];
             }
+
+            NSString *uploadFilePath;
+            NSString *media;
             
-            // Create json dictionary
-            NSString *diaryDate = [NSString stringWithFormat:@"%f",diary.dateCreated];
-            NSDictionary *diaryDict = [[NSDictionary alloc]initWithObjectsAndKeys:
-                                       diary.subject,                                       @"diarySubject",
-                                       diary.diaryText,                                     @"diaryText",
-                                       diaryDate,                                           @"dateInterval",
-                                       location,                                       @"diaryLocationCoordinate",
-                                       diary.location,                                      @"diaryLocationName" ,
-                                       nil];
-            NSData *diaryData = [NSJSONSerialization dataWithJSONObject:diaryDict options:NSJSONWritingPrettyPrinted error:nil];
+            // Create and upload video thumbnail
+            NSString *thumbPath = [NSString stringWithFormat:@"%@/%@-thumbnail.png",folder,diary.diaryKey];
+            DBPath *newThumbPath = [[DBPath root] childPath:thumbPath];
+            DBFile *newThumb = [[DBFilesystem sharedFilesystem] createFile:newThumbPath error:nil];
             
-            // Upload diary image to DBFilesystem
-            NSString *uploadImagePath = [NSString stringWithFormat:@"%@/%@.png",folder,diary.diaryKey];
-            DBPath *newImagePath = [[DBPath root] childPath:uploadImagePath];
-            DBFile *imageFile = [[DBFilesystem sharedFilesystem] createFile:newImagePath error:nil];
-            NSData *diaryImageData = UIImagePNGRepresentation(diaryImage);
-            [imageFile writeData:diaryImageData error:nil];
+            // Upload photo
+            if (type == kSourceTypePhoto) {
+                // Create upload path for photo
+                uploadFilePath = [NSString stringWithFormat:@"%@/%@.png",folder,diary.diaryKey];
+                media = @"photo";
+                UIImage *image = [diary.diaryImage resizeImageToSize:CGSizeMake(50, 50)];
+                [newThumb writeData:UIImagePNGRepresentation(image) error:nil];
+
+            }
+            // Upload video
+            else {
+                // Create upload path for video
+                uploadFilePath = [NSString stringWithFormat:@"%@/%@.mov",folder,diary.diaryKey];
+                media = @"video";
+                [newThumb writeData:diary.diaryVideoThumbData error:nil];
+            }
             
-            // Upload diary text to DBFilesystem
-            NSString *uploadDataPath = [NSString stringWithFormat:@"%@/%@.json",folder,diary.diaryKey];
-            DBPath *newDataPath = [[DBPath root] childPath:uploadDataPath];
-            DBFile *dataFile = [[DBFilesystem sharedFilesystem] createFile:newDataPath error:nil];
-            [dataFile writeData:diaryData error:nil];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Upload Done"
-                                                               message:@"You have successfully uploaded diary"
-                                                              delegate:self cancelButtonTitle:@"OK"
-                                                     otherButtonTitles:nil, nil];
-                [alert show];
-            });
-            diary.cloudRelationship.dropbox = YES;
-            uploadComplete(YES);
+
+            [self uploadMediaToPath:uploadFilePath mediaData:data complete:^(BOOL success) {
+                // Create json dictionary
+                NSString *diaryDate = [NSString stringWithFormat:@"%f",diary.dateCreated];
+                NSDictionary *diaryDict = [[NSDictionary alloc]initWithObjectsAndKeys:
+                                           diary.subject,                                       @"diarySubject",
+                                           diary.diaryText,                                     @"diaryText",
+                                           diaryDate,                                           @"dateInterval",
+                                           location,                                       @"diaryLocationCoordinate",
+                                           diary.location,                                      @"diaryLocationName" ,
+                                           media,                                               @"mediaType",
+                                           nil];
+                NSData *diaryData = [NSJSONSerialization dataWithJSONObject:diaryDict options:NSJSONWritingPrettyPrinted error:nil];
+                
+                // Upload diary JSON to DBFilesystem
+                NSString *uploadJsonPath = [NSString stringWithFormat:@"%@/%@.json",folder,diary.diaryKey];
+                DBPath *newJsonPath = [[DBPath root] childPath:uploadJsonPath];
+                DBFile *jsonFile = [[DBFilesystem sharedFilesystem] createFile:newJsonPath error:nil];
+                [jsonFile writeData:diaryData error:nil];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    // Alert for upload complete
+                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Upload Done"
+                                                                   message:@"You have successfully uploaded diary"
+                                                                  delegate:self cancelButtonTitle:@"OK"
+                                                         otherButtonTitles:nil, nil];
+                    [alert show];
+                });
+                // Check diary now has uploaded to dropbox
+                diary.cloudRelationship.dropbox = YES;
+                
+                uploadComplete(YES);
+
+            }];
         }];
     }
+}
+
+- (void)uploadMediaToPath:(NSString *)uploadFilePath mediaData:(NSData *)data complete:(UploadBlock)uploadComplete
+{
+    // Upload vidoe or photo
+    DBPath *newFilePath = [[DBPath root] childPath:uploadFilePath];
+    __weak DBFile *newFile = [[DBFilesystem sharedFilesystem] createFile:newFilePath error:nil];
+    
+    NSLog(@"observer %@",_observer);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [newFile addObserver:self block:^{
+            NSLog(@"File upload progress %f",newFile.status.progress);
+            if (newFile.status.state==DBFileStateUploading)
+                NSLog(@"Uploading");
+            else if (newFile.status.state==DBFileStateIdle)
+                NSLog(@"Idle");
+            
+            if (newFile.status.progress==1) {
+                [newFile removeObserver:_observer];
+                uploadComplete(YES);
+            }
+        }];
+    });
+    [newFile writeData:data error:nil];
+
 }
 
 - (void)checkDiaryFolder:(void(^)(void))completeFolderCheck
@@ -160,14 +212,20 @@
     }
 }
 
-- (void)downloadDiaryFromFilesystem:(NSString *)key  complete:(DownloadBlock)downloadComplete
+- (void)downloadDiaryFromFilesystem:(NSString *)key  mediaType:(SourceType)type complete:(DownloadBlock)downloadComplete
 {
-    NSString *downloadFilePath = [NSString stringWithFormat:@"%@/%@.png",folder,key];
+    NSString *downloadFilePath;
+    
+    if (type==kSourceTypePhoto)
+        downloadFilePath = [NSString stringWithFormat:@"%@/%@.png",folder,key];
+    else
+        downloadFilePath = [NSString stringWithFormat:@"%@/%@.mov",folder,key];
+    
     DBPath *existingPath = [[DBPath root] childPath:downloadFilePath];
     DBFile *file = [[DBFilesystem sharedFilesystem] openFile:existingPath error:nil];
-    NSData *diaryImageData = [file readData:nil];
+    NSData *diaryMediaData = [file readData:nil];
     
-    downloadComplete(diaryImageData);
+    downloadComplete(diaryMediaData);
 }
 
 - (BOOL)checkFile:(NSString *)key
@@ -186,13 +244,13 @@
 {
     NSMutableDictionary *diarysFromCloud = [[NSMutableDictionary alloc]init];
     
+    // Get all files from dropbox app folder
     NSString *filePath = [NSString stringWithFormat:@"%@/",folder];
     DBPath *listFilePath = [[DBPath root] childPath:filePath];
     NSArray *listFiles = [filesystem listFolder:listFilePath error:nil];
     
-    NSMutableArray *allDiaryKeys = [[NSMutableArray alloc]init];
-    
     // Get all diary keys in core data
+    NSMutableArray *allDiaryKeys = [[NSMutableArray alloc]init];
     for (DiaryData *d in [[DiaryDataStore sharedStore]allItems]) {
         [allDiaryKeys addObject:d.diaryKey];
     }
@@ -202,24 +260,30 @@
         
         NSString *diaryKey = [info.path.name stringByDeletingPathExtension];
         NSString *fileExtension = [info.path.name pathExtension];
+        
+        if ([fileExtension isEqualToString:@"json"]&&![allDiaryKeys containsObject:diaryKey]) {
+            DBFile *jsonFile = [filesystem openThumbnail:info.path ofSize:DBThumbSizeXS inFormat:DBThumbFormatPNG error:nil];
+            NSData *json = [jsonFile readData:nil];
 
-        if ([fileExtension isEqualToString:@"png"] && info.thumbExists && ![allDiaryKeys containsObject:diaryKey]) {
-            
-            // Get diary image thumbnail
-            DBFile *imageFile = [filesystem openThumbnail:info.path ofSize:DBThumbSizeXS inFormat:DBThumbFormatPNG error:nil];
-            NSData *diaryImageData = [imageFile readData:nil];
-            UIImage *diaryImage = [UIImage imageWithData:diaryImageData];
-
-            // Get diary json
-            NSString *diaryDataPath = [NSString stringWithFormat:@"%@/%@.json",folder,diaryKey];
-            DBPath *existingPath = [[DBPath root] childPath:diaryDataPath];
-            DBFile *dataFile = [[DBFilesystem sharedFilesystem] openFile:existingPath error:nil];
-            
             TempDiaryData *t = [[TempDiaryData alloc]init];
             t.diaryKey = diaryKey;
-            t.thumbnail = diaryImage;
-            NSData *json = [dataFile readData:nil];
             t.diaryData = [NSJSONSerialization JSONObjectWithData:json options:NSJSONReadingAllowFragments error:nil];
+            
+            // Get diary thumbnail
+            NSString *thumbDataPath = [NSString stringWithFormat:@"%@/%@-thumbnail.png",folder,diaryKey];
+            DBPath *thumbPath = [[DBPath root] childPath:thumbDataPath];
+            
+            DBFile *thumbFile = [[DBFilesystem sharedFilesystem] openFile:thumbPath error:nil];
+            NSData *thumbData = [thumbFile readData:nil];
+            UIImage *thumb = [UIImage imageWithData:thumbData];
+            
+            if ([[t.diaryData objectForKey:@"mediaType"] isEqualToString:@"photo"]) {
+                
+                t.thumbnail = thumb;
+                
+            } else {
+                t.thumbnail = thumb;
+            }
             
             [diarysFromCloud setObject:t forKey:diaryKey];
         }

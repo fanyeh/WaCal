@@ -17,5 +17,7 @@
 //@property (nonatomic, strong) NSData * thumbnailData;
 @property (nonatomic, strong) NSString * diaryKey;
 @property (nonatomic,strong) NSDictionary *diaryData;
+@property (nonatomic, strong) NSString * mediaType;
+
 
 @end
