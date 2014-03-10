@@ -11,10 +11,6 @@
 #import "DiaryData.h"
 #import "DiaryViewController.h"
 #import "DiaryCreateViewController.h"
-#import "DropboxModel.h"
-#import "TempDiaryData.h"
-#import <Dropbox/Dropbox.h>
-#import "CloudData.h"
 #import "DiaryTableViewCell.h"
 #import "LocationData.h"
 #import "LocationDataStore.h"
@@ -26,13 +22,11 @@
 
 @interface DiaryTableViewController ()
 {
-    UITableView *cloudTable;
-    UITableView *localTable;
+
     NSMutableDictionary *cloudDiarys;
     BOOL currentTableIsLocal;
     NSDateFormatter *dateFormatter;
     NSDateFormatter *weekdayFormatter;
-    UISegmentedControl *diaryFilter;
 }
 @end
 
@@ -60,72 +54,12 @@
 //    self.navigationItem.leftBarButtonItem = editButton;
 //    self.navigationItem.leftBarButtonItem.tag = 0;
 
-    // Segment controll
-    diaryFilter = [[UISegmentedControl alloc] initWithItems:@[@"Local", @"Cloud"]];
-    [diaryFilter sizeToFit];
-    [diaryFilter addTarget:self
-                         action:@selector(segmentControlAction:)
-               forControlEvents:UIControlEventValueChanged];
-    self.navigationItem.titleView = diaryFilter;
-    
-    cloudTable = [[UITableView alloc]initWithFrame:self.tableView.frame];
-    [cloudTable registerNib:[UINib nibWithNibName:@"DiaryTableViewCell" bundle:nil] forCellReuseIdentifier:@"DiaryTableViewCell"];
-    cloudTable.backgroundColor =  [UIColor clearColor];
-    cloudTable.separatorStyle = UITableViewCellSeparatorStyleNone;
-    cloudTable.contentInset = UIEdgeInsetsMake(44, 0, 0, 0);
-    
-    localTable = [[UITableView alloc]initWithFrame:self.tableView.frame];
-    [localTable registerNib:[UINib nibWithNibName:@"DiaryTableViewCell" bundle:nil] forCellReuseIdentifier:@"DiaryTableViewCell"];
-    localTable.backgroundColor =  [UIColor clearColor];
-    localTable.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
-    self.tableView = localTable;
-    
-    cloudDiarys = [[NSMutableDictionary alloc]init];
-    
-    // Current table
-    currentTableIsLocal = YES;
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshCloud:) name:@"uploadComplete" object:nil];
     
     // Date formatters
     dateFormatter = [[NSDateFormatter alloc]init];
     dateFormatter.dateFormat = @"dd";
     weekdayFormatter = [[NSDateFormatter alloc]init];
     weekdayFormatter.dateFormat = @"EEEE";
-}
-
-- (void)refreshCloud:(NSNotification *)notification
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[DropboxModel shareModel] listAllCloudDiarys:^(NSMutableDictionary *diarysFromCloud) {
-            cloudDiarys = diarysFromCloud;
-            NSLog(@"Cloud diarys %@",cloudDiarys);
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.tableView reloadData];
-            });
-        }];
-    });
-}
-
-- (void)segmentControlAction:(UISegmentedControl *)sender
-{
-    
-    if (sender.selectedSegmentIndex == 0) {
-        currentTableIsLocal = YES;
-        self.tableView = localTable;
-        cloudTable.editing = NO;
-    } else {
-        currentTableIsLocal = NO;
-        self.tableView = cloudTable;
-        localTable.editing = NO;
-        [[DropboxModel shareModel]linkToDropBox:^(BOOL linked) {
-            if (linked) {
-                [self refreshCloud:nil];
-            }
-        } fromController:self];
-    }
-    [self.tableView reloadData];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -169,50 +103,23 @@
     cell.cellView.layer.shadowColor = [[UIColor blackColor]CGColor];
     cell.cellView.layer.shadowOpacity = 0.5f;
     cell.cellView.layer.shadowOffset = CGSizeMake(2 , 2);
+
+    // Configure the cell...
+    DiaryData *d = [DiaryDataStore sharedStore].allItems[indexPath.row];
+    NSDate *diaryDate = [NSDate dateWithTimeIntervalSinceReferenceDate:d.dateCreated];
+    cell.dateLabel.text = [dateFormatter stringFromDate:diaryDate];
+    cell.weekdayLabel.adjustsFontSizeToFitWidth = YES;
+    cell.weekdayLabel.text = [weekdayFormatter stringFromDate:diaryDate];
+    cell.locationLabel.text = d.location;
+    cell.diaryDetail.text = d.diaryText;
+    cell.diarySubject.text = d.subject;
     
-    // Local cell
-    if (currentTableIsLocal) {
-
-        // Configure the cell...
-        DiaryData *d = [DiaryDataStore sharedStore].allItems[indexPath.row];
-        NSDate *diaryDate = [NSDate dateWithTimeIntervalSinceReferenceDate:d.dateCreated];
-        cell.dateLabel.text = [dateFormatter stringFromDate:diaryDate];
-        cell.weekdayLabel.adjustsFontSizeToFitWidth = YES;
-        cell.weekdayLabel.text = [weekdayFormatter stringFromDate:diaryDate];
-        cell.locationLabel.text = d.location;
-        cell.diaryDetail.text = d.diaryText;
-        cell.diarySubject.text = d.subject;
-        
-        if (d.diaryVideoPath) {
-            cell.cellImageView.image = d.diaryVideoThumbnail;
-        } else {
-            cell.cellImageView.image = d.diaryImage;
-        }
-        return cell;
-
+    if (d.diaryVideoPath) {
+        cell.cellImageView.image = d.diaryVideoThumbnail;
+    } else {
+        cell.cellImageView.image = d.diaryImage;
     }
-    // Cloud cell
-    else {
-        TempDiaryData *t = [[cloudDiarys allValues] objectAtIndex:indexPath.row];
-        
-        NSDictionary *diaryData = t.diaryData;
-        NSDate *diaryDate = [NSDate dateWithTimeIntervalSinceReferenceDate:[(NSString *)[diaryData objectForKey:@"dateInterval"] doubleValue]];
-        cell.dateLabel.text = [dateFormatter stringFromDate:diaryDate];
-        cell.weekdayLabel.adjustsFontSizeToFitWidth = YES;
-        cell.weekdayLabel.text = [weekdayFormatter stringFromDate:diaryDate];
-        cell.locationLabel.text = [diaryData objectForKey:@"diaryLocationName"];
-        cell.diaryDetail.text = [diaryData objectForKey:@"diaryText"];
-        cell.diarySubject.text = [diaryData objectForKey:@"diarySubject"];
-        
-        if ([[diaryData objectForKey:@"mediaType"]isEqualToString:@"video"]) {
-            UIView *playView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
-            playView.backgroundColor = [UIColor whiteColor];
-            playView.center = cell.center;
-            [cell.cellImageView addSubview:playView];
-        }
-
-        return cell;
-    }
+    return cell;
 }
 
 // Override to support editing the table view.
@@ -236,76 +143,9 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (currentTableIsLocal) {
-        DiaryViewController *controller = [[DiaryViewController alloc]init];
-        controller.diaryData = [[DiaryDataStore sharedStore]allItems][indexPath.row];
-        [self.navigationController pushViewController:controller animated:YES];
-    } else {
-        // Download from cloud
-        // Get tempdata
-        TempDiaryData *t = [[cloudDiarys allValues] objectAtIndex:indexPath.row];
-        BOOL download = YES;
-        SourceType type;
-        if ([t.mediaType isEqualToString:@"photo"]) {
-            type = kSourceTypePhoto;
-        } else{
-            type = kSourceTypeVideo;
-        }
-        // Check if diary already exist
-        for (DiaryData *d in [[DiaryDataStore sharedStore]allItems]) {
-            if ([d.diaryKey isEqualToString:t.diaryKey]) {
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Diary Exist"
-                                                               message:@"You already have this diary in phone"
-                                                              delegate:self cancelButtonTitle:@"OK"
-                                                     otherButtonTitles:nil, nil];
-                [alert show];
-                download = NO;
-                break;
-            }
-        }
-        if(download) {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                [[DropboxModel shareModel] downloadDiaryFromFilesystem:t.diaryKey mediaType:type complete:^(NSData *data) {
-                    
-                    DiaryData *d = [[DiaryDataStore sharedStore]createItem];
-                    NSDictionary *diaryData = t.diaryData;
-                    
-                    d.diaryKey = t.diaryKey;
-                    d.subject = [diaryData objectForKey:@"diarySubject"];
-                    d.location =  [diaryData objectForKey:@"diaryLocationName"];
-                    d.diaryText =  [diaryData objectForKey:@"diaryText"];
-                    d.dateCreated = [(NSString *)[diaryData objectForKey:@"dateInterval"] doubleValue];
-                    
-                    if (type == kSourceTypeVideo) {
-                        [d setDiaryVideoData:data];
-                        [d setDiaryVideoThumbDataFromImage:t.thumbnail];
-                        
-                    } else {
-                        [d setDiaryImageDataFromImage:[UIImage imageWithData:data]];
-                    }
-
-                    [[DiaryDataStore sharedStore]saveChanges];
-                    
-                    NSDictionary *l = [diaryData objectForKey:@"diaryLocatinoCoordinate"];
-                    if(l) {
-                        LocationData *diaryLocation = [[LocationDataStore sharedStore]createItemWithKey:t.diaryKey];
-                        diaryLocation.longitude = [(NSString *)[l objectForKey:@"longitude"] doubleValue];
-                        diaryLocation.latitude = [(NSString *)[l objectForKey:@"latitude"] doubleValue];
-                    }
-                    
-                    [localTable reloadData];
-                    currentTableIsLocal = YES;
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Dwonload Completed"
-                                                                       message:nil
-                                                                      delegate:self cancelButtonTitle:@"OK"
-                                                             otherButtonTitles:nil, nil];
-                        [alert show];
-                    });
-                }];
-            });
-        }
-    }
+    DiaryViewController *controller = [[DiaryViewController alloc]init];
+    controller.diaryData = [[DiaryDataStore sharedStore]allItems][indexPath.row];
+    [self.navigationController pushViewController:controller animated:YES];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

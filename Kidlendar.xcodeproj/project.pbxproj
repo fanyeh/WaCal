@@ -22,7 +22,6 @@
 		4C1E40A818B459F700A273A1 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1E40A718B459F700A273A1 /* FacebookSDK.framework */; };
 		4C1E40BE18B4619B00A273A1 /* libGPUImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1E40B918B4616300A273A1 /* libGPUImage.a */; };
 		4C23963918B3295600BB87E7 /* FacebookModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23963818B3295600BB87E7 /* FacebookModel.m */; };
-		4C23963E18B3304100BB87E7 /* DropboxModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23963D18B3304100BB87E7 /* DropboxModel.m */; };
 		4C23964618B3B5E800BB87E7 /* TempDiaryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23964518B3B5E800BB87E7 /* TempDiaryData.m */; };
 		4C2E83BD1890BB450051215F /* CalendarStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2E83BC1890BB450051215F /* CalendarStore.m */; };
 		4C315C7B18AB298800A2A363 /* PhotoLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C315C7A18AB298800A2A363 /* PhotoLoader.m */; };
@@ -175,8 +174,6 @@
 		4C1E40B218B4616300A273A1 /* GPUImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPUImage.xcodeproj; path = "../../Downloads/GPUImage-master-2/framework/GPUImage.xcodeproj"; sourceTree = "<group>"; };
 		4C23963718B3295600BB87E7 /* FacebookModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookModel.h; sourceTree = "<group>"; };
 		4C23963818B3295600BB87E7 /* FacebookModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FacebookModel.m; sourceTree = "<group>"; };
-		4C23963C18B3304100BB87E7 /* DropboxModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropboxModel.h; sourceTree = "<group>"; };
-		4C23963D18B3304100BB87E7 /* DropboxModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropboxModel.m; sourceTree = "<group>"; };
 		4C23964418B3B5E800BB87E7 /* TempDiaryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TempDiaryData.h; sourceTree = "<group>"; };
 		4C23964518B3B5E800BB87E7 /* TempDiaryData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TempDiaryData.m; sourceTree = "<group>"; };
 		4C2E83BB1890BB450051215F /* CalendarStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarStore.h; sourceTree = "<group>"; };
@@ -513,8 +510,6 @@
 				4C315C7A18AB298800A2A363 /* PhotoLoader.m */,
 				4C23963718B3295600BB87E7 /* FacebookModel.h */,
 				4C23963818B3295600BB87E7 /* FacebookModel.m */,
-				4C23963C18B3304100BB87E7 /* DropboxModel.h */,
-				4C23963D18B3304100BB87E7 /* DropboxModel.m */,
 			);
 			name = "Other Model";
 			sourceTree = "<group>";
@@ -850,7 +845,6 @@
 				4CB3DD8818521DC400673478 /* main.m in Sources */,
 				4CFB086C187E696A00456D5D /* DateModel.m in Sources */,
 				4CA0368C18B7A12100015184 /* DiaryTableViewCell.m in Sources */,
-				4C23963E18B3304100BB87E7 /* DropboxModel.m in Sources */,
 				4CEEB9F818B4656100C7FA80 /* DiaryData.m in Sources */,
 				4C5C8FFC18A8730100B40F7E /* DiaryEntryViewController.m in Sources */,
 				4C417E7618714A4C000878FC /* DiaryDataStore.m in Sources */,

@@ -10,9 +10,6 @@
 #import "DiaryData.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import "KidlendarAppDelegate.h"
-#import "DropboxModel.h"
-#import <Dropbox/Dropbox.h>
-#import "CloudData.h"
 #import "FacebookModel.h"
 #import <Social/Social.h>
 //#import <Parse/Parse.h>
@@ -21,7 +18,6 @@
 
 @interface DiaryViewController () <FBLoginViewDelegate>
 {
-    DropboxModel *DBModel;
     UIBarButtonItem *backupButton;
     UIBarButtonItem *shareButton;
     MPMoviePlayerViewController *videoPlayer;
@@ -105,10 +101,6 @@
     _diaryDetailTextView.textContainer.exclusionPaths = @[exclusionPathYear,exclusionPathDate,exclusionPathMonth];
 
     
-//    backupButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"backup.png"] style:UIBarButtonItemStyleBordered
-//                                                                                 target:self
-//                                                                                 action:@selector(showBackup)];
-    
     shareButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"share.png"] style:UIBarButtonItemStyleBordered
                                                                                  target:self
                                                                                  action:@selector(showShare)];
@@ -126,9 +118,6 @@
     UITapGestureRecognizer *facebookTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showShareSheet:)];
     [_facebookImageView addGestureRecognizer:facebookTap];
     
-//    // Backup
-//    UITapGestureRecognizer *dropboxTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(backupDiary)];
-//    [_dropboxImageView addGestureRecognizer:dropboxTap];
 }
 
 - (void)playVideo
@@ -169,78 +158,6 @@
     backupButton.enabled = NO;
     shareButton.enabled = NO;
     self.navigationItem.hidesBackButton = YES;
-}
-
-- (void)backupDiary
-{
-    if (!_diaryData.cloudRelationship.dropbox) {
-        [[DropboxModel shareModel] linkToDropBox:^(BOOL linked) {
-            if (linked) {
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    if (_diaryData.diaryVideoPath)
-                        [self uploadVideo];
-                    else
-                        [self uploadPhoto];
-                });
-            }
-        } fromController:self];
-    }
-}
-
-- (void)uploadVideo
-{
-    ALAssetsLibrary *library = [[ALAssetsLibrary alloc]init];
-    [library assetForURL:[NSURL URLWithString:_diaryData.diaryVideoPath] resultBlock:^(ALAsset *asset) {
-        ALAssetRepresentation *rep = [asset defaultRepresentation];
-        Byte *buffer = (Byte*)malloc(rep.size);
-        NSUInteger buffered = [rep getBytes:buffer fromOffset:0.0 length:rep.size error:nil];
-        NSData *data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
-        
-        NSString *uploadFilePath = [NSString stringWithFormat:@"%@/%@.png",@"Diary",_diaryData.diaryKey];
-        // Upload vidoe or photo
-        DBPath *newFilePath = [[DBPath root] childPath:uploadFilePath];
-        __block DBFile *newFile = [[DBFilesystem sharedFilesystem] createFile:newFilePath error:nil];
-        DBFileStatus *newFileStatus = newFile.status;
-        [newFile addObserver:self block:^{
-            NSLog(@"File upload progress %f",newFileStatus.progress);
-            if (newFileStatus.state==DBFileStateUploading)
-                NSLog(@"Uploading");
-            else if (newFileStatus.state==DBFileStateIdle)
-                NSLog(@"Idle");
-            
-            if (newFileStatus.progress==1) {
-                NSLog(@"Uploading Done!");
-            }
-        }];
-        [newFile writeData:data error:nil];
-        
-//        [[DropboxModel shareModel] uploadDiaryToFilesystem:_diaryData mediaData:data mediaType:kSourceTypeVideo complete:^(BOOL success) {
-//            if (success) {
-//                [[NSNotificationCenter defaultCenter] postNotificationName:@"uploadComplete" object:nil];
-//            }
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [self.navigationController popViewControllerAnimated:YES];
-//            });
-//        }];
-        
-    } failureBlock:^(NSError *error) {
-        NSLog(@"Search asset failure with error %@",error);
-    }];
-}
-
--(void)uploadPhoto
-{
-//    NSData *diaryImageData = UIImagePNGRepresentation(diaryImage);
-
-    [[DropboxModel shareModel] uploadDiaryToFilesystem:_diaryData mediaData:_diaryData.diaryImageData mediaType:kSourceTypePhoto complete:^(BOOL success) {
- 
-        if (success) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"uploadComplete" object:nil];
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.navigationController popViewControllerAnimated:YES];
-        });
-    }];
 }
 
 - (void)showShareSheet:(UITapGestureRecognizer *)sender
