@@ -97,6 +97,8 @@
 		4CB3DD9718521DC500673478 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB3DD7F18521DC400673478 /* UIKit.framework */; };
 		4CB3DD9F18521DC500673478 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CB3DD9D18521DC500673478 /* InfoPlist.strings */; };
 		4CB3DDA118521DC500673478 /* KidlendarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB3DDA018521DC500673478 /* KidlendarTests.m */; };
+		4CBA4BB618CD9B4F00B380AB /* PhotoAlbumTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CBA4BB518CD9B4F00B380AB /* PhotoAlbumTableCell.xib */; };
+		4CBA4BBB18CD9BFC00B380AB /* PhotoAlbumTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBA4BBA18CD9BFC00B380AB /* PhotoAlbumTableCell.m */; };
 		4CD2B92318A492E6002DA9E4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD2B92218A492E6002DA9E4 /* Security.framework */; };
 		4CD2B93218A4CF69002DA9E4 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD2B93118A4CF69002DA9E4 /* CFNetwork.framework */; };
 		4CEEB9F818B4656100C7FA80 /* DiaryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEEB9F718B4656100C7FA80 /* DiaryData.m */; };
@@ -280,6 +282,9 @@
 		4CB3DD9C18521DC500673478 /* KidlendarTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "KidlendarTests-Info.plist"; sourceTree = "<group>"; };
 		4CB3DD9E18521DC500673478 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4CB3DDA018521DC500673478 /* KidlendarTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KidlendarTests.m; sourceTree = "<group>"; };
+		4CBA4BB518CD9B4F00B380AB /* PhotoAlbumTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoAlbumTableCell.xib; sourceTree = "<group>"; };
+		4CBA4BB918CD9BFC00B380AB /* PhotoAlbumTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoAlbumTableCell.h; sourceTree = "<group>"; };
+		4CBA4BBA18CD9BFC00B380AB /* PhotoAlbumTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoAlbumTableCell.m; sourceTree = "<group>"; };
 		4CD2B92218A492E6002DA9E4 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		4CD2B93118A4CF69002DA9E4 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		4CEEB9F618B4656100C7FA80 /* DiaryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiaryData.h; path = ../DiaryData.h; sourceTree = "<group>"; };
@@ -301,9 +306,9 @@
 		4CFB086B187E696A00456D5D /* DateModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateModel.m; sourceTree = "<group>"; };
 		4CFB086D187E6BFB00456D5D /* MonthModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthModel.h; sourceTree = "<group>"; };
 		4CFB086E187E6BFB00456D5D /* MonthModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonthModel.m; sourceTree = "<group>"; };
-		4CFB1B7D18C8092200EC443A /* trash35@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "trash35@2x.png"; sourceTree = "<group>"; };
-		4CFB1B7E18C8092200EC443A /* save35@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "save35@2x.png"; sourceTree = "<group>"; };
-		4CFB1B7F18C8092200EC443A /* diaryTab@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "diaryTab@2x.png"; sourceTree = "<group>"; };
+		4CFB1B7D18C8092200EC443A /* trash35@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "trash35@2x.png"; path = "../trash35@2x.png"; sourceTree = "<group>"; };
+		4CFB1B7E18C8092200EC443A /* save35@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "save35@2x.png"; path = "../save35@2x.png"; sourceTree = "<group>"; };
+		4CFB1B7F18C8092200EC443A /* diaryTab@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "diaryTab@2x.png"; path = "../diaryTab@2x.png"; sourceTree = "<group>"; };
 		4CFB1B8318C8676300EC443A /* selectPhoto@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "selectPhoto@2x.png"; sourceTree = "<group>"; };
 		4CFB6DC7186A6BAC001C8F05 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		4CFEB19318C2CF9C00CFE1A1 /* uploadicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = uploadicon.png; sourceTree = "<group>"; };
@@ -424,6 +429,9 @@
 				4C5B01F518ACBD7E0030FCCC /* DiaryCreateViewController.xib */,
 				4C68364918BAE4B200FAA259 /* AlbumPhotoCell.h */,
 				4C68364A18BAE4B200FAA259 /* AlbumPhotoCell.m */,
+				4CBA4BB918CD9BFC00B380AB /* PhotoAlbumTableCell.h */,
+				4CBA4BBA18CD9BFC00B380AB /* PhotoAlbumTableCell.m */,
+				4CBA4BB518CD9B4F00B380AB /* PhotoAlbumTableCell.xib */,
 				4C6C49BE186DDB680042EB61 /* DiaryTableViewController.h */,
 				4C6C49BF186DDB680042EB61 /* DiaryTableViewController.m */,
 				4CA0368A18B7A12100015184 /* DiaryTableViewCell.h */,
@@ -550,9 +558,6 @@
 		4CB3DD6F18521DC400673478 = {
 			isa = PBXGroup;
 			children = (
-				4CFB1B7D18C8092200EC443A /* trash35@2x.png */,
-				4CFB1B7E18C8092200EC443A /* save35@2x.png */,
-				4CFB1B7F18C8092200EC443A /* diaryTab@2x.png */,
 				4C1E40B218B4616300A273A1 /* GPUImage.xcodeproj */,
 				4CFFD5891897800A0070C33C /* lookup_amatorka.png */,
 				4CB3DD8118521DC400673478 /* Kidlendar */,
@@ -626,6 +631,9 @@
 		4CB3DD8218521DC400673478 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4CFB1B7D18C8092200EC443A /* trash35@2x.png */,
+				4CFB1B7E18C8092200EC443A /* save35@2x.png */,
+				4CFB1B7F18C8092200EC443A /* diaryTab@2x.png */,
 				4C07B2BC18C8BE1600911045 /* x@2x.png */,
 				4C07B2BD18C8BE1600911045 /* v@2x.png */,
 				4CA2506A1869377000AEA94E /* UIImage+Resize.h */,
@@ -796,6 +804,7 @@
 				4C3FBA5818C4CCFF0097C67D /* face_yellow.png in Resources */,
 				4C4AAB7918C6B39000458908 /* locationTag10@2x.png in Resources */,
 				4C5BA25B1861731A00528843 /* 929-film-1@2x.png in Resources */,
+				4CBA4BB618CD9B4F00B380AB /* PhotoAlbumTableCell.xib in Resources */,
 				4C68CABF18C63A51003776D2 /* playButton@2x.png in Resources */,
 				4CF5151F18C314500050E330 /* 42-photos.png in Resources */,
 				4C61326D18BF16990025FD00 /* EventCreateController.xib in Resources */,
@@ -869,6 +878,7 @@
 				4CFFD584189775270070C33C /* DiaryPhotoViewController.m in Sources */,
 				4C61326C18BF16990025FD00 /* EventCreateController.m in Sources */,
 				4C23963918B3295600BB87E7 /* FacebookModel.m in Sources */,
+				4CBA4BBB18CD9BFC00B380AB /* PhotoAlbumTableCell.m in Sources */,
 				4C51761D186FF309002F6F6D /* KidlendarModel.xcdatamodeld in Sources */,
 				4C5B01F618ACBD7F0030FCCC /* DiaryCreateViewController.m in Sources */,
 				4CFF693118BF3FC000337857 /* RepeatView.m in Sources */,

@@ -15,6 +15,7 @@
 #import "DiaryEntryViewController.h"
 #import "AlbumPhotoCell.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import "PhotoAlbumTableCell.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 #define GrayUIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:0.5]
@@ -178,9 +179,10 @@
     photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, -320, 0);
     photoAlbumTable.delegate = self;
     photoAlbumTable.dataSource = self;
-    [photoAlbumTable registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
     photoAlbumTable.contentInset = UIEdgeInsetsMake(-1.0f, 0.0f, 0.0f, 0.0);
     photoAlbumTable.backgroundColor = [UIColor blackColor];
+    [photoAlbumTable registerNib:[UINib nibWithNibName:@"PhotoAlbumTableCell" bundle:nil]
+         forCellReuseIdentifier:@"PhotoAlbumTableCell"];
     [self.view addSubview:photoAlbumTable];
     showAlbumTable = NO;
 
@@ -188,6 +190,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupPhotoCollectionView) name:@"loadLibraySourceDone" object:nil];
     photoLoader = [[PhotoLoader alloc]initWithSourceType:kSourceTypeAll];
+    photoAssets = [[NSMutableArray alloc]init];
     
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneSelection)];
     self.navigationItem.rightBarButtonItem = doneButton;
@@ -553,9 +556,8 @@
     
     NSString *sourceKey = sourceKeys[1];
     assetGroupPropertyName = sourceKey;
-//    NSArray *sourceAsset = [photoLoader.sourceDictionary objectForKey:sourceKey];
-    photoAssets = [photoLoader.sourceDictionary objectForKey:sourceKey];
-
+    
+    photoAssets = [[NSMutableArray alloc]initWithArray:[[[photoLoader.sourceDictionary objectForKey:sourceKey] reverseObjectEnumerator] allObjects]];
 
     navItem.title = assetGroupPropertyName;
     [photoCollectionView reloadData];
@@ -563,7 +565,8 @@
 
 - (void)reloadPhotoCollectionView:(NSMutableArray *)selectedAlbum
 {
-    photoAssets = selectedAlbum;
+    photoAssets = [[NSMutableArray alloc]initWithArray:[[selectedAlbum reverseObjectEnumerator] allObjects]];
+    
     [photoCollectionView reloadData];
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -898,27 +901,25 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    static NSString *CellIdentifier = @"PhotoAlbumTableCell";
+    PhotoAlbumTableCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
+        cell = [[PhotoAlbumTableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
     // Configure the cell...
     NSArray *souceKeys = photoLoader.sourceDictionary.allKeys;
     NSString *key = souceKeys[indexPath.row];
-    cell.textLabel.text = key;
+    cell.title.text = key;
     
     NSMutableArray *photoAlbum = [[photoLoader sourceDictionary] objectForKey:key];
     ALAsset *asset = [photoAlbum lastObject];
     cell.imageView.image = [UIImage imageWithCGImage: asset.thumbnail];
     cell.backgroundColor = [UIColor colorWithWhite:0.298 alpha:1.000];
-
-    //cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld",[photoAlbum count]];
-    //NSLog(@"%@",[NSString stringWithFormat:@"%ld",[photoAlbum count]]);
+    cell.detail.text = [NSString stringWithFormat:@"%ld",[photoAlbum count]];
+    
     return cell;
-
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

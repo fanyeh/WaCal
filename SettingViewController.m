@@ -33,20 +33,13 @@
     [super viewDidLoad];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
     self.navigationItem.title = @"Setting";
-
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     [self.tableView registerClass:[SwitchCell class] forCellReuseIdentifier:@"SwitchCell"];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:YES];
-    [self.tableView reloadData];
+//    [super viewWillAppear:YES];
+//    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning
@@ -83,15 +76,13 @@
         }
     
         // Configure the cell...
-           NSArray *allCalendars = [[CalendarStore sharedStore]allCalendars];
+        NSArray *allCalendars = [[CalendarStore sharedStore]allCalendars];
         EKCalendar *calendar = allCalendars[indexPath.row];
-        if (calendar == [[CalendarStore sharedStore]calendar]){
-            cell.detailTextLabel.text = @"This is current calendar";
-        } else {
-            cell.detailTextLabel.text = nil;
-        }
+        if (cell.isSelected)
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
         
         cell.textLabel.text = calendar.title;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
     else  {
@@ -108,6 +99,7 @@
     }
 }
 
+
 - (void)disableFaceDetection:(UISwitch *)sender
 {
     if (sender.on) {
@@ -121,11 +113,23 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSArray *allCalendars = [[CalendarStore sharedStore]allCalendars];
-    EKCalendar *calendar = allCalendars[indexPath.row];
-    [CalendarStore sharedStore].calendar = calendar;
-    [tableView reloadData];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"EKCalendarSwitch" object:nil];
+    if (indexPath.section == 0) {
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        NSArray *allCalendars = [[CalendarStore sharedStore]allCalendars];
+        EKCalendar *calendar = allCalendars[indexPath.row];
+        [CalendarStore sharedStore].calendar = calendar;
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"EKCalendarSwitch" object:nil];
+    }
+}
+
+
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0) {
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
 }
 
 @end

@@ -22,11 +22,12 @@
 
 @interface DiaryTableViewController ()
 {
-
     NSMutableDictionary *cloudDiarys;
     BOOL currentTableIsLocal;
     NSDateFormatter *dateFormatter;
     NSDateFormatter *weekdayFormatter;
+    NSArray *monthArray;
+    NSMutableDictionary *diaryInSections;
 }
 @end
 
@@ -49,17 +50,28 @@
     
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self  action:@selector(createDiary)];
     self.navigationItem.rightBarButtonItem = addButton;
-    
-//    UIBarButtonItem *editButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self  action:@selector(editDiaryTable)];
-//    self.navigationItem.leftBarButtonItem = editButton;
-//    self.navigationItem.leftBarButtonItem.tag = 0;
 
-    
     // Date formatters
     dateFormatter = [[NSDateFormatter alloc]init];
     dateFormatter.dateFormat = @"dd";
     weekdayFormatter = [[NSDateFormatter alloc]init];
     weekdayFormatter.dateFormat = @"EEEE";
+    
+    // Set up table
+    [self.tableView registerNib:[UINib nibWithNibName:@"DiaryTableViewCell" bundle:nil]
+         forCellReuseIdentifier:@"DiaryTableViewCell"];
+    
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+
+    monthArray = @[@"January",@"February",@"March",@"April",@"May",@"June",@"July",@"August",@"September",@"October",@"November",@"December"];
+//    diaryInSections = [[NSMutableDictionary alloc]init];
+    [self sortDiaryToSection];
+    
+    // Add observer to monitor event when new calendar event is created or removed
+    [[NSNotificationCenter defaultCenter]addObserver:self
+                                            selector:@selector(refreshDiary:)
+                                                name:@"diaryChange" object:nil];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -75,22 +87,46 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)refreshDiary:(NSNotification *)notification
+{
+    [self sortDiaryToSection];
+    [self.tableView reloadData];
+}
+
+- (void)sortDiaryToSection
+{
+    NSArray *diaryArray = [[DiaryDataStore sharedStore]allItems];
+    diaryInSections = [[NSMutableDictionary alloc]init];
+
+    for (DiaryData *d in diaryArray) {
+        NSDate *diaryDate = [NSDate dateWithTimeIntervalSinceReferenceDate:d.dateCreated];
+        NSDateComponents *comp = [[NSCalendar currentCalendar]components:(NSCalendarUnitYear|NSCalendarUnitMonth) fromDate:diaryDate];
+        NSString *sectionKey = [NSString stringWithFormat:@"%ld-%@",[comp year],monthArray[[comp month]]];
+        if (![diaryInSections objectForKey:sectionKey]) {
+            NSMutableArray *diarySet = [[NSMutableArray alloc]init];
+            [diarySet addObject:d];
+            [diaryInSections setObject:diarySet forKey:sectionKey];
+        }
+        else {
+            NSMutableArray *diarySet = [diaryInSections objectForKey:sectionKey];
+            [diarySet addObject:d];
+        }
+    }
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 1;
+    return [diaryInSections.allKeys count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    if (currentTableIsLocal)
-        return [[[DiaryDataStore sharedStore]allItems]count];
-    else {
-        return [cloudDiarys count];
-    }
+    NSString *sectionKey =diaryInSections.allKeys[section];
+    return [[diaryInSections objectForKey:sectionKey] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -100,12 +136,15 @@
         cell =[[DiaryTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DiaryTableViewCell"];
     cell.cellImageView.layer.cornerRadius = 5.0f;
     cell.cellImageView.layer.masksToBounds = YES;
-    cell.cellView.layer.shadowColor = [[UIColor blackColor]CGColor];
-    cell.cellView.layer.shadowOpacity = 0.5f;
-    cell.cellView.layer.shadowOffset = CGSizeMake(2 , 2);
+//    cell.cellView.layer.shadowColor = [[UIColor blackColor]CGColor];
+//    cell.cellView.layer.shadowOpacity = 0.5f;
+//    cell.cellView.layer.shadowOffset = CGSizeMake(2 , 2);
 
     // Configure the cell...
-    DiaryData *d = [DiaryDataStore sharedStore].allItems[indexPath.row];
+//    DiaryData *d = [DiaryDataStore sharedStore].allItems[indexPath.row];
+    NSString *sectionKey =diaryInSections.allKeys[indexPath.section];
+    DiaryData *d = [[diaryInSections objectForKey:sectionKey] objectAtIndex:indexPath.row];
+    
     NSDate *diaryDate = [NSDate dateWithTimeIntervalSinceReferenceDate:d.dateCreated];
     cell.dateLabel.text = [dateFormatter stringFromDate:diaryDate];
     cell.weekdayLabel.adjustsFontSizeToFitWidth = YES;
@@ -125,16 +164,20 @@
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (currentTableIsLocal) {
-        if (editingStyle == UITableViewCellEditingStyleDelete) {
-            // Delete the row from the data source
-            DiaryData *d = [[[DiaryDataStore sharedStore]allItems]objectAtIndex:[indexPath row]];
-            [[DiaryDataStore sharedStore] removeItem:d];
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // Delete the row from the data source
+        NSString *sectionKey =diaryInSections.allKeys[indexPath.section];
+        DiaryData *d = [[diaryInSections objectForKey:sectionKey] objectAtIndex:indexPath.row];
+        [[DiaryDataStore sharedStore] removeItem:d];
+        
+        // Delete item from sort diary and row
+        if ([[[DiaryDataStore sharedStore]allItems]count] > 0) {
+            [[diaryInSections objectForKey:sectionKey] removeObjectAtIndex:indexPath.row];
             [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"diaryChange" object:nil];
         }
-        else if (editingStyle == UITableViewCellEditingStyleInsert) {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        else {
+            [diaryInSections removeObjectForKey:sectionKey];
+            [tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
         }
     }
 }
@@ -144,7 +187,9 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     DiaryViewController *controller = [[DiaryViewController alloc]init];
-    controller.diaryData = [[DiaryDataStore sharedStore]allItems][indexPath.row];
+    NSString *sectionKey =diaryInSections.allKeys[indexPath.section];
+    controller.diaryData = [[diaryInSections objectForKey:sectionKey] objectAtIndex:indexPath.row];
+
     [self.navigationController pushViewController:controller animated:YES];
 }
 
@@ -153,7 +198,24 @@
     return 101; // 可在 XIB 檔案，點選 My Talbe View Cell 從 Size inspector 得知
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
+    headerView.backgroundColor = [UIColor redColor];
+    UILabel *headerLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
+    headerLabel.textColor = Rgb2UIColor(33, 138, 251);
+    headerLabel.textAlignment = NSTextAlignmentCenter;
+    headerLabel.font = [UIFont fontWithName:@"Avenir" size:20];
+    headerLabel.center = headerView.center;
+    headerLabel.text = [diaryInSections.allKeys objectAtIndex:section];
+    [headerView addSubview:headerLabel];
+    return headerView;
+}
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 44;
+}
 
 - (void)createDiary
 {

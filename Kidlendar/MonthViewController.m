@@ -90,14 +90,14 @@
     [_emptyDiaryView addGestureRecognizer:emptyDiaryTap];
     [_emptyEventView addGestureRecognizer:emptyEventTap];
     _emptyDiaryButton.layer.cornerRadius = 5.0f;
-    _emptyDiaryButton.layer.shadowColor = [[UIColor blackColor]CGColor];
-    _emptyDiaryButton.layer.shadowOpacity = 0.5f;
-    _emptyDiaryButton.layer.shadowOffset = CGSizeMake(2 , 2);
+//    _emptyDiaryButton.layer.shadowColor = [[UIColor blackColor]CGColor];
+//    _emptyDiaryButton.layer.shadowOpacity = 0.5f;
+//    _emptyDiaryButton.layer.shadowOffset = CGSizeMake(2 , 2);
     
     _emptyEventButton.layer.cornerRadius = 5.0f;
-    _emptyEventButton.layer.shadowColor = [[UIColor blackColor]CGColor];
-    _emptyEventButton.layer.shadowOpacity = 0.5f;
-    _emptyEventButton.layer.shadowOffset = CGSizeMake(2 , 2);
+//    _emptyEventButton.layer.shadowColor = [[UIColor blackColor]CGColor];
+//    _emptyEventButton.layer.shadowOpacity = 0.5f;
+//    _emptyEventButton.layer.shadowOffset = CGSizeMake(2 , 2);
     
     dateFormatter = [[NSDateFormatter alloc]init];
     dateFormatter.dateFormat = @"yyyy/MM/dd";
@@ -328,12 +328,6 @@
 
 - (void)switchEKCalendar:(NSNotification *)notification
 {
-    // Re construct month model
-    monthModel = [[MonthModel alloc]initMonthCalendarWithDate:[NSDate date] andCalendar:_gregorian];
-    
-    // Refresh calendar view
-    [_monthView initCalendar:monthModel];
-    
     [self resetCalendar];
     if (_monthView.shrink)
         [self shrinkMonthWithOutAnimation];
