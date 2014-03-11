@@ -155,8 +155,10 @@
     
     if (d.diaryVideoPath) {
         cell.cellImageView.image = d.diaryVideoThumbnail;
+        cell.videoPlayButton.hidden = NO;
     } else {
         cell.cellImageView.image = d.diaryImage;
+        cell.videoPlayButton.hidden = YES;
     }
     return cell;
 }

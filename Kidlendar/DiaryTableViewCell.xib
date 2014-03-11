@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
@@ -66,6 +66,10 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.1137254902" green="0.4431372549" blue="0.71764705880000002" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
+                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="playButton.png" translatesAutoresizingMaskIntoConstraints="NO" id="NKC-cj-BQi">
+                                <rect key="frame" x="247" y="33" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -81,11 +85,13 @@
                 <outlet property="diaryDetail" destination="CXH-7h-ptv" id="AyT-Ea-Gsc"/>
                 <outlet property="diarySubject" destination="hqD-Ga-YAd" id="lfh-Sz-t0t"/>
                 <outlet property="locationLabel" destination="bzW-UH-2Pv" id="x2h-Kd-YcP"/>
+                <outlet property="videoPlayButton" destination="NKC-cj-BQi" id="k9l-3R-mzS"/>
                 <outlet property="weekdayLabel" destination="8Pk-x5-2k2" id="W4A-JH-owG"/>
             </connections>
         </tableViewCell>
     </objects>
     <resources>
         <image name="locationTag-24.png" width="512" height="512"/>
+        <image name="playButton.png" width="44" height="44"/>
     </resources>
 </document>
