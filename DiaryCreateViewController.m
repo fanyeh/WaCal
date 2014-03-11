@@ -600,7 +600,7 @@
                 NSInteger selectNumber = i + 1;
                 [photoCollectionView selectItemAtIndexPath:path animated:NO scrollPosition:UICollectionViewScrollPositionCenteredVertically];
                 AlbumPhotoCell *cell = (AlbumPhotoCell *)[photoCollectionView cellForItemAtIndexPath:path];
-                cell.selectNumber.text = [NSString stringWithFormat:@"%ld", selectNumber];
+                cell.selectNumber.text = [NSString stringWithFormat:@"%ld", (long)selectNumber];
 
             }
         }
@@ -623,10 +623,10 @@
     
     // Resize the image
     [fullScreenImageArray addObject:image];
-    navItem.rightBarButtonItem.title = [NSString stringWithFormat:@"%ld/5",[fullScreenImageArray count]];
+    navItem.rightBarButtonItem.title = [NSString stringWithFormat:@"%ld/5",(unsigned long)[fullScreenImageArray count]];
     
     AlbumPhotoCell *cell = (AlbumPhotoCell *)[photoCollectionView cellForItemAtIndexPath:indexPath];
-    cell.selectNumber.text = [NSString stringWithFormat:@"%ld",[fullScreenImageArray count]];
+    cell.selectNumber.text = [NSString stringWithFormat:@"%ld",(unsigned long)[fullScreenImageArray count]];
     
     // Perform face detection and setup diary collection view
     [faceDetectingActivity startAnimating];
@@ -820,7 +820,7 @@
             NSUInteger index = [selectedPhotoOrderingInfo indexOfObject:imageInfo];
             [imageMeta removeObjectAtIndex:index];
             [fullScreenImageArray removeObjectAtIndex:index];
-            navItem.rightBarButtonItem.title = [NSString stringWithFormat:@"%ld/5",[fullScreenImageArray count]];
+            navItem.rightBarButtonItem.title = [NSString stringWithFormat:@"%ld/5",(unsigned long)[fullScreenImageArray count]];
 
             // Remove image info from ordering info
             [selectedPhotoOrderingInfo removeObject:imageInfo];
@@ -929,7 +929,7 @@
     ALAsset *asset = [photoAlbum lastObject];
     cell.photoImageView.image = [UIImage imageWithCGImage: asset.thumbnail];
     cell.backgroundColor = [UIColor colorWithWhite:0.298 alpha:1.000];
-    cell.detail.text = [NSString stringWithFormat:@"%ld Photos",[photoAlbum count]];
+    cell.detail.text = [NSString stringWithFormat:@"%ld Photos",(unsigned long)[photoAlbum count]];
 
     if ([key isEqualToString:assetGroupPropertyName]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;

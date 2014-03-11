@@ -101,7 +101,7 @@
     for (DiaryData *d in diaryArray) {
         NSDate *diaryDate = [NSDate dateWithTimeIntervalSinceReferenceDate:d.dateCreated];
         NSDateComponents *comp = [[NSCalendar currentCalendar]components:(NSCalendarUnitYear|NSCalendarUnitMonth) fromDate:diaryDate];
-        NSString *sectionKey = [NSString stringWithFormat:@"%ld-%@",[comp year],monthArray[[comp month]]];
+        NSString *sectionKey = [NSString stringWithFormat:@"%ld-%@",(long)[comp year],monthArray[[comp month]]];
         if (![diaryInSections objectForKey:sectionKey]) {
             NSMutableArray *diarySet = [[NSMutableArray alloc]init];
             [diarySet addObject:d];

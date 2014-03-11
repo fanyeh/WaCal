@@ -457,13 +457,17 @@
 		4C68CAB718C6303F003776D2 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4CFB1B7D18C8092200EC443A /* trash35@2x.png */,
+				4CFB1B7E18C8092200EC443A /* save35@2x.png */,
+				4CFB1B7F18C8092200EC443A /* diaryTab@2x.png */,
+				4C07B2BC18C8BE1600911045 /* x@2x.png */,
+				4C07B2BD18C8BE1600911045 /* v@2x.png */,
 				4CFB1B8318C8676300EC443A /* selectPhoto@2x.png */,
 				4C68CABE18C63A51003776D2 /* playButton@2x.png */,
 				4C68CAB918C6350E003776D2 /* calendarTab@2x.png */,
 				4C68CABA18C6350E003776D2 /* settingTab@2x.png */,
 				4C5BA25C1861745D00528843 /* 929-film-1.png */,
 				4C5BA25A1861731A00528843 /* 929-film-1@2x.png */,
-				4CB3DD8318521DC400673478 /* Kidlendar-Info.plist */,
 				4C3FBA5518C4CCFF0097C67D /* face_white.png */,
 				4C3FBA5618C4CCFF0097C67D /* face_yellow.png */,
 				4CF5152218C325730050E330 /* fb_icon_325x325.png */,
@@ -631,11 +635,7 @@
 		4CB3DD8218521DC400673478 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				4CFB1B7D18C8092200EC443A /* trash35@2x.png */,
-				4CFB1B7E18C8092200EC443A /* save35@2x.png */,
-				4CFB1B7F18C8092200EC443A /* diaryTab@2x.png */,
-				4C07B2BC18C8BE1600911045 /* x@2x.png */,
-				4C07B2BD18C8BE1600911045 /* v@2x.png */,
+				4CB3DD8318521DC400673478 /* Kidlendar-Info.plist */,
 				4CA2506A1869377000AEA94E /* UIImage+Resize.h */,
 				4CA2506B1869377000AEA94E /* UIImage+Resize.m */,
 				4CB3DD8418521DC400673478 /* InfoPlist.strings */,

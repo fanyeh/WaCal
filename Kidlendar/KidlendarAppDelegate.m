@@ -16,6 +16,9 @@
 #import <Dropbox/Dropbox.h>
 #import "DiaryCreateViewController.h"
 
+NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGranted";
+NSString *const AccountTwitterAccountAccessGranted = @"TwitterAccountAccessGranted";
+
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 
 @implementation KidlendarAppDelegate
@@ -31,11 +34,7 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     
-    // Register for push notifications
-//    [application registerForRemoteNotificationTypes:
-//     UIRemoteNotificationTypeBadge |
-//     UIRemoteNotificationTypeAlert |
-//     UIRemoteNotificationTypeSound];
+    self.accountStore = [[ACAccountStore alloc] init];
 
     DBAccountManager *accountManager = [[DBAccountManager alloc] initWithAppKey:@"hsvuk547mb46ady" secret:@"z0bw1iew9vssq6r"];
     [DBAccountManager setSharedManager:accountManager];
@@ -64,49 +63,132 @@
     [[UINavigationBar appearance] setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance] setBackgroundColor:Rgb2UIColor(29 , 113 , 183)];
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]]; //is the buttons text color
-    
-//    [[UITabBar appearance] setBackgroundImage:[[UIImage alloc] init]];
-//    [[UITabBar appearance] setShadowImage:[[UIImage alloc] init]];
-//
-//    [[UITabBar appearance] setBackgroundColor:Rgb2UIColor(29 , 113 , 183)];
     [[UITabBar appearance] setTintColor:Rgb2UIColor(29 , 113 , 183)]; //is the buttons text color
-    
-//    [Parse setApplicationId:@"7utzGzNF3trLYTt20IxZfICqt53FG8w6H0G0uhkm"
-//                  clientKey:@"DKa0htgOp1uZF6eXPjjYyohbGNb2knhPlBxfycMP"];
-    
-
-    
-
-    
-//    // Create a pointer to the Photo object
-//    NSString *photoId = [notificationPayload objectForKey:@"p"];
-//    PFObject *targetPhoto = [PFObject objectWithoutDataWithClassName:@"Photo"
-//                                                            objectId:photoId];
-//    
-//    // Fetch photo object
-//    [targetPhoto fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-//        // Show photo view controller
-//        if (!error && [PFUser currentUser]) {
-//            PhotoVC *viewController = [[PhotoVC alloc] initWithPhoto:object];
-//            [self.navController pushViewController:viewController animated:YES];
-//        }
-//    }];
-    
     return YES;
 }
 
-//- (void)application:(UIApplication *)application
-//didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)newDeviceToken {
-//    // Store the deviceToken in the current installation and save it to Parse.
-//    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-//    [currentInstallation setDeviceTokenFromData:newDeviceToken];
-//    [currentInstallation saveInBackground];
-//}
+- (void)getFacebookAccount
+{
+    // 1
+    ACAccountType *facebookAccountType = [self.accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierFacebook];
+    __weak KidlendarAppDelegate *weakSelf = self;
+    // 2
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // 3
+        NSDictionary *facebookOptions = @{ACFacebookAppIdKey : @"1450548605159832",
+                                          ACFacebookPermissionsKey : @[@"email", @"read_stream",@"user_relationships", @"user_website"],
+                                          ACFacebookAudienceKey : ACFacebookAudienceEveryone };
+        // 4
+        [weakSelf.accountStore requestAccessToAccountsWithType:facebookAccountType
+                                                       options:facebookOptions
+                                                    completion:^(BOOL granted, NSError *error) {
+                                                        
+                                                         // 5
+                                                         if (granted)
+                                                         {
+                                                             [weakSelf getPublishStream];
+                                                         }
+                                                         // 6
+                                                         else
+                                                         {
+                                                             // 7
+                                                             if (error)
+                                                             {
+                                                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                                                     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Facebook"
+                                                                                                                         message:@"There was an error retrieving your Facebook account, make sure you have an account setup in iSocial"
+                                                                                                                        delegate:nil
+                                                                                                               cancelButtonTitle:@"Dismiss"
+                                                                                                               otherButtonTitles:nil];
+                                                                     [alertView show];
+                                                                 });
+                                                             }
+                                                             // 8 User deny access
+                                                             else
+                                                             {
+                                                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                                                     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Facebook"
+                                                                                                                         message:@"Access to Facebook was not granted. Please go to the device settings and allow access for iSocial"
+                                                                                                                        delegate:nil
+                                                                                                               cancelButtonTitle:@"Dismiss"
+                                                                                                               otherButtonTitles:nil];
+                                                                     [alertView show];
+                                                                 });
+                                                             }
+                                                         }
+         }];
+    });
+}
 
-//- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-//    [PFPush handlePush:userInfo];
-//    [[tbc.tabBar.items objectAtIndex:1]setBadgeValue:@"1"];
-//}
+- (void)getPublishStream {
+    // 1
+    ACAccountType *facebookAccountType = [self.accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierFacebook];
+    __weak KidlendarAppDelegate *weakSelf = self;
+    // 2
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // 3
+        NSDictionary *facebookOptions = @{ACFacebookAppIdKey : @"1450548605159832",
+                                          ACFacebookPermissionsKey : @[@"publish_stream"],
+                                          ACFacebookAudienceKey : ACFacebookAudienceEveryone };
+        // 4
+        [weakSelf.accountStore requestAccessToAccountsWithType:facebookAccountType
+                                                       options:facebookOptions completion:^(BOOL granted,
+                                                                                            NSError *error) {
+                                                           // 5
+                                                           if (granted)
+                                                           {
+                                                               weakSelf.facebookAccount = [[weakSelf.accountStore accountsWithAccountType:facebookAccountType]lastObject];
+                                                               
+                                                               dispatch_async(dispatch_get_main_queue(), ^{
+                                                                   [[NSNotificationCenter defaultCenter] postNotificationName:AccountFacebookAccountAccessGranted object:nil];
+                                                               });
+                                                           }
+                                                           // 6
+                                                           else
+                                                           {
+                                                               // 7
+                                                               if (error)
+                                                               {
+                                                                   dispatch_async(dispatch_get_main_queue(), ^{
+                                                                       UIAlertView *alertView = [[UIAlertView alloc]
+                                                                                                 initWithTitle:@"Facebook"
+                                                                                                 message:@"There was an error retrieving your Facebook account, make sureyou have an account setup in Settings and that access is granted foriSocial"
+                                                                                                 delegate:nil
+                                                                                                 cancelButtonTitle:@"Dismiss"
+                                                                                                 otherButtonTitles:nil];
+                                                                       [alertView show];
+                                                                   });
+                                                               }
+                                                               // 8
+                                                               else
+                                                               {
+                                                                   dispatch_async(dispatch_get_main_queue(), ^{
+                                                                       UIAlertView *alertView = [[UIAlertView alloc]
+                                                                                                 initWithTitle:@"Facebook"
+                                                                                                 message:@"Access to Facebook was not granted. Please go to the device settings and allow access for iSocial"
+                                                                                                 delegate:nil
+                                                                                                 cancelButtonTitle:@"Dismiss"
+                                                                                                 otherButtonTitles:nil];
+                                                                       [alertView show];
+                                                                   });
+                                                               }
+                                                           }
+                                                       }];
+    });
+}
+
+- (void)presentErrorWithMessage:(NSString *)errorMessage
+{
+    UIAlertView *alertView = [[UIAlertView alloc]
+                              initWithTitle:@"Error"
+                              message:errorMessage
+                              delegate:nil
+                              cancelButtonTitle:@"Dismiss"
+                              otherButtonTitles:nil];
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        [alertView show];
+    });
+}
 
 - (void)createAllViewControllers
 {
@@ -116,19 +198,12 @@
             [[[CalendarStore sharedStore]allCalendars] addObject:c];
         }
     }
-    
-//    [[CalendarStore sharedStore]setAllCalendars:[[[CalendarStore sharedStore]eventStore] calendarsForEntityType:EKEntityTypeEvent]];
-
     [[CalendarStore sharedStore]setCalendar:[CalendarStore sharedStore].allCalendars[0]];
 
     // Set up calendar controller
     MonthViewController *calendarController = [[MonthViewController alloc]init];
     UINavigationController *calendarNavigationController = [[UINavigationController alloc]initWithRootViewController:calendarController];
     calendarNavigationController.tabBarItem = [[UITabBarItem alloc]initWithTitle:@"Calendar" image:[UIImage imageNamed:@"calendarTab.png"] selectedImage:[UIImage imageNamed:@"calendarTab.png"]];
-    
-//    [calendarNavigationController.tabBarItem setTitleTextAttributes:[NSDictionary
-//                                                                     dictionaryWithObjectsAndKeys:[UIColor colorWithWhite:0.702 alpha:1.000],NSForegroundColorAttributeName, nil]
-//                                             forState:UIControlStateNormal];
     
     // Set up diary controller
     DiaryTableViewController *diaryController = [[DiaryTableViewController alloc]init];

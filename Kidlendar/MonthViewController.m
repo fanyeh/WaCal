@@ -250,7 +250,7 @@
     
     // Change the text
     monthLabel.text = month;
-    yearLabel.text = [NSString stringWithFormat:@"%ld",[comp year]];
+    yearLabel.text = [NSString stringWithFormat:@"%ld",(long)[comp year]];
 }
 
 #pragma mark - UITableViewDataSource

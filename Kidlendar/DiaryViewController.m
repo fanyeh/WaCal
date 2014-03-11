@@ -15,6 +15,7 @@
 //#import <Parse/Parse.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import <AssetsLibrary/AssetsLibrary.h>
+#import "KidlendarAppDelegate.h"
 
 @interface DiaryViewController () <FBLoginViewDelegate>
 {
@@ -81,12 +82,12 @@
     NSDateFormatter *weekdayFormatter = [[NSDateFormatter alloc]init];
     weekdayFormatter.dateFormat = @"EEEE";
     
-    _yearLabel.text = [NSString stringWithFormat:@"%ld",[dateComp year]];
+    _yearLabel.text = [NSString stringWithFormat:@"%ld",(long)[dateComp year]];
     _monthLabel.text = [monthArray objectAtIndex: [dateComp month]-1];
     NSInteger day = [dateComp day];
-    _dateLabel.text = [NSString stringWithFormat:@"%ld",[dateComp day]];
+    _dateLabel.text = [NSString stringWithFormat:@"%ld",(long)[dateComp day]];
     if (day==1) {
-        _dateLabel.text = [NSString stringWithFormat:@"%ld st",[dateComp day]];
+        _dateLabel.text = [NSString stringWithFormat:@"%ld st",(long)[dateComp day]];
     }
     
     _weekdayLabel.text  = [weekdayFormatter stringFromDate:diaryDate];
@@ -163,7 +164,8 @@
 - (void)showShareSheet:(UITapGestureRecognizer *)sender
 {
     [self cancelAction];
-
+    KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    
     NSString *serviceType;
     switch (sender.view.tag) {
         case 0:
@@ -178,39 +180,83 @@
         default:
             break;
     }
-    //  Create an instance of the share Sheet
-    SLComposeViewController *shareSheet = [SLComposeViewController
-                                           composeViewControllerForServiceType:
-                                           serviceType]; // Service Type 有 Facebook/Twitter/微博 可以選
     
-    shareSheet.completionHandler = ^(SLComposeViewControllerResult result) {
-        switch(result) {
-                //  This means the user cancelled without sending the Tweet
-            case SLComposeViewControllerResultCancelled:
-                break;
-                //  This means the user hit 'Send'
-            case SLComposeViewControllerResultDone:
-                break;
-        }
-    };
-    
-    //  Set the initial body of the share sheet
-    [shareSheet setInitialText:_diaryData.diaryText];
-    
-    //  分享照片
-    if (![shareSheet addImage:_diaryData.diaryImage]) {
-        NSLog(@"Unable to add the image!");
-    }
-    
-    //  分享連結
-//    if (![shareSheet addURL:[NSURL URLWithString:@"http://123.com/"]]){
-//        NSLog(@"Unable to add the URL!");
-//    }
-    
+    if (appDelegate.facebookAccount)
+    {
+        NSData *mediaData = _diaryData.diaryImageData;
 
+        NSDictionary *parameters = @{@"message": _diaryData.diaryText};
+
+        
+        SLRequest *facebookRequest = [SLRequest requestForServiceType:serviceType
+                                                        requestMethod:SLRequestMethodPOST
+                                                                  URL:[NSURL URLWithString:@"https://graph.facebook.com/me/photos"]
+                                                           parameters:parameters];
+
+        [facebookRequest addMultipartData:mediaData
+                                 withName:@"picture"
+                                     type:@"image/png"
+                                 filename:nil];
+        
+        facebookRequest.account = appDelegate.facebookAccount;
+        
+        
+        [facebookRequest performRequestWithHandler:^(NSData* responseData, NSHTTPURLResponse* urlResponse, NSError* error) {
+            if (error) {
+                // 4
+                KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+                [appDelegate presentErrorWithMessage:[NSString
+                                                      stringWithFormat:@"There was an error reading your Facebook feed. %@",
+                                                      [error localizedDescription]]];
+            }
+            else
+            {
+                // 5
+                NSError *jsonError;
+                NSDictionary *responseJSON = [NSJSONSerialization
+                                              JSONObjectWithData:responseData
+                                              options:NSJSONReadingAllowFragments
+                                              error:&jsonError];
+                if (jsonError) {
+                      // 6
+                      KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+                      [appDelegate presentErrorWithMessage:[NSString
+                                                            stringWithFormat:@"There was an error reading your Facebook feed. %@",
+                                                            [error localizedDescription]]];
+                } else {
+                    NSLog(@"Response data %@",responseJSON);
+                }
+            }
+        }];
+    }
+    else
+    {
+        [appDelegate getFacebookAccount];
+    }
+}
+
+- (void)upload{
+    NSURL *videourl = [NSURL URLWithString:@"https://graph.facebook.com/me/videos"];
     
-    //  Presents the share Sheet to the user
-    [self presentViewController:shareSheet animated:NO completion:nil];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"me" ofType:@"mov"];
+    NSURL *pathURL = [[NSURL alloc]initFileURLWithPath:filePath isDirectory:NO];
+    NSData *videoData = [NSData dataWithContentsOfFile:filePath];
+    
+    NSDictionary *params = @{
+                             @"title": @"Me being silly",
+                             @"description": @"Me testing the video upload to Facebook with the new system."
+                             };
+    
+    SLRequest *uploadRequest = [SLRequest requestForServiceType:SLServiceTypeFacebook
+                                                  requestMethod:SLRequestMethodPOST
+                                                            URL:videourl
+                                                     parameters:params];
+    [uploadRequest addMultipartData:videoData
+                           withName:@"source"
+                               type:@"video/quicktime"
+                           filename:[pathURL absoluteString]];
+    
+    uploadRequest.account = self.facebookAccount;
 }
 
 - (void)viewWillAppear:(BOOL)animated
