@@ -16,6 +16,8 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "KidlendarAppDelegate.h"
+#import "PhotoLoader.h"
+#import "AFHTTPRequestOperation.h"
 
 @interface DiaryViewController () <FBLoginViewDelegate>
 {
@@ -183,51 +185,10 @@
     
     if (appDelegate.facebookAccount)
     {
-        NSData *mediaData = _diaryData.diaryImageData;
-
-        NSDictionary *parameters = @{@"message": _diaryData.diaryText};
-
-        
-        SLRequest *facebookRequest = [SLRequest requestForServiceType:serviceType
-                                                        requestMethod:SLRequestMethodPOST
-                                                                  URL:[NSURL URLWithString:@"https://graph.facebook.com/me/photos"]
-                                                           parameters:parameters];
-
-        [facebookRequest addMultipartData:mediaData
-                                 withName:@"picture"
-                                     type:@"image/png"
-                                 filename:nil];
-        
-        facebookRequest.account = appDelegate.facebookAccount;
-        
-        
-        [facebookRequest performRequestWithHandler:^(NSData* responseData, NSHTTPURLResponse* urlResponse, NSError* error) {
-            if (error) {
-                // 4
-                KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-                [appDelegate presentErrorWithMessage:[NSString
-                                                      stringWithFormat:@"There was an error reading your Facebook feed. %@",
-                                                      [error localizedDescription]]];
-            }
-            else
-            {
-                // 5
-                NSError *jsonError;
-                NSDictionary *responseJSON = [NSJSONSerialization
-                                              JSONObjectWithData:responseData
-                                              options:NSJSONReadingAllowFragments
-                                              error:&jsonError];
-                if (jsonError) {
-                      // 6
-                      KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-                      [appDelegate presentErrorWithMessage:[NSString
-                                                            stringWithFormat:@"There was an error reading your Facebook feed. %@",
-                                                            [error localizedDescription]]];
-                } else {
-                    NSLog(@"Response data %@",responseJSON);
-                }
-            }
-        }];
+        if (_diaryData.diaryVideoPath)
+            [self uploadToFacebookWithMediaType:@"Video"];
+        else
+            [self uploadToFacebookWithMediaType:@"Photo"];
     }
     else
     {
@@ -235,28 +196,124 @@
     }
 }
 
-- (void)upload{
-    NSURL *videourl = [NSURL URLWithString:@"https://graph.facebook.com/me/videos"];
+- (void)uploadToFacebookWithMediaType:(NSString *)type
+{
+    __block SLRequest *facebookRequest;
     
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"me" ofType:@"mov"];
-    NSURL *pathURL = [[NSURL alloc]initFileURLWithPath:filePath isDirectory:NO];
-    NSData *videoData = [NSData dataWithContentsOfFile:filePath];
+    NSLog(@"message %@",_diaryData.diaryText);
+
+    if ([type isEqualToString:@"Photo"]) {
+        NSData *mediaData = _diaryData.diaryImageData;
+        NSDictionary *params = @{@"message": _diaryData.diaryText};
+        facebookRequest = [SLRequest requestForServiceType:SLServiceTypeFacebook
+                                                        requestMethod:SLRequestMethodPOST
+                                                                  URL:[NSURL URLWithString:@"https://graph.facebook.com/me/photos"]
+                                                           parameters:params];
+        [facebookRequest addMultipartData:mediaData
+                                 withName:@"picture"
+                                     type:@"image/png"
+                                 filename:nil];
+        
+        [self executeFBrequest:facebookRequest];
+
+    }
+    else
+    {
+        __block NSData *data;
+        NSDictionary *params = @{@"title": _diaryData.subject,
+                                 @"description": _diaryData.diaryText};
+        
+        [[PhotoLoader defaultAssetsLibrary] assetForURL:[NSURL URLWithString:_diaryData.diaryVideoPath] resultBlock:^(ALAsset *asset) {
+            
+            dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+            dispatch_group_t group = dispatch_group_create();
+
+            dispatch_group_async(group, queue, ^{
+                NSLog(@"Strat converting");
+                ALAssetRepresentation *rep = [asset defaultRepresentation];
+                Byte *buffer = (Byte*)malloc(rep.size);
+                NSUInteger buffered = [rep getBytes:buffer fromOffset:0.0 length:rep.size error:nil];
+                data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
+            });
+            
+            dispatch_group_notify(group, queue, ^{
+                NSLog(@"Strat uploading");
+                
+                facebookRequest = [SLRequest requestForServiceType:SLServiceTypeFacebook
+                                                     requestMethod:SLRequestMethodPOST
+                                                               URL:[NSURL URLWithString:@"https://graph.facebook.com/me/videos"]
+                                                        parameters:params];
+                
+                [facebookRequest addMultipartData:data
+                                         withName:@"source"
+                                             type:@"video/quicktime"
+                                         filename:@"test1.mov"];
+                
+                [self executeFBrequest:facebookRequest];
+
+            });
+            
+        } failureBlock:^(NSError *error) {
+            NSLog(@"Converting error %@",error);
+        }];
+    }
+}
+
+-(void)executeFBrequest:(SLRequest *)facebookRequest
+{
+    NSLog(@"executing");
     
-    NSDictionary *params = @{
-                             @"title": @"Me being silly",
-                             @"description": @"Me testing the video upload to Facebook with the new system."
-                             };
+    KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+
     
-    SLRequest *uploadRequest = [SLRequest requestForServiceType:SLServiceTypeFacebook
-                                                  requestMethod:SLRequestMethodPOST
-                                                            URL:videourl
-                                                     parameters:params];
-    [uploadRequest addMultipartData:videoData
-                           withName:@"source"
-                               type:@"video/quicktime"
-                           filename:[pathURL absoluteString]];
+    facebookRequest.account = appDelegate.facebookAccount;
+
     
-    uploadRequest.account = self.facebookAccount;
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:facebookRequest.preparedURLRequest];
+    [operation setUploadProgressBlock:^(NSUInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite) {
+        NSLog(@"%ld bytes out of %ld sent.", totalBytesWritten, totalBytesExpectedToWrite);
+        float progress = totalBytesWritten/(float)totalBytesExpectedToWrite;
+        NSLog(@"Progress :%f",progress);
+    }];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"Facebook upload success");
+
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Facebook upload error %@",error);
+    }];
+    
+    [operation start];
+    
+    
+    [facebookRequest performRequestWithHandler:^(NSData* responseData, NSHTTPURLResponse* urlResponse, NSError* error) {
+        if (error) {
+            // 4
+            KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+            [appDelegate presentErrorWithMessage:[NSString
+                                                  stringWithFormat:@"There was an error uploading media. %@",
+                                                  [error localizedDescription]]];
+        }
+        else
+        {
+            // 5
+            NSError *jsonError;
+            NSDictionary *responseJSON = [NSJSONSerialization
+                                          JSONObjectWithData:responseData
+                                          options:NSJSONReadingAllowFragments
+                                          error:&jsonError];
+            if (jsonError) {
+                // 6
+                KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+                [appDelegate presentErrorWithMessage:[NSString
+                                                      stringWithFormat:@"There was an error uploading media. %@",
+                                                      [error localizedDescription]]];
+            } else {
+                NSLog(@"Response data %@",responseJSON);
+            }
+        }
+    }];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated

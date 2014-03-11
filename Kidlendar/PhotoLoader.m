@@ -10,6 +10,15 @@
 
 @implementation PhotoLoader
 
++ (ALAssetsLibrary *)defaultAssetsLibrary {
+    static dispatch_once_t pred = 0;
+    static ALAssetsLibrary *library = nil;
+    dispatch_once(&pred, ^{
+        library = [[ALAssetsLibrary alloc] init];
+    });
+    return library;
+}
+
 - (id)initWithSourceType:(SourceType)sourceType
 {
     self = [super init];
@@ -22,7 +31,7 @@
 - (void)preparePhotos:(SourceType)sourceType
 {
     _assetGroups = [[NSMutableArray alloc]init];
-    _library = [[ALAssetsLibrary alloc]init];
+    _library = [PhotoLoader defaultAssetsLibrary];
     _sourceDictionary = [[NSMutableDictionary alloc]init];
     __block NSMutableArray *assets;
     

@@ -21,5 +21,6 @@ typedef NS_ENUM(NSInteger, SourceType)
 @property NSMutableArray *assetGroups;
 @property (nonatomic,strong) NSMutableDictionary *sourceDictionary;
 - (id)initWithSourceType:(SourceType)sourceType;
++ (ALAssetsLibrary *)defaultAssetsLibrary;
 
 @end

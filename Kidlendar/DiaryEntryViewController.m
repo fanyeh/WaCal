@@ -215,6 +215,10 @@
         diary.diaryVideoPath = [NSString stringWithFormat:@"%@",_asset.defaultRepresentation.url];
         UIImage *image = [UIImage imageWithCGImage: _asset.defaultRepresentation.fullScreenImage];
         [diary setDiaryVideoThumbDataFromImage:[image cropWithFaceDetect:CGSizeMake(320, 320)]];
+//        ALAssetRepresentation *rep = [_asset defaultRepresentation];
+//        Byte *buffer = (Byte*)malloc(rep.size);
+//        NSUInteger buffered = [rep getBytes:buffer fromOffset:0.0 length:rep.size error:nil];
+//        diary.diaryVideoData = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
     }
     
     [[DiaryDataStore sharedStore]saveChanges];
