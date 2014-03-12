@@ -8,21 +8,19 @@
 
 #import "DiaryViewController.h"
 #import "DiaryData.h"
-#import <FacebookSDK/FacebookSDK.h>
 #import "KidlendarAppDelegate.h"
-#import "FacebookModel.h"
 #import <Social/Social.h>
-//#import <Parse/Parse.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "KidlendarAppDelegate.h"
 #import "PhotoLoader.h"
 #import "AFHTTPRequestOperation.h"
+#import "Dropbox.h"
+#import "DBFile.h"
 
-@interface DiaryViewController () <FBLoginViewDelegate,UIAlertViewDelegate>
+@interface DiaryViewController () <UIAlertViewDelegate,NSURLSessionTaskDelegate>
 {
     UIBarButtonItem *backupButton;
-    UIBarButtonItem *shareButton;
     MPMoviePlayerViewController *videoPlayer;
     UIAlertView *preparingAlertView;
 }
@@ -36,11 +34,16 @@
 @property (weak, nonatomic) IBOutlet UILabel *weekdayLabel;
 @property (weak, nonatomic) IBOutlet UIView *popUpBackgroundView;
 @property (weak, nonatomic) IBOutlet UIView *backupView;
-@property (weak, nonatomic) IBOutlet UIView *shareView;
 @property (weak, nonatomic) IBOutlet UIImageView *dropboxImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *twitterImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *weiboImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *facebookImageView;
+
+@property (nonatomic, strong) NSURLSessionUploadTask *uploadTask;
+@property (nonatomic, strong) NSURLSession *session;
+@property (weak, nonatomic) IBOutlet UIView *uploadView;
+@property (weak, nonatomic) IBOutlet UIProgressView *progress;
+
 
 @end
 
@@ -51,6 +54,14 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        // 1
+        NSURLSessionConfiguration *config = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+        
+        // 2
+        [config setHTTPAdditionalHeaders:@{@"Authorization": [Dropbox apiAuthorizationHeader]}];
+        
+        // 3
+        _session = [NSURLSession sessionWithConfiguration:config];
     }
     return self;
 }
@@ -102,18 +113,10 @@
                                                                                                  fromView:_monthLabel]];
     
     _diaryDetailTextView.textContainer.exclusionPaths = @[exclusionPathYear,exclusionPathDate,exclusionPathMonth];
-
-    
-    shareButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"share.png"] style:UIBarButtonItemStyleBordered
-                                                                                 target:self
-                                                                                 action:@selector(showShare)];
-    
-    self.navigationItem.rightBarButtonItems = @[shareButton];
     
     _backupView.layer.cornerRadius = 10.0f;
-    _shareView.layer.cornerRadius = 10.0f;
     
-    // Share
+    // Share Photo
     UITapGestureRecognizer *twitterTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showShareSheet:)];
     [_twitterImageView addGestureRecognizer:twitterTap];
     UITapGestureRecognizer *weiboTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showShareSheet:)];
@@ -121,6 +124,15 @@
     UITapGestureRecognizer *facebookTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showShareSheet:)];
     [_facebookImageView addGestureRecognizer:facebookTap];
     
+    UITapGestureRecognizer *dropboxTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(uploadToDropbox)];
+    [_dropboxImageView addGestureRecognizer:dropboxTap];
+    
+    if (_diaryData.diaryVideoPath) {
+        _twitterImageView.hidden = YES;
+        _weiboImageView.hidden = YES;
+    }
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showBackup)];
 }
 
 - (void)playVideo
@@ -136,37 +148,194 @@
 - (void)cancelAction
 {
     _popUpBackgroundView.hidden = YES;
-    _shareView.hidden = YES;
-    _backupView.hidden = YES;
     backupButton.enabled = YES;
-    shareButton.enabled = YES;
     self.navigationItem.hidesBackButton = NO;
 }
 
 - (void)showBackup
 {
     _popUpBackgroundView.hidden = NO;
-    _shareView.hidden = YES;
-    _backupView.hidden = NO;
     backupButton.enabled = NO;
-    shareButton.enabled = NO;
     self.navigationItem.hidesBackButton = YES;
 }
 
-- (void)showShare
+-(void)uploadToDropbox
 {
-    _popUpBackgroundView.hidden = NO;
-    _backupView.hidden = YES;
-    _shareView.hidden = NO;
-    backupButton.enabled = NO;
-    shareButton.enabled = NO;
-    self.navigationItem.hidesBackButton = YES;
+    _popUpBackgroundView.hidden = YES;
+    // 1. Check to see if have access token to dropbox
+    NSString *token = [[NSUserDefaults standardUserDefaults] valueForKey:accessToken];
+    if (token) {
+        [self uploadImage:_diaryData.diaryImageData];
+    } else {
+        [self getOAuthRequestToken];
+    }
 }
+
+// stop upload
+
+- (IBAction)cancelUpload:(id)sender
+{
+    if (_uploadTask.state == NSURLSessionTaskStateRunning) {
+        [_uploadTask cancel];
+    }
+}
+
+- (void)uploadImage:(NSData *)imageData
+{
+    // 1
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+    config.HTTPMaximumConnectionsPerHost = 1;
+    [config setHTTPAdditionalHeaders:@{@"Authorization": [Dropbox apiAuthorizationHeader]}];
+    
+    // 2
+    NSURLSession *upLoadSession = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil];
+    
+    // for now just create a random file name, dropbox will handle it if we overwrite a file and create a new name..
+    NSURL *url = [Dropbox createPhotoUploadURL];
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    [request setHTTPMethod:@"PUT"];
+    
+    // 3
+    self.uploadTask = [upLoadSession uploadTaskWithRequest:request fromData:imageData];
+    
+    // 4
+    self.uploadView.hidden = NO;
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    // 5
+    [_uploadTask resume];
+}
+
+- (void)downloadPhotos
+{
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    NSString *photoDir = [NSString stringWithFormat:@"https://api.dropbox.com/1/search/dropbox/%@/photos?query=.jpg",appFolder];
+    NSURL *url = [NSURL URLWithString:photoDir];
+    
+    [[_session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (!error) {
+            NSHTTPURLResponse *httpResp = (NSHTTPURLResponse*) response;
+            if (httpResp.statusCode == 200) {
+                NSError *jsonError;
+                NSArray *filesJSON = [NSJSONSerialization
+                                      JSONObjectWithData:data
+                                      options:NSJSONReadingAllowFragments
+                                      error:&jsonError];
+                
+                NSMutableArray *dbFiles = [[NSMutableArray alloc] init];
+                
+                if (!jsonError) {
+                    for (NSDictionary *fileMetadata in filesJSON) {
+                        DBFile *file = [[DBFile alloc]
+                                        initWithJSONData:fileMetadata];
+                        [dbFiles addObject:file];
+                    }
+                    
+                    [dbFiles sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+                        return [obj1 compare:obj2];
+                    }];
+                    
+//                    _photoThumbnails = dbFiles;
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+//                        [self.tableView reloadData];
+                    });
+                }
+            } else {
+                // HANDLE BAD RESPONSE //
+            }
+        } else {
+            // ALWAYS HANDLE ERRORS :-] //
+        }
+    }] resume];
+}
+
+#pragma mark - NSURLSessionTaskDelegate methods
+
+- (void)URLSession:(NSURLSession *)session
+              task:(NSURLSessionTask *)task
+   didSendBodyData:(int64_t)bytesSent
+    totalBytesSent:(int64_t)totalBytesSent
+totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_progress setProgress:
+         (double)totalBytesSent /
+         (double)totalBytesExpectedToSend animated:YES];
+    });
+}
+
+- (void)URLSession:(NSURLSession *)session
+              task:(NSURLSessionTask *)task
+didCompleteWithError:(NSError *)error
+{
+    // 1
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        _uploadView.hidden = YES;
+        backupButton.enabled = YES ;
+    });
+    
+    if (!error) {
+        // 2
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"Upload completed");
+
+        });
+    } else {
+        // Alert for error
+    }
+}
+
+# pragma mark - OAUTH 1.0a STEP 1
+-(void)getOAuthRequestToken
+{
+    // OAUTH Step 1. Get request token.
+    [Dropbox requestTokenWithCompletionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (!error) {
+            NSHTTPURLResponse *httpResp = (NSHTTPURLResponse*) response;
+            if (httpResp.statusCode == 200) {
+                
+                NSString *responseStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                
+                /*
+                 oauth_token The request token that was just authorized. The request token secret isn't sent back.
+                 If the user chooses not to authorize the application,
+                 they will get redirected to the oauth_callback URL with the additional URL query parameter not_approved=true.
+                 */
+                NSDictionary *oauthDict = [Dropbox dictionaryFromOAuthResponseString:responseStr];
+                // save the REQUEST token and secret to use for normal api calls
+                [[NSUserDefaults standardUserDefaults] setObject:oauthDict[oauthTokenKey] forKey:requestToken];
+                [[NSUserDefaults standardUserDefaults] setObject:oauthDict[oauthTokenKeySecret] forKey:requestTokenSecret];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                
+                
+                NSString *authorizationURLWithParams = [NSString stringWithFormat:@"https://www.dropbox.com/1/oauth/authorize?oauth_token=%@&oauth_callback=dropbox://userauthorization",oauthDict[oauthTokenKey]];
+                
+                // escape codes
+                NSString *escapedURL = [authorizationURLWithParams stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                
+                // opens to user auth page in safari
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:escapedURL]];
+                
+            } else {
+                // HANDLE BAD RESPONSE //
+                NSLog(@"unexpected response getting token %@",[NSHTTPURLResponse localizedStringForStatusCode:httpResp.statusCode]);
+            }
+        } else {
+            // ALWAYS HANDLE ERRORS :-] //
+        }
+    }];
+}
+
+
+#pragma mark - Social share
 
 - (void)showShareSheet:(UITapGestureRecognizer *)sender
 {
     [self cancelAction];
-    KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
     NSString *serviceType;
     switch (sender.view.tag) {
@@ -183,147 +352,153 @@
             break;
     }
     
+    if (serviceType==SLServiceTypeFacebook && _diaryData.diaryVideoPath) {
+        [self uploadVideoToFacebook];
+    } else {
+        //  Create an instance of the share Sheet
+        SLComposeViewController *shareSheet = [SLComposeViewController
+                                               composeViewControllerForServiceType:
+                                               serviceType]; // Service Type 有 Facebook/Twitter/微博 可以選
+        
+        shareSheet.completionHandler = ^(SLComposeViewControllerResult result) {
+            switch(result) {
+                    //  This means the user cancelled without sending the Tweet
+                case SLComposeViewControllerResultCancelled:
+                    break;
+                    //  This means the user hit 'Send'
+                case SLComposeViewControllerResultDone:
+                    break;
+            }
+        };
+        
+        //  Set the initial body of the share sheet
+        [shareSheet setInitialText:_diaryData.diaryText];
+        
+        //  分享照片
+        if (![shareSheet addImage:_diaryData.diaryImage]) {
+            NSLog(@"Unable to add the image!");
+        }
+        
+        //  Presents the share Sheet to the user
+        [self presentViewController:shareSheet animated:NO completion:nil];
+    }
+}
+
+#pragma mark - Video upload to Facebook
+
+- (void)uploadVideoToFacebook
+{
+    KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+
     if (appDelegate.facebookAccount)
     {
-        if (_diaryData.diaryVideoPath)
-            [self uploadToFacebookWithMediaType:@"Video"];
-        else
-            [self uploadToFacebookWithMediaType:@"Photo"];
+        [self proceedVideoUploadToFB];
     }
     else
     {
         UIAlertView *loginAlert = [[UIAlertView alloc]initWithTitle:@"Please login your Facebook account"
-                                  message:@"Click OK button to proceed login"
-                                 delegate:self
-                        cancelButtonTitle:@"Cancel"
-                        otherButtonTitles:@"OK", nil];
+                                                            message:@"Click OK button to proceed login"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"Cancel"
+                                                  otherButtonTitles:@"OK", nil];
         
         [loginAlert show];
     }
-}
-
-- (void)uploadToFacebookWithMediaType:(NSString *)type
-{
-    __block SLRequest *facebookRequest;
-    
-    NSLog(@"message %@",_diaryData.diaryText);
-
-    if ([type isEqualToString:@"Photo"]) {
-        NSData *mediaData = _diaryData.diaryImageData;
-        NSDictionary *params = @{@"message": _diaryData.diaryText};
-        facebookRequest = [SLRequest requestForServiceType:SLServiceTypeFacebook
-                                                        requestMethod:SLRequestMethodPOST
-                                                                  URL:[NSURL URLWithString:@"https://graph.facebook.com/me/photos"]
-                                                           parameters:params];
-        [facebookRequest addMultipartData:mediaData
-                                 withName:@"picture"
-                                     type:@"image/png"
-                                 filename:nil];
-        
-        [self executeFBrequest:facebookRequest];
-
-    }
-    else
-    {
-        __block NSData *data;
-        NSDictionary *params = @{@"title": _diaryData.subject,
-                                 @"description": _diaryData.diaryText};
-        
-        [[PhotoLoader defaultAssetsLibrary] assetForURL:[NSURL URLWithString:_diaryData.diaryVideoPath] resultBlock:^(ALAsset *asset) {
-            
-            dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-            dispatch_group_t group = dispatch_group_create();
-
-            dispatch_group_async(group, queue, ^{
-                ALAssetRepresentation *rep = [asset defaultRepresentation];
-                Byte *buffer = (Byte*)malloc(rep.size);
-                NSUInteger buffered = [rep getBytes:buffer fromOffset:0.0 length:rep.size error:nil];
-                data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
-            });
-            
-            dispatch_group_notify(group, queue, ^{
-                
-                facebookRequest = [SLRequest requestForServiceType:SLServiceTypeFacebook
-                                                     requestMethod:SLRequestMethodPOST
-                                                               URL:[NSURL URLWithString:@"https://graph.facebook.com/me/videos"]
-                                                        parameters:params];
-                
-                [facebookRequest addMultipartData:data
-                                         withName:@"source"
-                                             type:@"video/quicktime"
-                                         filename:@"test1.mov"];
-                
-                [self executeFBrequest:facebookRequest];
-
-            });
-            
-        } failureBlock:^(NSError *error) {
-            NSLog(@"Converting error %@",error);
-        }];
-    }
-}
-
--(void)executeFBrequest:(SLRequest *)facebookRequest
-{
-    NSLog(@"executing");
-    
-    KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-
-    
-    facebookRequest.account = appDelegate.facebookAccount;
-
-    
-    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:facebookRequest.preparedURLRequest];
-    [operation setUploadProgressBlock:^(NSUInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite) {
-        NSLog(@"%ld bytes out of %ld sent.", totalBytesWritten, totalBytesExpectedToWrite);
-        float progress = totalBytesWritten/(float)totalBytesExpectedToWrite;
-        NSLog(@"Progress :%f",progress);
-    }];
-    
-    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"Facebook upload success");
-
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Facebook upload error %@",error);
-    }];
-    
-    [operation start];
-    
-    
-    [facebookRequest performRequestWithHandler:^(NSData* responseData, NSHTTPURLResponse* urlResponse, NSError* error) {
-        if (error) {
-            // 4
-            KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-            [appDelegate presentErrorWithMessage:[NSString
-                                                  stringWithFormat:@"There was an error uploading media. %@",
-                                                  [error localizedDescription]]];
-        }
-        else
-        {
-            // 5
-            NSError *jsonError;
-            NSDictionary *responseJSON = [NSJSONSerialization
-                                          JSONObjectWithData:responseData
-                                          options:NSJSONReadingAllowFragments
-                                          error:&jsonError];
-            if (jsonError) {
-                // 6
-                KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-                [appDelegate presentErrorWithMessage:[NSString
-                                                      stringWithFormat:@"There was an error uploading media. %@",
-                                                      [error localizedDescription]]];
-            } else {
-                NSLog(@"Response data %@",responseJSON);
-            }
-        }
-    }];
-
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     [appDelegate getFacebookAccount];
+}
+
+- (void)proceedVideoUploadToFB
+{
+    __block SLRequest *facebookRequest;
+    __block NSData *data;
+    NSDictionary *params = @{@"title": _diaryData.subject,
+                             @"description": _diaryData.diaryText};
+    
+    [[PhotoLoader defaultAssetsLibrary] assetForURL:[NSURL URLWithString:_diaryData.diaryVideoPath] resultBlock:^(ALAsset *asset) {
+        
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        dispatch_group_t group = dispatch_group_create();
+
+        dispatch_group_async(group, queue, ^{
+            ALAssetRepresentation *rep = [asset defaultRepresentation];
+            Byte *buffer = (Byte*)malloc(rep.size);
+            NSUInteger buffered = [rep getBytes:buffer fromOffset:0.0 length:rep.size error:nil];
+            data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
+        });
+        
+        dispatch_group_notify(group, queue, ^{
+            
+            facebookRequest = [SLRequest requestForServiceType:SLServiceTypeFacebook
+                                                 requestMethod:SLRequestMethodPOST
+                                                           URL:[NSURL URLWithString:@"https://graph.facebook.com/me/videos"]
+                                                    parameters:params];
+            
+            [facebookRequest addMultipartData:data
+                                     withName:@"source"
+                                         type:@"video/quicktime"
+                                     filename:@"test1.mov"];
+            
+            KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+            
+            
+            facebookRequest.account = appDelegate.facebookAccount;
+            
+            
+            AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:facebookRequest.preparedURLRequest];
+            [operation setUploadProgressBlock:^(NSUInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite) {
+                NSLog(@"%ld bytes out of %ld sent.", totalBytesWritten, totalBytesExpectedToWrite);
+                float progress = totalBytesWritten/(float)totalBytesExpectedToWrite;
+                NSLog(@"Progress :%f",progress);
+            }];
+            
+            [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+                NSLog(@"Facebook upload success");
+                
+            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                NSLog(@"Facebook upload error %@",error);
+            }];
+            
+            [operation start];
+            
+            
+            [facebookRequest performRequestWithHandler:^(NSData* responseData, NSHTTPURLResponse* urlResponse, NSError* error) {
+                if (error) {
+                    // 4
+                    KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+                    [appDelegate presentErrorWithMessage:[NSString
+                                                          stringWithFormat:@"There was an error uploading media. %@",
+                                                          [error localizedDescription]]];
+                }
+                else
+                {
+                    // 5
+                    NSError *jsonError;
+                    NSDictionary *responseJSON = [NSJSONSerialization
+                                                  JSONObjectWithData:responseData
+                                                  options:NSJSONReadingAllowFragments
+                                                  error:&jsonError];
+                    if (jsonError) {
+                        // 6
+                        KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+                        [appDelegate presentErrorWithMessage:[NSString
+                                                              stringWithFormat:@"There was an error uploading media. %@",
+                                                              [error localizedDescription]]];
+                    } else {
+                        NSLog(@"Response data %@",responseJSON);
+                    }
+                }
+            }];
+
+        });
+        
+    } failureBlock:^(NSError *error) {
+        NSLog(@"Converting error %@",error);
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated

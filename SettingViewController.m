@@ -10,8 +10,6 @@
 #import "CalendarStore.h"
 #import <EventKit/EventKit.h>
 #import "SwitchCell.h"
-#import <Dropbox/Dropbox.h>
-#import "FacebookModel.h"
 
 @interface SettingViewController () <UIPickerViewDataSource,UIPickerViewDelegate>
 {

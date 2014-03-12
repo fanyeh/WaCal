@@ -18,15 +18,11 @@
 		4C12B2F718A1FDC40046C5EC /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2F618A1FDC40046C5EC /* libz.dylib */; };
 		4C12B2F918A1FDE60046C5EC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2F818A1FDE60046C5EC /* SystemConfiguration.framework */; };
 		4C12B2FE18A200790046C5EC /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2FD18A200790046C5EC /* libc++.dylib */; };
-		4C1E40A618B459E500A273A1 /* Dropbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1E40A518B459E500A273A1 /* Dropbox.framework */; };
-		4C1E40A818B459F700A273A1 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1E40A718B459F700A273A1 /* FacebookSDK.framework */; };
 		4C1E40BE18B4619B00A273A1 /* libGPUImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1E40B918B4616300A273A1 /* libGPUImage.a */; };
-		4C23963918B3295600BB87E7 /* FacebookModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23963818B3295600BB87E7 /* FacebookModel.m */; };
 		4C23964618B3B5E800BB87E7 /* TempDiaryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23964518B3B5E800BB87E7 /* TempDiaryData.m */; };
 		4C2E83BD1890BB450051215F /* CalendarStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2E83BC1890BB450051215F /* CalendarStore.m */; };
 		4C315C7B18AB298800A2A363 /* PhotoLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C315C7A18AB298800A2A363 /* PhotoLoader.m */; };
 		4C3ECBBD18BC3C75002CD2FB /* WeekdayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ECBBC18BC3C75002CD2FB /* WeekdayView.m */; };
-		4C3EDA6B18C0CAB400FD7235 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3EDA6A18C0CAB400FD7235 /* Parse.framework */; };
 		4C3EDA6D18C0CB0000FD7235 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3EDA6C18C0CB0000FD7235 /* AudioToolbox.framework */; };
 		4C3EDA6F18C0CB1D00FD7235 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3EDA6E18C0CB1D00FD7235 /* MobileCoreServices.framework */; };
 		4C3EDA7118C0CB3B00FD7235 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3EDA7018C0CB3B00FD7235 /* StoreKit.framework */; };
@@ -83,6 +79,8 @@
 		4C6C49C5186DDDDF0042EB61 /* DiaryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C6C49C3186DDDDF0042EB61 /* DiaryViewController.xib */; };
 		4C73E02018BFA5F3007ECCEC /* EventReviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C73E01E18BFA5F3007ECCEC /* EventReviewController.m */; };
 		4C73E02118BFA5F3007ECCEC /* EventReviewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C73E01F18BFA5F3007ECCEC /* EventReviewController.xib */; };
+		4C7AC34618D0116C00CC92A5 /* Dropbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7AC34218D0116C00CC92A5 /* Dropbox.m */; };
+		4C7AC34718D0116C00CC92A5 /* DBFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7AC34418D0116C00CC92A5 /* DBFile.m */; };
 		4C84A57318BF7278005A30AB /* ReminderButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C84A57218BF7278005A30AB /* ReminderButton.m */; };
 		4C88B387188E56E100F4F47E /* DiaryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88B386188E56E100F4F47E /* DiaryCell.m */; };
 		4C91918718AF3A4900ED4695 /* ImageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C91918618AF3A4900ED4695 /* ImageStore.m */; };
@@ -180,11 +178,7 @@
 		4C12B2F618A1FDC40046C5EC /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		4C12B2F818A1FDE60046C5EC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		4C12B2FD18A200790046C5EC /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
-		4C1E40A518B459E500A273A1 /* Dropbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Dropbox.framework; sourceTree = "<group>"; };
-		4C1E40A718B459F700A273A1 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		4C1E40B218B4616300A273A1 /* GPUImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPUImage.xcodeproj; path = "../../Downloads/GPUImage-master-2/framework/GPUImage.xcodeproj"; sourceTree = "<group>"; };
-		4C23963718B3295600BB87E7 /* FacebookModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookModel.h; sourceTree = "<group>"; };
-		4C23963818B3295600BB87E7 /* FacebookModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FacebookModel.m; sourceTree = "<group>"; };
 		4C23964418B3B5E800BB87E7 /* TempDiaryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TempDiaryData.h; sourceTree = "<group>"; };
 		4C23964518B3B5E800BB87E7 /* TempDiaryData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TempDiaryData.m; sourceTree = "<group>"; };
 		4C2E83BB1890BB450051215F /* CalendarStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarStore.h; sourceTree = "<group>"; };
@@ -193,7 +187,6 @@
 		4C315C7A18AB298800A2A363 /* PhotoLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoLoader.m; sourceTree = "<group>"; };
 		4C3ECBBB18BC3C75002CD2FB /* WeekdayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeekdayView.h; sourceTree = "<group>"; };
 		4C3ECBBC18BC3C75002CD2FB /* WeekdayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeekdayView.m; sourceTree = "<group>"; };
-		4C3EDA6A18C0CAB400FD7235 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		4C3EDA6C18C0CB0000FD7235 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		4C3EDA6E18C0CB1D00FD7235 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		4C3EDA7018C0CB3B00FD7235 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
@@ -274,6 +267,10 @@
 		4C73E01D18BFA5F3007ECCEC /* EventReviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventReviewController.h; path = ../EventReviewController.h; sourceTree = "<group>"; };
 		4C73E01E18BFA5F3007ECCEC /* EventReviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EventReviewController.m; path = ../EventReviewController.m; sourceTree = "<group>"; };
 		4C73E01F18BFA5F3007ECCEC /* EventReviewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EventReviewController.xib; path = ../EventReviewController.xib; sourceTree = "<group>"; };
+		4C7AC34218D0116C00CC92A5 /* Dropbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dropbox.m; sourceTree = "<group>"; };
+		4C7AC34318D0116C00CC92A5 /* DBFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBFile.h; sourceTree = "<group>"; };
+		4C7AC34418D0116C00CC92A5 /* DBFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBFile.m; sourceTree = "<group>"; };
+		4C7AC34518D0116C00CC92A5 /* Dropbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dropbox.h; sourceTree = "<group>"; };
 		4C84A57118BF7278005A30AB /* ReminderButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReminderButton.h; sourceTree = "<group>"; };
 		4C84A57218BF7278005A30AB /* ReminderButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReminderButton.m; sourceTree = "<group>"; };
 		4C88B385188E56E100F4F47E /* DiaryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryCell.h; sourceTree = "<group>"; };
@@ -366,9 +363,7 @@
 				4CFB6DC8186A6BAC001C8F05 /* CoreLocation.framework in Frameworks */,
 				4CD2B93218A4CF69002DA9E4 /* CFNetwork.framework in Frameworks */,
 				4C12B2F118A1FDA20046C5EC /* GLKit.framework in Frameworks */,
-				4C1E40A618B459E500A273A1 /* Dropbox.framework in Frameworks */,
 				4CB3DD7C18521DC400673478 /* Foundation.framework in Frameworks */,
-				4C1E40A818B459F700A273A1 /* FacebookSDK.framework in Frameworks */,
 				4C12B2ED18A1FC280046C5EC /* GoogleMaps.framework in Frameworks */,
 				4C12B2F318A1FDAA0046C5EC /* ImageIO.framework in Frameworks */,
 				4C1E40BE18B4619B00A273A1 /* libGPUImage.a in Frameworks */,
@@ -377,7 +372,6 @@
 				4C12B2F518A1FDBA0046C5EC /* libicucore.dylib in Frameworks */,
 				4C3EDA6F18C0CB1D00FD7235 /* MobileCoreServices.framework in Frameworks */,
 				4C48FFAD188D656F0038AE6F /* OpenGLES.framework in Frameworks */,
-				4C3EDA6B18C0CAB400FD7235 /* Parse.framework in Frameworks */,
 				4C5420F01857FC9D006D2DE4 /* QuartzCore.framework in Frameworks */,
 				4CD2B92318A492E6002DA9E4 /* Security.framework in Frameworks */,
 				4CF5151918C2FCC70050E330 /* Social.framework in Frameworks */,
@@ -568,14 +562,16 @@
 		4C91918818AF3D3100ED4695 /* Other Model */ = {
 			isa = PBXGroup;
 			children = (
+				4C7AC34218D0116C00CC92A5 /* Dropbox.m */,
+				4C7AC34518D0116C00CC92A5 /* Dropbox.h */,
+				4C7AC34318D0116C00CC92A5 /* DBFile.h */,
+				4C7AC34418D0116C00CC92A5 /* DBFile.m */,
 				4CEEB9FC18B47BAF00C7FA80 /* CloudData.h */,
 				4CEEB9FD18B47BAF00C7FA80 /* CloudData.m */,
 				4C91918518AF3A4900ED4695 /* ImageStore.h */,
 				4C91918618AF3A4900ED4695 /* ImageStore.m */,
 				4C315C7918AB298800A2A363 /* PhotoLoader.h */,
 				4C315C7A18AB298800A2A363 /* PhotoLoader.m */,
-				4C23963718B3295600BB87E7 /* FacebookModel.h */,
-				4C23963818B3295600BB87E7 /* FacebookModel.m */,
 			);
 			name = "Other Model";
 			sourceTree = "<group>";
@@ -643,12 +639,9 @@
 				4C3EDA7018C0CB3B00FD7235 /* StoreKit.framework */,
 				4C3EDA6E18C0CB1D00FD7235 /* MobileCoreServices.framework */,
 				4C3EDA6C18C0CB0000FD7235 /* AudioToolbox.framework */,
-				4C1E40A718B459F700A273A1 /* FacebookSDK.framework */,
-				4C1E40A518B459E500A273A1 /* Dropbox.framework */,
 				4CD2B93118A4CF69002DA9E4 /* CFNetwork.framework */,
 				4CD2B92218A492E6002DA9E4 /* Security.framework */,
 				4C12B2FD18A200790046C5EC /* libc++.dylib */,
-				4C3EDA6A18C0CAB400FD7235 /* Parse.framework */,
 				4C12B2F818A1FDE60046C5EC /* SystemConfiguration.framework */,
 				4C12B2F618A1FDC40046C5EC /* libz.dylib */,
 				4C12B2F418A1FDBA0046C5EC /* libicucore.dylib */,
@@ -913,6 +906,7 @@
 				4CEEB9F818B4656100C7FA80 /* DiaryData.m in Sources */,
 				4C5C8FFC18A8730100B40F7E /* DiaryEntryViewController.m in Sources */,
 				4C417E7618714A4C000878FC /* DiaryDataStore.m in Sources */,
+				4C7AC34718D0116C00CC92A5 /* DBFile.m in Sources */,
 				4C9214CB185AAA29009A3090 /* DateView.m in Sources */,
 				4C67BAD718B6FBC300452539 /* SwitchCell.m in Sources */,
 				4CFB086F187E6BFB00456D5D /* MonthModel.m in Sources */,
@@ -933,7 +927,6 @@
 				4C23964618B3B5E800BB87E7 /* TempDiaryData.m in Sources */,
 				4CFFD584189775270070C33C /* DiaryPhotoViewController.m in Sources */,
 				4C61326C18BF16990025FD00 /* EventCreateController.m in Sources */,
-				4C23963918B3295600BB87E7 /* FacebookModel.m in Sources */,
 				4CBA4BBB18CD9BFC00B380AB /* PhotoAlbumTableCell.m in Sources */,
 				4C51761D186FF309002F6F6D /* KidlendarModel.xcdatamodeld in Sources */,
 				4C5B01F618ACBD7F0030FCCC /* DiaryCreateViewController.m in Sources */,
@@ -947,6 +940,7 @@
 				4C4F992418CF5E51007D3746 /* AFURLSessionManager.m in Sources */,
 				4C4F991C18CF5E51007D3746 /* AFHTTPRequestOperation.m in Sources */,
 				4CA2506C1869377000AEA94E /* UIImage+Resize.m in Sources */,
+				4C7AC34618D0116C00CC92A5 /* Dropbox.m in Sources */,
 				4C91918718AF3A4900ED4695 /* ImageStore.m in Sources */,
 				4C92155A185AD39E009A3090 /* MonthCalendarView.m in Sources */,
 				4C84A57318BF7278005A30AB /* ReminderButton.m in Sources */,

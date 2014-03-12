@@ -11,10 +11,9 @@
 #import "DiaryTableViewController.h"
 #import "CalendarStore.h"
 #import <CoreData/CoreData.h>
-#import <FacebookSDK/FacebookSDK.h>
 #import "SettingViewController.h"
-#import <Dropbox/Dropbox.h>
 #import "DiaryCreateViewController.h"
+#import "Dropbox.h"
 
 NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGranted";
 NSString *const AccountTwitterAccountAccessGranted = @"TwitterAccountAccessGranted";
@@ -36,9 +35,6 @@ NSString *const AccountTwitterAccountAccessGranted = @"TwitterAccountAccessGrant
     
     self.accountStore = [[ACAccountStore alloc] init];
 
-    DBAccountManager *accountManager = [[DBAccountManager alloc] initWithAppKey:@"hsvuk547mb46ady" secret:@"z0bw1iew9vssq6r"];
-    [DBAccountManager setSharedManager:accountManager];
-    
     // Init Calendar store
     [CalendarStore sharedStore];
     
@@ -245,20 +241,13 @@ NSString *const AccountTwitterAccountAccessGranted = @"TwitterAccountAccessGrant
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    [FBSession.activeSession handleDidBecomeActive];
-    
-//    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-//    if (currentInstallation.badge != 0) {
-//        currentInstallation.badge = 0;
-//        [currentInstallation saveEventually];
-//    }
+
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     [self saveContext];
-    [FBSession.activeSession close];
 }
 
 - (void)saveContext
@@ -348,139 +337,53 @@ NSString *const AccountTwitterAccountAccessGranted = @"TwitterAccountAccessGrant
     return _persistentStoreCoordinator;
 }
 
-#pragma mark - Facebook Session
-
-/*
- * If we have a valid session at the time of openURL call, we handle
- * Facebook transitions by passing the url argument to handleOpenURL
- */
-// Facebook
 - (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation {
-    
-    if ([sourceApplication isEqual: @"com.facebook.Facebook"]) {
-     // Call FBAppCall's handleOpenURL:sourceApplication to handle Facebook app responses
-        return [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
-    }
-    
-    if ([sourceApplication isEqual: @"com.getdropbox.Dropbox"]) {
-        DBAccount *account = [[DBAccountManager sharedManager] handleOpenURL:url];
-        if (account) {
-            NSLog(@"App linked successfully!");
-            
-//            // Add user to Parse channel use DB account ID
-//            PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-//            NSLog(@"channel %@",account.userId);
-//            [currentInstallation addUniqueObject:[NSString stringWithFormat:@"dropbox-%@",account.userId] forKey:@"channels"];
-            
-            // Set connection status in user default to YES
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"Dropbox"];
-            return YES;
-        }
-        return NO;
+    if ([[url scheme] isEqualToString:@"dropbox"]) {
+        [self exchangeRequestTokenForAccessToken];
     }
     return NO;
 }
 
-//- (void)closeSession {
-//    [FBSession.activeSession closeAndClearTokenInformation];
-//}
-#pragma mark - Facebook
-// This method will handle ALL the session state changes in the app
-- (void)sessionStateChanged:(FBSession *)session state:(FBSessionState) state error:(NSError *)error
+- (void)exchangeRequestTokenForAccessToken
 {
-    // If the session was opened successfully
-    if (!error && state == FBSessionStateOpen){
-        NSLog(@"Session opened");
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"Facebook"];
-        // Show the user the logged-in UI
-        [self userLoggedIn];
-        return;
-    }
-    if (state == FBSessionStateClosed || state == FBSessionStateClosedLoginFailed){
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"Facebook"];
-        // If the session is closed
-        NSLog(@"Session closed");
-        // Show the user the logged-out UI
-        [self userLoggedOut];
-    }
-    
-    // Handle errors
-    if (error){
-        NSLog(@"Error");
-        NSString *alertText;
-        NSString *alertTitle;
-        // If the error requires people using an app to make an action outside of the app in order to recover
-        if ([FBErrorUtility shouldNotifyUserForError:error] == YES){
-            alertTitle = @"Something went wrong";
-            alertText = [FBErrorUtility userMessageForError:error];
-            [self showMessage:alertText withTitle:alertTitle];
-        } else {
-            
-            // If the user cancelled login, do nothing
-            if ([FBErrorUtility errorCategoryForError:error] == FBErrorCategoryUserCancelled) {
-                NSLog(@"User cancelled login");
+    // OAUTH Step 3 - exchange request token for user access token
+    [Dropbox exchangeTokenForUserAccessTokenURLWithCompletionHandler:^(NSData *data,NSURLResponse *response,NSError *error) {
+        if (!error) {
+            NSHTTPURLResponse *httpResp = (NSHTTPURLResponse*) response;
+            if (httpResp.statusCode == 200) {
+                NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                NSDictionary *accessTokenDict = [Dropbox dictionaryFromOAuthResponseString:response];
                 
-                // Handle session closures that happen outside of the app
-            } else if ([FBErrorUtility errorCategoryForError:error] == FBErrorCategoryAuthenticationReopenSession){
-                alertTitle = @"Session Error";
-                alertText = @"Your current session is no longer valid. Please log in again.";
-                [self showMessage:alertText withTitle:alertTitle];
+                [[NSUserDefaults standardUserDefaults] setObject:accessTokenDict[oauthTokenKey] forKey:accessToken];
+                [[NSUserDefaults standardUserDefaults] setObject:accessTokenDict[oauthTokenKeySecret] forKey:accessTokenSecret];
+                [[NSUserDefaults standardUserDefaults] synchronize];
                 
-                // For simplicity, here we just show a generic message for all other errors
-                // You can learn how to handle other errors using our guide: https://developers.facebook.com/docs/ios/errors
+                NSLog(@"Loggin drop box succeed");
+//                // now load main part of application
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    
+//                    NSString *segueId = @"TabBar";
+//                    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+//                    UITabBarController *initViewController = [storyboard instantiateViewControllerWithIdentifier:segueId];
+//                    
+//                    UINavigationController *nav = (UINavigationController *) self.window.rootViewController;
+//                    nav.navigationBar.hidden = YES;
+//                    [nav pushViewController:initViewController animated:NO];
+//                });
+                
             } else {
-                //Get more error information from the error
-                NSDictionary *errorInformation = [[[error.userInfo objectForKey:@"com.facebook.sdk:ParsedJSONResponseKey"] objectForKey:@"body"] objectForKey:@"error"];
-                
-                // Show the user an error message
-                alertTitle = @"Something went wrong";
-                alertText = [NSString stringWithFormat:@"Please retry. \n\n If the problem persists contact us and mention this error code: %@", [errorInformation objectForKey:@"message"]];
-                [self showMessage:alertText withTitle:alertTitle];
+                // HANDLE BAD RESPONSE //
+                NSLog(@"exchange request for access token unexpected response %@",
+                      [NSHTTPURLResponse localizedStringForStatusCode:httpResp.statusCode]);
             }
+        } else {
+            // ALWAYS HANDLE ERRORS :-] //
         }
-        // Clear this token
-        [FBSession.activeSession closeAndClearTokenInformation];
-        // Show the user the logged-out UI
-        [self userLoggedOut];
-    }
+    }];
 }
-
-// Show the user the logged-out UI
-- (void)userLoggedOut
-{
-    // Set the button title as "Log in with Facebook"
-//    UIButton *loginButton = [self.customLoginViewController loginButton];
-//    [loginButton setTitle:@"Log in with Facebook" forState:UIControlStateNormal];
-    
-    // Confirm logout message
-    [self showMessage:@"You're now logged out" withTitle:@""];
-}
-
-// Show the user the logged-in UI
-- (void)userLoggedIn
-{
-    // Set the button title as "Log out"
-//    UIButton *loginButton = self.customLoginViewController.loginButton;
-//    [loginButton setTitle:@"Log out" forState:UIControlStateNormal];
-    
-    // Welcome message
-    [self showMessage:@"You're now logged in" withTitle:@"Welcome!"];
-    
-}
-
-// Show an alert message
-- (void)showMessage:(NSString *)text withTitle:(NSString *)title
-{
-    [[[UIAlertView alloc] initWithTitle:title
-                                message:text
-                               delegate:self
-                      cancelButtonTitle:@"OK!"
-                      otherButtonTitles:nil] show];
-}
-
 
 #pragma mark - Application's Documents directory
 

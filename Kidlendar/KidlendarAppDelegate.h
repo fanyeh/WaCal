@@ -7,13 +7,9 @@
 //
 
 extern NSString *const AccountFacebookAccountAccessGranted;
-extern NSString *const AccountTwitterAccountAccessGranted;
-
-
 
 #import <UIKit/UIKit.h>
 #import <EventKit/EventKit.h>
-#import <FacebookSDK/FacebookSDK.h>
 @import Accounts;
 @import Social;
 
@@ -27,13 +23,9 @@ extern NSString *const AccountTwitterAccountAccessGranted;
 @property (strong,nonatomic) EKEventStore *eventStore;
 @property (strong, nonatomic) ACAccountStore *accountStore;
 @property (strong, nonatomic) ACAccount *facebookAccount;
-@property (strong, nonatomic) ACAccount *twitterAccount;
-- (void)getFacebookAccount;
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
-- (void)sessionStateChanged:(FBSession *)session state:(FBSessionState) state error:(NSError *)error;
-- (void)userLoggedIn;
-- (void)userLoggedOut;
+- (void)getFacebookAccount;
 
 - (void)presentErrorWithMessage:(NSString *)errorMessage;
 
