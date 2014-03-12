@@ -19,7 +19,7 @@
 #import "PhotoLoader.h"
 #import "AFHTTPRequestOperation.h"
 
-@interface DiaryViewController () <FBLoginViewDelegate>
+@interface DiaryViewController () <FBLoginViewDelegate,UIAlertViewDelegate>
 {
     UIBarButtonItem *backupButton;
     UIBarButtonItem *shareButton;
@@ -192,7 +192,13 @@
     }
     else
     {
-        [appDelegate getFacebookAccount];
+        UIAlertView *loginAlert = [[UIAlertView alloc]initWithTitle:@"Please login your Facebook account"
+                                  message:@"Click OK button to proceed login"
+                                 delegate:self
+                        cancelButtonTitle:@"Cancel"
+                        otherButtonTitles:@"OK", nil];
+        
+        [loginAlert show];
     }
 }
 
@@ -229,7 +235,6 @@
             dispatch_group_t group = dispatch_group_create();
 
             dispatch_group_async(group, queue, ^{
-                NSLog(@"Strat converting");
                 ALAssetRepresentation *rep = [asset defaultRepresentation];
                 Byte *buffer = (Byte*)malloc(rep.size);
                 NSUInteger buffered = [rep getBytes:buffer fromOffset:0.0 length:rep.size error:nil];
@@ -237,7 +242,6 @@
             });
             
             dispatch_group_notify(group, queue, ^{
-                NSLog(@"Strat uploading");
                 
                 facebookRequest = [SLRequest requestForServiceType:SLServiceTypeFacebook
                                                      requestMethod:SLRequestMethodPOST
@@ -314,6 +318,12 @@
         }
     }];
 
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    [appDelegate getFacebookAccount];
 }
 
 - (void)viewWillAppear:(BOOL)animated
