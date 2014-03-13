@@ -47,6 +47,8 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     NSDictionary *selectedLocation;
     
     EKCalendar *selectedCalendar;
+    CGRect saveButtonFrame;
+    CGRect saveButtonFrameMove;
 
 }
 
@@ -63,8 +65,6 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 @property (weak, nonatomic) IBOutlet UILabel *endDateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *endTimeLabel;
 
-@property (weak, nonatomic) IBOutlet UIView *reminderView;
-@property (weak, nonatomic) IBOutlet UIView *repeatView;
 @property (weak, nonatomic) IBOutlet UIView *eventDetailView;
 
 @property (weak, nonatomic) IBOutlet UIView *maskView;
@@ -80,9 +80,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 @property (weak, nonatomic) IBOutlet UIButton *trashButton;
 @property (weak, nonatomic) IBOutlet UIView *mapMask;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
-@property (weak, nonatomic) IBOutlet UIView *dotView;
 
-@property (weak, nonatomic) IBOutlet UIView *mapLocationView;
 @property (weak, nonatomic) IBOutlet UILabel *mapLocationName;
 @property (weak, nonatomic) IBOutlet UILabel *destinationDistance;
 @property (weak, nonatomic) IBOutlet UITextView *mapLocationAddress;
@@ -90,6 +88,11 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 
 @property (weak, nonatomic) IBOutlet UILabel *calendarName;
 @property (weak, nonatomic) IBOutlet UITextField *calendarNameField;
+
+@property (weak, nonatomic) IBOutlet UILabel *repeatLabel;
+@property (weak, nonatomic) IBOutlet UILabel *reminderLabel;
+@property (weak, nonatomic) IBOutlet UILabel *reminderValueLabel;
+@property (weak, nonatomic) IBOutlet UILabel *repeatValueLabel;
 
 @end
 
@@ -117,15 +120,8 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     self.navigationItem.title = @"Event";
     
     // Main view
-    _dotView.layer.cornerRadius = _dotView.frame.size.width/2;
-    _trashButton.layer.cornerRadius = 5.0f;
-    _saveButton.layer.cornerRadius = 5.0f;
-    
-    // Event detail view
-    _eventDetailView.layer.cornerRadius = 5.0f;
-    _eventDetailView.layer.shadowColor = [[UIColor blackColor]CGColor];
-    _eventDetailView.layer.shadowOpacity = 0.5f;
-    _eventDetailView.layer.shadowOffset = CGSizeMake(2 , 2);
+    saveButtonFrame = _saveButton.frame;
+    saveButtonFrameMove = CGRectOffset(_saveButton.frame, 0, 215);
     
     // Calendar
     _calendarName.text = [[[CalendarStore sharedStore]calendar]title];
@@ -137,9 +133,8 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     _calendarNameField.inputView = calendarPicker;
     
     // Reminder view
-    _reminderView.layer.cornerRadius = 5.0f;
     UITapGestureRecognizer *reminderTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showReminder)];
-    [_reminderView addGestureRecognizer:reminderTap];
+    [_reminderLabel addGestureRecognizer:reminderTap];
     
     // Reminder selection view
     reminder = [[ReminderView alloc]init];
@@ -150,9 +145,8 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     [self.view addSubview:reminder];
     
     // Repeat view
-    _repeatView.layer.cornerRadius = 5.0f;
     UITapGestureRecognizer *repeatTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showRepeat)];
-    [_repeatView addGestureRecognizer:repeatTap];
+    [_repeatLabel addGestureRecognizer:repeatTap];
     
     // Repeat selection view
     repeat = [[RepeatView alloc]init];
@@ -165,7 +159,6 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     hideFrame = reminder.frame;
     
     // Set up All Day button
-    _alldayView.layer.cornerRadius = 5.0f;
     UITapGestureRecognizer *alldayTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(alldayAction)];
     [_alldayView addGestureRecognizer:alldayTap];
     _startTimeView.layer.cornerRadius = 5.0f;
@@ -192,10 +185,6 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     _subjectField.delegate = self;
     [_subjectField becomeFirstResponder];
     _locationField.delegate = self;
-    UIImageView *locationTag = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
-    locationTag.image = [UIImage imageNamed:@"locationTag20.png"];
-    _locationField.leftView = locationTag;
-    _locationField.leftViewMode = UITextFieldViewModeAlways;
     
     _startTimeField.delegate = self;
     _startTimeField.inputView = _datePicker;
@@ -212,10 +201,6 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     _locationMapView.delegate = self;
     _locationMapView.showsUserLocation = YES;
     _locationMapView.pitchEnabled = YES;
-    _mapLocationView.layer.cornerRadius = 5.0f;
-    _mapLocationView.layer.shadowColor = [[UIColor blackColor]CGColor];
-    _mapLocationView.layer.shadowOpacity = 0.5f;
-    _mapLocationView.layer.shadowOffset = CGSizeMake(2 , 2);
     
     // Search
     _locationSearchBar.delegate = self;
@@ -584,14 +569,10 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     [self.view endEditing:YES];
     reminder.show = NO;
     reminder.frame = hideFrame;
-    
     repeat.show = NO;
     repeat.frame = hideFrame;
-    
     CLLocation *destinationLocation = [[CLLocation alloc]initWithLatitude:destination.latitude longitude:destination.longitude];
-    
     _destinationDistance.text = [NSString stringWithFormat:@"%.1f KM",[_locationMapView.userLocation.location distanceFromLocation:destinationLocation]/1000];
-    
     _mapMask.hidden = NO;
 }
 

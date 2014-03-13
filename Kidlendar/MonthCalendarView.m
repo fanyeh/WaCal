@@ -127,7 +127,7 @@
 
         // Configure color for dates not in current month
         if (dateModel.isCurrentMonth)
-            dateView.dateLabel.textColor = [UIColor blackColor];
+            dateView.dateLabel.textColor = [UIColor colorWithWhite:0.298 alpha:1.000];
         else
             dateView.dateLabel.textColor = [UIColor colorWithWhite:0.500 alpha:0.500];
         
@@ -135,9 +135,6 @@
         if (dateModel.isToday) {
             dateView.isToday = YES;
             dateView.dateLabel.textColor = Rgb2UIColor(255, 0, 0);
-//            dateView.dateLabel.layer.borderColor = [[UIColor redColor]CGColor];
-//            dateView.dateLabel.layer.borderWidth = 1.0f;
-//            dateView.dateLabel.layer.cornerRadius = 5.0f;
         }
         
         // Add indicator if date has event

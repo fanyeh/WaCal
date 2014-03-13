@@ -11,6 +11,8 @@
 #import "ReminderView.h"
 #import "RepeatView.h"
 #import <EventKit/EventKit.h>
+#import <MapKit/MapKit.h>
+#import "MapKitHelpers.h"
 #import "ReminderButton.h"
 #import "LocationData.h"
 #import "LocationDataStore.h"
@@ -19,7 +21,7 @@
 #define kGOOGLE_API_KEY @"AIzaSyAD9e182Fr19_2DcJFZYUHf6wEeXjxs_kQ"
 
 
-@interface EventCreateController () <UITextFieldDelegate,UITableViewDataSource, UITableViewDelegate,UISearchBarDelegate>
+@interface EventCreateController () <UITextFieldDelegate,UITableViewDataSource, UITableViewDelegate,UISearchBarDelegate,UIPickerViewDelegate,UIPickerViewDataSource>
 {
     EKEvent *event;
     NSDateFormatter *dateFormatter;
@@ -37,8 +39,12 @@
     NSDictionary *selectedLocation;
     CGRect saveButtonFrame;
     CGRect saveButtonFrameMove;
+    
+    EKCalendar *selectedCalendar;
+
 
 }
+
 @property (weak, nonatomic) IBOutlet UITextField *subjectField;
 @property (weak, nonatomic) IBOutlet UITextField *locationField;
 @property (weak, nonatomic) IBOutlet UITextField *startTimeField;
@@ -60,7 +66,20 @@
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
 @property (weak, nonatomic) IBOutlet UILabel *repeatLabel;
 @property (weak, nonatomic) IBOutlet UILabel *reminderLabel;
+@property (weak, nonatomic) IBOutlet UILabel *reminderValueLabel;
+@property (weak, nonatomic) IBOutlet UILabel *repeatValueLabel;
+@property (weak, nonatomic) IBOutlet UITextField *calendarNameField;
+@property (weak, nonatomic) IBOutlet UILabel *calenderNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *calendarLabel;
 
+// Map
+@property (weak, nonatomic) IBOutlet UILabel *closeMapLabel;
+@property (weak, nonatomic) IBOutlet UILabel *destinationDistance;
+@property (weak, nonatomic) IBOutlet UILabel *mapLocationName;
+@property (weak, nonatomic) IBOutlet UILabel *mapLocationAddress;
+@property (weak, nonatomic) IBOutlet UILabel *locationPhone;
+@property (weak, nonatomic) IBOutlet UIView *mapMask;
+@property (weak, nonatomic) IBOutlet MKMapView *locationMapView;
 
 @end
 
@@ -80,27 +99,33 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    // Navgition save button
-    
+    // Navgition bar
     self.navigationItem.title = @"New Event";
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                                                                          target:self
+                                                                                          action:@selector(showMap)];
 
-    _saveButton.layer.cornerRadius = _saveButton.frame.size.width/2;
-    saveButtonFrame = _saveButton.frame;
-    saveButtonFrameMove = CGRectOffset(_saveButton.frame, 0, 215);
-    
     _locationSearchBar.delegate = self;
-    
     _searchResultTable.delegate = self;
     _searchResultTable.dataSource = self;
     [_searchResultTable registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
     
-    _locationSearchView.layer.cornerRadius = 10.0f;
+    // Calendar
+    _calenderNameLabel.text = [[[CalendarStore sharedStore]calendar]title];
+    UIPickerView *calendarPicker = [[UIPickerView alloc]init];
+    calendarPicker.delegate = self;
+    calendarPicker.dataSource = self;
+    _calendarNameField.delegate = self;
+    _calendarNameField.tintColor = [UIColor clearColor];
+    _calendarNameField.inputView = calendarPicker;
 
-
-    UITapGestureRecognizer *reminderTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showReminder)];
-    [_reminderLabel addGestureRecognizer:reminderTap];
     
+    UITapGestureRecognizer *reminderTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showReminder)];
+    UITapGestureRecognizer *repeatTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showRepeat)];
+    [_reminderLabel addGestureRecognizer:reminderTap];
+    [_repeatLabel addGestureRecognizer:repeatTap];
+
     // Reminder selection view
     reminder = [[ReminderView alloc]init];
     for (UIButton *b in reminder.subviews) {
@@ -108,10 +133,6 @@
     }
     [self checkAlarm];
     [self.view addSubview:reminder];
-    
-    // Repeat view
-    UITapGestureRecognizer *repeatTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showRepeat)];
-    [_repeatLabel addGestureRecognizer:repeatTap];
     
     // Repeat selection view
     repeat = [[RepeatView alloc]init];
@@ -130,7 +151,6 @@
     [_alldayView addGestureRecognizer:alldayTap];
     _startTimeView.layer.cornerRadius = 5.0f;
     _endTimeView.layer.cornerRadius = 5.0f;
-    
     
     // Set up date formatter
     dateFormatter = [[NSDateFormatter alloc]init];
@@ -174,7 +194,10 @@
     event.allDay = NO;
     
     selectedLocation = [[NSDictionary alloc]init];
-
+    
+    _saveButton.layer.cornerRadius = _saveButton.frame.size.width/2;
+    saveButtonFrame = _saveButton.frame;
+    saveButtonFrameMove = CGRectOffset(_saveButton.frame, 0, 215);
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -191,6 +214,48 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)showMap
+{
+    [self.view endEditing:YES];
+    reminder.show = NO;
+    reminder.frame = hideFrame;
+    repeat.show = NO;
+    repeat.frame = hideFrame;
+//    CLLocation *destinationLocation = [[CLLocation alloc]initWithLatitude:destination.latitude longitude:destination.longitude];
+//    _destinationDistance.text = [NSString stringWithFormat:@"%.1f KM",[_locationMapView.userLocation.location distanceFromLocation:destinationLocation]/1000];
+    _mapMask.hidden = NO;
+}
+
+- (void)closeMap
+{
+    
+}
+
+#pragma mark - UIPickerViewDataSource
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return [[[CalendarStore sharedStore]allCalendars] count];
+}
+
+#pragma mark - UIPickerViewDelegate
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    EKCalendar *calendar = [[CalendarStore sharedStore]allCalendars][row];
+    return calendar.title;
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    selectedCalendar = [[CalendarStore sharedStore]allCalendars][row];
+    _calenderNameLabel.text = selectedCalendar.title;
 }
 
 #pragma mark - UITextFieldDelegate
@@ -289,6 +354,7 @@
     if (event.allDay) {
         event.allDay = NO;
         _alldayView.backgroundColor = [UIColor whiteColor];
+        _alldayView.layer.borderWidth = 1.0f;
         _allLabel.textColor = [UIColor grayColor];
         _dayLabel.textColor = [UIColor grayColor];
         
@@ -307,13 +373,14 @@
     } else {
         event.allDay = YES;
         _alldayView.backgroundColor = [UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000];
+        _alldayView.layer.borderWidth = 0.0f;
         _allLabel.textColor = [UIColor whiteColor];
         _dayLabel.textColor = [UIColor whiteColor];
         
         _startDateLabel.frame = CGRectOffset(_startDateLabel.frame, 0 , -13);
         _endDateLabel.frame = CGRectOffset(_endDateLabel.frame, 0 , -13);
-        _startDateLabel.font = [UIFont systemFontOfSize:17];
-        _endDateLabel.font = [UIFont systemFontOfSize:17];
+        _startDateLabel.font = [UIFont fontWithName:@"Avenir-light" size:18];
+        _endDateLabel.font = [UIFont fontWithName:@"Avenir-light" size:18];
         
         _startTimeLabel.hidden = YES;
         _endTimeLabel.hidden = YES;
@@ -412,6 +479,7 @@
         if (sender.tag < 10) {
             sender.backgroundColor = [UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000];
             [self createAlarm:sender.tag];
+            _reminderValueLabel.text = sender.titleLabel.text;
         }
         
         // Change all other buttons to unselect
@@ -476,6 +544,7 @@
         if (sender.tag < 10) {
             sender.backgroundColor = [UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000];
             [self createRule:sender.tag];
+            _repeatValueLabel.text = sender.titleLabel.text;
         }
         
         // Change all other buttons to unselect
@@ -608,8 +677,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     _locationField.text = [places[indexPath.row] objectForKey:@"name"];
-    
-    
     selectedLocation = [places objectAtIndex:indexPath.row];
     
 //    // Update map info

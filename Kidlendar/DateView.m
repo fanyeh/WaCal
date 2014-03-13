@@ -23,17 +23,11 @@
                                                               self.frame.size.width-sizeOffset,
                                                               self.frame.size.width-sizeOffset
                                                               )];
-        _dateLabel.font = [UIFont fontWithName:@"Avenir-light" size:20];
-        _dateLabel.textColor = Rgb2UIColor(255, 255, 255);
+        _dateLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
         _dateLabel.textAlignment = NSTextAlignmentCenter;
-//        _dateLabel.layer.cornerRadius = 5.0f;
         [self addSubview:_dateLabel];
         _isToday = NO;
         _isSelected = NO;
-        
-//        self.layer.borderColor = [[UIColor greenColor]CGColor];
-//        self.layer.borderWidth = 1.0f;
-        
     }
     return self;
 }
