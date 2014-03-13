@@ -28,29 +28,26 @@
     if (self) {
         // Initialization code
         _show = NO;
-        self.layer.cornerRadius = 5.0f;
-//        self.layer.borderWidth = 2.0f;
-        self.backgroundColor = Rgb2UIColor(230, 230, 230) ;
-        self.layer.shadowColor = [[UIColor blackColor]CGColor];
-        self.layer.shadowOpacity = 0.5f;
-        self.layer.shadowOffset = CGSizeMake(2 , 2);
+//        self.backgroundColor = [UIColor blackColor];
         
-        CGFloat gapX = 35;
+        CGFloat gapX = 50;
         CGFloat gapY = 8;
         int alarmButtonCount = 10;
-        CGFloat alarmButtonX = 25;
+        CGFloat alarmButtonX = 10;
         CGFloat alarmButtonY = 8;
         CGFloat buttonSize = 60;
         
         // Tag : 1 - on time , 2 - 5min , 3 - 15min , 4 - 30min , 5 - 1hour , 6 - 2hour ,7 - 1day , 8 - 2Day , 9 - 1week
 
         for (int i = 1; i < alarmButtonCount ;i++) {
+            
             ReminderButton *alarmButton = [[ReminderButton alloc]initWithFrame:CGRectMake(alarmButtonX, alarmButtonY, buttonSize, buttonSize)];
+            
             [alarmButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-            [alarmButton setTitleColor:[UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000] forState:UIControlStateNormal];
-            alarmButton.titleLabel.font = [UIFont fontWithName:@"Avenir" size:14];
-            alarmButton.layer.borderColor = [[UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000]CGColor];
-            alarmButton.layer.borderWidth = 2.0f;
+            [alarmButton setTitleColor:[UIColor colorWithWhite:0.667 alpha:1.000] forState:UIControlStateNormal];
+            alarmButton.titleLabel.font = [UIFont fontWithName:@"Avenir-light" size:14];
+            alarmButton.layer.borderColor = [[UIColor colorWithWhite:0.667 alpha:1.000]CGColor];
+            alarmButton.layer.borderWidth = 1.0f;
             alarmButton.layer.cornerRadius = buttonSize/2;
             alarmButton.tag = i;
             [self addSubview:alarmButton];

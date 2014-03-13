@@ -24,6 +24,7 @@
         
         self.dateLabel.textColor =  [UIColor colorWithWhite:0.298 alpha:1.000];
         self.dateLabel.font = [UIFont fontWithName:@"Avenir" size:13];
+        self.backgroundColor = [UIColor whiteColor];
     }
     return self;
 }

@@ -35,6 +35,8 @@
     double locationLng;
     
     NSDictionary *selectedLocation;
+    CGRect saveButtonFrame;
+    CGRect saveButtonFrameMove;
 
 }
 @property (weak, nonatomic) IBOutlet UITextField *subjectField;
@@ -43,8 +45,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *startDateLabel;
 @property (weak, nonatomic) IBOutlet UITextField *endTimeField;
 @property (weak, nonatomic) IBOutlet UILabel *endDateLabel;
-@property (weak, nonatomic) IBOutlet UIView *reminderView;
-@property (weak, nonatomic) IBOutlet UIView *repeatView;
 @property (weak, nonatomic) IBOutlet UIView *eventDetailView;
 @property (weak, nonatomic) IBOutlet UISearchBar *locationSearchBar;
 @property (weak, nonatomic) IBOutlet UITableView *searchResultTable;
@@ -58,7 +58,9 @@
 @property (weak, nonatomic) IBOutlet UIView *startTimeView;
 @property (weak, nonatomic) IBOutlet UIView *endTimeView;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
-@property (weak, nonatomic) IBOutlet UIView *dotView;
+@property (weak, nonatomic) IBOutlet UILabel *repeatLabel;
+@property (weak, nonatomic) IBOutlet UILabel *reminderLabel;
+
 
 @end
 
@@ -78,13 +80,14 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    _dotView.layer.cornerRadius = _dotView.frame.size.width/2;
     // Navgition save button
     
     self.navigationItem.title = @"New Event";
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
 
     _saveButton.layer.cornerRadius = _saveButton.frame.size.width/2;
+    saveButtonFrame = _saveButton.frame;
+    saveButtonFrameMove = CGRectOffset(_saveButton.frame, 0, 215);
     
     _locationSearchBar.delegate = self;
     
@@ -94,16 +97,9 @@
     
     _locationSearchView.layer.cornerRadius = 10.0f;
 
-    // Event detail view
-    _eventDetailView.layer.cornerRadius = 5.0f;
-    _eventDetailView.layer.shadowColor = [[UIColor blackColor]CGColor];
-    _eventDetailView.layer.shadowOpacity = 0.5f;
-    _eventDetailView.layer.shadowOffset = CGSizeMake(2 , 2);
-    
-    // Reminder view
-    _reminderView.layer.cornerRadius = 5.0f;
+
     UITapGestureRecognizer *reminderTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showReminder)];
-    [_reminderView addGestureRecognizer:reminderTap];
+    [_reminderLabel addGestureRecognizer:reminderTap];
     
     // Reminder selection view
     reminder = [[ReminderView alloc]init];
@@ -114,9 +110,8 @@
     [self.view addSubview:reminder];
     
     // Repeat view
-    _repeatView.layer.cornerRadius = 5.0f;
     UITapGestureRecognizer *repeatTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showRepeat)];
-    [_repeatView addGestureRecognizer:repeatTap];
+    [_repeatLabel addGestureRecognizer:repeatTap];
     
     // Repeat selection view
     repeat = [[RepeatView alloc]init];
@@ -129,9 +124,8 @@
     hideFrame = reminder.frame;
 
     // Set up All Day button
-    _alldayView.layer.cornerRadius = 5.0f;
-    _allLabel.textColor = [UIColor grayColor];
-    _dayLabel.textColor = [UIColor grayColor];
+    _alldayView.layer.borderColor = [[UIColor colorWithWhite:0.667 alpha:1.000]CGColor];
+    _alldayView.layer.borderWidth = 1.0f;
     UITapGestureRecognizer *alldayTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(alldayAction)];
     [_alldayView addGestureRecognizer:alldayTap];
     _startTimeView.layer.cornerRadius = 5.0f;
@@ -159,10 +153,6 @@
     _subjectField.delegate = self;
     [_subjectField becomeFirstResponder];
     _locationField.delegate = self;
-    UIImageView *locationTag = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
-    locationTag.image = [UIImage imageNamed:@"locationTag20.png"];
-    _locationField.leftView = locationTag;
-    _locationField.leftViewMode = UITextFieldViewModeAlways;
     
     _startTimeField.delegate = self;
     _startTimeField.inputView = _datePicker;
@@ -232,6 +222,8 @@
     repeat.show = NO;
     reminder.frame = hideFrame;
     reminder.show = NO;
+    
+    _saveButton.frame = saveButtonFrame;
     return YES;
 }
 
@@ -274,8 +266,9 @@
         [self.view endEditing:YES];
         repeat.frame = hideFrame;
         repeat.show = NO;
-        reminder.frame = CGRectOffset(reminder.frame, 0, -236);
+        reminder.frame = CGRectOffset(reminder.frame, 0, -256);
         reminder.show = YES;
+        _saveButton.frame = saveButtonFrameMove;
     }
 }
 
@@ -285,8 +278,9 @@
         [self.view endEditing:YES];
         reminder.frame = hideFrame;
         reminder.show = NO;
-        repeat.frame = CGRectOffset(repeat.frame, 0, -236);
+        repeat.frame = CGRectOffset(repeat.frame, 0, -256);
         repeat.show = YES;
+        _saveButton.frame = saveButtonFrameMove;
     }
 }
 
@@ -318,8 +312,8 @@
         
         _startDateLabel.frame = CGRectOffset(_startDateLabel.frame, 0 , -13);
         _endDateLabel.frame = CGRectOffset(_endDateLabel.frame, 0 , -13);
-        _startDateLabel.font = [UIFont systemFontOfSize:15];
-        _endDateLabel.font = [UIFont systemFontOfSize:15];
+        _startDateLabel.font = [UIFont systemFontOfSize:17];
+        _endDateLabel.font = [UIFont systemFontOfSize:17];
         
         _startTimeLabel.hidden = YES;
         _endTimeLabel.hidden = YES;

@@ -176,11 +176,13 @@
         if ([[[DiaryDataStore sharedStore]allItems]count] > 0) {
             [[diaryInSections objectForKey:sectionKey] removeObjectAtIndex:indexPath.row];
             [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            
         }
         else {
             [diaryInSections removeObjectForKey:sectionKey];
             [tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
         }
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"diaryChange" object:nil];
     }
 }
 

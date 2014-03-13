@@ -13,10 +13,8 @@
 #import <CoreData/CoreData.h>
 #import "SettingViewController.h"
 #import "DiaryCreateViewController.h"
-#import "Dropbox.h"
 
 NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGranted";
-NSString *const AccountTwitterAccountAccessGranted = @"TwitterAccountAccessGranted";
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 
@@ -32,7 +30,7 @@ NSString *const AccountTwitterAccountAccessGranted = @"TwitterAccountAccessGrant
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    
+
     self.accountStore = [[ACAccountStore alloc] init];
 
     // Init Calendar store
@@ -54,12 +52,14 @@ NSString *const AccountTwitterAccountAccessGranted = @"TwitterAccountAccessGrant
     }
     
     self.window.backgroundColor = [UIColor whiteColor];
-    [self.window makeKeyAndVisible];
     
     [[UINavigationBar appearance] setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance] setBackgroundColor:Rgb2UIColor(29 , 113 , 183)];
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]]; //is the buttons text color
     [[UITabBar appearance] setTintColor:Rgb2UIColor(29 , 113 , 183)]; //is the buttons text color
+    
+    [self.window makeKeyAndVisible];
+
     return YES;
 }
 
@@ -335,54 +335,6 @@ NSString *const AccountTwitterAccountAccessGranted = @"TwitterAccountAccessGrant
     }
     
     return _persistentStoreCoordinator;
-}
-
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation {
-    if ([[url scheme] isEqualToString:@"dropbox"]) {
-        [self exchangeRequestTokenForAccessToken];
-    }
-    return NO;
-}
-
-- (void)exchangeRequestTokenForAccessToken
-{
-    // OAUTH Step 3 - exchange request token for user access token
-    [Dropbox exchangeTokenForUserAccessTokenURLWithCompletionHandler:^(NSData *data,NSURLResponse *response,NSError *error) {
-        if (!error) {
-            NSHTTPURLResponse *httpResp = (NSHTTPURLResponse*) response;
-            if (httpResp.statusCode == 200) {
-                NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                NSDictionary *accessTokenDict = [Dropbox dictionaryFromOAuthResponseString:response];
-                
-                [[NSUserDefaults standardUserDefaults] setObject:accessTokenDict[oauthTokenKey] forKey:accessToken];
-                [[NSUserDefaults standardUserDefaults] setObject:accessTokenDict[oauthTokenKeySecret] forKey:accessTokenSecret];
-                [[NSUserDefaults standardUserDefaults] synchronize];
-                
-                NSLog(@"Loggin drop box succeed");
-//                // now load main part of application
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    
-//                    NSString *segueId = @"TabBar";
-//                    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-//                    UITabBarController *initViewController = [storyboard instantiateViewControllerWithIdentifier:segueId];
-//                    
-//                    UINavigationController *nav = (UINavigationController *) self.window.rootViewController;
-//                    nav.navigationBar.hidden = YES;
-//                    [nav pushViewController:initViewController animated:NO];
-//                });
-                
-            } else {
-                // HANDLE BAD RESPONSE //
-                NSLog(@"exchange request for access token unexpected response %@",
-                      [NSHTTPURLResponse localizedStringForStatusCode:httpResp.statusCode]);
-            }
-        } else {
-            // ALWAYS HANDLE ERRORS :-] //
-        }
-    }];
 }
 
 #pragma mark - Application's Documents directory

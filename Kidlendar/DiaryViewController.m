@@ -15,8 +15,6 @@
 #import "KidlendarAppDelegate.h"
 #import "PhotoLoader.h"
 #import "AFHTTPRequestOperation.h"
-#import "Dropbox.h"
-#import "DBFile.h"
 
 @interface DiaryViewController () <UIAlertViewDelegate,NSURLSessionTaskDelegate>
 {
@@ -32,15 +30,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
 @property (weak, nonatomic) IBOutlet UILabel *subjectLabel;
 @property (weak, nonatomic) IBOutlet UILabel *weekdayLabel;
-@property (weak, nonatomic) IBOutlet UIView *popUpBackgroundView;
-@property (weak, nonatomic) IBOutlet UIView *backupView;
-@property (weak, nonatomic) IBOutlet UIImageView *dropboxImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *twitterImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *weiboImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *facebookImageView;
 
-@property (nonatomic, strong) NSURLSessionUploadTask *uploadTask;
-@property (nonatomic, strong) NSURLSession *session;
+
 @property (weak, nonatomic) IBOutlet UIView *uploadView;
 @property (weak, nonatomic) IBOutlet UIProgressView *progress;
 
@@ -54,15 +48,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        // 1
-        NSURLSessionConfiguration *config = [NSURLSessionConfiguration ephemeralSessionConfiguration];
-        
-        // 2
-        [config setHTTPAdditionalHeaders:@{@"Authorization": [Dropbox apiAuthorizationHeader]}];
-        
-        // 3
-        _session = [NSURLSession sessionWithConfiguration:config];
-    }
+            }
     return self;
 }
 
@@ -105,16 +91,11 @@
     
     _weekdayLabel.text  = [weekdayFormatter stringFromDate:diaryDate];
     
-    UIBezierPath *exclusionPathYear = [UIBezierPath bezierPathWithRect:[_diaryDetailTextView convertRect:_yearLabel.bounds
-                                                                                                fromView:_yearLabel]];
-    UIBezierPath *exclusionPathDate = [UIBezierPath bezierPathWithRect:[_diaryDetailTextView convertRect:_dateLabel.bounds
-                                                                                                fromView:_dateLabel]];
-    UIBezierPath *exclusionPathMonth = [UIBezierPath bezierPathWithRect:[_diaryDetailTextView convertRect:_monthLabel.bounds
-                                                                                                 fromView:_monthLabel]];
+    UIBezierPath *exclusionPathYear = [UIBezierPath bezierPathWithRect:[_diaryDetailTextView convertRect:_yearLabel.bounds  fromView:_yearLabel]];
+    UIBezierPath *exclusionPathDate = [UIBezierPath bezierPathWithRect:[_diaryDetailTextView convertRect:_dateLabel.bounds fromView:_dateLabel]];
+    UIBezierPath *exclusionPathMonth = [UIBezierPath bezierPathWithRect:[_diaryDetailTextView convertRect:_monthLabel.bounds fromView:_monthLabel]];
     
     _diaryDetailTextView.textContainer.exclusionPaths = @[exclusionPathYear,exclusionPathDate,exclusionPathMonth];
-    
-    _backupView.layer.cornerRadius = 10.0f;
     
     // Share Photo
     UITapGestureRecognizer *twitterTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showShareSheet:)];
@@ -124,15 +105,10 @@
     UITapGestureRecognizer *facebookTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showShareSheet:)];
     [_facebookImageView addGestureRecognizer:facebookTap];
     
-    UITapGestureRecognizer *dropboxTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(uploadToDropbox)];
-    [_dropboxImageView addGestureRecognizer:dropboxTap];
-    
     if (_diaryData.diaryVideoPath) {
         _twitterImageView.hidden = YES;
         _weiboImageView.hidden = YES;
     }
-    
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showBackup)];
 }
 
 - (void)playVideo
@@ -140,202 +116,10 @@
     [self playMovieWithURL:[NSURL URLWithString:_diaryData.diaryVideoPath]];
 }
 
-- (IBAction)cancelPopup:(id)sender
-{
-    [self cancelAction];
-}
-
-- (void)cancelAction
-{
-    _popUpBackgroundView.hidden = YES;
-    backupButton.enabled = YES;
-    self.navigationItem.hidesBackButton = NO;
-}
-
-- (void)showBackup
-{
-    _popUpBackgroundView.hidden = NO;
-    backupButton.enabled = NO;
-    self.navigationItem.hidesBackButton = YES;
-}
-
--(void)uploadToDropbox
-{
-    _popUpBackgroundView.hidden = YES;
-    // 1. Check to see if have access token to dropbox
-    NSString *token = [[NSUserDefaults standardUserDefaults] valueForKey:accessToken];
-    if (token) {
-        [self uploadImage:_diaryData.diaryImageData];
-    } else {
-        [self getOAuthRequestToken];
-    }
-}
-
-// stop upload
-
-- (IBAction)cancelUpload:(id)sender
-{
-    if (_uploadTask.state == NSURLSessionTaskStateRunning) {
-        [_uploadTask cancel];
-    }
-}
-
-- (void)uploadImage:(NSData *)imageData
-{
-    // 1
-    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
-    config.HTTPMaximumConnectionsPerHost = 1;
-    [config setHTTPAdditionalHeaders:@{@"Authorization": [Dropbox apiAuthorizationHeader]}];
-    
-    // 2
-    NSURLSession *upLoadSession = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil];
-    
-    // for now just create a random file name, dropbox will handle it if we overwrite a file and create a new name..
-    NSURL *url = [Dropbox createPhotoUploadURL];
-    
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
-    [request setHTTPMethod:@"PUT"];
-    
-    // 3
-    self.uploadTask = [upLoadSession uploadTaskWithRequest:request fromData:imageData];
-    
-    // 4
-    self.uploadView.hidden = NO;
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    
-    // 5
-    [_uploadTask resume];
-}
-
-- (void)downloadPhotos
-{
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    NSString *photoDir = [NSString stringWithFormat:@"https://api.dropbox.com/1/search/dropbox/%@/photos?query=.jpg",appFolder];
-    NSURL *url = [NSURL URLWithString:photoDir];
-    
-    [[_session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        if (!error) {
-            NSHTTPURLResponse *httpResp = (NSHTTPURLResponse*) response;
-            if (httpResp.statusCode == 200) {
-                NSError *jsonError;
-                NSArray *filesJSON = [NSJSONSerialization
-                                      JSONObjectWithData:data
-                                      options:NSJSONReadingAllowFragments
-                                      error:&jsonError];
-                
-                NSMutableArray *dbFiles = [[NSMutableArray alloc] init];
-                
-                if (!jsonError) {
-                    for (NSDictionary *fileMetadata in filesJSON) {
-                        DBFile *file = [[DBFile alloc]
-                                        initWithJSONData:fileMetadata];
-                        [dbFiles addObject:file];
-                    }
-                    
-                    [dbFiles sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-                        return [obj1 compare:obj2];
-                    }];
-                    
-//                    _photoThumbnails = dbFiles;
-                    
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-//                        [self.tableView reloadData];
-                    });
-                }
-            } else {
-                // HANDLE BAD RESPONSE //
-            }
-        } else {
-            // ALWAYS HANDLE ERRORS :-] //
-        }
-    }] resume];
-}
-
-#pragma mark - NSURLSessionTaskDelegate methods
-
-- (void)URLSession:(NSURLSession *)session
-              task:(NSURLSessionTask *)task
-   didSendBodyData:(int64_t)bytesSent
-    totalBytesSent:(int64_t)totalBytesSent
-totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [_progress setProgress:
-         (double)totalBytesSent /
-         (double)totalBytesExpectedToSend animated:YES];
-    });
-}
-
-- (void)URLSession:(NSURLSession *)session
-              task:(NSURLSessionTask *)task
-didCompleteWithError:(NSError *)error
-{
-    // 1
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-        _uploadView.hidden = YES;
-        backupButton.enabled = YES ;
-    });
-    
-    if (!error) {
-        // 2
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"Upload completed");
-
-        });
-    } else {
-        // Alert for error
-    }
-}
-
-# pragma mark - OAUTH 1.0a STEP 1
--(void)getOAuthRequestToken
-{
-    // OAUTH Step 1. Get request token.
-    [Dropbox requestTokenWithCompletionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        if (!error) {
-            NSHTTPURLResponse *httpResp = (NSHTTPURLResponse*) response;
-            if (httpResp.statusCode == 200) {
-                
-                NSString *responseStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                
-                /*
-                 oauth_token The request token that was just authorized. The request token secret isn't sent back.
-                 If the user chooses not to authorize the application,
-                 they will get redirected to the oauth_callback URL with the additional URL query parameter not_approved=true.
-                 */
-                NSDictionary *oauthDict = [Dropbox dictionaryFromOAuthResponseString:responseStr];
-                // save the REQUEST token and secret to use for normal api calls
-                [[NSUserDefaults standardUserDefaults] setObject:oauthDict[oauthTokenKey] forKey:requestToken];
-                [[NSUserDefaults standardUserDefaults] setObject:oauthDict[oauthTokenKeySecret] forKey:requestTokenSecret];
-                [[NSUserDefaults standardUserDefaults] synchronize];
-                
-                
-                NSString *authorizationURLWithParams = [NSString stringWithFormat:@"https://www.dropbox.com/1/oauth/authorize?oauth_token=%@&oauth_callback=dropbox://userauthorization",oauthDict[oauthTokenKey]];
-                
-                // escape codes
-                NSString *escapedURL = [authorizationURLWithParams stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-                
-                // opens to user auth page in safari
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:escapedURL]];
-                
-            } else {
-                // HANDLE BAD RESPONSE //
-                NSLog(@"unexpected response getting token %@",[NSHTTPURLResponse localizedStringForStatusCode:httpResp.statusCode]);
-            }
-        } else {
-            // ALWAYS HANDLE ERRORS :-] //
-        }
-    }];
-}
-
-
 #pragma mark - Social share
 
 - (void)showShareSheet:(UITapGestureRecognizer *)sender
 {
-    [self cancelAction];
     
     NSString *serviceType;
     switch (sender.view.tag) {
@@ -408,12 +192,15 @@ didCompleteWithError:(NSError *)error
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    [appDelegate getFacebookAccount];
+    if (buttonIndex != 0) {
+        KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        [appDelegate getFacebookAccount];
+    }
 }
 
 - (void)proceedVideoUploadToFB
 {
+    _uploadView.hidden = NO;
     __block SLRequest *facebookRequest;
     __block NSData *data;
     NSDictionary *params = @{@"title": _diaryData.subject,
@@ -451,15 +238,21 @@ didCompleteWithError:(NSError *)error
             
             AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:facebookRequest.preparedURLRequest];
             [operation setUploadProgressBlock:^(NSUInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite) {
-                NSLog(@"%ld bytes out of %ld sent.", totalBytesWritten, totalBytesExpectedToWrite);
-                float progress = totalBytesWritten/(float)totalBytesExpectedToWrite;
-                NSLog(@"Progress :%f",progress);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    float uploadProgress = totalBytesWritten/(float)totalBytesExpectedToWrite;
+                    [_progress setProgress:uploadProgress animated:YES];
+                });
+
             }];
             
             [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+                _uploadView.hidden = YES;
+
                 NSLog(@"Facebook upload success");
                 
             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                _uploadView.hidden = YES;
+
                 NSLog(@"Facebook upload error %@",error);
             }];
             

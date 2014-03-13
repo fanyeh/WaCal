@@ -23,7 +23,7 @@
                                                               self.frame.size.width-sizeOffset,
                                                               self.frame.size.width-sizeOffset
                                                               )];
-        _dateLabel.font = [UIFont fontWithName:@"Avenir-Light" size:20];
+        _dateLabel.font = [UIFont fontWithName:@"Avenir-light" size:20];
         _dateLabel.textColor = Rgb2UIColor(255, 255, 255);
         _dateLabel.textAlignment = NSTextAlignmentCenter;
 //        _dateLabel.layer.cornerRadius = 5.0f;
@@ -42,8 +42,8 @@
 {
     UIView *hasEventView = [[UIView alloc]initWithFrame:CGRectMake(_dateLabel.center.x -self.frame.size.width/7-2,
                                                                    _dateLabel.frame.size.height+2,
-                                                                   self.frame.size.width/7,
-                                                                   self.frame.size.width/7)];
+                                                                   8,
+                                                                   8)];
     
     hasEventView.layer.cornerRadius = hasEventView.frame.size.width/2;
     
@@ -57,8 +57,8 @@
 {
     UIView *hasDiaryView = [[UIView alloc]initWithFrame:CGRectMake(_dateLabel.center.x +2,
                                                                    _dateLabel.frame.size.height+2,
-                                                                   self.frame.size.width/7,
-                                                                   self.frame.size.width/7)];
+                                                                   8,
+                                                                   8)];
     
     hasDiaryView.layer.cornerRadius = hasDiaryView.frame.size.width/2;
     

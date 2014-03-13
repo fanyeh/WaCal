@@ -79,8 +79,6 @@
 		4C6C49C5186DDDDF0042EB61 /* DiaryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C6C49C3186DDDDF0042EB61 /* DiaryViewController.xib */; };
 		4C73E02018BFA5F3007ECCEC /* EventReviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C73E01E18BFA5F3007ECCEC /* EventReviewController.m */; };
 		4C73E02118BFA5F3007ECCEC /* EventReviewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C73E01F18BFA5F3007ECCEC /* EventReviewController.xib */; };
-		4C7AC34618D0116C00CC92A5 /* Dropbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7AC34218D0116C00CC92A5 /* Dropbox.m */; };
-		4C7AC34718D0116C00CC92A5 /* DBFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7AC34418D0116C00CC92A5 /* DBFile.m */; };
 		4C84A57318BF7278005A30AB /* ReminderButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C84A57218BF7278005A30AB /* ReminderButton.m */; };
 		4C88B387188E56E100F4F47E /* DiaryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88B386188E56E100F4F47E /* DiaryCell.m */; };
 		4C91918718AF3A4900ED4695 /* ImageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C91918618AF3A4900ED4695 /* ImageStore.m */; };
@@ -267,10 +265,6 @@
 		4C73E01D18BFA5F3007ECCEC /* EventReviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventReviewController.h; path = ../EventReviewController.h; sourceTree = "<group>"; };
 		4C73E01E18BFA5F3007ECCEC /* EventReviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EventReviewController.m; path = ../EventReviewController.m; sourceTree = "<group>"; };
 		4C73E01F18BFA5F3007ECCEC /* EventReviewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EventReviewController.xib; path = ../EventReviewController.xib; sourceTree = "<group>"; };
-		4C7AC34218D0116C00CC92A5 /* Dropbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dropbox.m; sourceTree = "<group>"; };
-		4C7AC34318D0116C00CC92A5 /* DBFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBFile.h; sourceTree = "<group>"; };
-		4C7AC34418D0116C00CC92A5 /* DBFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBFile.m; sourceTree = "<group>"; };
-		4C7AC34518D0116C00CC92A5 /* Dropbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dropbox.h; sourceTree = "<group>"; };
 		4C84A57118BF7278005A30AB /* ReminderButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReminderButton.h; sourceTree = "<group>"; };
 		4C84A57218BF7278005A30AB /* ReminderButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReminderButton.m; sourceTree = "<group>"; };
 		4C88B385188E56E100F4F47E /* DiaryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryCell.h; sourceTree = "<group>"; };
@@ -543,7 +537,6 @@
 		4C86E92E188F96E600137B6A /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				4CFF692F18BF3FC000337857 /* RepeatView.h */,
 				4C73E01D18BFA5F3007ECCEC /* EventReviewController.h */,
 				4C73E01E18BFA5F3007ECCEC /* EventReviewController.m */,
 				4C73E01F18BFA5F3007ECCEC /* EventReviewController.xib */,
@@ -554,6 +547,7 @@
 				4CFF692D18BF2B2900337857 /* ReminderView.m */,
 				4C84A57118BF7278005A30AB /* ReminderButton.h */,
 				4C84A57218BF7278005A30AB /* ReminderButton.m */,
+				4CFF692F18BF3FC000337857 /* RepeatView.h */,
 				4CFF693018BF3FC000337857 /* RepeatView.m */,
 			);
 			name = Controller;
@@ -562,10 +556,6 @@
 		4C91918818AF3D3100ED4695 /* Other Model */ = {
 			isa = PBXGroup;
 			children = (
-				4C7AC34218D0116C00CC92A5 /* Dropbox.m */,
-				4C7AC34518D0116C00CC92A5 /* Dropbox.h */,
-				4C7AC34318D0116C00CC92A5 /* DBFile.h */,
-				4C7AC34418D0116C00CC92A5 /* DBFile.m */,
 				4CEEB9FC18B47BAF00C7FA80 /* CloudData.h */,
 				4CEEB9FD18B47BAF00C7FA80 /* CloudData.m */,
 				4C91918518AF3A4900ED4695 /* ImageStore.h */,
@@ -668,11 +658,11 @@
 		4CB3DD8118521DC400673478 /* Kidlendar */ = {
 			isa = PBXGroup;
 			children = (
-				4C4F990818CF5E30007D3746 /* AFNetworking */,
 				4CB3DD8A18521DC400673478 /* KidlendarAppDelegate.h */,
 				4CB3DD8B18521DC400673478 /* KidlendarAppDelegate.m */,
-				4C0C38C518673A240001CC08 /* Diary */,
 				4C315C7C18AB299500A2A363 /* Model */,
+				4C4F990818CF5E30007D3746 /* AFNetworking */,
+				4C0C38C518673A240001CC08 /* Diary */,
 				4CB3BD2E18A331BD0006AFD4 /* Setting */,
 				4C3E3EA818865AFE00D02397 /* Event */,
 				4C92155E185AD445009A3090 /* Calendar */,
@@ -906,7 +896,6 @@
 				4CEEB9F818B4656100C7FA80 /* DiaryData.m in Sources */,
 				4C5C8FFC18A8730100B40F7E /* DiaryEntryViewController.m in Sources */,
 				4C417E7618714A4C000878FC /* DiaryDataStore.m in Sources */,
-				4C7AC34718D0116C00CC92A5 /* DBFile.m in Sources */,
 				4C9214CB185AAA29009A3090 /* DateView.m in Sources */,
 				4C67BAD718B6FBC300452539 /* SwitchCell.m in Sources */,
 				4CFB086F187E6BFB00456D5D /* MonthModel.m in Sources */,
@@ -940,7 +929,6 @@
 				4C4F992418CF5E51007D3746 /* AFURLSessionManager.m in Sources */,
 				4C4F991C18CF5E51007D3746 /* AFHTTPRequestOperation.m in Sources */,
 				4CA2506C1869377000AEA94E /* UIImage+Resize.m in Sources */,
-				4C7AC34618D0116C00CC92A5 /* Dropbox.m in Sources */,
 				4C91918718AF3A4900ED4695 /* ImageStore.m in Sources */,
 				4C92155A185AD39E009A3090 /* MonthCalendarView.m in Sources */,
 				4C84A57318BF7278005A30AB /* ReminderButton.m in Sources */,

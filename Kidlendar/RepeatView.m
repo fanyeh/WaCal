@@ -29,17 +29,13 @@
         
         _show = NO;
 
-        self.backgroundColor = Rgb2UIColor(230, 230, 230) ;
-        self.layer.shadowColor = [[UIColor blackColor]CGColor];
-        self.layer.shadowOpacity = 0.5f;
-        self.layer.shadowOffset = CGSizeMake(2 , 2);
         
-        CGFloat gapX = 35;
-        CGFloat gapY = 32;
+        CGFloat gapX = 50;
+        CGFloat gapY =8;
 
         int alarmButtonCount = 7;
-        CGFloat alarmButtonX = 25;
-        CGFloat alarmButtonY = 32;
+        CGFloat alarmButtonX = 10;
+        CGFloat alarmButtonY =8;
         CGFloat buttonSize = 60;
         
         for (int i = 1; i < alarmButtonCount ;i++) {
@@ -47,11 +43,11 @@
 
             UIButton *alarmButton = [[UIButton alloc]initWithFrame:CGRectMake(alarmButtonX, alarmButtonY, buttonSize, buttonSize)];
             [alarmButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-            [alarmButton setTitleColor:[UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000] forState:UIControlStateNormal];
-            alarmButton.titleLabel.font = [UIFont fontWithName:@"Avenir" size:14];
+            [alarmButton setTitleColor:[UIColor colorWithWhite:0.667 alpha:1.000] forState:UIControlStateNormal];
+            alarmButton.titleLabel.font = [UIFont fontWithName:@"Avenir-light" size:14];
             alarmButton.layer.cornerRadius = buttonSize/2;
-            alarmButton.layer.borderColor = [[UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000]CGColor];
-            alarmButton.layer.borderWidth = 2.0f;
+            alarmButton.layer.borderColor = [[UIColor colorWithWhite:0.667 alpha:1.000]CGColor];
+            alarmButton.layer.borderWidth = 1.0f;
             alarmButton.tag = i;
             [self addSubview:alarmButton];
             alarmButtonX += buttonSize + gapX;
@@ -72,7 +68,7 @@
                     [alarmButton setTitle:@"Week" forState:UIControlStateNormal];
                     break;
                 case 4:
-                    [alarmButton setTitle:@"2 Weeks" forState:UIControlStateNormal];
+                    [alarmButton setTitle:@"2 Week" forState:UIControlStateNormal];
                     break;
                 case 5:
                     [alarmButton setTitle:@"Month" forState:UIControlStateNormal];

@@ -59,8 +59,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *allDayLabel;
 @property (weak, nonatomic) IBOutlet UIView *emptyDiaryView;
 @property (weak, nonatomic) IBOutlet UIView *emptyEventView;
-@property (weak, nonatomic) IBOutlet UIView *emptyEventButton;
-@property (weak, nonatomic) IBOutlet UIView *emptyDiaryButton;
+
 
 @end
 
@@ -89,15 +88,8 @@
 
     [_emptyDiaryView addGestureRecognizer:emptyDiaryTap];
     [_emptyEventView addGestureRecognizer:emptyEventTap];
-    _emptyDiaryButton.layer.cornerRadius = 5.0f;
-//    _emptyDiaryButton.layer.shadowColor = [[UIColor blackColor]CGColor];
-//    _emptyDiaryButton.layer.shadowOpacity = 0.5f;
-//    _emptyDiaryButton.layer.shadowOffset = CGSizeMake(2 , 2);
+
     
-    _emptyEventButton.layer.cornerRadius = 5.0f;
-//    _emptyEventButton.layer.shadowColor = [[UIColor blackColor]CGColor];
-//    _emptyEventButton.layer.shadowOpacity = 0.5f;
-//    _emptyEventButton.layer.shadowOffset = CGSizeMake(2 , 2);
     
     dateFormatter = [[NSDateFormatter alloc]init];
     dateFormatter.dateFormat = @"yyyy/MM/dd";
@@ -155,8 +147,8 @@
     eventTableView.hidden = YES;
     eventTableView.delegate = self;
     eventTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [eventTableView registerNib:[UINib nibWithNibName:@"EventTableCell" bundle:nil]
-         forCellReuseIdentifier:@"Cell"];
+    [eventTableView registerNib:[UINib nibWithNibName:@"EventTableCell" bundle:nil] forCellReuseIdentifier:@"Cell"];
+//    eventTableView.backgroundColor = [UIColor blackColor];
 
     [self.view addSubview:eventTableView];
     
@@ -260,7 +252,7 @@
     EKEvent *event = monthModel.eventsInDate[indexPath.row];
     cell.titleLabel.text = event.title;
     cell.locationLabel.text = event.location;
-    
+    cell.dotView.layer.cornerRadius = cell.dotView.frame.size.width/2;
     if (event.allDay) {
         cell.alldayLabel.hidden = NO;
         cell.startDateLabel.hidden = YES;
@@ -290,7 +282,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 50;
+    return 59;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -381,6 +373,7 @@
 - (void)shrinkMonthWithAnimation
 {
     _comingEventView.hidden = YES;
+    _dotView.hidden = YES;
     [_monthView shrinkCalendarWithRow:[monthModel rowNumberForDate:_selectedDate]withAnimation:YES complete:^{
         eventTableView.hidden = NO;
         [self showEventTable];
@@ -399,6 +392,7 @@
 
 -(void)expandMonthWithAnimation
 {
+    _dotView.hidden = NO;
     if (_monthView.shrink) {
         eventTableView.hidden = YES;
         [_monthView expandCalendarWithRow:[monthModel rowNumberForDate:_selectedDate]withAnimation:YES complete:^{
@@ -544,6 +538,11 @@
 {
     [monthModel checkEventForDate:_selectedDate];
     if ([monthModel.eventsInDate count]> 0) {
+        // Opens event and diary details on tap date
+        eventTableView.hidden = NO;
+
+        eventTableView.frame = CGRectMake(0, _monthView.shrinkFrame.origin.y+_monthView.shrinkFrame.size.height, self.view.frame.size.width, _diaryView.frame.origin.y-(_monthView.shrinkFrame.origin.y+_monthView.shrinkFrame.size.height));
+        [eventTableView reloadData];
         if (!_emptyEventView.hidden) {
             [UIView animateWithDuration:0.5 animations:^{
                 _emptyEventView.alpha =0;
@@ -552,6 +551,7 @@
             }];
         }
     } else {
+        eventTableView.hidden = YES;
         if (_emptyEventView.hidden) {
             _emptyEventView.hidden = NO;
             [UIView animateWithDuration:0.5 animations:^{
@@ -559,9 +559,6 @@
             }];
         }
     }
-    // Opens event and diary details on tap date
-        eventTableView.frame = CGRectMake(0, _monthView.shrinkFrame.origin.y+_monthView.shrinkFrame.size.height, self.view.frame.size.width, 200);
-        [eventTableView reloadData];
 }
 
 - (void)showComingEvent
