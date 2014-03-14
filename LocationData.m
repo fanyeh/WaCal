@@ -17,6 +17,7 @@
 @dynamic locationIcon;
 @dynamic locationIconData;
 @dynamic locationName;
+@dynamic reference;
 
 - (void)awakeFromFetch
 {

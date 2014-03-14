@@ -18,6 +18,8 @@
 @property (nonatomic, strong) NSString *locationName;
 @property (nonatomic, strong) UIImage *locationIcon;
 @property (nonatomic, strong) NSData *locationIconData;
+@property (nonatomic, strong) NSString *reference;
+
 
 - (void)setLocatinoIconDataFromImage:(UIImage *)image;
 

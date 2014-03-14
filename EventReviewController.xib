@@ -11,19 +11,15 @@
                 <outlet property="calendarName" destination="G6N-zI-Zam" id="HSh-OT-Zhp"/>
                 <outlet property="calendarNameField" destination="e9l-E4-jp9" id="lHg-7C-d2D"/>
                 <outlet property="dayLabel" destination="S5R-19-FsV" id="8bf-ao-hw2"/>
-                <outlet property="destinationDistance" destination="l6h-DJ-pcC" id="7Vi-Lu-nsP"/>
                 <outlet property="endDateLabel" destination="XZd-cn-xsU" id="o0O-E3-pLi"/>
                 <outlet property="endTimeField" destination="BHb-6d-pWz" id="0DU-F8-BOL"/>
                 <outlet property="endTimeLabel" destination="g6K-7x-FIq" id="6ZK-wR-Ddq"/>
                 <outlet property="endTimeView" destination="dt1-yb-YOw" id="bT4-rp-nhG"/>
                 <outlet property="eventDetailView" destination="Ldd-2q-YMF" id="5K7-Rv-kf4"/>
                 <outlet property="locationField" destination="qDM-US-Zdb" id="F3a-uV-qUa"/>
-                <outlet property="locationMapView" destination="QSy-SP-ope" id="fda-50-xYe"/>
-                <outlet property="locationPhone" destination="zHz-ap-VlV" id="pyM-be-6Yt"/>
                 <outlet property="locationSearchBar" destination="e1R-BK-ghW" id="78A-7T-2EF"/>
                 <outlet property="locationSearchView" destination="sYV-UU-5g0" id="piq-OE-rIE"/>
-                <outlet property="mapLocationName" destination="zqz-XP-lKe" id="UoA-ws-Y7Q"/>
-                <outlet property="mapMask" destination="xqa-Me-6w4" id="ehx-Rf-GhI"/>
+                <outlet property="mapIcon" destination="bQb-PD-cVG" id="GE4-Jt-fGa"/>
                 <outlet property="maskView" destination="oIp-Mx-atK" id="jzv-Jh-vcr"/>
                 <outlet property="reminderLabel" destination="AXj-ae-rfw" id="NpZ-uU-4oh"/>
                 <outlet property="reminderValueLabel" destination="nJT-gl-L3D" id="4mC-cs-BUr"/>
@@ -220,11 +216,15 @@
                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mapicon.png" id="bQb-PD-cVG">
+                            <rect key="frame" x="265" y="106" width="30" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="2sQ-qx-kNr" userLabel="Delete Button">
-                    <rect key="frame" x="10" y="313" width="35" height="35"/>
+                    <rect key="frame" x="15" y="313" width="35" height="35"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.98431372549999996" green="0.41568627450000001" blue="0.46666666670000001" alpha="1" colorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -236,7 +236,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="eTY-nK-O9I" userLabel="Save Button">
-                    <rect key="frame" x="275" y="313" width="35" height="35"/>
+                    <rect key="frame" x="270" y="313" width="35" height="35"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.11372549019607843" green="0.44313725490196076" blue="0.71764705882352942" alpha="1" colorSpace="calibratedRGB"/>
                     <state key="normal" image="v.png">
@@ -247,86 +247,39 @@
                         <action selector="saveEvent:" destination="-1" eventType="touchUpInside" id="WKM-oG-21k"/>
                     </connections>
                 </button>
-            </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
-        </view>
-        <view hidden="YES" contentMode="scaleToFill" id="xqa-Me-6w4" userLabel="map mask">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <subviews>
-                <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" id="QSy-SP-ope">
-                    <rect key="frame" x="0.0" y="44" width="320" height="412"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                </mapView>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="zqz-XP-lKe">
-                    <rect key="frame" x="17" y="464" width="205" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="20"/>
-                    <color key="textColor" red="0.29803922770000002" green="0.29803922770000002" blue="0.29803922770000002" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Phone:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="NPx-uZ-FUb">
-                    <rect key="frame" x="17" y="522" width="54" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
-                    <color key="textColor" red="0.29803922770000002" green="0.29803922770000002" blue="0.29803922770000002" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <label opaque="NO" clipsSubviews="YES" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="zHz-ap-VlV">
-                    <rect key="frame" x="79" y="522" width="143" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
-                    <color key="textColor" red="0.29803922770000002" green="0.29803922770000002" blue="0.29803922770000002" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100.0 KM" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="l6h-DJ-pcC">
-                    <rect key="frame" x="230" y="472" width="70" height="64"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="16"/>
-                    <color key="textColor" red="0.29803922770000002" green="0.29803922770000002" blue="0.29803922770000002" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="bnD-Pl-zR0">
-                    <rect key="frame" x="17" y="493" width="205" height="21"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                    <color key="textColor" red="0.29803922770000002" green="0.29803922770000002" blue="0.29803922770000002" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
-            </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
-        </view>
-        <view hidden="YES" contentMode="scaleToFill" id="oIp-Mx-atK" userLabel="search mask">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="300"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <subviews>
-                <view contentMode="scaleToFill" id="sYV-UU-5g0" userLabel="search view">
-                    <rect key="frame" x="20" y="20" width="280" height="260"/>
+                <view hidden="YES" contentMode="scaleToFill" id="oIp-Mx-atK" userLabel="search mask">
+                    <rect key="frame" x="0.0" y="44" width="320" height="300"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" id="Fet-Cc-3aT">
-                            <rect key="frame" x="0.0" y="44" width="280" height="206"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        </tableView>
-                        <searchBar contentMode="redraw" searchBarStyle="minimal" showsCancelButton="YES" id="e1R-BK-ghW">
-                            <rect key="frame" x="0.0" y="0.0" width="280" height="44"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            <textInputTraits key="textInputTraits"/>
-                        </searchBar>
+                        <view contentMode="scaleToFill" id="sYV-UU-5g0" userLabel="search view">
+                            <rect key="frame" x="20" y="20" width="280" height="260"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" id="Fet-Cc-3aT">
+                                    <rect key="frame" x="0.0" y="44" width="280" height="206"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </tableView>
+                                <searchBar contentMode="redraw" searchBarStyle="minimal" showsCancelButton="YES" id="e1R-BK-ghW">
+                                    <rect key="frame" x="0.0" y="0.0" width="280" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                    <textInputTraits key="textInputTraits"/>
+                                </searchBar>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        </view>
                     </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="calibratedWhite"/>
                 </view>
             </subviews>
-            <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="calibratedWhite"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>
     <resources>
         <image name="locationTag20.png" width="20" height="20"/>
+        <image name="mapicon.png" width="256" height="256"/>
         <image name="reminder.png" width="20" height="20"/>
         <image name="repeat.png" width="512" height="512"/>
         <image name="v.png" width="35" height="35"/>

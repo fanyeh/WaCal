@@ -16,6 +16,7 @@
 #import "ReminderView.h"
 #import "RepeatView.h"
 #import "ReminderButton.h"
+#import "MapViewController.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 #define kGOOGLE_API_KEY @"AIzaSyAD9e182Fr19_2DcJFZYUHf6wEeXjxs_kQ"
@@ -26,12 +27,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 {
     NSDateFormatter *dateFormatter;
     NSDateFormatter *timeFormatter;
-    LocationCallback _foundLocationCallback;
-    CLLocationCoordinate2D destination;
-    MKPointAnnotation *previousSourceAnnotation;
-    MKPointAnnotation *previousDestinationAnnotation;
 
-    MKRoute *previousUserLocationDirectRoute;
     BOOL hasDestination;
 
     NSDate *minimumDate;
@@ -49,7 +45,6 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     EKCalendar *selectedCalendar;
     CGRect saveButtonFrame;
     CGRect saveButtonFrameMove;
-
 }
 
 @property (weak, nonatomic) IBOutlet UITextField *subjectField;
@@ -72,19 +67,11 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 @property (weak, nonatomic) IBOutlet UISearchBar *locationSearchBar;
 @property (weak, nonatomic) IBOutlet UITableView *searchResultTable;
 
-@property (weak, nonatomic) IBOutlet MKMapView *locationMapView;
-
 @property (weak, nonatomic) IBOutlet UIView *alldayView;
 @property (weak, nonatomic) IBOutlet UILabel *allLabel;
 @property (weak, nonatomic) IBOutlet UILabel *dayLabel;
 @property (weak, nonatomic) IBOutlet UIButton *trashButton;
-@property (weak, nonatomic) IBOutlet UIView *mapMask;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
-
-@property (weak, nonatomic) IBOutlet UILabel *mapLocationName;
-@property (weak, nonatomic) IBOutlet UILabel *destinationDistance;
-@property (weak, nonatomic) IBOutlet UITextView *mapLocationAddress;
-@property (weak, nonatomic) IBOutlet UILabel *locationPhone;
 
 @property (weak, nonatomic) IBOutlet UILabel *calendarName;
 @property (weak, nonatomic) IBOutlet UITextField *calendarNameField;
@@ -93,6 +80,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 @property (weak, nonatomic) IBOutlet UILabel *reminderLabel;
 @property (weak, nonatomic) IBOutlet UILabel *reminderValueLabel;
 @property (weak, nonatomic) IBOutlet UILabel *repeatValueLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *mapIcon;
 
 @end
 
@@ -115,9 +103,6 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     // View controller
     self.navigationItem.title = _event.title;
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction
-                                                                                          target:self action:@selector(showMap)];
-    self.navigationItem.title = @"Event";
     
     // Main view
     saveButtonFrame = _saveButton.frame;
@@ -197,11 +182,6 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     _endTimeLabel.text = [timeFormatter stringFromDate:[NSDate dateWithTimeInterval:300 sinceDate:_selectedDate]];
     _endDateLabel.text =  [dateFormatter stringFromDate:[NSDate dateWithTimeInterval:300 sinceDate:_selectedDate]];
     
-    // Map
-    _locationMapView.delegate = self;
-    _locationMapView.showsUserLocation = YES;
-    _locationMapView.pitchEnabled = YES;
-    
     // Search
     _locationSearchBar.delegate = self;
     _searchResultTable.delegate = self;
@@ -209,9 +189,21 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     [_searchResultTable registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
     _locationSearchView.layer.cornerRadius = 10.0f;
     selectedLocation = [[NSDictionary alloc]init];
-    
-    UITapGestureRecognizer *phoneTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(makeCall)];
-    [_locationPhone addGestureRecognizer:phoneTap];
+
+    // Map icon
+    UITapGestureRecognizer *mapIconTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showMap)];
+    [_mapIcon addGestureRecognizer:mapIconTap];
+}
+
+-(void)showMap
+{
+    if (selectedLocation) {
+        MapViewController *map = [[MapViewController alloc]initWithLocation:selectedLocation];
+        [self.navigationController pushViewController:map animated:YES];
+    } else {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Please Select Location" message:nil delegate:nil cancelButtonTitle:@"Close" otherButtonTitles:nil, nil];
+        [alert show];
+    }
 }
 
 #pragma mark - UIPickerViewDataSource
@@ -268,22 +260,6 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     // Check if there is location
     if (_event.location) {
         _locationField.text = _event.location;
-        
-        // Check if there's event location
-        NSMutableDictionary *allLocationItems = [[LocationDataStore sharedStore]allItems];
-        LocationData *eventLocation = [allLocationItems objectForKey:_event.eventIdentifier];
-        // If yes , update map
-        if (eventLocation) {
-            destination =  CLLocationCoordinate2DMake(eventLocation.latitude, eventLocation.longitude);
-            hasDestination = YES;
-            
-            // Update map info
-            _mapLocationName.text = eventLocation.locationName;
-            _mapLocationAddress.text = eventLocation.locationAddress;
-            
-        } else {
-            hasDestination = NO;
-        }
     }
     else {
         _locationField.placeholder = @"Select location";
@@ -303,155 +279,8 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - MKMapViewDelegate
-
-- (MKMapItem*)mapItemForCoordinate:(CLLocationCoordinate2D)coordinate {
-    MKPlacemark *placemark = [[MKPlacemark alloc] initWithCoordinate:coordinate addressDictionary:nil];
-    MKMapItem *mapItem = [[MKMapItem alloc] initWithPlacemark:placemark];
-    return mapItem;
-}
-
-- (void)calculateRouteToMapItem:(CLLocationCoordinate2D)userLocation userDestination:(CLLocationCoordinate2D)userDestination
-{
-    // 2
-    MKPointAnnotation *sourceAnnotation = [MKPointAnnotation new];
-    sourceAnnotation.coordinate = userLocation;
-    sourceAnnotation.title = @"Start";
-    
-    MKPointAnnotation *destinationAnnotation = [MKPointAnnotation new];
-    destinationAnnotation.coordinate = userDestination;
-    destinationAnnotation.title = _locationField.text;
-    
-    __block MKRoute *fromUserLocationDirectionsRoute = nil;
-    
-    // 1
-    MKMapItem *sourceMapItem = [self mapItemForCoordinate:userLocation];
-    MKMapItem *destinationMapItem = [self mapItemForCoordinate:userDestination];;
-    
-    // 3
-    dispatch_group_t group = dispatch_group_create();
-    
-    // 4
-    // Find route to source airport
-    dispatch_group_enter(group);
-    [self obtainDirectionsFrom:sourceMapItem
-                            to:destinationMapItem
-                    completion:^(MKRoute *route, NSError *error) {
-                        fromUserLocationDirectionsRoute = route;
-                        dispatch_group_leave(group);
-                    }];
-    
-    // 6
-    // When both are found, setup new route
-    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
-        
-        // Add source/dest annotation
-        if ([_locationMapView.annotations count]==1) {
-            [_locationMapView addAnnotations:@[destinationAnnotation,sourceAnnotation]];
-            previousSourceAnnotation = sourceAnnotation;
-            previousDestinationAnnotation = destinationAnnotation;
-        }
-        // Remove then add source/desitination for latest location updates for route
-        else {
-            // Remove source annotation
-            [_locationMapView removeAnnotation:previousSourceAnnotation];
-            [_locationMapView removeAnnotation:previousDestinationAnnotation];
-            
-            // Add new source annotation
-            [_locationMapView addAnnotation:sourceAnnotation];
-            [_locationMapView addAnnotation:destinationAnnotation];
-
-            previousSourceAnnotation = sourceAnnotation;
-            previousDestinationAnnotation = destinationAnnotation;
-
-            [_locationMapView removeOverlay:previousUserLocationDirectRoute.polyline];
-        }
-        
-        // Add route overlay
-        [_locationMapView addOverlay:fromUserLocationDirectionsRoute.polyline level:MKOverlayLevelAboveRoads];
-        previousUserLocationDirectRoute = fromUserLocationDirectionsRoute;
-        
-        MKMapPoint points[2];
-        points[0] = MKMapPointForCoordinate(sourceAnnotation.coordinate);
-        points[1] = MKMapPointForCoordinate(destinationAnnotation.coordinate);
-        
-        MKCoordinateRegion boundingRegion = CoordinateRegionBoundingMapPoints(points, 2);
-        boundingRegion.span.latitudeDelta *= 1.1f;
-        boundingRegion.span.longitudeDelta *= 1.1f;
-        [_locationMapView setRegion:boundingRegion animated:YES];
-        CLLocation *destinationLocation = [[CLLocation alloc]initWithLatitude:destination.latitude longitude:destination.longitude];
-        
-        _destinationDistance.text = [NSString stringWithFormat:@"%.1f KM",[_locationMapView.userLocation.location distanceFromLocation:destinationLocation]/1000];
-    });
-}
-
-- (void)obtainDirectionsFrom:(MKMapItem*)from to:(MKMapItem*)to completion:(void(^)(MKRoute *route, NSError *error))completion {
-    // 1
-    MKDirectionsRequest *request = [[MKDirectionsRequest alloc] init];
-    
-    // 2
-    request.source = from;
-    request.destination = to;
-    
-    // 3
-    request.transportType = MKDirectionsTransportTypeAutomobile;
-    
-    // 4
-    MKDirections *directions = [[MKDirections alloc] initWithRequest:request];
-    [directions calculateDirectionsWithCompletionHandler:^(MKDirectionsResponse *response, NSError *error) {
-        MKRoute *route = nil;
-        
-        // 5
-        if (response.routes.count > 0) {
-            route = response.routes[0];
-        } else if (!error) {
-            error = [NSError errorWithDomain:@"com.razeware.FlyMeThere" code:404 userInfo:@{NSLocalizedDescriptionKey:@"No routes found!"}];
-        }
-        
-        // 6
-        if (completion) {
-            completion(route, error);
-        }
-    }];
-}
-
-#pragma mark - MKMapViewDelegate
-
-- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
-    
-    if (hasDestination) {
-        [self calculateRouteToMapItem:userLocation.location.coordinate userDestination:(destination)];
-    }
-    
-}
-
-- (MKAnnotationView*)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
-    if ([annotation isKindOfClass:[MKPlacemark class]]) {
-        MKPinAnnotationView *pin = (MKPinAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:@"placemark"];
-        if (!pin) {
-            pin = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"placemark"];
-            pin.pinColor = MKPinAnnotationColorRed;
-            pin.canShowCallout = YES;
-        } else {
-            pin.annotation = annotation;
-        }
-        return pin;
-    }
-    return nil;
-}
-
-- (MKOverlayRenderer*)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay
-{
-    if ([overlay isKindOfClass:[MKPolyline class]]) {
-        MKPolylineRenderer *renderer = [[MKPolylineRenderer alloc] initWithPolyline:(MKPolyline*)overlay];
-        renderer.strokeColor = [UIColor blueColor];
-        return renderer;
-    }
-    return nil;
-}
-
 #pragma mark - UIAlertViewDelegate
-
+// Alert before delete event
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex==1) {
@@ -490,6 +319,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     repeat.show = NO;
     reminder.frame = hideFrame;
     reminder.show = NO;
+    selectedLocation = nil;
     return YES;
 }
 
@@ -534,7 +364,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     
     // Create new location if there isn't one, else update it
     if ([selectedLocation count]>0) {
-        LocationData *eventLocation = [[[LocationDataStore sharedStore]allItems] objectForKey:eventIdentifier];
+        LocationData * eventLocation = [[[LocationDataStore sharedStore]allItems] objectForKey:eventIdentifier];
         if (!eventLocation) {
             eventLocation = [[LocationDataStore sharedStore]createItemWithKey:eventIdentifier];
         }
@@ -542,6 +372,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
         eventLocation.longitude = [[[[selectedLocation objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
         eventLocation.locationName = [selectedLocation objectForKey:@"name"];
         eventLocation.locationAddress = [selectedLocation objectForKey:@"formatted_address"];
+        eventLocation.reference = [selectedLocation objectForKey:@"reference"];
         [[LocationDataStore sharedStore]saveChanges];
     }
     
@@ -562,18 +393,6 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
                                                otherButtonTitles:@"OK", nil];
     
     [deleteAlert show];
-}
-
-- (void)showMap
-{
-    [self.view endEditing:YES];
-    reminder.show = NO;
-    reminder.frame = hideFrame;
-    repeat.show = NO;
-    repeat.frame = hideFrame;
-    CLLocation *destinationLocation = [[CLLocation alloc]initWithLatitude:destination.latitude longitude:destination.longitude];
-    _destinationDistance.text = [NSString stringWithFormat:@"%.1f KM",[_locationMapView.userLocation.location distanceFromLocation:destinationLocation]/1000];
-    _mapMask.hidden = NO;
 }
 
 - (void)searchLocation
@@ -917,18 +736,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     
     selectedLocation = [places objectAtIndex:indexPath.row];
     
-    // Update map info
-    _mapLocationName.text =[selectedLocation objectForKey:@"name"];
-    _mapLocationAddress.text = [selectedLocation objectForKey:@"formatted_address"];
-    [self queryGooglePlaceDetails:[selectedLocation objectForKey:@"reference"]];
-    
     _maskView.hidden = YES;
-    
-    // Update Apple map
-    double lat =  [[[[selectedLocation objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"] doubleValue];
-    double lon = [[[[selectedLocation objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
-    destination = CLLocationCoordinate2DMake(lat,lon);
-    [self calculateRouteToMapItem:_locationMapView.userLocation.location.coordinate userDestination:destination];
 }
 
 // Google search
@@ -967,52 +775,6 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
                                    NSLog(@"error %@",connectionError);
                                }
                            }];
-}
-
--(void)queryGooglePlaceDetails:(NSString *)reference
-{
-    // Sensor = true means search using GPS
-    NSString *url;
-    url = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/details/json?reference=%@&sensor=true&key=%@",reference,kGOOGLE_API_KEY];
-    //Formulate the string as a URL object.
-    NSURL *googleRequestURL=[NSURL URLWithString:[url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-    // Retrieve the results of the URL.
-    
-    NSURLRequest *request = [NSURLRequest requestWithURL:googleRequestURL];
-    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-    [NSURLConnection sendAsynchronousRequest:request
-                                       queue:queue
-                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-                               
-                               if ([data length]>0 && connectionError==nil) {
-                                   //收到正確的資料，連線沒有錯
-                                   NSDictionary* json = [NSJSONSerialization JSONObjectWithData:data
-                                                                                        options:NSJSONReadingAllowFragments
-                                                                                          error:&connectionError];
-                                   
-                                   dispatch_async(dispatch_get_main_queue(), ^{
-                                       _locationPhone.text = [[json objectForKey:@"result"] objectForKey:@"formatted_phone_number"];
-                                   });
-                                   
-                               } else if ([data length]==0 && connectionError==nil) {
-                                   //沒有資料，連線沒有錯誤
-                               } else if (connectionError != nil) {
-                                   //連線有錯誤
-                                   NSLog(@"error %@",connectionError);
-                               }
-                           }];
-}
-
-- (IBAction)closeMap:(id)sender
-{
-    _mapMask.hidden = YES;
-    [_subjectField becomeFirstResponder];
-}
-
-- (void)makeCall
-{
-    NSString *phoneNumber = [NSString stringWithFormat:@"tel:%@",[_locationPhone.text stringByReplacingOccurrencesOfString:@" " withString:@""]];
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:phoneNumber]];
 }
 
 @end

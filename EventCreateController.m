@@ -11,11 +11,10 @@
 #import "ReminderView.h"
 #import "RepeatView.h"
 #import <EventKit/EventKit.h>
-#import <MapKit/MapKit.h>
-#import "MapKitHelpers.h"
 #import "ReminderButton.h"
 #import "LocationData.h"
 #import "LocationDataStore.h"
+#import "MapViewController.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 #define kGOOGLE_API_KEY @"AIzaSyAD9e182Fr19_2DcJFZYUHf6wEeXjxs_kQ"
@@ -33,16 +32,11 @@
     EKRecurrenceRule *recurrenceRule;
     CGRect hideFrame;
     NSArray *places;
-    double locationLat;
-    double locationLng;
-    
     NSDictionary *selectedLocation;
     CGRect saveButtonFrame;
     CGRect saveButtonFrameMove;
-    
     EKCalendar *selectedCalendar;
-
-
+    CLLocationCoordinate2D destination;
 }
 
 @property (weak, nonatomic) IBOutlet UITextField *subjectField;
@@ -71,15 +65,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *calendarNameField;
 @property (weak, nonatomic) IBOutlet UILabel *calenderNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *calendarLabel;
-
-// Map
-@property (weak, nonatomic) IBOutlet UILabel *closeMapLabel;
-@property (weak, nonatomic) IBOutlet UILabel *destinationDistance;
-@property (weak, nonatomic) IBOutlet UILabel *mapLocationName;
-@property (weak, nonatomic) IBOutlet UILabel *mapLocationAddress;
-@property (weak, nonatomic) IBOutlet UILabel *locationPhone;
-@property (weak, nonatomic) IBOutlet UIView *mapMask;
-@property (weak, nonatomic) IBOutlet MKMapView *locationMapView;
+@property (weak, nonatomic) IBOutlet UIImageView *mapIcon;
 
 @end
 
@@ -102,9 +88,6 @@
     // Navgition bar
     self.navigationItem.title = @"New Event";
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAction
-                                                                                          target:self
-                                                                                          action:@selector(showMap)];
 
     _locationSearchBar.delegate = self;
     _searchResultTable.delegate = self;
@@ -120,7 +103,6 @@
     _calendarNameField.tintColor = [UIColor clearColor];
     _calendarNameField.inputView = calendarPicker;
 
-    
     UITapGestureRecognizer *reminderTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showReminder)];
     UITapGestureRecognizer *repeatTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showRepeat)];
     [_reminderLabel addGestureRecognizer:reminderTap];
@@ -195,9 +177,14 @@
     
     selectedLocation = [[NSDictionary alloc]init];
     
+    // Save Button
     _saveButton.layer.cornerRadius = _saveButton.frame.size.width/2;
     saveButtonFrame = _saveButton.frame;
     saveButtonFrameMove = CGRectOffset(_saveButton.frame, 0, 215);
+    
+    // Map icon
+    UITapGestureRecognizer *mapIconTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showMap)];
+    [_mapIcon addGestureRecognizer:mapIconTap];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -216,21 +203,10 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)showMap
+-(void)showMap
 {
-    [self.view endEditing:YES];
-    reminder.show = NO;
-    reminder.frame = hideFrame;
-    repeat.show = NO;
-    repeat.frame = hideFrame;
-//    CLLocation *destinationLocation = [[CLLocation alloc]initWithLatitude:destination.latitude longitude:destination.longitude];
-//    _destinationDistance.text = [NSString stringWithFormat:@"%.1f KM",[_locationMapView.userLocation.location distanceFromLocation:destinationLocation]/1000];
-    _mapMask.hidden = NO;
-}
-
-- (void)closeMap
-{
-    
+    MapViewController *map = [[MapViewController alloc]initWithLocation:selectedLocation];
+    [self.navigationController pushViewController:map animated:YES];
 }
 
 #pragma mark - UIPickerViewDataSource
@@ -287,8 +263,9 @@
     repeat.show = NO;
     reminder.frame = hideFrame;
     reminder.show = NO;
-    
     _saveButton.frame = saveButtonFrame;
+    
+    _mapIcon.hidden = YES;
     return YES;
 }
 
@@ -308,6 +285,7 @@
         eventLocation.longitude = [[[[selectedLocation objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
         eventLocation.locationName = [selectedLocation objectForKey:@"name"];
         eventLocation.locationAddress = [selectedLocation objectForKey:@"formatted_address"];
+        eventLocation.reference = [selectedLocation objectForKey:@"reference"];
         [eventLocation setLocatinoIconDataFromImage:[UIImage imageWithContentsOfFile:[selectedLocation objectForKey:@"icon"]]];
         [[LocationDataStore sharedStore]saveChanges];
         NSLog(@"Created new location");
@@ -660,6 +638,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     // Configure the cell...
+    // Show the search result
     NSString *locName = [places[indexPath.row] objectForKey:@"name"];
     NSString *address = [places[indexPath.row] objectForKey:@"formatted_address"];
     
@@ -679,24 +658,20 @@
     _locationField.text = [places[indexPath.row] objectForKey:@"name"];
     selectedLocation = [places objectAtIndex:indexPath.row];
     
-//    // Update map info
-//    _mapLocationName.text =[selectedLocation objectForKey:@"name"];
-//    _mapLocationAddress.text = [selectedLocation objectForKey:@"formatted_address"];
-//    _mapLocationIcon.image = [selectedLocation objectForKey:@"icon"];
-//    
+    // Hide search table after row selected
     _maskView.hidden = YES;
-//
-//    // Update Apple map
-//    destination = CLLocationCoordinate2DMake(locationLat,locationLng);
-//    [self calculateRouteToMapItem:_locationMapView.userLocation.location.coordinate userDestination:destination];
-
+    _mapIcon.hidden = NO;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     if (textField.returnKeyType == UIReturnKeySearch) {
         _locationSearchBar.text = _locationField.text;
+        
+        // Start searching from google when search key is pressed
         [self queryGooglePlacesLongitude:_locationField.text];
+        
+        // Show the search table and search bar
         _maskView.hidden = NO;
         [_locationSearchBar becomeFirstResponder];
     }
@@ -704,7 +679,8 @@
     return YES;
 }
 
-// Google search
+#pragma mark - Google Places Search
+
 -(void) queryGooglePlacesLongitude:(NSString *)name
 {
     // Sensor = true means search using GPS
@@ -741,7 +717,5 @@
                                }
                            }];
 }
-
-
 
 @end
