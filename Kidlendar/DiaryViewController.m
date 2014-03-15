@@ -33,6 +33,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *twitterImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *weiboImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *facebookImageView;
+@property (weak, nonatomic) IBOutlet UIView *videoPlayView;
 
 
 @property (weak, nonatomic) IBOutlet UIView *uploadView;
@@ -57,16 +58,21 @@
     [super viewDidLoad];
     
     // Do any additional setup after loading the view from its nib.
-    
+    _videoPlayView.layer.cornerRadius = _videoPlayView.frame.size.width/2;
+    _videoPlayView.layer.borderWidth = 4.0f;
+    _videoPlayView.layer.borderColor = [[UIColor whiteColor]CGColor];
     // Put that image onto the screen in our image view
     if (_diaryData.diaryVideoThumbnail) {
         _diaryPhoto.image = _diaryData.diaryVideoThumbnail;
         UITapGestureRecognizer *videoTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(playVideo)];
         _diaryPhoto.userInteractionEnabled = YES;
         [_diaryPhoto addGestureRecognizer:videoTap];
+        _videoPlayView.hidden = NO;
         
     } else {
         _diaryPhoto.image = _diaryData.diaryImage;
+        _videoPlayView.hidden = YES;
+
     }
 
    _diaryDetailTextView.text = _diaryData.diaryText;

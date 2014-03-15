@@ -13,6 +13,7 @@
 #import <EventKit/EventKit.h>
 #import "ReminderButton.h"
 #import "LocationData.h"
+#import "SelectedLocation.h"
 #import "LocationDataStore.h"
 #import "MapViewController.h"
 
@@ -32,7 +33,7 @@
     EKRecurrenceRule *recurrenceRule;
     CGRect hideFrame;
     NSArray *places;
-    NSDictionary *selectedLocation;
+    SelectedLocation *selectedLocation;
     CGRect saveButtonFrame;
     CGRect saveButtonFrameMove;
     EKCalendar *selectedCalendar;
@@ -155,6 +156,7 @@
     _subjectField.delegate = self;
     [_subjectField becomeFirstResponder];
     _locationField.delegate = self;
+    _locationField.tag = 3;
     
     _startTimeField.delegate = self;
     _startTimeField.inputView = _datePicker;
@@ -175,7 +177,7 @@
     event.endDate = [NSDate dateWithTimeInterval:300 sinceDate:_selectedDate];
     event.allDay = NO;
     
-    selectedLocation = [[NSDictionary alloc]init];
+    selectedLocation = [[SelectedLocation alloc]init];
     
     // Save Button
     _saveButton.layer.cornerRadius = _saveButton.frame.size.width/2;
@@ -255,6 +257,9 @@
             _endTimeView.layer.borderWidth = 2.0f;
             _startTimeView.layer.borderWidth = 0.0f;
             break;
+        case 3:
+            _mapIcon.hidden = YES;
+            break;
         default:
             break;
     }
@@ -264,8 +269,6 @@
     reminder.frame = hideFrame;
     reminder.show = NO;
     _saveButton.frame = saveButtonFrame;
-    
-    _mapIcon.hidden = YES;
     return YES;
 }
 
@@ -279,14 +282,13 @@
     [[[CalendarStore sharedStore]eventStore] saveEvent:event span:EKSpanThisEvent commit:YES error:nil];
     
     // Create new location
-    if ([selectedLocation count] > 0) {
+    if (selectedLocation.locationName) {
         LocationData *eventLocation = [[LocationDataStore sharedStore]createItemWithKey:event.eventIdentifier];
-        eventLocation.latitude =  [[[[selectedLocation objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"] doubleValue];
-        eventLocation.longitude = [[[[selectedLocation objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
-        eventLocation.locationName = [selectedLocation objectForKey:@"name"];
-        eventLocation.locationAddress = [selectedLocation objectForKey:@"formatted_address"];
-        eventLocation.reference = [selectedLocation objectForKey:@"reference"];
-        [eventLocation setLocatinoIconDataFromImage:[UIImage imageWithContentsOfFile:[selectedLocation objectForKey:@"icon"]]];
+        eventLocation.latitude = selectedLocation.latitude;
+        eventLocation.longitude = selectedLocation.longitude;
+        eventLocation.locationName = selectedLocation.locationName;
+        eventLocation.locationAddress = selectedLocation.locationAddress;
+        eventLocation.reference = selectedLocation.reference;
         [[LocationDataStore sharedStore]saveChanges];
         NSLog(@"Created new location");
     }
@@ -656,7 +658,14 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     _locationField.text = [places[indexPath.row] objectForKey:@"name"];
-    selectedLocation = [places objectAtIndex:indexPath.row];
+    
+    // Create temp location data
+    NSDictionary *selectedPlace = [places objectAtIndex:indexPath.row];
+    selectedLocation.latitude =  [[[[selectedPlace objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"] doubleValue];
+    selectedLocation.longitude = [[[[selectedPlace objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
+    selectedLocation.locationName = [selectedPlace objectForKey:@"name"];
+    selectedLocation.locationAddress = [selectedPlace objectForKey:@"formatted_address"];
+    selectedLocation.reference = [selectedPlace objectForKey:@"reference"];
     
     // Hide search table after row selected
     _maskView.hidden = YES;

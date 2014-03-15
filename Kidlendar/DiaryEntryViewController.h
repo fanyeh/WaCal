@@ -14,7 +14,6 @@ typedef NS_ENUM(NSInteger, MediaType)
     kMediaTypeVideo
 };
 
-
 @class ALAsset;
 
 @interface DiaryEntryViewController : UIViewController

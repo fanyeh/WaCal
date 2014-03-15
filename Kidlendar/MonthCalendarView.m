@@ -124,7 +124,6 @@
         [dateView.dateLabel setText:[NSString stringWithFormat:@"%ld",(long)dateComp.day]];
         [_dateGroupView addSubview:dateView];
 
-
         // Configure color for dates not in current month
         if (dateModel.isCurrentMonth)
             dateView.dateLabel.textColor = [UIColor colorWithWhite:0.298 alpha:1.000];

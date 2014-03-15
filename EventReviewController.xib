@@ -171,7 +171,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <textField opaque="NO" clipsSubviews="YES" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Select location" minimumFontSize="17" clearButtonMode="whileEditing" id="qDM-US-Zdb" userLabel="Location Field">
-                            <rect key="frame" x="53" y="106" width="242" height="30"/>
+                            <rect key="frame" x="53" y="106" width="194" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="20"/>
@@ -216,8 +216,8 @@
                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mapicon.png" id="bQb-PD-cVG">
-                            <rect key="frame" x="265" y="106" width="30" height="30"/>
+                        <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mapicon.png" id="bQb-PD-cVG">
+                            <rect key="frame" x="255" y="101" width="40" height="40"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
                     </subviews>

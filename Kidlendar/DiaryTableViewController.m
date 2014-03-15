@@ -25,8 +25,9 @@
     NSMutableDictionary *cloudDiarys;
     BOOL currentTableIsLocal;
     NSDateFormatter *dateFormatter;
-    NSDateFormatter *weekdayFormatter;
+    NSDateFormatter *timeFormatter;
     NSArray *monthArray;
+    NSArray *weekdayArray;
     NSMutableDictionary *diaryInSections;
 }
 @end
@@ -46,25 +47,23 @@
 {
     [super viewDidLoad];
 //    self.automaticallyAdjustsScrollViewInsets = NO;
-    self.view.backgroundColor = Rgb2UIColor(236, 240, 241);
+    self.view.backgroundColor = [UIColor whiteColor];
     
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self  action:@selector(createDiary)];
     self.navigationItem.rightBarButtonItem = addButton;
 
     // Date formatters
     dateFormatter = [[NSDateFormatter alloc]init];
-    dateFormatter.dateFormat = @"dd";
-    weekdayFormatter = [[NSDateFormatter alloc]init];
-    weekdayFormatter.dateFormat = @"EEEE";
+    dateFormatter.dateFormat = @"yyyy/MM/dd";
+    timeFormatter = [[NSDateFormatter alloc]init];
+    timeFormatter.dateFormat = @"HH:mm";
     
     // Set up table
-    [self.tableView registerNib:[UINib nibWithNibName:@"DiaryTableViewCell" bundle:nil]
-         forCellReuseIdentifier:@"DiaryTableViewCell"];
-    
+    [self.tableView registerNib:[UINib nibWithNibName:@"DiaryTableViewCell" bundle:nil] forCellReuseIdentifier:@"DiaryTableViewCell"];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
     monthArray = @[@"January",@"February",@"March",@"April",@"May",@"June",@"July",@"August",@"September",@"October",@"November",@"December"];
-//    diaryInSections = [[NSMutableDictionary alloc]init];
+    weekdayArray = @[@"Sun",@"Mon",@"Tue",@"Wed",@"Thu",@"Fri",@"Sat"];
     [self sortDiaryToSection];
     
     // Add observer to monitor event when new calendar event is created or removed
@@ -101,7 +100,7 @@
     for (DiaryData *d in diaryArray) {
         NSDate *diaryDate = [NSDate dateWithTimeIntervalSinceReferenceDate:d.dateCreated];
         NSDateComponents *comp = [[NSCalendar currentCalendar]components:(NSCalendarUnitYear|NSCalendarUnitMonth) fromDate:diaryDate];
-        NSString *sectionKey = [NSString stringWithFormat:@"%ld-%@",(long)[comp year],monthArray[[comp month]]];
+        NSString *sectionKey = [NSString stringWithFormat:@"%@ %ld",monthArray[[comp month]-1],(long)[comp year]];
         if (![diaryInSections objectForKey:sectionKey]) {
             NSMutableArray *diarySet = [[NSMutableArray alloc]init];
             [diarySet addObject:d];
@@ -131,34 +130,48 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    DiaryTableViewCell *cell = (DiaryTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"DiaryTableViewCell"];
+    DiaryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DiaryTableViewCell"];
     if (!cell)
         cell =[[DiaryTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DiaryTableViewCell"];
-    cell.cellImageView.layer.cornerRadius = 5.0f;
-    cell.cellImageView.layer.masksToBounds = YES;
-//    cell.cellView.layer.shadowColor = [[UIColor blackColor]CGColor];
-//    cell.cellView.layer.shadowOpacity = 0.5f;
-//    cell.cellView.layer.shadowOffset = CGSizeMake(2 , 2);
-
-    // Configure the cell...
-//    DiaryData *d = [DiaryDataStore sharedStore].allItems[indexPath.row];
     NSString *sectionKey =diaryInSections.allKeys[indexPath.section];
     DiaryData *d = [[diaryInSections objectForKey:sectionKey] objectAtIndex:indexPath.row];
     
     NSDate *diaryDate = [NSDate dateWithTimeIntervalSinceReferenceDate:d.dateCreated];
-    cell.dateLabel.text = [dateFormatter stringFromDate:diaryDate];
-    cell.weekdayLabel.adjustsFontSizeToFitWidth = YES;
-    cell.weekdayLabel.text = [weekdayFormatter stringFromDate:diaryDate];
+    NSDateComponents *comp = [[NSCalendar currentCalendar]components:(NSCalendarUnitDay|NSCalendarUnitWeekday) fromDate:diaryDate];
+    
+    NSInteger weekday = [comp weekday];
+    NSInteger day = [comp day];
+    NSString *dayString;
+    switch (day%10) {
+        case 1:
+            dayString = @"st";
+            break;
+        case 2:
+            dayString = @"nd";
+            break;
+        case 3:
+            dayString = @"rd";
+            break;
+        default:
+            dayString = @"th";
+            break;
+    }
+    
+    cell.dateLabel.text = [NSString stringWithFormat:@"%ld%@,%@",day,dayString,weekdayArray[weekday-1]];
+    cell.timeLabel.text = [timeFormatter stringFromDate:diaryDate];
     cell.locationLabel.text = d.location;
     cell.diaryDetail.text = d.diaryText;
     cell.diarySubject.text = d.subject;
     
     if (d.diaryVideoPath) {
         cell.cellImageView.image = d.diaryVideoThumbnail;
-        cell.videoPlayButton.hidden = NO;
+        cell.videoPlayView.layer.borderWidth = 2.0f;
+        cell.videoPlayView.layer.borderColor = [[UIColor whiteColor]CGColor];
+        cell.videoPlayView.layer.cornerRadius = cell.videoPlayView.frame.size.width/2;
+        cell.videoPlayView.hidden = NO;
     } else {
         cell.cellImageView.image = d.diaryImage;
-        cell.videoPlayButton.hidden = YES;
+        cell.videoPlayView.hidden = YES;
     }
     return cell;
 }
@@ -199,17 +212,21 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 101; // 可在 XIB 檔案，點選 My Talbe View Cell 從 Size inspector 得知
+    return 80; // 可在 XIB 檔案，點選 My Talbe View Cell 從 Size inspector 得知
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UIView *headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
-    headerView.backgroundColor = [UIColor redColor];
-    UILabel *headerLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 320, 44)];
-    headerLabel.textColor = Rgb2UIColor(33, 138, 251);
+    UIView *headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 30)];
+    headerView.backgroundColor = [UIColor colorWithWhite:0.902 alpha:1.000];
+    headerView.layer.shadowOpacity = 0.5f;
+    headerView.layer.shadowColor = [[UIColor colorWithWhite:0.298 alpha:1.000]CGColor];
+    headerView.layer.shadowOffset = CGSizeMake(0, 1);
+    
+    UILabel *headerLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 320, 30)];
+    headerLabel.textColor = Rgb2UIColor(29 , 113 , 183);
     headerLabel.textAlignment = NSTextAlignmentCenter;
-    headerLabel.font = [UIFont fontWithName:@"Avenir" size:20];
+    headerLabel.font = [UIFont fontWithName:@"Avenir-bold" size:15];
     headerLabel.center = headerView.center;
     headerLabel.text = [diaryInSections.allKeys objectAtIndex:section];
     [headerView addSubview:headerLabel];
@@ -218,7 +235,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 44;
+    return 30;
 }
 
 - (void)createDiary

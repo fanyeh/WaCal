@@ -8,13 +8,13 @@
 
 #import "DiaryEntryViewController.h"
 #import <MapKit/MapKit.h>
-//#import <GoogleMaps/GoogleMaps.h>
 #import "DiaryData.h"
 #import "DiaryDataStore.h"
 #import "LocationDataStore.h"
 #import "LocationData.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "UIImage+Resize.h"
+#import "GPUImage.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 #define kGOOGLE_API_KEY @"AIzaSyAD9e182Fr19_2DcJFZYUHf6wEeXjxs_kQ"
@@ -28,15 +28,13 @@
     double locationLng;
     double locationLat;
 }
+@property (weak, nonatomic) IBOutlet UIImageView *backgroundView;
 @property (weak, nonatomic) IBOutlet UIView *locationSearchView;
-@property (weak, nonatomic) IBOutlet UIView *maskView;
-@property (weak, nonatomic) IBOutlet UIView *diaryComposeView;
 @property (weak, nonatomic) IBOutlet UITextField *diaryTimeField;
 @property (weak, nonatomic) IBOutlet UITextField *locationField;
 @property (weak, nonatomic) IBOutlet UITextField *diarySubjectField;
 @property (weak, nonatomic) IBOutlet UITableView *searchResultTable;
 @property (weak, nonatomic) IBOutlet UISearchBar *locationSearchBar;
-@property (weak, nonatomic) IBOutlet UIView *dotView;
 @property (weak, nonatomic) IBOutlet UITextView *diaryEntryView;
 @end
 
@@ -56,20 +54,19 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.automaticallyAdjustsScrollViewInsets = NO;
-    
-    _dotView.layer.cornerRadius = _dotView.frame.size.width/2;
-    
+     
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                                                                target:self
                                                                                action:@selector(saveDiary)];
     
     self.navigationItem.rightBarButtonItem = doneButton;
+  
+    GPUImageiOSBlurFilter *blurFilter = [[GPUImageiOSBlurFilter alloc]init];
+    blurFilter.blurRadiusInPixels = 0.5f;
+    _backgroundView.image =  [blurFilter imageByFilteringImage:_diaryImage];
+
     
-    _diaryComposeView.layer.cornerRadius = 5.0f;
-    _diaryComposeView.layer.shadowColor = [[UIColor blackColor]CGColor];
-    _diaryComposeView.layer.shadowOpacity = 0.5f;
-    _diaryComposeView.layer.shadowOffset = CGSizeMake(2 , 2);
-    
+//    _backgroundView.image = _diaryImage;
     // Setup Date picker
     datePicker = [[UIDatePicker alloc]init];
     [datePicker setDatePickerMode:UIDatePickerModeDateAndTime];
@@ -79,34 +76,27 @@
 
     // Set up date formatter
     dateFormatter = [[NSDateFormatter alloc]init];
-    dateFormatter.dateFormat = @"yyyy年MM月dd日 EEEE HH:mm";
+    dateFormatter.dateFormat = @"yyyy/MM/dd";
     dateFormatter.timeZone = [NSTimeZone systemTimeZone];
     
     _diaryEntryView.delegate = self;
-    _diaryEntryView.layer.borderColor = [[UIColor colorWithWhite:0.702 alpha:1.000] CGColor];
-    _diaryEntryView.layer.borderWidth = 0.5f;
+//    _diaryEntryView.layer.borderColor = [[UIColor whiteColor] CGColor];
+//    _diaryEntryView.layer.borderWidth = 4.0f;
     _diaryEntryView.layer.cornerRadius = 5.0f;
+
     
     _diarySubjectField.delegate = self;
     [_diarySubjectField becomeFirstResponder];
     _diarySubjectField.tag = 0;
     
     _locationField.delegate = self;
-    UIImageView *locationTag = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
-    locationTag.image = [UIImage imageNamed:@"locationTag20.png"];
-    _locationField.leftView = locationTag;
-    _locationField.leftViewMode = UITextFieldViewModeAlways;
-    
+
     _locationSearchBar.delegate = self;
     
     _diaryTimeField.delegate = self;
     _diaryTimeField.inputView = datePicker;
     _diaryTimeField.tag = 1;
-    UIImageView *timeTag = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
-    timeTag.image = [UIImage imageNamed:@"calendar.png"];
-    _diaryTimeField.leftView = timeTag;
-    _diaryTimeField.leftViewMode = UITextFieldViewModeAlways;
-
+    _diaryTimeField.text = [dateFormatter stringFromDate:[NSDate date]];
     
     _searchResultTable.delegate = self;
     _searchResultTable.dataSource = self;
@@ -121,11 +111,6 @@
     
     _locationSearchView.layer.cornerRadius = 10.0f;
     
-}
-- (IBAction)locationBtnAction:(id)sender
-{
-    _maskView.hidden = NO;
-    [_locationSearchBar becomeFirstResponder];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -148,7 +133,7 @@
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
-    _maskView.hidden = YES;
+    _locationSearchView.hidden = YES;
 }
 
 #pragma mark - UITableViewDataSource
@@ -181,7 +166,7 @@
     _locationField.text = [places[indexPath.row] objectForKey:@"name"];
     locationLat =  [[[[places[indexPath.row] objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"] doubleValue];
     locationLng =  [[[[places[indexPath.row] objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
-    _maskView.hidden = YES;
+    _locationSearchView.hidden = YES;
 }
 
 - (void)didReceiveMemoryWarning
@@ -215,10 +200,6 @@
         diary.diaryVideoPath = [NSString stringWithFormat:@"%@",_asset.defaultRepresentation.url];
         UIImage *image = [UIImage imageWithCGImage: _asset.defaultRepresentation.fullScreenImage];
         [diary setDiaryVideoThumbDataFromImage:[image cropWithFaceDetect:CGSizeMake(320, 320)]];
-//        ALAssetRepresentation *rep = [_asset defaultRepresentation];
-//        Byte *buffer = (Byte*)malloc(rep.size);
-//        NSUInteger buffered = [rep getBytes:buffer fromOffset:0.0 length:rep.size error:nil];
-//        diary.diaryVideoData = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
     }
     
     [[DiaryDataStore sharedStore]saveChanges];
@@ -243,7 +224,7 @@
     if (textField.returnKeyType == UIReturnKeySearch) {
         _locationSearchBar.text = _locationField.text;
         [self queryGooglePlacesLongitude:0 andLatitude:0 withName:_locationField.text];
-        _maskView.hidden = NO;
+        _locationSearchView.hidden = NO;
         [_locationSearchBar becomeFirstResponder];
     }
     [textField resignFirstResponder];

@@ -111,6 +111,7 @@
 		4CD2B93218A4CF69002DA9E4 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD2B93118A4CF69002DA9E4 /* CFNetwork.framework */; };
 		4CEEB9F818B4656100C7FA80 /* DiaryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEEB9F718B4656100C7FA80 /* DiaryData.m */; };
 		4CEEB9FE18B47BAF00C7FA80 /* CloudData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEEB9FD18B47BAF00C7FA80 /* CloudData.m */; };
+		4CF1D5D718D34CD900B8801F /* SelectedLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF1D5D618D34CD900B8801F /* SelectedLocation.m */; };
 		4CF5151918C2FCC70050E330 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF5151818C2FCC70050E330 /* Social.framework */; };
 		4CF5151D18C314430050E330 /* 41-picture-frame.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF5151C18C314430050E330 /* 41-picture-frame.png */; };
 		4CF5151F18C314500050E330 /* 42-photos.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CF5151E18C314500050E330 /* 42-photos.png */; };
@@ -317,6 +318,8 @@
 		4CEEB9F718B4656100C7FA80 /* DiaryData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiaryData.m; path = ../DiaryData.m; sourceTree = "<group>"; };
 		4CEEB9FC18B47BAF00C7FA80 /* CloudData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudData.h; sourceTree = "<group>"; };
 		4CEEB9FD18B47BAF00C7FA80 /* CloudData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloudData.m; sourceTree = "<group>"; };
+		4CF1D5D518D34CD900B8801F /* SelectedLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectedLocation.h; sourceTree = "<group>"; };
+		4CF1D5D618D34CD900B8801F /* SelectedLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectedLocation.m; sourceTree = "<group>"; };
 		4CF5151818C2FCC70050E330 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		4CF5151C18C314430050E330 /* 41-picture-frame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "41-picture-frame.png"; sourceTree = "<group>"; };
 		4CF5151E18C314500050E330 /* 42-photos.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "42-photos.png"; sourceTree = "<group>"; };
@@ -729,6 +732,8 @@
 				4CFB086E187E6BFB00456D5D /* MonthModel.m */,
 				4C2E83BB1890BB450051215F /* CalendarStore.h */,
 				4C2E83BC1890BB450051215F /* CalendarStore.m */,
+				4CF1D5D518D34CD900B8801F /* SelectedLocation.h */,
+				4CF1D5D618D34CD900B8801F /* SelectedLocation.m */,
 			);
 			name = "Calendar Model";
 			sourceTree = "<group>";
@@ -933,6 +938,7 @@
 				4CBA4BBB18CD9BFC00B380AB /* PhotoAlbumTableCell.m in Sources */,
 				4C51761D186FF309002F6F6D /* KidlendarModel.xcdatamodeld in Sources */,
 				4C5B01F618ACBD7F0030FCCC /* DiaryCreateViewController.m in Sources */,
+				4CF1D5D718D34CD900B8801F /* SelectedLocation.m in Sources */,
 				4C4F992218CF5E51007D3746 /* AFURLRequestSerialization.m in Sources */,
 				4CFF693118BF3FC000337857 /* RepeatView.m in Sources */,
 				4C73E02018BFA5F3007ECCEC /* EventReviewController.m in Sources */,

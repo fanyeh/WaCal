@@ -16,9 +16,9 @@
                 <outlet property="subjectLabel" destination="vbX-PE-Xav" id="OhQ-vJ-LIf"/>
                 <outlet property="twitterImageView" destination="aFh-Gf-UDH" id="w4A-L4-u97"/>
                 <outlet property="uploadView" destination="ITT-cE-RZd" id="iqK-rF-Xhz"/>
+                <outlet property="videoPlayView" destination="wfd-Cd-OhF" id="qwy-2m-X3j"/>
                 <outlet property="view" destination="1" id="3"/>
                 <outlet property="weekdayLabel" destination="EDV-aG-qGt" id="oa5-9Q-FE1"/>
-                <outlet property="weiboImageView" destination="ax4-FP-orE" id="51h-UT-LJL"/>
                 <outlet property="yearLabel" destination="nuw-8O-UeL" id="coZ-6T-38i"/>
             </connections>
         </placeholder>
@@ -31,12 +31,13 @@
                     <rect key="frame" x="2" y="46" width="316" height="316"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" editable="NO" selectable="NO" id="OSf-Sk-hU6">
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" editable="NO" id="OSf-Sk-hU6">
                     <rect key="frame" x="5" y="408" width="310" height="133"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, su</string>
-                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                    <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                    <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2014" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="nuw-8O-UeL" userLabel="year - 2014">
@@ -71,9 +72,9 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subject" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="vbX-PE-Xav">
-                    <rect key="frame" x="5" y="388" width="189" height="21"/>
+                    <rect key="frame" x="5" y="384" width="189" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="22"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <view contentMode="scaleToFill" id="Fzw-iR-pl6">
@@ -89,15 +90,11 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <imageView tag="2" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fb_icon_325x325.png" id="ZyT-W9-LV6">
-                    <rect key="frame" x="275" y="365" width="40" height="40"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                </imageView>
-                <imageView tag="1" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SinaWeibo.png" id="ax4-FP-orE">
-                    <rect key="frame" x="227" y="365" width="40" height="40"/>
+                    <rect key="frame" x="285" y="375" width="30" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="twitter-bird-white-on-blue.png" id="aFh-Gf-UDH">
-                    <rect key="frame" x="179" y="365" width="40" height="40"/>
+                    <rect key="frame" x="245" y="375" width="30" height="30"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 </imageView>
                 <view hidden="YES" contentMode="scaleToFill" id="ITT-cE-RZd">
@@ -129,6 +126,17 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                 </view>
+                <view hidden="YES" contentMode="scaleToFill" id="wfd-Cd-OhF" userLabel="videoPlayView">
+                    <rect key="frame" x="116" y="160" width="88" height="88"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="playButton.png" id="jbJ-MT-LGM">
+                            <rect key="frame" x="27" y="22" width="44" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        </imageView>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
@@ -136,9 +144,9 @@
         </view>
     </objects>
     <resources>
-        <image name="SinaWeibo.png" width="1000" height="800"/>
         <image name="fb_icon_325x325.png" width="325" height="325"/>
         <image name="locationTag10.png" width="10" height="10"/>
+        <image name="playButton.png" width="44" height="44"/>
         <image name="twitter-bird-white-on-blue.png" width="300" height="300"/>
     </resources>
 </document>

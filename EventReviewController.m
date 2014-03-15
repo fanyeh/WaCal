@@ -11,6 +11,7 @@
 #import "ImageStore.h"
 #import "LocationDataStore.h"
 #import "LocationData.h"
+#import "SelectedLocation.h"
 #import <MapKit/MapKit.h>
 #import "MapKitHelpers.h"
 #import "ReminderView.h"
@@ -40,11 +41,14 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     
     BOOL allday;
     
-    NSDictionary *selectedLocation;
+    SelectedLocation *selectedLocation;
     
     EKCalendar *selectedCalendar;
     CGRect saveButtonFrame;
     CGRect saveButtonFrameMove;
+    
+    CGRect trashButtonFrame;
+    CGRect trashButtonFrameMove;
 }
 
 @property (weak, nonatomic) IBOutlet UITextField *subjectField;
@@ -103,10 +107,6 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     // View controller
     self.navigationItem.title = _event.title;
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
-    
-    // Main view
-    saveButtonFrame = _saveButton.frame;
-    saveButtonFrameMove = CGRectOffset(_saveButton.frame, 0, 215);
     
     // Calendar
     _calendarName.text = [[[CalendarStore sharedStore]calendar]title];
@@ -170,6 +170,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     _subjectField.delegate = self;
     [_subjectField becomeFirstResponder];
     _locationField.delegate = self;
+    _locationField.tag=3;
     
     _startTimeField.delegate = self;
     _startTimeField.inputView = _datePicker;
@@ -188,47 +189,23 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     _searchResultTable.dataSource = self;
     [_searchResultTable registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
     _locationSearchView.layer.cornerRadius = 10.0f;
-    selectedLocation = [[NSDictionary alloc]init];
 
+    
+    // Save Button
+    _saveButton.layer.cornerRadius = _saveButton.frame.size.width/2;
+    saveButtonFrame = _saveButton.frame;
+    saveButtonFrameMove = CGRectOffset(_saveButton.frame, 0, 215);
+    
+    
+    // Trash Button
+    _trashButton.layer.cornerRadius = _trashButton.frame.size.width/2;
+    trashButtonFrame = _trashButton.frame;
+    trashButtonFrameMove = CGRectOffset(_trashButton.frame, 0, 215);
+    
     // Map icon
     UITapGestureRecognizer *mapIconTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showMap)];
     [_mapIcon addGestureRecognizer:mapIconTap];
-}
-
--(void)showMap
-{
-    if (selectedLocation) {
-        MapViewController *map = [[MapViewController alloc]initWithLocation:selectedLocation];
-        [self.navigationController pushViewController:map animated:YES];
-    } else {
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Please Select Location" message:nil delegate:nil cancelButtonTitle:@"Close" otherButtonTitles:nil, nil];
-        [alert show];
-    }
-}
-
-#pragma mark - UIPickerViewDataSource
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
-{
-    return 1;
-}
-
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-    return [[[CalendarStore sharedStore]allCalendars] count];
-}
-
-#pragma mark - UIPickerViewDelegate
-
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-    EKCalendar *calendar = [[CalendarStore sharedStore]allCalendars][row];
-    return calendar.title;
-}
-
-- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
-{
-    selectedCalendar = [[CalendarStore sharedStore]allCalendars][row];
-    _calendarName.text = selectedCalendar.title;
+    selectedLocation = [[SelectedLocation alloc]init];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -260,6 +237,17 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     // Check if there is location
     if (_event.location) {
         _locationField.text = _event.location;
+        LocationData *l = [[[LocationDataStore sharedStore]allItems]objectForKey:_event.eventIdentifier];
+        if (l) {
+            selectedLocation.locationName = l.locationName;
+            selectedLocation.locationAddress = l.locationAddress;
+            selectedLocation.reference = l.reference;
+            selectedLocation.latitude = l.latitude;
+            selectedLocation.longitude = l.longitude;
+            _mapIcon.hidden = NO;
+        } else {
+            _mapIcon.hidden = YES;
+        }
     }
     else {
         _locationField.placeholder = @"Select location";
@@ -269,6 +257,37 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 - (void)viewWillDisappear:(BOOL)animated
 {
     self.tabBarController.tabBar.hidden = NO;
+}
+
+-(void)showMap
+{
+    MapViewController *map = [[MapViewController alloc]initWithLocation:selectedLocation];
+    [self.navigationController pushViewController:map animated:YES];
+}
+
+#pragma mark - UIPickerViewDataSource
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return [[[CalendarStore sharedStore]allCalendars] count];
+}
+
+#pragma mark - UIPickerViewDelegate
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    EKCalendar *calendar = [[CalendarStore sharedStore]allCalendars][row];
+    return calendar.title;
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    selectedCalendar = [[CalendarStore sharedStore]allCalendars][row];
+    _calendarName.text = selectedCalendar.title;
 }
 
 #pragma mark - Memory Management
@@ -311,15 +330,18 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
             _datePicker.minimumDate = minimumDate;
             [_datePicker setDate:_event.endDate];
             break;
+        case 3:
+            _mapIcon.hidden = YES;
+            break;
         default:
             break;
     }
-    
     repeat.frame = hideFrame;
     repeat.show = NO;
     reminder.frame = hideFrame;
     reminder.show = NO;
-    selectedLocation = nil;
+    _saveButton.frame = saveButtonFrame;
+    _trashButton.frame = trashButtonFrame;
     return YES;
 }
 
@@ -363,19 +385,21 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     }
     
     // Create new location if there isn't one, else update it
-    if ([selectedLocation count]>0) {
-        LocationData * eventLocation = [[[LocationDataStore sharedStore]allItems] objectForKey:eventIdentifier];
-        if (!eventLocation) {
-            eventLocation = [[LocationDataStore sharedStore]createItemWithKey:eventIdentifier];
-        }
-        eventLocation.latitude =  [[[[selectedLocation objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"] doubleValue];
-        eventLocation.longitude = [[[[selectedLocation objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
-        eventLocation.locationName = [selectedLocation objectForKey:@"name"];
-        eventLocation.locationAddress = [selectedLocation objectForKey:@"formatted_address"];
-        eventLocation.reference = [selectedLocation objectForKey:@"reference"];
-        [[LocationDataStore sharedStore]saveChanges];
+    LocationData * eventLocation = [[[LocationDataStore sharedStore]allItems] objectForKey:eventIdentifier];
+    if (!eventLocation) {
+        eventLocation = [[LocationDataStore sharedStore]createItemWithKey:eventIdentifier];
     }
     
+    // Create new location
+    if (selectedLocation.locationName) {
+        eventLocation.latitude = selectedLocation.latitude;
+        eventLocation.longitude = selectedLocation.longitude;
+        eventLocation.locationName = selectedLocation.locationName;
+        eventLocation.locationAddress = selectedLocation.locationAddress;
+        eventLocation.reference = selectedLocation.reference;
+        [[LocationDataStore sharedStore]saveChanges];
+    }
+
     NSDictionary *startDate = [NSDictionary dictionaryWithObject:_event.startDate forKey:@"startDate"];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"eventChange" object:nil userInfo:startDate];
     [self.navigationController popViewControllerAnimated:YES];
@@ -408,8 +432,10 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
         [self.view endEditing:YES];
         repeat.frame = hideFrame;
         repeat.show = NO;
-        reminder.frame = CGRectOffset(reminder.frame, 0, -236);
+        reminder.frame = CGRectOffset(reminder.frame, 0, -256);
         reminder.show = YES;
+        _saveButton.frame = saveButtonFrameMove;
+        _trashButton.frame = trashButtonFrameMove;
     }
 }
 
@@ -419,8 +445,10 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
         [self.view endEditing:YES];
         reminder.frame = hideFrame;
         reminder.show = NO;
-        repeat.frame = CGRectOffset(repeat.frame, 0, -236);
+        repeat.frame = CGRectOffset(repeat.frame, 0, -256);
         repeat.show = YES;
+        _saveButton.frame = saveButtonFrameMove;
+        _trashButton.frame = trashButtonFrameMove;
     }
 }
 
@@ -734,9 +762,16 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 {
     _locationField.text = [places[indexPath.row] objectForKey:@"name"];
     
-    selectedLocation = [places objectAtIndex:indexPath.row];
+    // Create temp location data
+    NSDictionary *selectedPlace = [places objectAtIndex:indexPath.row];
+    selectedLocation.latitude =  [[[[selectedPlace objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"] doubleValue];
+    selectedLocation.longitude = [[[[selectedPlace objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
+    selectedLocation.locationName = [selectedPlace objectForKey:@"name"];
+    selectedLocation.locationAddress = [selectedPlace objectForKey:@"formatted_address"];
+    selectedLocation.reference = [selectedPlace objectForKey:@"reference"];
     
     _maskView.hidden = YES;
+    _mapIcon.hidden = NO;
 }
 
 // Google search

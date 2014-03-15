@@ -6,15 +6,13 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DiaryEntryViewController">
             <connections>
-                <outlet property="diaryComposeView" destination="gmH-TQ-MtH" id="Cbw-zP-521"/>
+                <outlet property="backgroundView" destination="yRz-sy-z0a" id="G1X-st-MdF"/>
                 <outlet property="diaryEntryView" destination="7ee-j6-VgJ" id="ebD-g0-vZK"/>
                 <outlet property="diarySubjectField" destination="aPc-K5-Mp3" id="2vg-Yn-AkJ"/>
                 <outlet property="diaryTimeField" destination="ggv-6Q-Bvg" id="gtf-kH-Zbf"/>
-                <outlet property="dotView" destination="J21-7F-s7m" id="pPM-fR-ttr"/>
                 <outlet property="locationField" destination="JjE-KJ-kih" id="dE7-8a-OIT"/>
                 <outlet property="locationSearchBar" destination="1dr-14-Kxw" id="Me6-sc-aUl"/>
                 <outlet property="locationSearchView" destination="sD9-Yg-F30" id="Vf5-9S-uxM"/>
-                <outlet property="maskView" destination="Vg6-3j-LEZ" id="3Tl-Hy-9Z6"/>
                 <outlet property="searchDisplayController" destination="ekE-cp-JUF" id="hfJ-Dp-UlV"/>
                 <outlet property="searchResultTable" destination="O8i-zU-OG5" id="AbQ-H5-0Hu"/>
                 <outlet property="view" destination="1" id="3"/>
@@ -25,74 +23,57 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gmH-TQ-MtH">
-                    <rect key="frame" x="10" y="58" width="300" height="259"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yRz-sy-z0a">
+                    <rect key="frame" x="0.0" y="44" width="320" height="320"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </imageView>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gsU-o1-0bb">
+                    <rect key="frame" x="0.0" y="44" width="320" height="320"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="locationTag20.png" translatesAutoresizingMaskIntoConstraints="NO" id="V65-HM-nZp">
+                            <rect key="frame" x="10" y="240" width="20" height="20"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <textField opaque="NO" clipsSubviews="YES" tag="9" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Location" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="JjE-KJ-kih" userLabel="Location Field">
+                            <rect key="frame" x="43" y="235" width="267" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="1" alpha="0.25" colorSpace="calibratedWhite"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="20"/>
+                            <textInputTraits key="textInputTraits" returnKeyType="search"/>
+                        </textField>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7ee-j6-VgJ">
-                            <rect key="frame" x="17" y="99" width="267" height="114"/>
+                            <rect key="frame" x="10" y="77" width="300" height="150"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" white="1" alpha="0.25" colorSpace="calibratedWhite"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textView>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Subject" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="aPc-K5-Mp3">
-                            <rect key="frame" x="5" y="23" width="279" height="30"/>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Subject" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="aPc-K5-Mp3" userLabel="Subject">
+                            <rect key="frame" x="10" y="39" width="209" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
-                            <textInputTraits key="textInputTraits"/>
+                            <color key="backgroundColor" white="1" alpha="0.25" colorSpace="calibratedWhite"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
                         </textField>
-                        <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="ggv-6Q-Bvg">
-                            <rect key="frame" x="17" y="61" width="267" height="30"/>
+                        <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="right" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="ggv-6Q-Bvg" userLabel="Date Field">
+                            <rect key="frame" x="227" y="39" width="83" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                            <color key="backgroundColor" white="1" alpha="0.25" colorSpace="calibratedWhite"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textField>
-                        <textField opaque="NO" clipsSubviews="YES" tag="9" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" background="locationTag20.png" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="JjE-KJ-kih">
-                            <rect key="frame" x="17" y="221" width="267" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
-                            <textInputTraits key="textInputTraits" returnKeyType="search"/>
-                        </textField>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8GD-EH-EA5">
-                            <rect key="frame" x="5" y="54" width="290" height="2"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        </view>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J21-7F-s7m" userLabel="dot">
-                            <rect key="frame" x="5" y="5" width="10" height="10"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.69019607843137254" green="0.80000000000000004" blue="0.59999999999999998" alpha="1" colorSpace="calibratedRGB"/>
-                        </view>
                     </subviews>
-                    <color key="backgroundColor" red="0.90196078430000004" green="0.90196078430000004" blue="0.90196078430000004" alpha="1" colorSpace="calibratedRGB"/>
-                </view>
-                <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vg6-3j-LEZ" userLabel="search">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sD9-Yg-F30">
-                            <rect key="frame" x="20" y="64" width="280" height="250"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <subviews>
-                                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="O8i-zU-OG5">
-                                    <rect key="frame" x="7" y="66" width="267" height="177"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </tableView>
-                                <searchBar contentMode="redraw" fixedFrame="YES" searchBarStyle="minimal" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1dr-14-Kxw">
-                                    <rect key="frame" x="7" y="22" width="267" height="44"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                    <textInputTraits key="textInputTraits"/>
-                                </searchBar>
-                            </subviews>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        </view>
-                    </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.70000000000000007" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.55000000000000004" colorSpace="calibratedWhite"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                 </view>
             </subviews>
-            <color key="backgroundColor" red="0.92549019610000005" green="0.94117647059999998" blue="0.94509803920000002" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
@@ -112,6 +93,26 @@
                 <outlet property="searchResultsDelegate" destination="-1" id="BSl-k3-4Bu"/>
             </connections>
         </searchDisplayController>
+        <view hidden="YES" contentMode="scaleToFill" id="sD9-Yg-F30">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="O8i-zU-OG5">
+                    <rect key="frame" x="7" y="88" width="307" height="264"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </tableView>
+                <searchBar contentMode="redraw" fixedFrame="YES" searchBarStyle="minimal" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1dr-14-Kxw">
+                    <rect key="frame" x="7" y="44" width="307" height="44"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <textInputTraits key="textInputTraits"/>
+                </searchBar>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="calibratedWhite"/>
+            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+        </view>
     </objects>
     <resources>
         <image name="locationTag20.png" width="20" height="20"/>

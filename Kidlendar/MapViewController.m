@@ -9,6 +9,7 @@
 #import "MapViewController.h"
 #import "MapKitHelpers.h"
 #import <MapKit/MapKit.h>
+#import "SelectedLocation.h"
 
 #define kGOOGLE_API_KEY @"AIzaSyAD9e182Fr19_2DcJFZYUHf6wEeXjxs_kQ"
 
@@ -40,16 +41,14 @@
     return self;
 }
 
--(id)initWithLocation:(NSDictionary *)location
+-(id)initWithLocation:(SelectedLocation *)location
 {
     self = [super init];
     if (self) {
-        double lat =  [[[[location objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"] doubleValue];
-        double lon = [[[[location objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
-        _locationNameLabel.text = [location objectForKey:@"name"];
-        _addressLabel.text = [location objectForKey:@"formatted_address"];
-        destinationReference = [location objectForKey:@"reference"];
-        destination = CLLocationCoordinate2DMake(lat, lon);
+        _locationNameLabel.text = location.locationName;
+        _addressLabel.text = location.locationAddress;
+        destinationReference = location.reference;
+        destination = CLLocationCoordinate2DMake(location.latitude, location.longitude);
     }
     return  self;
 }
@@ -60,9 +59,11 @@
     // Do any additional setup after loading the view from its nib.
     _locationMapView.delegate = self;
     _locationMapView.userTrackingMode = MKMapTypeStandard;
+    
+    _mapDetailView.layer.cornerRadius = 5.0f;
+    
     UITapGestureRecognizer *phoneTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(makeCall)];
     [_phoneNumberLabel addGestureRecognizer:phoneTap];
-//    [self calculateRouteToMapItem:_locationMapView.userLocation.location.coordinate userDestination:destination];
     [self queryGooglePlaceDetails:destinationReference];
 }
 

@@ -59,6 +59,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *allDayLabel;
 @property (weak, nonatomic) IBOutlet UIView *emptyDiaryView;
 @property (weak, nonatomic) IBOutlet UIView *emptyEventView;
+@property (weak, nonatomic) IBOutlet UIView *videoPlayView;
 
 
 @end
@@ -89,7 +90,9 @@
     [_emptyDiaryView addGestureRecognizer:emptyDiaryTap];
     [_emptyEventView addGestureRecognizer:emptyEventTap];
 
-    
+    _videoPlayView.layer.cornerRadius = _videoPlayView.frame.size.width/2;
+    _videoPlayView.layer.borderColor = [[UIColor whiteColor]CGColor];
+    _videoPlayView.layer.borderWidth = 3.0f;
     
     dateFormatter = [[NSDateFormatter alloc]init];
     dateFormatter.dateFormat = @"yyyy/MM/dd";
@@ -619,12 +622,15 @@
     // Check if there's diary available
     if ([[[DiaryDataStore sharedStore]allItems]count] > 0) {
         DiaryData *d = [[[DiaryDataStore sharedStore]allItems]lastObject];
-        _diaryImageView.layer.cornerRadius = 5;;
-        _diaryImageView.layer.masksToBounds = YES;
-        if (d.diaryVideoPath)
+
+        if (d.diaryVideoPath) {
             _diaryImageView.image = d.diaryVideoThumbnail;
-        else
+            _videoPlayView.hidden = NO;
+        }
+        else {
             _diaryImageView.image = d.diaryImage;
+            _videoPlayView.hidden = YES;
+        }
         _diaryTitle.text = d.subject;
         _diaryDetail.text = d.diaryText;
         _diaryDate.text = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceReferenceDate:d.dateCreated]];

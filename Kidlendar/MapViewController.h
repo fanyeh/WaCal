@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
+@class SelectedLocation;
 
 @interface MapViewController : UIViewController
--(id)initWithLocation:(NSDictionary *)location;
+-(id)initWithLocation:(SelectedLocation *)location;
 
 @end

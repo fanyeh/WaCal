@@ -9,14 +9,13 @@
 #import <UIKit/UIKit.h>
 
 @interface DiaryTableViewCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet UIView *cellView;
 @property (weak, nonatomic) IBOutlet UIImageView *cellImageView;
-@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
-@property (weak, nonatomic) IBOutlet UILabel *weekdayLabel;
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
 @property (weak, nonatomic) IBOutlet UITextView *diaryDetail;
 @property (weak, nonatomic) IBOutlet UILabel *diarySubject;
-@property (weak, nonatomic) IBOutlet UIView *dateBackgroundView;
 @property (weak, nonatomic) IBOutlet UIImageView *videoPlayButton;
+@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
+@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
+@property (weak, nonatomic) IBOutlet UIView *videoPlayView;
 
 @end

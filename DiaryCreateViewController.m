@@ -103,10 +103,19 @@
     [videoView addSubview:videoImageView];
     UITapGestureRecognizer *videoTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(playMovie)];
     [videoView addGestureRecognizer:videoTap];
+    
+    UIView *videoPlayView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 88, 88)];
+    videoPlayView.layer.borderColor = [[UIColor whiteColor]CGColor];
+    videoPlayView.layer.borderWidth = 4.0f;
+    videoPlayView.layer.cornerRadius = videoPlayView.frame.size.width/2;
+    videoPlayView.center = videoImageView.center;
+    [videoImageView addSubview:videoPlayView];
+    
     UIImageView *playButtonView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];
     playButtonView.image = [UIImage imageNamed:@"playButton.png"];
     playButtonView.center = videoImageView.center;
-    [videoView addSubview:playButtonView];
+    playButtonView.frame = CGRectOffset(playButtonView.frame, 5, 0);
+    [videoImageView addSubview:playButtonView];
     
     // Set up diary photo collection view
     diaryCollectionViewInset = UIEdgeInsetsMake(2, 2, 2, 2);
@@ -480,6 +489,7 @@
     } else {
         ALAsset *videoAsset = [photoAssets objectAtIndex:videoIndexPath.row];
         entryViewController.asset = videoAsset;
+        entryViewController.diaryImage = videoImageView.image;
     }
     [self.navigationController pushViewController:entryViewController animated:YES];
 }
@@ -985,7 +995,6 @@
     videoPlayer = [[MPMoviePlayerViewController alloc] initWithContentURL: videoAsset.defaultRepresentation.url];
     [videoPlayer.moviePlayer setContentURL:videoAsset.defaultRepresentation.url];
     
-    
     [videoPlayer.moviePlayer requestThumbnailImagesAtTimes:@[[NSNumber numberWithFloat:1.0]] timeOption:MPMovieTimeOptionExact];
     // Setup the player
     videoPlayer.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
@@ -1014,6 +1023,7 @@
                                                selector: @selector(moviePlayBackDidFinish:)
                                                    name: MPMoviePlayerPlaybackDidFinishNotification
                                                  object: videoPlayer.moviePlayer];
+    
     [videoPlayer.moviePlayer prepareToPlay];
     [videoPlayer.moviePlayer pause];
     [self launchPreparingAlertViewAlert];
@@ -1047,8 +1057,10 @@
                                                     name: MPMoviePlayerPlaybackDidFinishNotification
                                                   object: moviePlayer];
     
+    
+    
     // Remove from the parent's view
-    [moviePlayer.view removeFromSuperview];
+//    [moviePlayer.view removeFromSuperview];
     
     // Stop before release to workaround iOS's bug
     [moviePlayer stop];
@@ -1062,7 +1074,7 @@
 	if(preparingAlertView!=nil)	// Don't need to launch again
 		return;
 	
-	preparingAlertView = [[UIAlertView alloc] initWithTitle:@"" message:@"Movie Preparing..."
+	preparingAlertView = [[UIAlertView alloc] initWithTitle:@"" message:@"Loading..."
                                                    delegate:self cancelButtonTitle:nil otherButtonTitles: nil];
 	
 	UIActivityIndicatorView *waitView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
