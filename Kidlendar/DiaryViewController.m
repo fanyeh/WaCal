@@ -24,9 +24,7 @@
 }
 @property (weak, nonatomic) IBOutlet UIImageView *diaryPhoto;
 @property (weak, nonatomic) IBOutlet UITextView *diaryDetailTextView;
-@property (weak, nonatomic) IBOutlet UILabel *yearLabel;
-@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
-@property (weak, nonatomic) IBOutlet UILabel *monthLabel;
+
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
 @property (weak, nonatomic) IBOutlet UILabel *subjectLabel;
 @property (weak, nonatomic) IBOutlet UILabel *weekdayLabel;
@@ -34,6 +32,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *weiboImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *facebookImageView;
 @property (weak, nonatomic) IBOutlet UIView *videoPlayView;
+@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 
 
 @property (weak, nonatomic) IBOutlet UIView *uploadView;
@@ -57,6 +56,8 @@
 {
     [super viewDidLoad];
     
+    self.navigationItem.title = _diaryData.subject;
+
     // Do any additional setup after loading the view from its nib.
     _videoPlayView.layer.cornerRadius = _videoPlayView.frame.size.width/2;
     _videoPlayView.layer.borderWidth = 4.0f;
@@ -87,21 +88,8 @@
     NSDateFormatter *weekdayFormatter = [[NSDateFormatter alloc]init];
     weekdayFormatter.dateFormat = @"EEEE";
     
-    _yearLabel.text = [NSString stringWithFormat:@"%ld",(long)[dateComp year]];
-    _monthLabel.text = [monthArray objectAtIndex: [dateComp month]-1];
-    NSInteger day = [dateComp day];
-    _dateLabel.text = [NSString stringWithFormat:@"%ld",(long)[dateComp day]];
-    if (day==1) {
-        _dateLabel.text = [NSString stringWithFormat:@"%ld st",(long)[dateComp day]];
-    }
-    
+    _dateLabel.text = [NSString stringWithFormat:@"%@ %ld,%ld",[monthArray objectAtIndex: [dateComp month]-1],(long)[dateComp day],(long)[dateComp year]];
     _weekdayLabel.text  = [weekdayFormatter stringFromDate:diaryDate];
-    
-    UIBezierPath *exclusionPathYear = [UIBezierPath bezierPathWithRect:[_diaryDetailTextView convertRect:_yearLabel.bounds  fromView:_yearLabel]];
-    UIBezierPath *exclusionPathDate = [UIBezierPath bezierPathWithRect:[_diaryDetailTextView convertRect:_dateLabel.bounds fromView:_dateLabel]];
-    UIBezierPath *exclusionPathMonth = [UIBezierPath bezierPathWithRect:[_diaryDetailTextView convertRect:_monthLabel.bounds fromView:_monthLabel]];
-    
-    _diaryDetailTextView.textContainer.exclusionPaths = @[exclusionPathYear,exclusionPathDate,exclusionPathMonth];
     
     // Share Photo
     UITapGestureRecognizer *twitterTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showShareSheet:)];

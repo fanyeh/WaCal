@@ -113,7 +113,7 @@
     
     _dotViewGray.layer.cornerRadius = _dotView.frame.size.width/2;
     
-    self.navigationController.navigationBar.clipsToBounds = YES;
+//    self.navigationController.navigationBar.clipsToBounds = YES;
     
     _selectedDate = [monthModel dateModelForDate:[NSDate date]].date;
     [_monthView initCalendar:monthModel];
@@ -194,11 +194,6 @@
                                                 name:@"EKCalendarSwitch" object:nil];
     
     [self showDiary];
-}
-
--(void)viewDidLayoutSubviews
-{
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:NO];
 }
 
 - (void)didReceiveMemoryWarning

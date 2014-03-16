@@ -18,7 +18,6 @@
 #import "PhotoAlbumTableCell.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
-#define GrayUIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:0.5]
 
 @interface DiaryCreateViewController () <UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,filterImageDelegate,UITableViewDataSource,UITableViewDelegate>
 {
@@ -94,8 +93,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
-    self.navigationItem.title = @"Diary Photo";
+    self.navigationItem.title = @"Photos";
     
     videoView = [[UIView alloc]initWithFrame:CGRectMake(2, 46, 316, 316)];
     videoImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 316, 316)];
@@ -160,7 +158,9 @@
     
     // Navigation bar on scroller
     navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 10 , 320, 44)];
-    navBar.backgroundColor = [UIColor clearColor];
+    
+    [navBar setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
+    [navBar setBackgroundColor:[UIColor clearColor]];
     navBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
     navItem = [[UINavigationItem alloc]init];
     navItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"◀︎" style:UIBarButtonItemStyleBordered target:self action:@selector(showTable)];
@@ -249,7 +249,7 @@
 {
     self.tabBarController.tabBar.hidden = YES;
     photoAlbumTable.hidden = YES;
-
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -261,6 +261,11 @@
 {
     self.tabBarController.tabBar.hidden = NO;
     photoAlbumTable.hidden = YES;
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return YES;
 }
 
 #pragma mark - Diary photo collection view relate

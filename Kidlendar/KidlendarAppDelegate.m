@@ -50,13 +50,16 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
                 NSLog(@"need permission , error %@",error);
         }];
     }
-    
+
     self.window.backgroundColor = [UIColor whiteColor];
-    
-    [[UINavigationBar appearance] setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
-    [[UINavigationBar appearance] setBackgroundColor:Rgb2UIColor(29 , 113 , 183)];
+    [[UINavigationBar appearance]setBarStyle:UIBarStyleBlack];
+    [[UINavigationBar appearance] setBarTintColor:Rgb2UIColor(45 , 105 , 96)];
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]]; //is the buttons text color
-    [[UITabBar appearance] setTintColor:Rgb2UIColor(29 , 113 , 183)]; //is the buttons text color
+    NSDictionary *size = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0],NSFontAttributeName,
+                          [UIColor whiteColor],NSForegroundColorAttributeName,nil];
+    [[UINavigationBar appearance]setTitleTextAttributes:size];
+    [[UITabBar appearance] setTintColor:Rgb2UIColor(45 , 105 , 96)]; //is the buttons text color
+
     
     [self.window makeKeyAndVisible];
 
@@ -204,7 +207,7 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
     // Set up diary controller
     DiaryTableViewController *diaryController = [[DiaryTableViewController alloc]init];
     UINavigationController *diaryNavigationController = [[UINavigationController alloc]initWithRootViewController:diaryController];
-    diaryNavigationController.tabBarItem = [[UITabBarItem alloc]initWithTitle:@"Diary" image:[UIImage imageNamed:@"newDiary.png"] selectedImage:[UIImage imageNamed:@"newDiary.png"]];
+    diaryNavigationController.tabBarItem = [[UITabBarItem alloc]initWithTitle:@"Write" image:[UIImage imageNamed:@"newDiary.png"] selectedImage:[UIImage imageNamed:@"newDiary.png"]];
     
     // Set up setting controller
     SettingViewController *settingController = [[SettingViewController alloc]init];

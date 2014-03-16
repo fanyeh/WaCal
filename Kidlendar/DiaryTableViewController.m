@@ -18,7 +18,7 @@
 #import <AVFoundation/AVFoundation.h>
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
-
+#define MainColor [UIColor colorWithRed:(45 / 255.0) green:(105 / 255.0) blue:(96 / 255.0) alpha:1.0]
 
 @interface DiaryTableViewController ()
 {
@@ -46,11 +46,18 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-//    self.automaticallyAdjustsScrollViewInsets = NO;
     self.view.backgroundColor = [UIColor whiteColor];
     
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self  action:@selector(createDiary)];
     self.navigationItem.rightBarButtonItem = addButton;
+    
+//    NSDictionary *size = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0],NSFontAttributeName,
+//                          [UIColor whiteColor],NSForegroundColorAttributeName,nil];
+//    
+//    self.navigationController.navigationBar.titleTextAttributes = size;
+
+    
+    self.navigationItem.title = @"Moments";
 
     // Date formatters
     dateFormatter = [[NSDateFormatter alloc]init];
@@ -218,15 +225,15 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView *headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 30)];
-    headerView.backgroundColor = [UIColor colorWithWhite:0.902 alpha:1.000];
-    headerView.layer.shadowOpacity = 0.5f;
-    headerView.layer.shadowColor = [[UIColor colorWithWhite:0.298 alpha:1.000]CGColor];
+    headerView.backgroundColor = [UIColor whiteColor];
+    headerView.layer.shadowOpacity = 0.3f;
+    headerView.layer.shadowColor = [[UIColor colorWithWhite:0.502 alpha:1.000]CGColor];
     headerView.layer.shadowOffset = CGSizeMake(0, 1);
     
     UILabel *headerLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 320, 30)];
-    headerLabel.textColor = Rgb2UIColor(29 , 113 , 183);
+    headerLabel.textColor = MainColor;
     headerLabel.textAlignment = NSTextAlignmentCenter;
-    headerLabel.font = [UIFont fontWithName:@"Avenir-bold" size:15];
+    headerLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:16];
     headerLabel.center = headerView.center;
     headerLabel.text = [diaryInSections.allKeys objectAtIndex:section];
     [headerView addSubview:headerLabel];

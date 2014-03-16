@@ -13,6 +13,9 @@
 #import "WeekdayView.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
+#define MainColor [UIColor colorWithRed:(145 / 255.0) green:(170 / 255.0) blue:(157 / 255.0) alpha:1.0]
+#define TodayColor [UIColor colorWithRed:(217 / 255.0) green:(100 / 255.0) blue:(89 / 255.0) alpha:1.0]
+
 
 @implementation MonthCalendarView
 {
@@ -42,7 +45,6 @@
 
 - (void)initCalendar:(MonthModel *)monthModel
 {
-    self.backgroundColor = [UIColor clearColor];
     // Initialization code
     _monthModel = monthModel;
     CGFloat xOffSet = 0.0f;
@@ -133,7 +135,7 @@
         // Configure color for today
         if (dateModel.isToday) {
             dateView.isToday = YES;
-            dateView.dateLabel.textColor = Rgb2UIColor(255, 0, 0);
+            dateView.dateLabel.textColor = TodayColor;
         }
         
         // Add indicator if date has event
@@ -293,12 +295,12 @@
     [weekdayView.selectedLabel.layer addAnimation:animation forKey:nil];
 
     if (view.isToday) {
-        view.dateLabel.backgroundColor = Rgb2UIColor(231, 76, 60);
-        weekdayView.selectedLabel.backgroundColor = Rgb2UIColor(231, 76, 60);
+        view.dateLabel.backgroundColor = TodayColor;
+        weekdayView.selectedLabel.backgroundColor = TodayColor;
     }
     else {
-        view.dateLabel.backgroundColor = Rgb2UIColor(29 , 113 , 183);
-        weekdayView.selectedLabel.backgroundColor = Rgb2UIColor(29 , 113 , 183);
+        view.dateLabel.backgroundColor = MainColor;
+        weekdayView.selectedLabel.backgroundColor = MainColor;
     }
     
 //    view.dateLabel.layer.cornerRadius = 5.0f;
@@ -325,19 +327,13 @@
         view.dateLabel.textColor = [UIColor colorWithWhite:0.500 alpha:0.500];
     else {
         if (view.isToday) {
-            view.dateLabel.textColor = Rgb2UIColor(231, 76, 60);
-//            view.dateLabel.backgroundColor = Rgb2UIColor(231, 76, 60);
-//            view.dateLabel.layer.borderColor = [Rgb2UIColor(231, 76, 60)CGColor];
-//            view.dateLabel.layer.borderWidth = 1.0f;
+            view.dateLabel.textColor = TodayColor;
         }
         else {
             view.dateLabel.textColor = [UIColor blackColor];
         }
     }
     view.dateLabel.backgroundColor =[UIColor clearColor];
-
-//    view.dateLabel.layer.cornerRadius = 0.0f;
-
     view.isSelected = NO;
 }
 

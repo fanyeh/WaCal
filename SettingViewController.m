@@ -34,7 +34,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+    NSDictionary *size = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0],NSFontAttributeName,
+                          [UIColor whiteColor],NSForegroundColorAttributeName,nil];
+    self.navigationController.navigationBar.titleTextAttributes = size;
     self.navigationItem.title = @"Setting";
     
     [self.tableView registerClass:[SwitchCell class] forCellReuseIdentifier:@"SwitchCell"];
@@ -47,11 +49,6 @@
     
     fakeAlarmField = [[UITextField alloc]init];
     fakeAlarmField.inputView = alarmPicker;
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-//    [super viewWillAppear:YES];
-//    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning

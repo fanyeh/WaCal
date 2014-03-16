@@ -23,7 +23,7 @@
                                                               self.frame.size.width-sizeOffset,
                                                               self.frame.size.width-sizeOffset
                                                               )];
-        _dateLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
+        _dateLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
         _dateLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:_dateLabel];
         _isToday = NO;
@@ -56,7 +56,7 @@
     
     hasDiaryView.layer.cornerRadius = hasDiaryView.frame.size.width/2;
     
-    hasDiaryView.backgroundColor = Rgb2UIColor(176, 204, 153);
+    hasDiaryView.backgroundColor = Rgb2UIColor(41, 217, 194);
     [self addSubview:hasDiaryView];
 }
 

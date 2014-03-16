@@ -54,7 +54,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.automaticallyAdjustsScrollViewInsets = NO;
-     
+    self.navigationItem.title = @"Words";
+
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                                                                target:self
                                                                                action:@selector(saveDiary)];
@@ -80,10 +81,9 @@
     dateFormatter.timeZone = [NSTimeZone systemTimeZone];
     
     _diaryEntryView.delegate = self;
-//    _diaryEntryView.layer.borderColor = [[UIColor whiteColor] CGColor];
-//    _diaryEntryView.layer.borderWidth = 4.0f;
     _diaryEntryView.layer.cornerRadius = 5.0f;
-
+    _diaryEntryView.text = @"This moment...";
+    _diaryEntryView.textColor = [UIColor lightGrayColor];
     
     _diarySubjectField.delegate = self;
     [_diarySubjectField becomeFirstResponder];
@@ -234,6 +234,25 @@
     return YES;
 }
 
+#pragma mark - UITextViewDelegate
+
+- (BOOL) textViewShouldBeginEditing:(UITextView *)textView
+{
+    _diaryEntryView.text = @"";
+    _diaryEntryView.textColor = [UIColor whiteColor];
+    return YES;
+}
+
+-(void) textViewDidChange:(UITextView *)textView
+{
+    if(_diaryEntryView.text.length == 0){
+        _diaryEntryView.textColor = [UIColor lightGrayColor];
+        _diaryEntryView.text = @"This moment...";
+//        [_diaryEntryView resignFirstResponder];
+    }
+}
+
+#pragma mark - Google Places Search
 // Google search
 -(void) queryGooglePlacesLongitude:(double)longitude andLatitude:(double)latitude withName:(NSString *)name
 {
