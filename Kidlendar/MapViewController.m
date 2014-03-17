@@ -20,6 +20,7 @@
     MKPointAnnotation *previousDestinationAnnotation;
     MKRoute *previousUserLocationDirectRoute;
     NSString *destinationReference;
+    CLLocation *destinationLocation;
 }
 @property (weak, nonatomic) IBOutlet MKMapView *locationMapView;
 @property (weak, nonatomic) IBOutlet UIView *mapDetailView;
@@ -59,8 +60,11 @@
     // Do any additional setup after loading the view from its nib.
     _locationMapView.delegate = self;
     _locationMapView.userTrackingMode = MKMapTypeStandard;
-    
+    destinationLocation = [[CLLocation alloc]initWithLatitude:destination.latitude longitude:destination.longitude];
+
     _mapDetailView.layer.cornerRadius = 5.0f;
+    
+    self.navigationItem.title = @"Destination";
     
     UITapGestureRecognizer *phoneTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(makeCall)];
     [_phoneNumberLabel addGestureRecognizer:phoneTap];
@@ -70,11 +74,13 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     self.tabBarController.tabBar.hidden = YES;
+    _locationMapView.showsUserLocation = YES;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     self.tabBarController.tabBar.hidden = NO;
+    _locationMapView.showsUserLocation = NO;
 }
 
 #pragma mark - Put Route on Map
@@ -83,6 +89,22 @@
     MKPlacemark *placemark = [[MKPlacemark alloc] initWithCoordinate:coordinate addressDictionary:nil];
     MKMapItem *mapItem = [[MKMapItem alloc] initWithPlacemark:placemark];
     return mapItem;
+}
+
+- (void)addDesitination:(CLLocationCoordinate2D)userDestination
+{
+    MKPointAnnotation *destinationAnnotation = [MKPointAnnotation new];
+    destinationAnnotation.coordinate = userDestination;
+    [_locationMapView addAnnotation:destinationAnnotation];
+    
+    MKMapPoint points[2];
+    points[0] = MKMapPointForCoordinate(_locationMapView.userLocation.location.coordinate);
+    points[1] = MKMapPointForCoordinate(destinationAnnotation.coordinate);
+    
+    MKCoordinateRegion boundingRegion = CoordinateRegionBoundingMapPoints(points, 2);
+    boundingRegion.span.latitudeDelta *= 1.1f;
+    boundingRegion.span.longitudeDelta *= 1.1f;
+    [_locationMapView setRegion:boundingRegion animated:YES];
 }
 
 - (void)calculateRouteToMapItem:(CLLocationCoordinate2D)userLocation userDestination:(CLLocationCoordinate2D)userDestination
@@ -153,8 +175,6 @@
         boundingRegion.span.latitudeDelta *= 1.1f;
         boundingRegion.span.longitudeDelta *= 1.1f;
         [_locationMapView setRegion:boundingRegion animated:YES];
-        CLLocation *destinationLocation = [[CLLocation alloc]initWithLatitude:destination.latitude longitude:destination.longitude];
-        
         _distanceLabel.text = [NSString stringWithFormat:@"%.1f KM",[_locationMapView.userLocation.location distanceFromLocation:destinationLocation]/1000];
     });
 }
@@ -193,7 +213,9 @@
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-    [self calculateRouteToMapItem:userLocation.location.coordinate userDestination:(destination)];
+//    [self calculateRouteToMapItem:userLocation.location.coordinate userDestination:(destination)];
+    _distanceLabel.text = [NSString stringWithFormat:@"%.1f KM",[_locationMapView.userLocation.location distanceFromLocation:destinationLocation]/1000];
+    [self addDesitination:destination];
 }
 
 - (MKAnnotationView*)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
@@ -205,6 +227,7 @@
             pin.canShowCallout = YES;
         } else {
             pin.annotation = annotation;
+            
         }
         return pin;
     }

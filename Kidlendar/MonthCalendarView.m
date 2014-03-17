@@ -13,7 +13,7 @@
 #import "WeekdayView.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
-#define MainColor [UIColor colorWithRed:(145 / 255.0) green:(170 / 255.0) blue:(157 / 255.0) alpha:1.0]
+#define MainColor [UIColor colorWithRed:(45 / 255.0) green:(105 / 255.0) blue:(96 / 255.0) alpha:1.0]
 #define TodayColor [UIColor colorWithRed:(217 / 255.0) green:(100 / 255.0) blue:(89 / 255.0) alpha:1.0]
 
 
@@ -80,10 +80,10 @@
         WeekdayView *dateView = [[WeekdayView alloc]initWithFrame:CGRectMake(xOffSet,yOffSet,dateViewWidth,weekdayViewHeight)];
         [dateView.dateLabel setText:weekDay[i-1]];
         dateView.dateLabel.frame = CGRectMake(0,0, dateViewWidth, weekdayViewHeight);
-        [self addSubview:dateView];
         xOffSet += dateViewWidth;
         dateView.row = -1;
         [weekdayArray addObject:dateView];
+        [self addSubview:dateView];
     }
     monthViewFrame = self.frame;
     [self addSubview:borderView];
@@ -125,7 +125,7 @@
         dateView.date = dateModel.date;
         [dateView.dateLabel setText:[NSString stringWithFormat:@"%ld",(long)dateComp.day]];
         [_dateGroupView addSubview:dateView];
-
+        
         // Configure color for dates not in current month
         if (dateModel.isCurrentMonth)
             dateView.dateLabel.textColor = [UIColor colorWithWhite:0.298 alpha:1.000];
@@ -165,13 +165,13 @@
 
     if (animation) {
         
-        [UIView animateWithDuration:0.8 animations:^{
+        [UIView animateWithDuration:0.5 animations:^{
             // 1. Shift original frame
             _dateGroupView.frame = CGRectOffset(dateGroupFrame, 0, -shiftOffset);
             borderView.frame = CGRectOffset(borderFrame, 0, -shiftOffset);
             
         } completion:^(BOOL finished) {
-            [UIView animateWithDuration:0.4 animations:^{
+            [UIView animateWithDuration:0.3 animations:^{
                 
                 // 2. Shrink shifted frame
                 _dateGroupView.frame = CGRectMake(_dateGroupView.frame.origin.x,
@@ -221,7 +221,7 @@
     __block CGFloat expandOffset = (5-row) * dateViewHeight;
     
     if (animation) {
-        [UIView animateWithDuration:0.8 animations:^{
+        [UIView animateWithDuration:0.5f animations:^{
             // 1. un invis dates
             for (DateView *view in _dateGroupView.subviews) {
                 if (view.row < row ) {
@@ -234,7 +234,7 @@
             borderView.frame = CGRectOffset(borderView.frame, 0, shiftOffset);
             
         } completion:^(BOOL finished) {
-            [UIView animateWithDuration:0.4 animations:^{
+            [UIView animateWithDuration:0.3 animations:^{
                 
                 // 3. Unhide bottom dates
                 for (DateView *view in _dateGroupView.subviews) {

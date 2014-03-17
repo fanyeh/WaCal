@@ -19,6 +19,7 @@
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 #define kGOOGLE_API_KEY @"AIzaSyAD9e182Fr19_2DcJFZYUHf6wEeXjxs_kQ"
+#define MainColor [UIColor colorWithRed:(45 / 255.0) green:(105 / 255.0) blue:(96 / 255.0) alpha:1.0]
 
 
 @interface EventCreateController () <UITextFieldDelegate,UITableViewDataSource, UITableViewDelegate,UISearchBarDelegate,UIPickerViewDelegate,UIPickerViewDataSource>
@@ -88,12 +89,11 @@
     
     // Navgition bar
     self.navigationItem.title = @"New Event";
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
 
     _locationSearchBar.delegate = self;
     _searchResultTable.delegate = self;
     _searchResultTable.dataSource = self;
-    [_searchResultTable registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
+    _locationSearchView.layer.cornerRadius = 10.0f;
     
     // Calendar
     _calenderNameLabel.text = [[[CalendarStore sharedStore]calendar]title];
@@ -114,7 +114,6 @@
     for (UIButton *b in reminder.subviews) {
         [b addTarget:self action:@selector(alarmTap:) forControlEvents:UIControlEventTouchDown];
     }
-    [self checkAlarm];
     [self.view addSubview:reminder];
     
     // Repeat selection view
@@ -122,7 +121,6 @@
     for (UIButton *b in repeat.subviews) {
         [b addTarget:self action:@selector(recurrenceBtn:) forControlEvents:UIControlEventTouchDown];
     }
-    [self checkRule];
     [self.view addSubview:repeat];
 
     hideFrame = reminder.frame;
@@ -272,6 +270,12 @@
     return YES;
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    _saveButton.hidden = NO;
+    return YES;
+}
+
 #pragma mark - User actions
 
 - (IBAction)saveEvent:(id)sender
@@ -352,7 +356,7 @@
 
     } else {
         event.allDay = YES;
-        _alldayView.backgroundColor = [UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000];
+        _alldayView.backgroundColor = MainColor;
         _alldayView.layer.borderWidth = 0.0f;
         _allLabel.textColor = [UIColor whiteColor];
         _dayLabel.textColor = [UIColor whiteColor];
@@ -431,22 +435,6 @@
     }
 }
 
-- (void)checkAlarm
-{
-    if (event.hasAlarms) {
-        for (EKAlarm *a in event.alarms) {
-            NSLog(@"alarm %@",a);
-            for (ReminderButton *b in reminder.subviews) {
-                if ((b.tag==1&&a.absoluteDate)||(b.timeOffset == a.relativeOffset*-1)) {
-                    [b setSelected:YES];
-                    b.backgroundColor = [UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000];
-                    break;
-                }
-            }
-        }
-    }
-}
-
 - (void)alarmTap:(UIButton *)sender
 {
     // Tag : 1 - on time , 2 - 5min , 3 - 15min , 4 - 30min , 5 - 1hour , 6 - 2hour ,7 - 1day , 8 - 2Day , 9 - 1week
@@ -457,7 +445,7 @@
     } else {
         [sender setSelected:YES];
         if (sender.tag < 10) {
-            sender.backgroundColor = [UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000];
+            sender.backgroundColor = MainColor;
             [self createAlarm:sender.tag];
             _reminderValueLabel.text = sender.titleLabel.text;
         }
@@ -522,7 +510,7 @@
     } else {
         [sender setSelected:YES];
         if (sender.tag < 10) {
-            sender.backgroundColor = [UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000];
+            sender.backgroundColor = MainColor;
             [self createRule:sender.tag];
             _repeatValueLabel.text = sender.titleLabel.text;
         }
@@ -542,48 +530,6 @@
     if (event.hasRecurrenceRules) {
         for (EKRecurrenceRule *r in event.recurrenceRules) {
             [event removeRecurrenceRule:r];
-        }
-    }
-}
-
-- (void)checkRule
-{
-    // Tag 1 - Never ; 2 - Day ; 3 - Week ; 4 - Two Week ; 5 - Month ; 6 - Year
-    int tag;
-    if (event.hasRecurrenceRules) {
-        for (EKRecurrenceRule *r in event.recurrenceRules) {
-            EKRecurrenceFrequency frequency = r.frequency;
-            NSInteger interval = r.interval;
-            switch (frequency) {
-                case EKRecurrenceFrequencyDaily:
-                    tag = 2;
-                    break;
-                case EKRecurrenceFrequencyWeekly:
-                    if (interval == 1)
-                        tag = 3;
-                    else
-                        tag = 4;
-                    break;
-                case EKRecurrenceFrequencyMonthly:
-                    tag = 5;
-                    break;
-                case EKRecurrenceFrequencyYearly:
-                    tag = 6;
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-    else {
-        tag = 1;
-    }
-    
-    for (UIButton *b in self.view.subviews) {
-        if (b.tag == tag) {
-            [b setSelected:YES];
-            b.layer.borderColor = [[UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000]CGColor];
-            break;
         }
     }
 }

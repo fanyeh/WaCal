@@ -27,7 +27,9 @@
     NSArray* places;
     double locationLng;
     double locationLat;
+    BOOL hasText;
 }
+@property (weak, nonatomic) IBOutlet UIView *searchMaskView;
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundView;
 @property (weak, nonatomic) IBOutlet UIView *locationSearchView;
 @property (weak, nonatomic) IBOutlet UITextField *diaryTimeField;
@@ -66,8 +68,6 @@
     blurFilter.blurRadiusInPixels = 0.5f;
     _backgroundView.image =  [blurFilter imageByFilteringImage:_diaryImage];
 
-    
-//    _backgroundView.image = _diaryImage;
     // Setup Date picker
     datePicker = [[UIDatePicker alloc]init];
     [datePicker setDatePickerMode:UIDatePickerModeDateAndTime];
@@ -83,7 +83,8 @@
     _diaryEntryView.delegate = self;
     _diaryEntryView.layer.cornerRadius = 5.0f;
     _diaryEntryView.text = @"This moment...";
-    _diaryEntryView.textColor = [UIColor lightGrayColor];
+    _diaryEntryView.textColor = [UIColor colorWithWhite:0.333 alpha:1.000];
+    hasText = NO;
     
     _diarySubjectField.delegate = self;
     [_diarySubjectField becomeFirstResponder];
@@ -100,7 +101,6 @@
     
     _searchResultTable.delegate = self;
     _searchResultTable.dataSource = self;
-    [_searchResultTable registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
     
     for (NSDictionary *meta in _imageMeta) {
         NSDictionary *GPS = [meta objectForKey:@"{GPS}"];
@@ -133,7 +133,7 @@
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
-    _locationSearchView.hidden = YES;
+    _searchMaskView.hidden = YES;
 }
 
 #pragma mark - UITableViewDataSource
@@ -153,7 +153,6 @@
     cell.detailTextLabel.text = address;
 
     return cell;
-
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -166,7 +165,7 @@
     _locationField.text = [places[indexPath.row] objectForKey:@"name"];
     locationLat =  [[[[places[indexPath.row] objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"] doubleValue];
     locationLng =  [[[[places[indexPath.row] objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
-    _locationSearchView.hidden = YES;
+    _searchMaskView.hidden = YES;
 }
 
 - (void)didReceiveMemoryWarning
@@ -224,7 +223,7 @@
     if (textField.returnKeyType == UIReturnKeySearch) {
         _locationSearchBar.text = _locationField.text;
         [self queryGooglePlacesLongitude:0 andLatitude:0 withName:_locationField.text];
-        _locationSearchView.hidden = NO;
+        _searchMaskView.hidden = NO;
         [_locationSearchBar becomeFirstResponder];
     }
     [textField resignFirstResponder];
@@ -238,18 +237,21 @@
 
 - (BOOL) textViewShouldBeginEditing:(UITextView *)textView
 {
-    _diaryEntryView.text = @"";
-    _diaryEntryView.textColor = [UIColor whiteColor];
+    if (!hasText) {
+        _diaryEntryView.text = @"";
+        _diaryEntryView.textColor = [UIColor whiteColor];
+    }
     return YES;
 }
 
--(void) textViewDidChange:(UITextView *)textView
+- (void)textViewDidEndEditing:(UITextView *)textView
 {
     if(_diaryEntryView.text.length == 0){
-        _diaryEntryView.textColor = [UIColor lightGrayColor];
+        _diaryEntryView.textColor = [UIColor colorWithWhite:0.333 alpha:1.000];
         _diaryEntryView.text = @"This moment...";
-//        [_diaryEntryView resignFirstResponder];
-    }
+        hasText = NO;
+    } else
+        hasText = YES;
 }
 
 #pragma mark - Google Places Search

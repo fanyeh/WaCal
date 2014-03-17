@@ -41,6 +41,7 @@
     UILabel *monthLabel;
     UILabel *yearLabel;
     NSDateFormatter *eventTimeFormatter;
+    NSInteger selectedMonth;
 }
 
 @property (weak, nonatomic) IBOutlet UIView *diaryView;
@@ -84,6 +85,8 @@
     // Do any additional setup after loading the view from its nib.
 //    self.view.layer.borderColor = [Rgb2UIColor(33, 138, 251) CGColor];
 //    self.view.layer.borderWidth = 5.0f;
+
+    
     UITapGestureRecognizer *emptyEventTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(addEvent)];
     UITapGestureRecognizer *emptyDiaryTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(addDiary)];
 
@@ -117,7 +120,12 @@
     
     _selectedDate = [monthModel dateModelForDate:[NSDate date]].date;
     [_monthView initCalendar:monthModel];
-    [self resetCalendar];
+    [self resetCalendarBySelectDate:NO];
+    
+    NSDateComponents *comp = [_gregorian components:NSMonthCalendarUnit
+                                           fromDate:_selectedDate];
+    
+    selectedMonth = [comp month];
     UISwipeGestureRecognizer *swipeLeft = [[UISwipeGestureRecognizer alloc]initWithTarget:self
                                                                                    action:@selector(forwardMonth:)];
     [swipeLeft setDirection:UISwipeGestureRecognizerDirectionLeft];
@@ -213,34 +221,37 @@
                                            fromDate:_selectedDate];
     
     NSArray *monthArray = @[@"January",@"February",@"March",@"April",@"May",@"June",@"July",@"August",@"September",@"October",@"November",@"December"];
-    NSString *month = monthArray[[comp month]-1];
-    NSInteger currentMonth = [monthArray indexOfObject:monthLabel.text];
-    NSInteger currentYear = [yearLabel.text integerValue];
-    
-    
-    // Add transition (must be called after myLabel has been displayed)
-    CATransition *animation = [CATransition animation];
-    animation.duration = 0.8;
-    animation.type = kCATransitionPush;
-    
-    // Forward or Rewind month
-    if (currentMonth > ([comp month]-1))
-        animation.subtype = kCATransitionFromLeft;
-    else
-        animation.subtype = kCATransitionFromRight;
-    
-    // Forward or Rewind year
-    if (currentYear > [comp year])
-        animation.subtype = kCATransitionFromLeft;
-    else if (currentYear < [comp year])
-        animation.subtype = kCATransitionFromRight;
-
-    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    [monthLabel.layer addAnimation:animation forKey:@"changeTextTransition"];
-    
-    // Change the text
-    monthLabel.text = month;
-    yearLabel.text = [NSString stringWithFormat:@"%ld",(long)[comp year]];
+    if (selectedMonth !=[comp month]) {
+        NSString *month = monthArray[[comp month]-1];
+        NSInteger currentMonth = [monthArray indexOfObject:monthLabel.text];
+        NSInteger currentYear = [yearLabel.text integerValue];
+        
+        // Add transition (must be called after myLabel has been displayed)
+        CATransition *animation = [CATransition animation];
+        animation.duration = 1.0f;
+        animation.type = kCATransitionReveal;
+        
+        // Forward or Rewind month
+        if (currentMonth > ([comp month]-1))
+            animation.subtype = kCATransitionFromLeft;
+        else
+            animation.subtype = kCATransitionFromRight;
+        
+        // Forward or Rewind year
+        if (currentYear > [comp year])
+            animation.subtype = kCATransitionFromLeft;
+        else if (currentYear < [comp year])
+            animation.subtype = kCATransitionFromRight;
+        
+        animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+        [monthLabel.layer addAnimation:animation forKey:@"changeTextTransition"];
+        monthLabel.text = month;
+        yearLabel.text = [NSString stringWithFormat:@"%ld",(long)[comp year]];
+        selectedMonth = [comp month];
+    } else {
+        monthLabel.text = monthArray[selectedMonth-1];
+        yearLabel.text = [NSString stringWithFormat:@"%ld",(long)[comp year]];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -306,7 +317,7 @@
     NSLog(@"event change");
     NSDate *eventDate = [notification.userInfo objectForKey:@"startDate"];;
     _selectedDate = eventDate;
-    [self resetCalendar];
+    [self resetCalendarBySelectDate:YES];
     if (_monthView.shrink)
         [self shrinkMonthWithOutAnimation];
 }
@@ -318,7 +329,7 @@
 
 - (void)switchEKCalendar:(NSNotification *)notification
 {
-    [self resetCalendar];
+    [self resetCalendarBySelectDate:NO];
     if (_monthView.shrink)
         [self shrinkMonthWithOutAnimation];
 }
@@ -345,22 +356,21 @@
 - (void)forwardMonth:(UITapGestureRecognizer *)sender
 {
     if (_monthView.shrink)
-        [self switchCalendarByWeek:1];
+        [self switchCalendarByWeek:kCalendarForward bySelectDate:NO];
     else
-        [self switchCalendarByMonth:1];
+        [self switchCalendarByMonth:kCalendarForward bySelectDate:NO];
 }
 
 - (void)rewindMonth:(UITapGestureRecognizer *)sender
 {
     if (_monthView.shrink)
-        [self switchCalendarByWeek:0];
+        [self switchCalendarByWeek:kCalendarRewind bySelectDate:NO];
     else
-        [self switchCalendarByMonth:0];
+        [self switchCalendarByMonth:kCalendarRewind bySelectDate:NO];
 }
 
 - (void)shrinkMonthWithOutAnimation
 {
-
     _comingEventView.hidden = YES;
     [_monthView shrinkCalendarWithRow:[monthModel rowNumberForDate:_selectedDate]withAnimation:NO complete:^{
         eventTableView.hidden = NO;
@@ -399,7 +409,7 @@
     }
 }
 
-- (void)switchCalendarByMonth:(int)forwardOrRewind
+- (void)switchCalendarByMonth:(SwitchCalendar)forwardOrRewind bySelectDate:(BOOL)bySelect
 {
     NSDateComponents *dateComponents = [_gregorian components:(
                                                                NSYearCalendarUnit |
@@ -413,13 +423,12 @@
 
     // Add transition (must be called after myLabel has been displayed)
     CATransition *animation = [CATransition animation];
-    animation.duration = 0.8f;
+    animation.duration = 0.5f;
     animation.type = kCATransitionPush;
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     
     DateModel *selectedDateModel = [monthModel dateModelForDate:_selectedDate];
-    // Rewind = 0 , Forward = 1
-    if (forwardOrRewind==0) {
+    if (forwardOrRewind==kCalendarRewind) {
         animation.subtype = kCATransitionFromLeft;
         if (selectedDateModel.isCurrentMonth)
             [dateComponents setMonth:([dateComponents month] - 1)];
@@ -430,14 +439,16 @@
             [dateComponents setMonth:([dateComponents month] + 1)];
     }
     
-    // Set _selected date to 1st date of previous/next month
-    dateComponents.day = 1;
-    _selectedDate = [_gregorian dateFromComponents:dateComponents];
-    [self.monthView.layer addAnimation:animation forKey:nil];
-    [self resetCalendar];
+    if (!bySelect) {
+        // Set _selected date to 1st date of previous/next month
+        dateComponents.day = 1;
+        _selectedDate = [_gregorian dateFromComponents:dateComponents];
+    }
+    [self.monthView.dateGroupView.layer addAnimation:animation forKey:nil];
+    [self resetCalendarBySelectDate:bySelect];
 }
 
-- (void)switchCalendarByWeek:(int)forwardOrRewind
+- (void)switchCalendarByWeek:(SwitchCalendar)forwardOrRewind bySelectDate:(BOOL)bySelect
 {
     // Normalize selectedDate to dateModel's date
     NSDateComponents *dateComponents = [_gregorian components:(
@@ -453,49 +464,55 @@
 
     // Add transition (must be called after myLabel has been displayed)
     CATransition *animation = [CATransition animation];
-    animation.duration = 0.8f;
+    animation.duration = 0.5f;
     animation.type = kCATransitionPush;
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
 
     DateModel *selectedDateModel = [monthModel dateModelForDate:_selectedDate];
 
     // Rewind = 0 , Forward = 1
-    if (forwardOrRewind==0) {
+    if (forwardOrRewind==kCalendarRewind) {
         animation.subtype = kCATransitionFromLeft;
         row = row - 1;
-        if (row <0) {
-            // Update month model to previous month
-            if (selectedDateModel.isCurrentMonth) {
-                dateComponents.month -= 1;
-                dateComponents.day = 1; // Set to first date in case last date can be different for each month
+        if (!bySelect) {
+            if (row <0) {
+                // Update month model to previous month
+                if (selectedDateModel.isCurrentMonth) {
+                    dateComponents.month -= 1;
+                    dateComponents.day = 1; // Set to first date in case last date can be different for each month
+                }
+                _selectedDate = [_gregorian dateFromComponents:dateComponents];
             }
-            _selectedDate = [_gregorian dateFromComponents:dateComponents];
-        }
-        else {
-            DateModel *firstDateModelOfLastWeek = [[monthModel datesInMonth]objectAtIndex:row*7];
-            _selectedDate = firstDateModelOfLastWeek.date;
+            else {
+                DateModel *firstDateModelOfLastWeek = [[monthModel datesInMonth]objectAtIndex:row*7];
+                _selectedDate = firstDateModelOfLastWeek.date;
+            }
         }
     }
     else {
         animation.subtype = kCATransitionFromRight;
         row = row + 1;
         DateModel *d = [monthModel.datesInMonth lastObject];
-        if (row > d.row) {
-            // Update month model to next month 1st monday
-            if (selectedDateModel.isCurrentMonth) {
-                dateComponents.month += 1;
-                dateComponents.day = 1;  // Set to first date in case last date can be different for each month
+        if (!bySelect) {
+            if (row > d.row) {
+                // Update month model to next month 1st monday
+                if (selectedDateModel.isCurrentMonth) {
+                    dateComponents.month += 1;
+                    dateComponents.day = 1;  // Set to first date in case last date can be different for each month
+                }
+                _selectedDate = [_gregorian dateFromComponents:dateComponents];
             }
-            _selectedDate = [_gregorian dateFromComponents:dateComponents];
-        }
-        else {
-            DateModel *firstDateModelOfNextWeek = [[monthModel datesInMonth]objectAtIndex:row*7];
-            _selectedDate = firstDateModelOfNextWeek.date;
+            else {
+                DateModel *firstDateModelOfNextWeek = [[monthModel datesInMonth]objectAtIndex:row*7];
+                _selectedDate = firstDateModelOfNextWeek.date;
+            }
         }
     }
-    [self resetCalendar];
+    [self resetCalendarBySelectDate:bySelect];
     [self shrinkMonthWithOutAnimation];
-    [self.monthView.layer addAnimation:animation forKey:nil];
+    
+    if (!bySelect)
+        [self.monthView.dateGroupView.layer addAnimation:animation forKey:nil];
 }
 
 - (void)dateLabelTap:(UITapGestureRecognizer *)sender
@@ -511,12 +528,34 @@
     
     // Assign selectedDate based on tap
     _selectedDate = dateModel.date;
+    
+    // Change month title if selected date is in different month
+    NSDateComponents *comp = [_gregorian components:NSMonthCalendarUnit
+                                           fromDate:_selectedDate];
+    
+    // Switch month by selected date in different month
+    if ([comp month] > selectedMonth) {
+        if(_monthView.shrink)
+           [self switchCalendarByWeek:kCalendarForward bySelectDate:YES];
+        else
+            [self switchCalendarByMonth:kCalendarForward bySelectDate:YES];
+    } else if ([comp month] <  selectedMonth){
+        if(_monthView.shrink)
+            [self switchCalendarByWeek:kCalendarRewind bySelectDate:YES];
+        else
+            [self switchCalendarByMonth:kCalendarRewind bySelectDate:YES];
+    }
+
     // Set up position of event & diary detail view
     [_monthView setAppearanceOnSelectDate:dateModel.date];
     previousDateModel = dateModel;
     
-    if (_monthView.shrink)
+    if (_monthView.shrink) {
         [self showEventTable];
+        // Change nav bar title if month is shrinked and selected is in different month
+        if ([comp month] != selectedMonth)
+            [self setNavgationBarTitle];
+    }
     else
         [self showComingEvent];
 }
@@ -657,7 +696,7 @@
     }
 }
 
-- (void)resetCalendar
+- (void)resetCalendarBySelectDate:(BOOL)bySelect
 {
     [_monthView setAppearanceOnDeselectDate:previousDateModel.date dateNotInCurrentMonth:previousDateModel.isCurrentMonth];
     previousDateModel.isSelected = NO;
@@ -668,7 +707,7 @@
     
     // Adjust selected date to monday of the week if month view is shrinked
     // Weekday Sunday = 1 , Saturday = 6
-    if (_monthView.shrink) {
+    if (_monthView.shrink&&!bySelect) {
         NSDateComponents *dateComponents = [_gregorian components:(
                                                                    NSYearCalendarUnit |
                                                                    NSMonthCalendarUnit|
@@ -692,13 +731,14 @@
     [_monthView setAppearanceOnSelectDate:previousDateModel.date];
     // Activate date view in month view
     [self activateDateLabelGesture];
-    // Refresh navigation bar
-    [self setNavgationBarTitle];
     
     if (_monthView.shrink)
         [self showEventTable];
     else
         [self showComingEvent];
+    
+    // Refresh navigation bar
+    [self setNavgationBarTitle];
 }
 
 -(void)addDiary

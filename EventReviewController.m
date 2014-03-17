@@ -21,6 +21,8 @@
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 #define kGOOGLE_API_KEY @"AIzaSyAD9e182Fr19_2DcJFZYUHf6wEeXjxs_kQ"
+#define MainColor [UIColor colorWithRed:(45 / 255.0) green:(105 / 255.0) blue:(96 / 255.0) alpha:1.0]
+
 
 typedef void (^LocationCallback)(CLLocationCoordinate2D);
 
@@ -106,7 +108,6 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     
     // View controller
     self.navigationItem.title = _event.title;
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
     
     // Calendar
     _calendarName.text = [[[CalendarStore sharedStore]calendar]title];
@@ -187,9 +188,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     _locationSearchBar.delegate = self;
     _searchResultTable.delegate = self;
     _searchResultTable.dataSource = self;
-    [_searchResultTable registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
     _locationSearchView.layer.cornerRadius = 10.0f;
-
     
     // Save Button
     _saveButton.layer.cornerRadius = _saveButton.frame.size.width/2;
@@ -216,7 +215,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     _subjectField.text = _event.title;
     if (_event.allDay) {
         allday = YES;
-        _alldayView.backgroundColor = [UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000];
+        _alldayView.backgroundColor = MainColor;
         _allLabel.textColor = [UIColor whiteColor];
         _dayLabel.textColor = [UIColor whiteColor];
         _startTimeLabel.hidden = YES;
@@ -474,7 +473,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
         
     } else {
         allday = YES;
-        _alldayView.backgroundColor = [UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000];
+        _alldayView.backgroundColor = MainColor;
         _allLabel.textColor = [UIColor whiteColor];
         _dayLabel.textColor = [UIColor whiteColor];
         
@@ -542,15 +541,17 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 {
     if (_event.hasAlarms) {
         for (EKAlarm *a in _event.alarms) {
-            NSLog(@"alarm %@",a);
             for (ReminderButton *b in reminder.subviews) {
                 if ((b.tag==1&&a.absoluteDate)||(b.timeOffset == a.relativeOffset*-1)) {
                     [b setSelected:YES];
-                    b.backgroundColor = [UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000];
+                    b.backgroundColor =MainColor;
+                    _reminderValueLabel.text = b.titleLabel.text;
                     break;
                 }
             }
         }
+    } else {
+        _reminderValueLabel.text = @"No Reminder";
     }
 }
 
@@ -564,8 +565,9 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     } else {
         [sender setSelected:YES];
         if (sender.tag < 10) {
-            sender.backgroundColor = [UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000];
+            sender.backgroundColor = MainColor;
             [self createAlarm:sender.tag];
+            _reminderValueLabel.text = sender.titleLabel.text;
         }
         
         // Change all other buttons to unselect
@@ -628,8 +630,9 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     } else {
         [sender setSelected:YES];
         if (sender.tag < 10) {
-            sender.backgroundColor = [UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000];
+            sender.backgroundColor = MainColor;
             [self createRule:sender.tag];
+            _repeatValueLabel.text = sender.titleLabel.text;
         }
         
         // Change all other buttons to unselect
@@ -684,10 +687,11 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
         tag = 1;
     }
     
-    for (UIButton *b in self.view.subviews) {
+    for (UIButton *b in repeat.subviews) {
         if (b.tag == tag) {
             [b setSelected:YES];
-            b.layer.borderColor = [[UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000]CGColor];
+            b.backgroundColor = MainColor;
+            _repeatValueLabel.text = b.titleLabel.text;
             break;
         }
     }

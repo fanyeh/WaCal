@@ -11,6 +11,12 @@
 #import <EventKit/EventKit.h>
 #import <CoreLocation/CoreLocation.h>
 
+typedef NS_ENUM(NSInteger, SwitchCalendar)
+{
+    kCalendarForward,
+    kCalendarRewind
+};
+
 @interface MonthViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>
 @property (strong, nonatomic) IBOutlet MonthCalendarView *monthView;
 @property NSCalendar *gregorian;

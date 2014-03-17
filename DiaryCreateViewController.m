@@ -107,6 +107,7 @@
     videoPlayView.layer.borderWidth = 4.0f;
     videoPlayView.layer.cornerRadius = videoPlayView.frame.size.width/2;
     videoPlayView.center = videoImageView.center;
+    videoPlayView.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.700];
     [videoImageView addSubview:videoPlayView];
     
     UIImageView *playButtonView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];

@@ -25,7 +25,7 @@
     NSMutableDictionary *cloudDiarys;
     BOOL currentTableIsLocal;
     NSDateFormatter *dateFormatter;
-    NSDateFormatter *timeFormatter;
+    NSDateFormatter *weekdayFormatter;
     NSArray *monthArray;
     NSArray *weekdayArray;
     NSMutableDictionary *diaryInSections;
@@ -50,27 +50,20 @@
     
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self  action:@selector(createDiary)];
     self.navigationItem.rightBarButtonItem = addButton;
-    
-//    NSDictionary *size = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0],NSFontAttributeName,
-//                          [UIColor whiteColor],NSForegroundColorAttributeName,nil];
-//    
-//    self.navigationController.navigationBar.titleTextAttributes = size;
-
-    
     self.navigationItem.title = @"Moments";
 
     // Date formatters
     dateFormatter = [[NSDateFormatter alloc]init];
     dateFormatter.dateFormat = @"yyyy/MM/dd";
-    timeFormatter = [[NSDateFormatter alloc]init];
-    timeFormatter.dateFormat = @"HH:mm";
+    weekdayFormatter = [[NSDateFormatter alloc]init];
+    weekdayFormatter.dateFormat = @"EEEE";
     
     // Set up table
     [self.tableView registerNib:[UINib nibWithNibName:@"DiaryTableViewCell" bundle:nil] forCellReuseIdentifier:@"DiaryTableViewCell"];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
     monthArray = @[@"January",@"February",@"March",@"April",@"May",@"June",@"July",@"August",@"September",@"October",@"November",@"December"];
-    weekdayArray = @[@"Sun",@"Mon",@"Tue",@"Wed",@"Thu",@"Fri",@"Sat"];
+    weekdayArray = @[@"Sunday",@"Monday",@"Tuesday",@"Wedneday",@"Thursday",@"Friday",@"Saturday"];
     [self sortDiaryToSection];
     
     // Add observer to monitor event when new calendar event is created or removed
@@ -146,7 +139,6 @@
     NSDate *diaryDate = [NSDate dateWithTimeIntervalSinceReferenceDate:d.dateCreated];
     NSDateComponents *comp = [[NSCalendar currentCalendar]components:(NSCalendarUnitDay|NSCalendarUnitWeekday) fromDate:diaryDate];
     
-    NSInteger weekday = [comp weekday];
     NSInteger day = [comp day];
     NSString *dayString;
     switch (day%10) {
@@ -164,8 +156,7 @@
             break;
     }
     
-    cell.dateLabel.text = [NSString stringWithFormat:@"%ld%@,%@",day,dayString,weekdayArray[weekday-1]];
-    cell.timeLabel.text = [timeFormatter stringFromDate:diaryDate];
+    cell.dateLabel.text = [NSString stringWithFormat:@"%ld%@ %@",day,dayString,[weekdayFormatter stringFromDate:diaryDate]];
     cell.locationLabel.text = d.location;
     cell.diaryDetail.text = d.diaryText;
     cell.diarySubject.text = d.subject;
@@ -175,6 +166,7 @@
         cell.videoPlayView.layer.borderWidth = 2.0f;
         cell.videoPlayView.layer.borderColor = [[UIColor whiteColor]CGColor];
         cell.videoPlayView.layer.cornerRadius = cell.videoPlayView.frame.size.width/2;
+        cell.videoPlayView.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.700];
         cell.videoPlayView.hidden = NO;
     } else {
         cell.cellImageView.image = d.diaryImage;

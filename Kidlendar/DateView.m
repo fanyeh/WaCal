@@ -19,12 +19,19 @@
         // Initialization code
         float sizeOffset = 14;
         _dateLabel = [[UILabel alloc]initWithFrame:CGRectMake(sizeOffset/2,
-                                                              0,
-                                                              self.frame.size.width-sizeOffset,
-                                                              self.frame.size.width-sizeOffset
+                                                              1,
+                                                              32,
+                                                              32
                                                               )];
+//        NSValue *rect = [NSValue valueWithCGRect:CGRectMake(sizeOffset/2,
+//                                                            1,
+//                                                            self.frame.size.width-sizeOffset,
+//                                                            self.frame.size.width-sizeOffset
+//                                                            )];
+//        NSLog(@"Rect %@",rect);
         _dateLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:20];
         _dateLabel.textAlignment = NSTextAlignmentCenter;
+        _dateLabel.layer.cornerRadius = _dateLabel.frame.size.width/2;
         [self addSubview:_dateLabel];
         _isToday = NO;
         _isSelected = NO;

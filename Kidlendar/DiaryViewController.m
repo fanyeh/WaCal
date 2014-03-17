@@ -66,8 +66,7 @@
     if (_diaryData.diaryVideoThumbnail) {
         _diaryPhoto.image = _diaryData.diaryVideoThumbnail;
         UITapGestureRecognizer *videoTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(playVideo)];
-        _diaryPhoto.userInteractionEnabled = YES;
-        [_diaryPhoto addGestureRecognizer:videoTap];
+        [_videoPlayView addGestureRecognizer:videoTap];
         _videoPlayView.hidden = NO;
         
     } else {
