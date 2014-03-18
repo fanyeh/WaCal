@@ -175,6 +175,7 @@
     photoCollectionShrinkHeight = self.view.frame.size.height - 44 - diaryPhotosView.frame.size.height - scroller.frame.size.height;
     
     UICollectionViewFlowLayout *photoFlowLayout = [[UICollectionViewFlowLayout alloc]init];
+    
     photoCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 418, 320, photoCollectionExpandHeight)
                                             collectionViewLayout:photoFlowLayout];
     photoCollectionView.delegate = self;
@@ -214,9 +215,8 @@
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithTitle:@"Next >" style:UIBarButtonItemStylePlain target:self action:@selector(doneSelection)];
     self.navigationItem.rightBarButtonItem = doneButton;
 
-    
     // Face detection
-    faceDetectingActivity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    faceDetectingActivity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     faceDetectingActivity.frame = diaryPhotosView.frame;
     [self.view addSubview:faceDetectingActivity];
     
@@ -245,7 +245,6 @@
 {
     self.tabBarController.tabBar.hidden = YES;
     photoAlbumTable.hidden = YES;
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -257,7 +256,6 @@
 {
     self.tabBarController.tabBar.hidden = NO;
     photoAlbumTable.hidden = YES;
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
 }
 
 - (BOOL)prefersStatusBarHidden {

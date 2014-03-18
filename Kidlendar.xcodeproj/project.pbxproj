@@ -82,6 +82,7 @@
 		4C6C49C5186DDDDF0042EB61 /* DiaryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C6C49C3186DDDDF0042EB61 /* DiaryViewController.xib */; };
 		4C73E02018BFA5F3007ECCEC /* EventReviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C73E01E18BFA5F3007ECCEC /* EventReviewController.m */; };
 		4C73E02118BFA5F3007ECCEC /* EventReviewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C73E01F18BFA5F3007ECCEC /* EventReviewController.xib */; };
+		4C761D1018D8AE2500AE97DE /* lookup_amatorka.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C761D0F18D8AE2500AE97DE /* lookup_amatorka.png */; };
 		4C84A57318BF7278005A30AB /* ReminderButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C84A57218BF7278005A30AB /* ReminderButton.m */; };
 		4C88B387188E56E100F4F47E /* DiaryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88B386188E56E100F4F47E /* DiaryCell.m */; };
 		4C91918718AF3A4900ED4695 /* ImageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C91918618AF3A4900ED4695 /* ImageStore.m */; };
@@ -134,7 +135,6 @@
 		4CFF693118BF3FC000337857 /* RepeatView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFF693018BF3FC000337857 /* RepeatView.m */; };
 		4CFFD584189775270070C33C /* DiaryPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFFD582189775270070C33C /* DiaryPhotoViewController.m */; };
 		4CFFD585189775270070C33C /* DiaryPhotoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CFFD583189775270070C33C /* DiaryPhotoViewController.xib */; };
-		4CFFD58A1897800A0070C33C /* lookup_amatorka.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CFFD5891897800A0070C33C /* lookup_amatorka.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -273,6 +273,7 @@
 		4C73E01D18BFA5F3007ECCEC /* EventReviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventReviewController.h; path = ../EventReviewController.h; sourceTree = "<group>"; };
 		4C73E01E18BFA5F3007ECCEC /* EventReviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EventReviewController.m; path = ../EventReviewController.m; sourceTree = "<group>"; };
 		4C73E01F18BFA5F3007ECCEC /* EventReviewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EventReviewController.xib; path = ../EventReviewController.xib; sourceTree = "<group>"; };
+		4C761D0F18D8AE2500AE97DE /* lookup_amatorka.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lookup_amatorka.png; sourceTree = "<group>"; };
 		4C84A57118BF7278005A30AB /* ReminderButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReminderButton.h; sourceTree = "<group>"; };
 		4C84A57218BF7278005A30AB /* ReminderButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReminderButton.m; sourceTree = "<group>"; };
 		4C88B385188E56E100F4F47E /* DiaryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryCell.h; sourceTree = "<group>"; };
@@ -348,7 +349,6 @@
 		4CFFD581189775270070C33C /* DiaryPhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryPhotoViewController.h; sourceTree = "<group>"; };
 		4CFFD582189775270070C33C /* DiaryPhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryPhotoViewController.m; sourceTree = "<group>"; };
 		4CFFD583189775270070C33C /* DiaryPhotoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiaryPhotoViewController.xib; sourceTree = "<group>"; };
-		4CFFD5891897800A0070C33C /* lookup_amatorka.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lookup_amatorka.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -509,6 +509,7 @@
 		4C68CAB718C6303F003776D2 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4C761D0F18D8AE2500AE97DE /* lookup_amatorka.png */,
 				4C570B3918D2DE8900BFA3C4 /* mapicon.png */,
 				4CFB1B7D18C8092200EC443A /* trash35@2x.png */,
 				4CFB1B7E18C8092200EC443A /* save35@2x.png */,
@@ -617,7 +618,6 @@
 			isa = PBXGroup;
 			children = (
 				4C1E40B218B4616300A273A1 /* GPUImage.xcodeproj */,
-				4CFFD5891897800A0070C33C /* lookup_amatorka.png */,
 				4CB3DD8118521DC400673478 /* Kidlendar */,
 				4CB3DD8218521DC400673478 /* Supporting Files */,
 				4CB3DD9A18521DC500673478 /* KidlendarTests */,
@@ -857,6 +857,7 @@
 				4CFB1B8018C8092200EC443A /* trash35@2x.png in Resources */,
 				4C4CE27818BDB21E007217CA /* calendar.png in Resources */,
 				4C3FBA5818C4CCFF0097C67D /* face_yellow.png in Resources */,
+				4C761D1018D8AE2500AE97DE /* lookup_amatorka.png in Resources */,
 				4C4AAB7918C6B39000458908 /* locationTag10@2x.png in Resources */,
 				4C5BA25B1861731A00528843 /* 929-film-1@2x.png in Resources */,
 				4CBA4BB618CD9B4F00B380AB /* PhotoAlbumTableCell.xib in Resources */,
@@ -866,7 +867,6 @@
 				4C07B2BF18C8BE1600911045 /* v@2x.png in Resources */,
 				4C4AAB7B18C6B39000458908 /* write@2x.png in Resources */,
 				4CFB1B8218C8092200EC443A /* diaryTab@2x.png in Resources */,
-				4CFFD58A1897800A0070C33C /* lookup_amatorka.png in Resources */,
 				4C4AAB7C18C6B39000458908 /* reminder@2x.png in Resources */,
 				4CA0369018B7A29F00015184 /* DiaryTableViewCell.xib in Resources */,
 				4C4AAB7A18C6B39000458908 /* newDiary@2x.png in Resources */,
