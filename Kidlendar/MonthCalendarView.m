@@ -63,6 +63,7 @@
     borderView = [[UIView alloc]initWithFrame:CGRectMake(0, weekdayViewHeight+dateGroupFrame.size.height, 320, 1)];
     borderView.backgroundColor = [UIColor colorWithWhite:0.902 alpha:1.000];
     borderFrame = borderView.frame;
+//    [self addSubview:borderView];
 
     
 //    _dateGroupView.layer.borderColor = [[UIColor greenColor]CGColor];
@@ -86,7 +87,6 @@
         [self addSubview:dateView];
     }
     monthViewFrame = self.frame;
-    [self addSubview:borderView];
 
     _shrinkFrame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, weekdayViewHeight + dateViewHeight);
     // Init date labels
@@ -165,13 +165,13 @@
 
     if (animation) {
         
-        [UIView animateWithDuration:0.5 animations:^{
+        [UIView animateWithDuration:0.4f animations:^{
             // 1. Shift original frame
             _dateGroupView.frame = CGRectOffset(dateGroupFrame, 0, -shiftOffset);
             borderView.frame = CGRectOffset(borderFrame, 0, -shiftOffset);
             
         } completion:^(BOOL finished) {
-            [UIView animateWithDuration:0.3 animations:^{
+            [UIView animateWithDuration:0.4f animations:^{
                 
                 // 2. Shrink shifted frame
                 _dateGroupView.frame = CGRectMake(_dateGroupView.frame.origin.x,
@@ -221,7 +221,7 @@
     __block CGFloat expandOffset = (5-row) * dateViewHeight;
     
     if (animation) {
-        [UIView animateWithDuration:0.5f animations:^{
+        [UIView animateWithDuration:0.4f animations:^{
             // 1. un invis dates
             for (DateView *view in _dateGroupView.subviews) {
                 if (view.row < row ) {
@@ -234,7 +234,7 @@
             borderView.frame = CGRectOffset(borderView.frame, 0, shiftOffset);
             
         } completion:^(BOOL finished) {
-            [UIView animateWithDuration:0.3 animations:^{
+            [UIView animateWithDuration:0.4f animations:^{
                 
                 // 3. Unhide bottom dates
                 for (DateView *view in _dateGroupView.subviews) {
@@ -286,7 +286,7 @@
     weekdayView.selectedLabel.hidden = NO;
 
     CATransition *animation = [CATransition animation];
-    animation.duration = 0.5f;
+    animation.duration = 0.3f;
     animation.type = kCATransitionFade;
     animation.subtype = kCATransitionFromBottom;
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
@@ -315,7 +315,7 @@
     weekdayView.selectedLabel.hidden = YES;
 
     CATransition *animation = [CATransition animation];
-    animation.duration = 0.5f;
+    animation.duration = 0.3f;
     animation.type = kCATransitionFade;
     animation.subtype = kCATransitionFromTop;
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];

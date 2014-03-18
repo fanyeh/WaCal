@@ -70,6 +70,8 @@
     [[NSNotificationCenter defaultCenter]addObserver:self
                                             selector:@selector(refreshDiary:)
                                                 name:@"diaryChange" object:nil];
+    
+    self.tableView.showsVerticalScrollIndicator = NO;
 
 }
 
@@ -217,7 +219,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView *headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 30)];
-    headerView.backgroundColor = [UIColor whiteColor];
+    headerView.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.000];
     headerView.layer.shadowOpacity = 0.3f;
     headerView.layer.shadowColor = [[UIColor colorWithWhite:0.502 alpha:1.000]CGColor];
     headerView.layer.shadowOffset = CGSizeMake(0, 1);

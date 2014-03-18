@@ -42,6 +42,7 @@
     UILabel *yearLabel;
     NSDateFormatter *eventTimeFormatter;
     NSInteger selectedMonth;
+    
 }
 
 @property (weak, nonatomic) IBOutlet UIView *diaryView;
@@ -49,7 +50,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *comingEventTimeEnd;
 @property (weak, nonatomic) IBOutlet UILabel *comingEventTitle;
 @property (weak, nonatomic) IBOutlet UIView *comingEventView;
-@property (weak, nonatomic) IBOutlet UILabel *locationLabel;
 @property (weak, nonatomic) IBOutlet UIView *dotView;
 @property (weak, nonatomic) IBOutlet UIImageView *diaryImageView;
 @property (weak, nonatomic) IBOutlet UIView *dotViewGray;
@@ -116,7 +116,6 @@
     
     _dotViewGray.layer.cornerRadius = _dotView.frame.size.width/2;
     
-//    self.navigationController.navigationBar.clipsToBounds = YES;
     
     _selectedDate = [monthModel dateModelForDate:[NSDate date]].date;
     [_monthView initCalendar:monthModel];
@@ -152,14 +151,17 @@
     [_diaryView addGestureRecognizer:diaryTap];
 
     // Set up table for events
-    eventTableView = [[UITableView alloc]initWithFrame:self.view.frame style:UITableViewStyleGrouped];
+    CGRect eventTableFrame = CGRectMake(0,
+                                        _comingEventView.frame.origin.y,
+                                        self.view.frame.size.width,
+                                        _diaryView.frame.origin.y-(_monthView.shrinkFrame.origin.y+_monthView.shrinkFrame.size.height));
+    eventTableView = [[UITableView alloc]initWithFrame:eventTableFrame style:UITableViewStyleGrouped];
     eventTableView.dataSource = self;
     eventTableView.backgroundColor = [UIColor clearColor];
     eventTableView.hidden = YES;
     eventTableView.delegate = self;
     eventTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [eventTableView registerNib:[UINib nibWithNibName:@"EventTableCell" bundle:nil] forCellReuseIdentifier:@"Cell"];
-//    eventTableView.backgroundColor = [UIColor blackColor];
 
     [self.view addSubview:eventTableView];
     
@@ -260,8 +262,13 @@
     EventTableCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     EKEvent *event = monthModel.eventsInDate[indexPath.row];
     cell.titleLabel.text = event.title;
-    cell.locationLabel.text = event.location;
     cell.dotView.layer.cornerRadius = cell.dotView.frame.size.width/2;
+    
+    if (!event.location) {
+        cell.titleLabel.frame = CGRectOffset(cell.titleLabel.frame, 0, 12);
+    }
+
+    
     if (event.allDay) {
         cell.alldayLabel.hidden = NO;
         cell.startDateLabel.hidden = YES;
@@ -423,7 +430,8 @@
 
     // Add transition (must be called after myLabel has been displayed)
     CATransition *animation = [CATransition animation];
-    animation.duration = 0.5f;
+    animation.delegate = self;
+    animation.duration = 0.3f;
     animation.type = kCATransitionPush;
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     
@@ -444,7 +452,7 @@
         dateComponents.day = 1;
         _selectedDate = [_gregorian dateFromComponents:dateComponents];
     }
-    [self.monthView.dateGroupView.layer addAnimation:animation forKey:nil];
+    [_monthView.dateGroupView.layer addAnimation:animation forKey:nil];
     [self resetCalendarBySelectDate:bySelect];
 }
 
@@ -464,7 +472,7 @@
 
     // Add transition (must be called after myLabel has been displayed)
     CATransition *animation = [CATransition animation];
-    animation.duration = 0.5f;
+    animation.duration = 0.3f;
     animation.type = kCATransitionPush;
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
 
@@ -577,11 +585,15 @@
     if ([monthModel.eventsInDate count]> 0) {
         // Opens event and diary details on tap date
         eventTableView.hidden = NO;
-
-        eventTableView.frame = CGRectMake(0, _monthView.shrinkFrame.origin.y+_monthView.shrinkFrame.size.height, self.view.frame.size.width, _diaryView.frame.origin.y-(_monthView.shrinkFrame.origin.y+_monthView.shrinkFrame.size.height));
+        eventTableView.frame = CGRectMake(0,
+                                          _monthView.shrinkFrame.origin.y+_monthView.shrinkFrame.size.height+11,
+                                          self.view.frame.size.width,
+                                          _diaryView.frame.origin.y-(_monthView.shrinkFrame.origin.y+_monthView.shrinkFrame.size.height));
+ 
         [eventTableView reloadData];
         if (!_emptyEventView.hidden) {
             [UIView animateWithDuration:0.5 animations:^{
+
                 _emptyEventView.alpha =0;
             } completion:^(BOOL finished) {
                 _emptyEventView.hidden = YES;
@@ -620,7 +632,6 @@
                 }
 
                 _comingEventTitle.text = comingUpEvent.title;
-                _locationLabel.text = comingUpEvent.location;
                 break;
             }
         }
@@ -739,6 +750,12 @@
     
     // Refresh navigation bar
     [self setNavgationBarTitle];
+    
+}
+
+- (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
+{
+    [_monthView.dateGroupView.layer removeAllAnimations];
 }
 
 -(void)addDiary

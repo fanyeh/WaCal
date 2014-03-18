@@ -66,6 +66,8 @@
     
     UIView *videoView;
     UIImageView *videoImageView;
+    
+    BOOL selectEnable;
 }
 
 @property (weak, nonatomic) IBOutlet UIView *noPhotoView;
@@ -94,6 +96,8 @@
     // Do any additional setup after loading the view from its nib.
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.navigationItem.title = @"Photos";
+    
+    selectEnable = YES;
     
     videoView = [[UIView alloc]initWithFrame:CGRectMake(2, 46, 316, 316)];
     videoImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 316, 316)];
@@ -149,13 +153,6 @@
     scrollerBar.backgroundColor = [UIColor whiteColor];
     scrollerBar.layer.cornerRadius = 3;
     [scroller addSubview:scrollerBar];
-    
-//    // Media type on scroller
-//    UILabel *media = [[UILabel alloc]initWithFrame:CGRectMake(270, 0, 50, 20)];
-//    media.text = @"Photo";
-//    media.adjustsFontSizeToFitWidth = YES;
-//    media.textColor = [UIColor whiteColor];
-//    [scroller addSubview:media];
     
     // Navigation bar on scroller
     navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 10 , 320, 44)];
@@ -214,15 +211,13 @@
     photoLoader = [[PhotoLoader alloc]initWithSourceType:kSourceTypeAll];
     photoAssets = [[NSMutableArray alloc]init];
     
-//    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneSelection)];
-    
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithTitle:@"Next >" style:UIBarButtonItemStylePlain target:self action:@selector(doneSelection)];
     self.navigationItem.rightBarButtonItem = doneButton;
 
     
     // Face detection
     faceDetectingActivity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    faceDetectingActivity.frame = self.view.frame;
+    faceDetectingActivity.frame = diaryPhotosView.frame;
     [self.view addSubview:faceDetectingActivity];
     
     UIPanGestureRecognizer *faceDetectPan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panFaceDetectView:)];
@@ -262,7 +257,7 @@
 {
     self.tabBarController.tabBar.hidden = NO;
     photoAlbumTable.hidden = YES;
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -362,7 +357,7 @@
 {
     [diaryPhotosView reloadData];
     [faceDetectingActivity stopAnimating];
-    photoCollectionView.userInteractionEnabled = YES;
+    selectEnable = YES;
 }
 
 - (void)reloadCellWithIndexPath:(NSIndexPath *)path
@@ -454,7 +449,10 @@
                 // Also need to adjust index position in data source
                 [selectedPhotoOrderingInfo exchangeObjectAtIndex:currentCellIndexPath.row withObjectAtIndex:touchedCellPath.row];
                 [fullScreenImageArray exchangeObjectAtIndex:currentCellIndexPath.row withObjectAtIndex:touchedCellPath.row];
-                [self processFaceDetection];
+//                [self processFaceDetection];
+                [self processFaceDetectionWithIndexPath:touchedCellPath];
+                [self processFaceDetectionWithIndexPath:currentCellIndexPath];
+
             }];
         }
         else {
@@ -744,7 +742,7 @@
             DiaryPhotoViewController *photoViewController = [[DiaryPhotoViewController alloc]init];
             
             // Get image from selectedPhotoInfo
-//            UIImage *photo = [self getPhotoWithImageInfo:[selectedPhotoOrderingInfo objectAtIndex:indexPath.row]];
+            //            UIImage *photo = [self getPhotoWithImageInfo:[selectedPhotoOrderingInfo objectAtIndex:indexPath.row]];
             UIImage *photo = [fullScreenImageArray objectAtIndex:indexPath.row];
             photoViewController.cropRectSize = [sizeArray[indexPath.row] CGSizeValue];
             photoViewController.photoImage = photo;
@@ -755,32 +753,35 @@
     }
     
     // Photo collection view select
-    else {
-        ALAsset *asset =  [photoAssets objectAtIndex:indexPath.row];
-        if ([asset valueForProperty:ALAssetPropertyType]==ALAssetTypeVideo) {
-            if ([fullScreenImageArray count] > 0) {
-                [self cancelPhotoSelection];
-            }
-            if (videoIndexPath)
-                [photoCollectionView deselectItemAtIndexPath:videoIndexPath animated:YES];
 
-            navItem.rightBarButtonItem.title = @"1/1";
-            videoIndexPath = indexPath;
-            selectedMediaType = kMediaTypeVideo;
-            UIImage *cellImage = [UIImage imageWithCGImage:[asset.defaultRepresentation fullScreenImage]];
-            videoImageView.image = [cellImage cropWithFaceDetect:videoImageView.frame.size];
-            videoView.hidden = NO;
-            [self.view bringSubviewToFront:videoView];
-            [self.view bringSubviewToFront:scroller];
-            [self.view bringSubviewToFront:photoAlbumTable];
-            [self.view bringSubviewToFront:photoCollectionView];
-            
-        } else {
-            photoCollectionView.userInteractionEnabled = NO;
-            [self cancelMPMoviePlayer];
-            videoIndexPath = nil;
-            selectedMediaType = kMediaTypePhoto;
-            [self selectedPhoto:indexPath];
+    else {
+        if (selectEnable) {
+            selectEnable = NO;
+            ALAsset *asset =  [photoAssets objectAtIndex:indexPath.row];
+            if ([asset valueForProperty:ALAssetPropertyType]==ALAssetTypeVideo) {
+                if ([fullScreenImageArray count] > 0) {
+                    [self cancelPhotoSelection];
+                }
+                if (videoIndexPath)
+                    [photoCollectionView deselectItemAtIndexPath:videoIndexPath animated:YES];
+                
+                navItem.rightBarButtonItem.title = @"1/1";
+                videoIndexPath = indexPath;
+                selectedMediaType = kMediaTypeVideo;
+                UIImage *cellImage = [UIImage imageWithCGImage:[asset.defaultRepresentation fullScreenImage]];
+                videoImageView.image = [cellImage cropWithFaceDetect:videoImageView.frame.size];
+                videoView.hidden = NO;
+                [self.view bringSubviewToFront:videoView];
+                [self.view bringSubviewToFront:scroller];
+                [self.view bringSubviewToFront:photoAlbumTable];
+                [self.view bringSubviewToFront:photoCollectionView];
+                
+            } else {
+                [self cancelMPMoviePlayer];
+                videoIndexPath = nil;
+                selectedMediaType = kMediaTypePhoto;
+                [self selectedPhoto:indexPath];
+            }
         }
     }
 }
@@ -792,9 +793,8 @@
         if ([asset valueForProperty:ALAssetPropertyType]==ALAssetTypeVideo) {
             [self cancelMPMoviePlayer];
             navItem.rightBarButtonItem.title = @"0/1";
-        } else {
+        } else
             [self removePhotoWithIndexPath:indexPath];
-        }
     }
 }
 
@@ -813,14 +813,11 @@
                 return NO;
             } else
                 return YES;
-        }  else {
+        } else
             return YES;
-        }
     }
     else
-    {
         return YES;
-    }
 }
 
 #pragma mark -Remove Photo
