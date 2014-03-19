@@ -16,5 +16,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *videoPlayButton;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UIView *videoPlayView;
+@property (weak, nonatomic) IBOutlet UIImageView *locationTag;
 
 @end

@@ -11,6 +11,6 @@
 
 @interface DiaryViewController : UIViewController
 @property (strong,nonatomic) DiaryData *diaryData;
-@property NSInteger index;
+//@property NSInteger index;
 
 @end

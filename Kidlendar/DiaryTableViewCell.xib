@@ -24,7 +24,7 @@
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="locationTag10.png" translatesAutoresizingMaskIntoConstraints="NO" id="jxT-JL-PUC" userLabel="Date background - locationTag-24.png">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="locationTag10.png" translatesAutoresizingMaskIntoConstraints="NO" id="jxT-JL-PUC" userLabel="locationTag">
                         <rect key="frame" x="83" y="65" width="10" height="10"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
@@ -77,6 +77,7 @@
                 <outlet property="diaryDetail" destination="CXH-7h-ptv" id="AyT-Ea-Gsc"/>
                 <outlet property="diarySubject" destination="hqD-Ga-YAd" id="lfh-Sz-t0t"/>
                 <outlet property="locationLabel" destination="bzW-UH-2Pv" id="x2h-Kd-YcP"/>
+                <outlet property="locationTag" destination="jxT-JL-PUC" id="gic-wc-QOF"/>
                 <outlet property="videoPlayButton" destination="NKC-cj-BQi" id="k9l-3R-mzS"/>
                 <outlet property="videoPlayView" destination="VZh-0a-uqq" id="X3f-CY-IQs"/>
             </connections>

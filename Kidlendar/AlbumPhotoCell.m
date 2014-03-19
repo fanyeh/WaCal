@@ -35,11 +35,19 @@
         _selectNumber.textAlignment = NSTextAlignmentCenter;
         _selectNumber.textColor = [UIColor whiteColor];
         
+        
         highlightMask = [[UIView alloc]initWithFrame:self.contentView.frame];
         highlightMask.layer.borderWidth = 3.0f;
         highlightMask.layer.borderColor = [_selectNumber.backgroundColor CGColor];
         highlightMask.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.500];
+        
         [highlightMask addSubview:_selectNumber];
+        
+        _videoLabel = [[UIImageView alloc]initWithFrame:_selectNumber.frame];
+        _videoLabel.image = [UIImage imageNamed:@"video.png"];
+        _videoLabel.hidden = YES;
+        [highlightMask addSubview:_videoLabel];
+
         [self addSubview:highlightMask];
         highlightMask.hidden = YES;
         
@@ -62,9 +70,13 @@
 {
     [super setSelected:selected];
     if ([_asset valueForProperty:ALAssetPropertyType]==ALAssetTypeVideo) {
-        _selectNumber.hidden = YES;
+        _selectNumber.text = nil;
+        _videoLabel.hidden = NO;
+        
     } else {
         _selectNumber.hidden = NO;
+        _videoLabel.hidden = YES;
+
     }
     
     if (selected) {

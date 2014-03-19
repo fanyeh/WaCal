@@ -14,4 +14,5 @@
 @property (weak, nonatomic) IBOutlet UILabel *endDateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIView *dotView;
+@property (weak, nonatomic) IBOutlet UILabel *eventEndLabel;
 @end

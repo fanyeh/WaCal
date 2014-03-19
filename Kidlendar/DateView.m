@@ -18,6 +18,8 @@
     if (self) {
         // Initialization code
         float sizeOffset = 14;
+        self.backgroundColor = [UIColor whiteColor];
+        self.opaque = YES;
         _dateLabel = [[UILabel alloc]initWithFrame:CGRectMake(sizeOffset/2,
                                                               1,
                                                               32,
@@ -50,8 +52,6 @@
     
     hasEventView.backgroundColor = [UIColor colorWithRed:1.000 green:0.827 blue:0.306 alpha:1.000];
     [self addSubview:hasEventView];
-    
-
 }
 
 -(void)addHasDiaryView

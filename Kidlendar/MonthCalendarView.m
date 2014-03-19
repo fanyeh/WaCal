@@ -63,14 +63,7 @@
     borderView = [[UIView alloc]initWithFrame:CGRectMake(0, weekdayViewHeight+dateGroupFrame.size.height, 320, 1)];
     borderView.backgroundColor = [UIColor colorWithWhite:0.902 alpha:1.000];
     borderFrame = borderView.frame;
-//    [self addSubview:borderView];
 
-    
-//    _dateGroupView.layer.borderColor = [[UIColor greenColor]CGColor];
-//    _dateGroupView.layer.borderWidth = 2.0f;
-//
-//    self.layer.borderColor = [[UIColor yellowColor]CGColor];
-//    self.layer.borderWidth = 2.0f;
     [self addSubview:_dateGroupView];
     
     NSArray *weekDay = @[@"Mon",@"Tue",@"Wed",@"Thu",@"Fri",@"Sat",@"Sun"];
@@ -120,11 +113,13 @@
         
         // Init date view
         DateView *dateView = [[DateView alloc]initWithFrame:CGRectMake(xOffSet, yOffSet, dateViewWidth, dateViewHeight)];
+        [_dateGroupView addSubview:dateView];
+
+
         dateView.row = dateModel.row;
         dateView.tag = i; // Index to link view and date model
         dateView.date = dateModel.date;
         [dateView.dateLabel setText:[NSString stringWithFormat:@"%ld",(long)dateComp.day]];
-        [_dateGroupView addSubview:dateView];
         
         // Configure color for dates not in current month
         if (dateModel.isCurrentMonth)
@@ -146,7 +141,7 @@
         if (dateModel.hasDiary)
             [dateView addHasDiaryView];
 
-        // Switch dateview Y position for week change
+        // Switch date view Y position for week change
         if (i%7 == 6) {
             yOffSet += dateViewHeight;
             xOffSet = 0;

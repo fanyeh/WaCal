@@ -51,6 +51,13 @@
                         <color key="backgroundColor" red="0.90196078431372551" green="0.90196078431372551" blue="0.90196078431372551" alpha="1" colorSpace="calibratedRGB"/>
                         <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     </view>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="ENDS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jcY-FA-P1N">
+                        <rect key="frame" x="272" y="38" width="44" height="21"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                        <color key="textColor" red="0.85098039219999999" green="0.3921568627" blue="0.34901960780000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
             </tableViewCellContentView>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -58,6 +65,7 @@
                 <outlet property="alldayLabel" destination="0wR-gP-0kE" id="DDp-Sv-tX5"/>
                 <outlet property="dotView" destination="Noo-CO-kjP" id="PkY-55-tsz"/>
                 <outlet property="endDateLabel" destination="equ-Cu-EcK" id="WGH-H2-d8r"/>
+                <outlet property="eventEndLabel" destination="jcY-FA-P1N" id="u4F-JP-IaS"/>
                 <outlet property="startDateLabel" destination="iNh-O8-QmF" id="waa-Bq-WMj"/>
                 <outlet property="titleLabel" destination="VFL-4o-v2h" id="Dh9-Ld-4Ik"/>
             </connections>

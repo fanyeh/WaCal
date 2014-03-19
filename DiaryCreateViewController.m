@@ -66,8 +66,6 @@
     
     UIView *videoView;
     UIImageView *videoImageView;
-    
-    BOOL selectEnable;
 }
 
 @property (weak, nonatomic) IBOutlet UIView *noPhotoView;
@@ -96,8 +94,6 @@
     // Do any additional setup after loading the view from its nib.
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.navigationItem.title = @"Photos";
-    
-    selectEnable = YES;
     
     videoView = [[UIView alloc]initWithFrame:CGRectMake(2, 46, 316, 316)];
     videoImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 316, 316)];
@@ -323,9 +319,9 @@
         UIImage *cellImage;
         
         if ([[NSUserDefaults standardUserDefaults]boolForKey:@"FaceDetection"])
-            cellImage = [resizeImage cropWithFaceDetect:size];
+            cellImage = [[resizeImage cropWithFaceDetect:size] resizeImageToSize:size];
         else
-            cellImage = [resizeImage cropWithoutFaceOutDetect:size];
+            cellImage = [[resizeImage cropWithoutFaceOutDetect:size] resizeImageToSize:size];
 
         [cellImageArray addObject:cellImage];
         
@@ -342,9 +338,9 @@
     UIImage *cellImage;
     
     if ([[NSUserDefaults standardUserDefaults]boolForKey:@"FaceDetection"])
-        cellImage = [fullScreenImage cropWithFaceDetect:size];
+        cellImage = [[fullScreenImage cropWithFaceDetect:size]resizeImageToSize:size];
     else
-        cellImage = [fullScreenImage cropWithoutFaceOutDetect:size];
+        cellImage = [[fullScreenImage cropWithoutFaceOutDetect:size]resizeImageToSize:size];
     
     cellImageArray[path.row] = cellImage;
         
@@ -355,7 +351,7 @@
 {
     [diaryPhotosView reloadData];
     [faceDetectingActivity stopAnimating];
-    selectEnable = YES;
+    photoCollectionView.userInteractionEnabled = YES;
 }
 
 - (void)reloadCellWithIndexPath:(NSIndexPath *)path
@@ -753,33 +749,34 @@
     // Photo collection view select
 
     else {
-        if (selectEnable) {
-            selectEnable = NO;
-            ALAsset *asset =  [photoAssets objectAtIndex:indexPath.row];
-            if ([asset valueForProperty:ALAssetPropertyType]==ALAssetTypeVideo) {
-                if ([fullScreenImageArray count] > 0) {
-                    [self cancelPhotoSelection];
-                }
-                if (videoIndexPath)
-                    [photoCollectionView deselectItemAtIndexPath:videoIndexPath animated:YES];
-                
-                navItem.rightBarButtonItem.title = @"1/1";
-                videoIndexPath = indexPath;
-                selectedMediaType = kMediaTypeVideo;
-                UIImage *cellImage = [UIImage imageWithCGImage:[asset.defaultRepresentation fullScreenImage]];
-                videoImageView.image = [cellImage cropWithFaceDetect:videoImageView.frame.size];
-                videoView.hidden = NO;
-                [self.view bringSubviewToFront:videoView];
-                [self.view bringSubviewToFront:scroller];
-                [self.view bringSubviewToFront:photoAlbumTable];
-                [self.view bringSubviewToFront:photoCollectionView];
-                
-            } else {
-                [self cancelMPMoviePlayer];
-                videoIndexPath = nil;
-                selectedMediaType = kMediaTypePhoto;
-                [self selectedPhoto:indexPath];
+        photoCollectionView.userInteractionEnabled = NO;
+
+        ALAsset *asset =  [photoAssets objectAtIndex:indexPath.row];
+        if ([asset valueForProperty:ALAssetPropertyType]==ALAssetTypeVideo) {
+            if ([fullScreenImageArray count] > 0) {
+                [self cancelPhotoSelection];
             }
+            if (videoIndexPath)
+                [photoCollectionView deselectItemAtIndexPath:videoIndexPath animated:YES];
+            
+            navItem.rightBarButtonItem.title = @"1/1";
+            videoIndexPath = indexPath;
+            selectedMediaType = kMediaTypeVideo;
+            UIImage *cellImage = [UIImage imageWithCGImage:[asset.defaultRepresentation fullScreenImage]];
+            videoImageView.image = [cellImage cropWithFaceDetect:videoImageView.frame.size];
+            videoView.hidden = NO;
+            [self.view bringSubviewToFront:videoView];
+            [self.view bringSubviewToFront:scroller];
+            [self.view bringSubviewToFront:photoAlbumTable];
+            [self.view bringSubviewToFront:photoCollectionView];
+            
+            photoCollectionView.userInteractionEnabled = YES;
+            
+        } else if ([fullScreenImageArray count] < 5) {
+            [self cancelMPMoviePlayer];
+            videoIndexPath = nil;
+            selectedMediaType = kMediaTypePhoto;
+            [self selectedPhoto:indexPath];
         }
     }
 }
@@ -870,6 +867,7 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (collectionView.tag==0) {
+        NSLog(@"index row %ld",indexPath.row);
         NSValue *cellSizeValue = sizeArray[indexPath.row];
         return [cellSizeValue CGSizeValue];
     } else {

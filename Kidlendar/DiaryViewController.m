@@ -15,6 +15,7 @@
 #import "KidlendarAppDelegate.h"
 #import "PhotoLoader.h"
 #import "AFHTTPRequestOperation.h"
+#import "UIImage+Resize.h"
 
 @interface DiaryViewController () <UIAlertViewDelegate,NSURLSessionTaskDelegate>
 {
@@ -70,7 +71,7 @@
         _videoPlayView.hidden = NO;
         
     } else {
-        _diaryPhoto.image = _diaryData.diaryImage;
+        _diaryPhoto.image = [_diaryData.diaryImage resizeImageToSize:_diaryPhoto.frame.size];
         _videoPlayView.hidden = YES;
 
     }
@@ -287,15 +288,15 @@
     }];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    self.tabBarController.tabBar.hidden = YES;
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    self.tabBarController.tabBar.hidden = NO;
-}
+//- (void)viewWillAppear:(BOOL)animated
+//{
+//    self.tabBarController.tabBar.hidden = YES;
+//}
+//
+//- (void)viewWillDisappear:(BOOL)animated
+//{
+//    self.tabBarController.tabBar.hidden = NO;
+//}
 
 #pragma mark - Memory management
 

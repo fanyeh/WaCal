@@ -21,6 +21,8 @@
                 <outlet property="dotViewGray" destination="wdQ-ts-BQM" id="rx5-H4-STD"/>
                 <outlet property="emptyDiaryView" destination="5fp-Uf-A9B" id="JvL-I2-Che"/>
                 <outlet property="emptyEventView" destination="166-Px-c8h" id="qGI-k4-CJe"/>
+                <outlet property="endEventLabel" destination="ACt-r3-qUb" id="gKW-G1-hMe"/>
+                <outlet property="locationTag" destination="tab-ai-3Xc" id="jVx-pC-8ku"/>
                 <outlet property="monthView" destination="Jg6-h3-3bP" id="BMR-Kh-e88"/>
                 <outlet property="videoPlayView" destination="Rlr-gR-0oq" id="Le8-xS-DjZ"/>
                 <outlet property="view" destination="1" id="3"/>
@@ -51,7 +53,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="+ New Diary" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0t1-ac-TcV">
-                            <rect key="frame" x="85" y="42" width="150" height="25"/>
+                            <rect key="frame" x="85" y="32" width="150" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="21"/>
                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -71,7 +73,7 @@
                             <color key="backgroundColor" red="1" green="0.82745098039999998" blue="0.30588235289999999" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Test" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3PH-GC-YQU">
-                            <rect key="frame" x="118" y="15" width="196" height="30"/>
+                            <rect key="frame" x="118" y="15" width="132" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="highlightedColor"/>
@@ -96,8 +98,15 @@
                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="ENDS" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ACt-r3-qUb" userLabel="Label - ENDS">
+                            <rect key="frame" x="271" y="38" width="43" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                            <color key="textColor" red="0.85098039215686272" green="0.39215686274509803" blue="0.34901960784313724" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jg6-h3-3bP" customClass="MonthCalendarView">
                     <rect key="frame" x="0.0" y="64" width="320" height="302"/>
@@ -169,6 +178,7 @@
                     <color key="backgroundColor" red="0.90196079015731812" green="0.90196079015731812" blue="0.90196079015731812" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
             </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>

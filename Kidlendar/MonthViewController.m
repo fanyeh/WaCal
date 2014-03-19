@@ -22,7 +22,7 @@
 #import "LocationData.h"
 #import "LocationDataStore.h"
 #import "EventTableCell.h"
-#import "DiaryViewController.h"
+#import "DiaryPageViewController.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 
@@ -61,6 +61,8 @@
 @property (weak, nonatomic) IBOutlet UIView *emptyDiaryView;
 @property (weak, nonatomic) IBOutlet UIView *emptyEventView;
 @property (weak, nonatomic) IBOutlet UIView *videoPlayView;
+@property (weak, nonatomic) IBOutlet UIImageView *locationTag;
+@property (weak, nonatomic) IBOutlet UILabel *endEventLabel;
 
 
 @end
@@ -206,6 +208,16 @@
     [self showDiary];
 }
 
+//- (void)viewWillDisappear:(BOOL)animated
+//{
+//    _monthView.hidden = YES;
+//}
+//
+//-(void)viewWillAppear:(BOOL)animated
+//{
+//    _monthView.hidden  = NO;
+//}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -268,6 +280,10 @@
         cell.titleLabel.frame = CGRectOffset(cell.titleLabel.frame, 0, 12);
     }
 
+    if ([event.startDate compare:[NSDate date]] == NSOrderedAscending)
+        cell.eventEndLabel.hidden = NO;
+    else
+        cell.eventEndLabel.hidden = YES;
     
     if (event.allDay) {
         cell.alldayLabel.hidden = NO;
@@ -346,10 +362,9 @@
 
 -(void)diaryTap
 {
-    DiaryViewController *controller = [[DiaryViewController alloc]init];
+    DiaryPageViewController *controller = [[DiaryPageViewController alloc]init];
     controller.diaryData = [[[DiaryDataStore sharedStore]allItems]lastObject];
     [self.navigationController pushViewController:controller animated:YES];
-
 }
 
 -(void)showEventView
@@ -566,6 +581,8 @@
     }
     else
         [self showComingEvent];
+    
+    [self showDiary];
 }
 
 - (void)activateDateLabelGesture
@@ -612,49 +629,43 @@
 
 - (void)showComingEvent
 {
-    [monthModel checkEventForDate:_selectedDate];
-    if ([monthModel.eventsInDate count]> 0) {
-        for (EKEvent *comingUpEvent in monthModel.eventsInDate) {
-            if (comingUpEvent.startDate >[NSDate date]) {
-                _comingUpEvent = comingUpEvent;
-                if (comingUpEvent.isAllDay) {
-                    _comingEventTime.hidden = YES;
-                    _comingEventTimeEnd.hidden = YES;
-                    _allDayLabel.hidden = NO;
-                    
-                } else {
-                    _comingEventTime.hidden = NO;
-                    _comingEventTimeEnd.hidden = NO;
-                    _allDayLabel.hidden = YES;
-
-                    _comingEventTime.text  = [eventTimeFormatter stringFromDate:comingUpEvent.startDate];
-                    _comingEventTimeEnd.text = [eventTimeFormatter stringFromDate:comingUpEvent.endDate];
+    //            NSOrderedAscending //dateOne before dateTwo
+    //            NSOrderedSame  //dateOne and dateTwo are the same
+    //            NSOrderedDescending  //dateOne is after dateTwo
+    
+    if ([monthModel checkEventForDate:_selectedDate]) {
+        if ([[[monthModel.eventsInDate lastObject]startDate] compare:[NSDate date]]== NSOrderedAscending) {
+            _comingUpEvent = [monthModel.eventsInDate lastObject];
+            [self updateComingEventViewEnds:YES];
+            
+        } else {
+            for (EKEvent *comingUpEvent in monthModel.eventsInDate) {
+                if([comingUpEvent.startDate compare:[NSDate date]] == NSOrderedDescending) {
+                    // Assign to _comingUpEvent in case user tap event from _comingEventView
+                    _comingUpEvent = comingUpEvent;
+                    [self updateComingEventViewEnds:NO];
+                    break;
                 }
-
-                _comingEventTitle.text = comingUpEvent.title;
-                break;
             }
         }
-        if (_comingEventView.hidden) {
-            [UIView animateWithDuration:0.5 animations:^{
-                _emptyEventView.alpha =0;
-            } completion:^(BOOL finished) {
-                _emptyEventView.hidden = YES;
-                _comingEventView.alpha = 0;
-                [UIView animateWithDuration:0.5f animations:^{
-                    _comingEventView.hidden = NO;
-                    _comingEventView.alpha = 1;
-                }];
+        [UIView animateWithDuration:0.3 animations:^{
+            _emptyEventView.alpha =0;
+        } completion:^(BOOL finished) {
+            _emptyEventView.hidden = YES;
+            _comingEventView.alpha = 0;
+            [UIView animateWithDuration:0.3f animations:^{
+                _comingEventView.hidden = NO;
+                _comingEventView.alpha = 1;
             }];
-        }
+        }];
     }
    else if (_emptyEventView.hidden) {
-       [UIView animateWithDuration:0.5 animations:^{
+       [UIView animateWithDuration:0.3 animations:^{
            _comingEventView.alpha =0;
        } completion:^(BOOL finished) {
            _comingEventView.hidden = YES;
            _emptyEventView.alpha = 0;
-           [UIView animateWithDuration:0.5f animations:^{
+           [UIView animateWithDuration:0.3f animations:^{
                _emptyEventView.hidden = NO;
                _emptyEventView.alpha = 1;
            }];
@@ -662,49 +673,127 @@
     }
 }
 
+-(void)updateComingEventViewEnds:(BOOL)ends
+{
+    if (ends)
+        _endEventLabel.hidden = NO;
+    else
+        _endEventLabel.hidden = YES;
+    
+    if (_comingUpEvent.isAllDay) {
+        _comingEventTime.hidden = YES;
+        _comingEventTimeEnd.hidden = YES;
+        _allDayLabel.hidden = NO;
+        
+    } else {
+        _comingEventTime.hidden = NO;
+        _comingEventTimeEnd.hidden = NO;
+        _allDayLabel.hidden = YES;
+        _comingEventTime.text  = [eventTimeFormatter stringFromDate:_comingUpEvent.startDate];
+        _comingEventTimeEnd.text = [eventTimeFormatter stringFromDate:_comingUpEvent.endDate];
+    }
+    _comingEventTitle.text = _comingUpEvent.title;
+}
+
 -(void)showDiary
 {
-    // Check if there's diary available
-    if ([[[DiaryDataStore sharedStore]allItems]count] > 0) {
-        DiaryData *d = [[[DiaryDataStore sharedStore]allItems]lastObject];
-
+    // Check if there's diary available for selected date
+    if([monthModel checkDiaryForDate:_selectedDate]) {
+        DiaryData *d = [monthModel.diarysInDate lastObject];
+        
         if (d.diaryVideoPath) {
             _diaryImageView.image = d.diaryVideoThumbnail;
             _videoPlayView.hidden = NO;
         }
         else {
-            _diaryImageView.image = d.diaryImage;
+            _diaryImageView.image = [d.diaryImage resizeImageToSize:_diaryImageView.frame.size];
             _videoPlayView.hidden = YES;
         }
         _diaryTitle.text = d.subject;
         _diaryDetail.text = d.diaryText;
         _diaryDate.text = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceReferenceDate:d.dateCreated]];
-        _diaryLocation.text = d.location;
+        
+        if (d.location.length > 0) {
+            _locationTag.hidden = NO;
+            _diaryLocation.text = d.location;
+        } else {
+            _locationTag.hidden = YES;
+            _diaryLocation.text = nil;
+        }
         
         if (_diaryView.hidden) {
-            [UIView animateWithDuration:0.5 animations:^{
+            [UIView animateWithDuration:0.3f animations:^{
                 _emptyDiaryView.alpha =0;
             } completion:^(BOOL finished) {
                 _emptyDiaryView.hidden = YES;
                 _diaryView.alpha = 0;
-                [UIView animateWithDuration:0.5f animations:^{
+                [UIView animateWithDuration:0.3f animations:^{
                     _diaryView.hidden = NO;
                     _diaryView.alpha = 1;
                 }];
             }];
         }
     } else if (_emptyDiaryView.hidden) {
-        [UIView animateWithDuration:0.5 animations:^{
+        [UIView animateWithDuration:0.3f animations:^{
             _diaryView.alpha =0;
         } completion:^(BOOL finished) {
             _diaryView.hidden = YES;
             _emptyDiaryView.alpha = 0;
-            [UIView animateWithDuration:0.5f animations:^{
+            [UIView animateWithDuration:0.3f animations:^{
                 _emptyDiaryView.hidden = NO;
                 _emptyDiaryView.alpha = 1;
             }];
         }];
     }
+    
+//    if ([[[DiaryDataStore sharedStore]allItems]count] > 0) {
+//        
+//        DiaryData *d = [[[DiaryDataStore sharedStore]allItems]lastObject];
+//
+//        if (d.diaryVideoPath) {
+//            _diaryImageView.image = d.diaryVideoThumbnail;
+//            _videoPlayView.hidden = NO;
+//        }
+//        else {
+//            _diaryImageView.image = [d.diaryImage resizeImageToSize:_diaryImageView.frame.size];
+//            _videoPlayView.hidden = YES;
+//        }
+//        _diaryTitle.text = d.subject;
+//        _diaryDetail.text = d.diaryText;
+//        _diaryDate.text = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceReferenceDate:d.dateCreated]];
+//
+//        if (d.location.length > 0) {
+//            _locationTag.hidden = NO;
+//            _diaryLocation.text = d.location;
+//        } else {
+//            _locationTag.hidden = YES;
+//            _diaryLocation.text = nil;
+//        }
+//
+//        if (_diaryView.hidden) {
+//            [UIView animateWithDuration:0.5 animations:^{
+//                _emptyDiaryView.alpha =0;
+//            } completion:^(BOOL finished) {
+//                _emptyDiaryView.hidden = YES;
+//                _diaryView.alpha = 0;
+//                [UIView animateWithDuration:0.5f animations:^{
+//                    _diaryView.hidden = NO;
+//                    _diaryView.alpha = 1;
+//                }];
+//            }];
+//        }
+//    } else if (_emptyDiaryView.hidden) {
+//        [UIView animateWithDuration:0.5 animations:^{
+//            _diaryView.alpha =0;
+//        } completion:^(BOOL finished) {
+//            _diaryView.hidden = YES;
+//            _emptyDiaryView.alpha = 0;
+//            [UIView animateWithDuration:0.5f animations:^{
+//                _emptyDiaryView.hidden = NO;
+//                _emptyDiaryView.alpha = 1;
+//            }];
+//        }];
+//    }
 }
 
 - (void)resetCalendarBySelectDate:(BOOL)bySelect

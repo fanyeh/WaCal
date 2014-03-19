@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4C07B2BE18C8BE1600911045 /* x@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C07B2BC18C8BE1600911045 /* x@2x.png */; };
-		4C07B2BF18C8BE1600911045 /* v@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C07B2BD18C8BE1600911045 /* v@2x.png */; };
 		4C0C38CA18673AD60001CC08 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C0C38C918673AD60001CC08 /* AssetsLibrary.framework */; };
 		4C12B2ED18A1FC280046C5EC /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2EC18A1FC280046C5EC /* GoogleMaps.framework */; };
 		4C12B2EF18A1FD960046C5EC /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2EE18A1FD960046C5EC /* CoreText.framework */; };
@@ -58,11 +56,8 @@
 		4C5420F01857FC9D006D2DE4 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5420EF1857FC9D006D2DE4 /* QuartzCore.framework */; };
 		4C570B3518D2D6D600BFA3C4 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C570B3318D2D6D600BFA3C4 /* MapViewController.m */; };
 		4C570B3618D2D6D600BFA3C4 /* MapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C570B3418D2D6D600BFA3C4 /* MapViewController.xib */; };
-		4C570B3A18D2DE8900BFA3C4 /* mapicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C570B3918D2DE8900BFA3C4 /* mapicon.png */; };
 		4C5B01F618ACBD7F0030FCCC /* DiaryCreateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B01F418ACBD7E0030FCCC /* DiaryCreateViewController.m */; };
 		4C5B01F718ACBD7F0030FCCC /* DiaryCreateViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C5B01F518ACBD7E0030FCCC /* DiaryCreateViewController.xib */; };
-		4C5BA25B1861731A00528843 /* 929-film-1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BA25A1861731A00528843 /* 929-film-1@2x.png */; };
-		4C5BA25D1861745D00528843 /* 929-film-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C5BA25C1861745D00528843 /* 929-film-1.png */; };
 		4C5C8FFC18A8730100B40F7E /* DiaryEntryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5C8FFA18A8730100B40F7E /* DiaryEntryViewController.m */; };
 		4C5C8FFD18A8730100B40F7E /* DiaryEntryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C5C8FFB18A8730100B40F7E /* DiaryEntryViewController.xib */; };
 		4C61325618BECAED0025FD00 /* EventTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C61325518BECAED0025FD00 /* EventTableCell.xib */; };
@@ -88,6 +83,7 @@
 		4C91918718AF3A4900ED4695 /* ImageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C91918618AF3A4900ED4695 /* ImageStore.m */; };
 		4C9214CB185AAA29009A3090 /* DateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9214CA185AAA29009A3090 /* DateView.m */; };
 		4C92155A185AD39E009A3090 /* MonthCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C921559185AD39E009A3090 /* MonthCalendarView.m */; };
+		4C9CC3D318D943F400F899F0 /* DiaryPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9CC3D218D943F400F899F0 /* DiaryPageViewController.m */; };
 		4CA0368C18B7A12100015184 /* DiaryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0368B18B7A12100015184 /* DiaryTableViewCell.m */; };
 		4CA0369018B7A29F00015184 /* DiaryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CA0368F18B7A29F00015184 /* DiaryTableViewCell.xib */; };
 		4CA2506C1869377000AEA94E /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA2506B1869377000AEA94E /* UIImage+Resize.m */; };
@@ -108,6 +104,10 @@
 		4CB3DDA118521DC500673478 /* KidlendarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB3DDA018521DC500673478 /* KidlendarTests.m */; };
 		4CBA4BB618CD9B4F00B380AB /* PhotoAlbumTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CBA4BB518CD9B4F00B380AB /* PhotoAlbumTableCell.xib */; };
 		4CBA4BBB18CD9BFC00B380AB /* PhotoAlbumTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CBA4BBA18CD9BFC00B380AB /* PhotoAlbumTableCell.m */; };
+		4CC417D118D9725000EE8DBE /* mapicon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC417D018D9725000EE8DBE /* mapicon@2x.png */; };
+		4CC417D518D9731C00EE8DBE /* video@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC417D218D9731C00EE8DBE /* video@2x.png */; };
+		4CC417D618D9731C00EE8DBE /* save@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC417D318D9731C00EE8DBE /* save@2x.png */; };
+		4CC417D718D9731C00EE8DBE /* delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CC417D418D9731C00EE8DBE /* delete@2x.png */; };
 		4CD2B92318A492E6002DA9E4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD2B92218A492E6002DA9E4 /* Security.framework */; };
 		4CD2B93218A4CF69002DA9E4 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD2B93118A4CF69002DA9E4 /* CFNetwork.framework */; };
 		4CEEB9F818B4656100C7FA80 /* DiaryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEEB9F718B4656100C7FA80 /* DiaryData.m */; };
@@ -125,8 +125,6 @@
 		4CF592E1186D5BE500F1BEEB /* MonthViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CF592DF186D5BE500F1BEEB /* MonthViewController.xib */; };
 		4CFB086C187E696A00456D5D /* DateModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFB086B187E696A00456D5D /* DateModel.m */; };
 		4CFB086F187E6BFB00456D5D /* MonthModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CFB086E187E6BFB00456D5D /* MonthModel.m */; };
-		4CFB1B8018C8092200EC443A /* trash35@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CFB1B7D18C8092200EC443A /* trash35@2x.png */; };
-		4CFB1B8118C8092200EC443A /* save35@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CFB1B7E18C8092200EC443A /* save35@2x.png */; };
 		4CFB1B8218C8092200EC443A /* diaryTab@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CFB1B7F18C8092200EC443A /* diaryTab@2x.png */; };
 		4CFB1B8418C8676300EC443A /* selectPhoto@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CFB1B8318C8676300EC443A /* selectPhoto@2x.png */; };
 		4CFB6DC8186A6BAC001C8F05 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CFB6DC7186A6BAC001C8F05 /* CoreLocation.framework */; };
@@ -169,8 +167,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4C07B2BC18C8BE1600911045 /* x@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "x@2x.png"; sourceTree = "<group>"; };
-		4C07B2BD18C8BE1600911045 /* v@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "v@2x.png"; sourceTree = "<group>"; };
 		4C0C38C918673AD60001CC08 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		4C12B2EC18A1FC280046C5EC /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMaps.framework; sourceTree = "<group>"; };
 		4C12B2EE18A1FD960046C5EC /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -239,12 +235,9 @@
 		4C570B3218D2D6D600BFA3C4 /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		4C570B3318D2D6D600BFA3C4 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		4C570B3418D2D6D600BFA3C4 /* MapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MapViewController.xib; sourceTree = "<group>"; };
-		4C570B3918D2DE8900BFA3C4 /* mapicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mapicon.png; sourceTree = "<group>"; };
 		4C5B01F318ACBD7E0030FCCC /* DiaryCreateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiaryCreateViewController.h; path = ../DiaryCreateViewController.h; sourceTree = "<group>"; };
 		4C5B01F418ACBD7E0030FCCC /* DiaryCreateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiaryCreateViewController.m; path = ../DiaryCreateViewController.m; sourceTree = "<group>"; };
 		4C5B01F518ACBD7E0030FCCC /* DiaryCreateViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DiaryCreateViewController.xib; path = ../DiaryCreateViewController.xib; sourceTree = "<group>"; };
-		4C5BA25A1861731A00528843 /* 929-film-1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "929-film-1@2x.png"; sourceTree = "<group>"; };
-		4C5BA25C1861745D00528843 /* 929-film-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "929-film-1.png"; sourceTree = "<group>"; };
 		4C5C8FF918A8730100B40F7E /* DiaryEntryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryEntryViewController.h; sourceTree = "<group>"; };
 		4C5C8FFA18A8730100B40F7E /* DiaryEntryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryEntryViewController.m; sourceTree = "<group>"; };
 		4C5C8FFB18A8730100B40F7E /* DiaryEntryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiaryEntryViewController.xib; sourceTree = "<group>"; };
@@ -284,6 +277,8 @@
 		4C9214CA185AAA29009A3090 /* DateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateView.m; sourceTree = "<group>"; };
 		4C921558185AD39E009A3090 /* MonthCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthCalendarView.h; sourceTree = "<group>"; };
 		4C921559185AD39E009A3090 /* MonthCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonthCalendarView.m; sourceTree = "<group>"; };
+		4C9CC3D118D943F400F899F0 /* DiaryPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryPageViewController.h; sourceTree = "<group>"; };
+		4C9CC3D218D943F400F899F0 /* DiaryPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryPageViewController.m; sourceTree = "<group>"; };
 		4CA0368A18B7A12100015184 /* DiaryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryTableViewCell.h; sourceTree = "<group>"; };
 		4CA0368B18B7A12100015184 /* DiaryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryTableViewCell.m; sourceTree = "<group>"; };
 		4CA0368F18B7A29F00015184 /* DiaryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiaryTableViewCell.xib; sourceTree = "<group>"; };
@@ -313,6 +308,10 @@
 		4CBA4BB518CD9B4F00B380AB /* PhotoAlbumTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PhotoAlbumTableCell.xib; sourceTree = "<group>"; };
 		4CBA4BB918CD9BFC00B380AB /* PhotoAlbumTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoAlbumTableCell.h; sourceTree = "<group>"; };
 		4CBA4BBA18CD9BFC00B380AB /* PhotoAlbumTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoAlbumTableCell.m; sourceTree = "<group>"; };
+		4CC417D018D9725000EE8DBE /* mapicon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "mapicon@2x.png"; path = "../mapicon@2x.png"; sourceTree = "<group>"; };
+		4CC417D218D9731C00EE8DBE /* video@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "video@2x.png"; path = "../video@2x.png"; sourceTree = "<group>"; };
+		4CC417D318D9731C00EE8DBE /* save@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "save@2x.png"; path = "../save@2x.png"; sourceTree = "<group>"; };
+		4CC417D418D9731C00EE8DBE /* delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "delete@2x.png"; path = "../delete@2x.png"; sourceTree = "<group>"; };
 		4CD2B92218A492E6002DA9E4 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		4CD2B93118A4CF69002DA9E4 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		4CEEB9F618B4656100C7FA80 /* DiaryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiaryData.h; path = ../DiaryData.h; sourceTree = "<group>"; };
@@ -336,8 +335,6 @@
 		4CFB086B187E696A00456D5D /* DateModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateModel.m; sourceTree = "<group>"; };
 		4CFB086D187E6BFB00456D5D /* MonthModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthModel.h; sourceTree = "<group>"; };
 		4CFB086E187E6BFB00456D5D /* MonthModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonthModel.m; sourceTree = "<group>"; };
-		4CFB1B7D18C8092200EC443A /* trash35@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "trash35@2x.png"; path = "../trash35@2x.png"; sourceTree = "<group>"; };
-		4CFB1B7E18C8092200EC443A /* save35@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "save35@2x.png"; path = "../save35@2x.png"; sourceTree = "<group>"; };
 		4CFB1B7F18C8092200EC443A /* diaryTab@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "diaryTab@2x.png"; path = "../diaryTab@2x.png"; sourceTree = "<group>"; };
 		4CFB1B8318C8676300EC443A /* selectPhoto@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "selectPhoto@2x.png"; sourceTree = "<group>"; };
 		4CFB6DC7186A6BAC001C8F05 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -476,6 +473,8 @@
 				4C6C49C3186DDDDF0042EB61 /* DiaryViewController.xib */,
 				4CA2506D1869517400AEA94E /* DiaryPhotoCell.h */,
 				4CA2506E1869517400AEA94E /* DiaryPhotoCell.m */,
+				4C9CC3D118D943F400F899F0 /* DiaryPageViewController.h */,
+				4C9CC3D218D943F400F899F0 /* DiaryPageViewController.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -509,19 +508,16 @@
 		4C68CAB718C6303F003776D2 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4CC417D218D9731C00EE8DBE /* video@2x.png */,
+				4CC417D318D9731C00EE8DBE /* save@2x.png */,
+				4CC417D418D9731C00EE8DBE /* delete@2x.png */,
+				4CC417D018D9725000EE8DBE /* mapicon@2x.png */,
 				4C761D0F18D8AE2500AE97DE /* lookup_amatorka.png */,
-				4C570B3918D2DE8900BFA3C4 /* mapicon.png */,
-				4CFB1B7D18C8092200EC443A /* trash35@2x.png */,
-				4CFB1B7E18C8092200EC443A /* save35@2x.png */,
 				4CFB1B7F18C8092200EC443A /* diaryTab@2x.png */,
-				4C07B2BC18C8BE1600911045 /* x@2x.png */,
-				4C07B2BD18C8BE1600911045 /* v@2x.png */,
 				4CFB1B8318C8676300EC443A /* selectPhoto@2x.png */,
 				4C68CABE18C63A51003776D2 /* playButton@2x.png */,
 				4C68CAB918C6350E003776D2 /* calendarTab@2x.png */,
 				4C68CABA18C6350E003776D2 /* settingTab@2x.png */,
-				4C5BA25C1861745D00528843 /* 929-film-1.png */,
-				4C5BA25A1861731A00528843 /* 929-film-1@2x.png */,
 				4C3FBA5518C4CCFF0097C67D /* face_white.png */,
 				4C3FBA5618C4CCFF0097C67D /* face_yellow.png */,
 				4CF5152218C325730050E330 /* fb_icon_325x325.png */,
@@ -850,42 +846,39 @@
 				4C61325D18BEE6200025FD00 /* clock.png in Resources */,
 				4CF5151D18C314430050E330 /* 41-picture-frame.png in Resources */,
 				4C68CABD18C6350E003776D2 /* settingTab@2x.png in Resources */,
-				4C5BA25D1861745D00528843 /* 929-film-1.png in Resources */,
+				4CC417D618D9731C00EE8DBE /* save@2x.png in Resources */,
 				4C6C49C5186DDDDF0042EB61 /* DiaryViewController.xib in Resources */,
 				4CF5152118C314840050E330 /* 83-calendar.png in Resources */,
-				4C570B3A18D2DE8900BFA3C4 /* mapicon.png in Resources */,
-				4CFB1B8018C8092200EC443A /* trash35@2x.png in Resources */,
 				4C4CE27818BDB21E007217CA /* calendar.png in Resources */,
 				4C3FBA5818C4CCFF0097C67D /* face_yellow.png in Resources */,
 				4C761D1018D8AE2500AE97DE /* lookup_amatorka.png in Resources */,
 				4C4AAB7918C6B39000458908 /* locationTag10@2x.png in Resources */,
-				4C5BA25B1861731A00528843 /* 929-film-1@2x.png in Resources */,
 				4CBA4BB618CD9B4F00B380AB /* PhotoAlbumTableCell.xib in Resources */,
 				4C68CABF18C63A51003776D2 /* playButton@2x.png in Resources */,
 				4CF5151F18C314500050E330 /* 42-photos.png in Resources */,
 				4C61326D18BF16990025FD00 /* EventCreateController.xib in Resources */,
-				4C07B2BF18C8BE1600911045 /* v@2x.png in Resources */,
 				4C4AAB7B18C6B39000458908 /* write@2x.png in Resources */,
 				4CFB1B8218C8092200EC443A /* diaryTab@2x.png in Resources */,
 				4C4AAB7C18C6B39000458908 /* reminder@2x.png in Resources */,
 				4CA0369018B7A29F00015184 /* DiaryTableViewCell.xib in Resources */,
 				4C4AAB7A18C6B39000458908 /* newDiary@2x.png in Resources */,
 				4C4AAB7718C6B39000458908 /* share@2x.png in Resources */,
+				4CC417D718D9731C00EE8DBE /* delete@2x.png in Resources */,
 				4C73E02118BFA5F3007ECCEC /* EventReviewController.xib in Resources */,
 				4CF5152618C325730050E330 /* fb_icon_325x325.png in Resources */,
 				4CFEB19418C2CF9C00CFE1A1 /* uploadicon.png in Resources */,
 				4C4AAB7618C6B39000458908 /* backup@2x.png in Resources */,
 				4C61325F18BEE6790025FD00 /* repeat.png in Resources */,
 				4C61325618BECAED0025FD00 /* EventTableCell.xib in Resources */,
-				4C07B2BE18C8BE1600911045 /* x@2x.png in Resources */,
 				4C5B01F718ACBD7F0030FCCC /* DiaryCreateViewController.xib in Resources */,
 				4CFB1B8418C8676300EC443A /* selectPhoto@2x.png in Resources */,
 				4C570B3618D2D6D600BFA3C4 /* MapViewController.xib in Resources */,
+				4CC417D118D9725000EE8DBE /* mapicon@2x.png in Resources */,
 				4CB3DD8618521DC400673478 /* InfoPlist.strings in Resources */,
-				4CFB1B8118C8092200EC443A /* save35@2x.png in Resources */,
 				4CB3BD2D18A330D80006AFD4 /* SettingViewController.xib in Resources */,
 				4CB3DD8E18521DC400673478 /* Images.xcassets in Resources */,
 				4C68CABC18C6350E003776D2 /* calendarTab@2x.png in Resources */,
+				4CC417D518D9731C00EE8DBE /* video@2x.png in Resources */,
 				4CF5152918C325730050E330 /* MetroUI-Apps-Dropbox-icon.png in Resources */,
 				4C3FBA5718C4CCFF0097C67D /* face_white.png in Resources */,
 				4CF592E1186D5BE500F1BEEB /* MonthViewController.xib in Resources */,
@@ -943,6 +936,7 @@
 				4CFF693118BF3FC000337857 /* RepeatView.m in Sources */,
 				4C73E02018BFA5F3007ECCEC /* EventReviewController.m in Sources */,
 				4C4F991D18CF5E51007D3746 /* AFHTTPRequestOperationManager.m in Sources */,
+				4C9CC3D318D943F400F899F0 /* DiaryPageViewController.m in Sources */,
 				4C315C7B18AB298800A2A363 /* PhotoLoader.m in Sources */,
 				4C50B73718B1BB3D0065434A /* MapKitHelpers.m in Sources */,
 				4C4F992118CF5E51007D3746 /* AFURLConnectionOperation.m in Sources */,

@@ -228,7 +228,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.85098039215686272" green="0.39215686274509803" blue="0.34901960784313724" alpha="1" colorSpace="calibratedRGB"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <state key="normal" image="x.png">
+                    <state key="normal" image="delete.png">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
@@ -239,7 +239,7 @@
                     <rect key="frame" x="270" y="313" width="35" height="35"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.1764705882" green="0.41176470590000003" blue="0.37647058820000001" alpha="1" colorSpace="calibratedRGB"/>
-                    <state key="normal" image="v.png">
+                    <state key="normal" image="save.png">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -278,11 +278,11 @@
         </view>
     </objects>
     <resources>
+        <image name="delete.png" width="35" height="35"/>
         <image name="locationTag20.png" width="20" height="20"/>
-        <image name="mapicon.png" width="256" height="256"/>
+        <image name="mapicon.png" width="40" height="40"/>
         <image name="reminder.png" width="20" height="20"/>
         <image name="repeat.png" width="512" height="512"/>
-        <image name="v.png" width="35" height="35"/>
-        <image name="x.png" width="35" height="35"/>
+        <image name="save.png" width="35" height="35"/>
     </resources>
 </document>

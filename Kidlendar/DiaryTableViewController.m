@@ -9,13 +9,14 @@
 #import "DiaryTableViewController.h"
 #import "DiaryDataStore.h"
 #import "DiaryData.h"
-#import "DiaryViewController.h"
 #import "DiaryCreateViewController.h"
 #import "DiaryTableViewCell.h"
 #import "LocationData.h"
 #import "LocationDataStore.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import <AVFoundation/AVFoundation.h>
+#import "DiaryPageViewController.h"
+#import "UIImage+Resize.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 #define MainColor [UIColor colorWithRed:(45 / 255.0) green:(105 / 255.0) blue:(96 / 255.0) alpha:1.0]
@@ -96,7 +97,9 @@
 
 - (void)sortDiaryToSection
 {
-    NSArray *diaryArray = [[DiaryDataStore sharedStore]allItems];
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO];
+    NSArray *diaryArray = [[[DiaryDataStore sharedStore]allItems] sortedArrayUsingDescriptors:@[sortDescriptor]];
+    
     diaryInSections = [[NSMutableDictionary alloc]init];
 
     for (DiaryData *d in diaryArray) {
@@ -145,7 +148,10 @@
     NSString *dayString;
     switch (day%10) {
         case 1:
-            dayString = @"st";
+            if (day==11)
+                dayString = @"th";
+            else
+                dayString = @"st";
             break;
         case 2:
             dayString = @"nd";
@@ -158,8 +164,15 @@
             break;
     }
     
-    cell.dateLabel.text = [NSString stringWithFormat:@"%ld%@ %@",day,dayString,[weekdayFormatter stringFromDate:diaryDate]];
-    cell.locationLabel.text = d.location;
+    cell.dateLabel.text = [NSString stringWithFormat:@"%ld%@ %@",(long)day,dayString,[weekdayFormatter stringFromDate:diaryDate]];
+    
+    if (d.location.length > 0) {
+        cell.locationTag.hidden = NO;
+        cell.locationLabel.text = d.location;
+    } else {
+        cell.locationTag.hidden = YES;
+        cell.locationLabel.text = nil;
+    }
     cell.diaryDetail.text = d.diaryText;
     cell.diarySubject.text = d.subject;
     
@@ -171,7 +184,7 @@
         cell.videoPlayView.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.700];
         cell.videoPlayView.hidden = NO;
     } else {
-        cell.cellImageView.image = d.diaryImage;
+        cell.cellImageView.image = [d.diaryImage resizeImageToSize:cell.contentView.frame.size];
         cell.videoPlayView.hidden = YES;
     }
     return cell;
@@ -204,10 +217,9 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    DiaryViewController *controller = [[DiaryViewController alloc]init];
+    DiaryPageViewController *controller = [[DiaryPageViewController alloc]init];
     NSString *sectionKey =diaryInSections.allKeys[indexPath.section];
     controller.diaryData = [[diaryInSections objectForKey:sectionKey] objectAtIndex:indexPath.row];
-
     [self.navigationController pushViewController:controller animated:YES];
 }
 

@@ -51,7 +51,7 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
         }];
     }
 
-    self.window.backgroundColor = [UIColor whiteColor];
+//    self.window.backgroundColor = [UIColor whiteColor];
     [[UINavigationBar appearance]setBarStyle:UIBarStyleBlack];
     [[UINavigationBar appearance] setBarTintColor:Rgb2UIColor(45 , 105 , 96)];
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]]; //is the buttons text color

@@ -185,9 +185,13 @@
     DiaryData *diary = [[DiaryDataStore sharedStore]createItem];
     
     diary.subject = _diarySubjectField.text;
-    diary.diaryText = _diaryEntryView.text;
+    if (hasText) {
+        diary.diaryText = _diaryEntryView.text;
+    }
     diary.dateCreated = [[dateFormatter dateFromString: _diaryTimeField.text] timeIntervalSinceReferenceDate];
-    diary.location = _locationField.text;
+    
+    if (_locationField.text.length > 0)
+        diary.location = _locationField.text;
     
     
     // Photo diary

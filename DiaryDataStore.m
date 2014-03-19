@@ -52,9 +52,7 @@
         NSEntityDescription *e = [[model entitiesByName] objectForKey:@"DiaryData"];
         [request setEntity:e];
         
-        NSSortDescriptor *sd = [NSSortDescriptor
-                                sortDescriptorWithKey:@"orderingValue"
-                                ascending:YES];
+        NSSortDescriptor *sd = [NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO];
         [request setSortDescriptors:[NSArray arrayWithObject:sd]];
         
         NSError *error;
@@ -92,7 +90,7 @@
     [self saveChanges];
 }
 
-- (NSArray *)allItems
+- (NSMutableArray *)allItems
 {
     return allItems;
 }

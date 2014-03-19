@@ -22,7 +22,7 @@
 
 - (void)removeItem:(DiaryData *)p;
 
-- (NSArray *)allItems;
+- (NSMutableArray *)allItems;
 
 - (DiaryData *)createItem;
 

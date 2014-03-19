@@ -56,7 +56,7 @@
     // create crop rect pan gesture
     pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     
-    _photoImage = [_photoImage cropWithFaceDetect:_photoImageView.frame.size];
+    _photoImage = [[_photoImage cropWithFaceDetect:_photoImageView.frame.size] resizeImageToSize:_photoImageView.frame.size];
     _photoImageView.image = _photoImage;
     [_photoImageView addGestureRecognizer:pan];
 
@@ -120,7 +120,8 @@
     CGPathAddPath(p1, nil, CGPathCreateWithRect(cropRect, nil));
     CGPathAddPath(p1, nil, CGPathCreateWithRect(_photoImageView.bounds, nil));
     _maskLayer.path = p1;
-    
+    CGPathRelease(p1);
+
     // display the path of the masks the for screenshot
     borderLayer.path = CGPathCreateWithRect(cropRect,nil);
     borderLayer.lineWidth = 3.0f;
