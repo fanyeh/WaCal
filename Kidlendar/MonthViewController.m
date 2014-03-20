@@ -42,6 +42,7 @@
     UILabel *yearLabel;
     NSDateFormatter *eventTimeFormatter;
     NSInteger selectedMonth;
+    DiaryData *showDiaryData;
     
 }
 
@@ -88,7 +89,6 @@
 //    self.view.layer.borderColor = [Rgb2UIColor(33, 138, 251) CGColor];
 //    self.view.layer.borderWidth = 5.0f;
 
-    
     UITapGestureRecognizer *emptyEventTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(addEvent)];
     UITapGestureRecognizer *emptyDiaryTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(addDiary)];
 
@@ -347,7 +347,8 @@
 
 -(void)refreshDiary:(NSNotification *)notification
 {
-    [self showDiary];
+    [self resetCalendarBySelectDate:NO];
+//    [self showDiary];
 }
 
 - (void)switchEKCalendar:(NSNotification *)notification
@@ -357,13 +358,12 @@
         [self shrinkMonthWithOutAnimation];
 }
 
-
 #pragma mark -UIGesture
 
 -(void)diaryTap
 {
     DiaryPageViewController *controller = [[DiaryPageViewController alloc]init];
-    controller.diaryData = [[[DiaryDataStore sharedStore]allItems]lastObject];
+    controller.diaryData = showDiaryData;
     [self.navigationController pushViewController:controller animated:YES];
 }
 
@@ -395,7 +395,6 @@
 {
     _comingEventView.hidden = YES;
     [_monthView shrinkCalendarWithRow:[monthModel rowNumberForDate:_selectedDate]withAnimation:NO complete:^{
-        eventTableView.hidden = NO;
         [self showEventTable];
     }];
 }
@@ -403,9 +402,7 @@
 - (void)shrinkMonthWithAnimation
 {
     _comingEventView.hidden = YES;
-    _dotView.hidden = YES;
     [_monthView shrinkCalendarWithRow:[monthModel rowNumberForDate:_selectedDate]withAnimation:YES complete:^{
-        eventTableView.hidden = NO;
         [self showEventTable];
     }];
 }
@@ -571,7 +568,6 @@
 
     // Set up position of event & diary detail view
     [_monthView setAppearanceOnSelectDate:dateModel.date];
-    previousDateModel = dateModel;
     
     if (_monthView.shrink) {
         [self showEventTable];
@@ -583,6 +579,8 @@
         [self showComingEvent];
     
     [self showDiary];
+    
+    previousDateModel = dateModel;
 }
 
 - (void)activateDateLabelGesture
@@ -598,40 +596,52 @@
 
 - (void)showEventTable
 {
-    [monthModel checkEventForDate:_selectedDate];
-    if ([monthModel.eventsInDate count]> 0) {
+    CATransition *animation = [CATransition animation];
+    animation.duration = 0.8f;
+    animation.type = kCATransitionPush;
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    
+    //            NSOrderedAscending //dateOne before dateTwo
+    //            NSOrderedSame  //dateOne and dateTwo are the same
+    //            NSOrderedDescending  //dateOne is after dateTwo
+    
+    if ([_selectedDate compare:[NSDate date]] == NSOrderedAscending)
+        animation.subtype = kCATransitionFromLeft;
+    else
+        animation.subtype = kCATransitionFromRight;
+    
+    if ([monthModel checkEventForDate:_selectedDate]) {
+        [eventTableView reloadData];
+        _emptyEventView.hidden = YES;
         // Opens event and diary details on tap date
+        [eventTableView.layer addAnimation:animation forKey:nil];
         eventTableView.hidden = NO;
         eventTableView.frame = CGRectMake(0,
                                           _monthView.shrinkFrame.origin.y+_monthView.shrinkFrame.size.height+11,
                                           self.view.frame.size.width,
                                           _diaryView.frame.origin.y-(_monthView.shrinkFrame.origin.y+_monthView.shrinkFrame.size.height));
- 
-        [eventTableView reloadData];
-        if (!_emptyEventView.hidden) {
-            [UIView animateWithDuration:0.5 animations:^{
-
-                _emptyEventView.alpha =0;
-            } completion:^(BOOL finished) {
-                _emptyEventView.hidden = YES;
-            }];
-        }
-    } else {
+    } else if (_emptyEventView.hidden){
         eventTableView.hidden = YES;
-        if (_emptyEventView.hidden) {
-            _emptyEventView.hidden = NO;
-            [UIView animateWithDuration:0.5 animations:^{
-                _emptyEventView.alpha =1;
-            }];
-        }
+        [_emptyEventView.layer addAnimation:animation forKey:nil];
+        _emptyEventView.hidden = NO;
     }
 }
 
 - (void)showComingEvent
 {
+    CATransition *animation = [CATransition animation];
+    animation.duration = 0.8f;
+    animation.type = kCATransitionPush;
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    
     //            NSOrderedAscending //dateOne before dateTwo
     //            NSOrderedSame  //dateOne and dateTwo are the same
     //            NSOrderedDescending  //dateOne is after dateTwo
+    
+    if ([_selectedDate compare:previousDateModel.date] == NSOrderedAscending)
+        animation.subtype = kCATransitionFromLeft;
+    else
+        animation.subtype = kCATransitionFromRight;
     
     if ([monthModel checkEventForDate:_selectedDate]) {
         if ([[[monthModel.eventsInDate lastObject]startDate] compare:[NSDate date]]== NSOrderedAscending) {
@@ -648,28 +658,14 @@
                 }
             }
         }
-        [UIView animateWithDuration:0.3 animations:^{
-            _emptyEventView.alpha =0;
-        } completion:^(BOOL finished) {
-            _emptyEventView.hidden = YES;
-            _comingEventView.alpha = 0;
-            [UIView animateWithDuration:0.3f animations:^{
-                _comingEventView.hidden = NO;
-                _comingEventView.alpha = 1;
-            }];
-        }];
+        _emptyEventView.hidden = YES;
+        [_comingEventView.layer addAnimation:animation forKey:nil];
+        _comingEventView.hidden = NO;
     }
    else if (_emptyEventView.hidden) {
-       [UIView animateWithDuration:0.3 animations:^{
-           _comingEventView.alpha =0;
-       } completion:^(BOOL finished) {
-           _comingEventView.hidden = YES;
-           _emptyEventView.alpha = 0;
-           [UIView animateWithDuration:0.3f animations:^{
-               _emptyEventView.hidden = NO;
-               _emptyEventView.alpha = 1;
-           }];
-       }];
+       _comingEventView.hidden = YES;
+       [_emptyEventView.layer addAnimation:animation forKey:nil];
+       _emptyEventView.hidden = NO;
     }
 }
 
@@ -697,16 +693,30 @@
 
 -(void)showDiary
 {
+    CATransition *animation = [CATransition animation];
+    animation.duration = 0.8f;
+    animation.type = kCATransitionPush;
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    
+    //            NSOrderedAscending //dateOne before dateTwo
+    //            NSOrderedSame  //dateOne and dateTwo are the same
+    //            NSOrderedDescending  //dateOne is after dateTwo
+    
+    if ([_selectedDate compare:previousDateModel.date] == NSOrderedAscending)
+        animation.subtype = kCATransitionFromLeft;
+    else
+        animation.subtype = kCATransitionFromRight;
+    
     // Check if there's diary available for selected date
     if([monthModel checkDiaryForDate:_selectedDate]) {
         DiaryData *d = [monthModel.diarysInDate lastObject];
-        
+        showDiaryData = d;
         if (d.diaryVideoPath) {
             _diaryImageView.image = d.diaryVideoThumbnail;
             _videoPlayView.hidden = NO;
         }
         else {
-            _diaryImageView.image = [d.diaryImage resizeImageToSize:_diaryImageView.frame.size];
+            _diaryImageView.image = [d.diaryPhotoThumbnail resizeImageToSize:_diaryImageView.frame.size];
             _videoPlayView.hidden = YES;
         }
         _diaryTitle.text = d.subject;
@@ -720,80 +730,14 @@
             _locationTag.hidden = YES;
             _diaryLocation.text = nil;
         }
-        
-        if (_diaryView.hidden) {
-            [UIView animateWithDuration:0.3f animations:^{
-                _emptyDiaryView.alpha =0;
-            } completion:^(BOOL finished) {
-                _emptyDiaryView.hidden = YES;
-                _diaryView.alpha = 0;
-                [UIView animateWithDuration:0.3f animations:^{
-                    _diaryView.hidden = NO;
-                    _diaryView.alpha = 1;
-                }];
-            }];
-        }
+        _emptyDiaryView.hidden = YES;
+        [_diaryView.layer addAnimation:animation forKey:nil];
+        _diaryView.hidden = NO;
     } else if (_emptyDiaryView.hidden) {
-        [UIView animateWithDuration:0.3f animations:^{
-            _diaryView.alpha =0;
-        } completion:^(BOOL finished) {
-            _diaryView.hidden = YES;
-            _emptyDiaryView.alpha = 0;
-            [UIView animateWithDuration:0.3f animations:^{
-                _emptyDiaryView.hidden = NO;
-                _emptyDiaryView.alpha = 1;
-            }];
-        }];
+        _diaryView.hidden = YES;
+        [_emptyDiaryView.layer addAnimation:animation forKey:nil];
+        _emptyDiaryView.hidden = NO;
     }
-    
-//    if ([[[DiaryDataStore sharedStore]allItems]count] > 0) {
-//        
-//        DiaryData *d = [[[DiaryDataStore sharedStore]allItems]lastObject];
-//
-//        if (d.diaryVideoPath) {
-//            _diaryImageView.image = d.diaryVideoThumbnail;
-//            _videoPlayView.hidden = NO;
-//        }
-//        else {
-//            _diaryImageView.image = [d.diaryImage resizeImageToSize:_diaryImageView.frame.size];
-//            _videoPlayView.hidden = YES;
-//        }
-//        _diaryTitle.text = d.subject;
-//        _diaryDetail.text = d.diaryText;
-//        _diaryDate.text = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceReferenceDate:d.dateCreated]];
-//
-//        if (d.location.length > 0) {
-//            _locationTag.hidden = NO;
-//            _diaryLocation.text = d.location;
-//        } else {
-//            _locationTag.hidden = YES;
-//            _diaryLocation.text = nil;
-//        }
-//
-//        if (_diaryView.hidden) {
-//            [UIView animateWithDuration:0.5 animations:^{
-//                _emptyDiaryView.alpha =0;
-//            } completion:^(BOOL finished) {
-//                _emptyDiaryView.hidden = YES;
-//                _diaryView.alpha = 0;
-//                [UIView animateWithDuration:0.5f animations:^{
-//                    _diaryView.hidden = NO;
-//                    _diaryView.alpha = 1;
-//                }];
-//            }];
-//        }
-//    } else if (_emptyDiaryView.hidden) {
-//        [UIView animateWithDuration:0.5 animations:^{
-//            _diaryView.alpha =0;
-//        } completion:^(BOOL finished) {
-//            _diaryView.hidden = YES;
-//            _emptyDiaryView.alpha = 0;
-//            [UIView animateWithDuration:0.5f animations:^{
-//                _emptyDiaryView.hidden = NO;
-//                _emptyDiaryView.alpha = 1;
-//            }];
-//        }];
-//    }
 }
 
 - (void)resetCalendarBySelectDate:(BOOL)bySelect
@@ -825,6 +769,13 @@
         _selectedDate = [_gregorian dateFromComponents:dateComponents];
     }
     
+    if (_monthView.shrink)
+        [self showEventTable];
+    else
+        [self showComingEvent];
+    
+    [self showDiary];
+    
     // Set up previous date view and model
     previousDateModel = [monthModel dateModelForDate:_selectedDate];
     previousDateModel.isSelected = YES;
@@ -832,14 +783,8 @@
     // Activate date view in month view
     [self activateDateLabelGesture];
     
-    if (_monthView.shrink)
-        [self showEventTable];
-    else
-        [self showComingEvent];
-    
     // Refresh navigation bar
     [self setNavgationBarTitle];
-    
 }
 
 - (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag

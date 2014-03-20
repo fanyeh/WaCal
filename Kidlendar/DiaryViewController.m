@@ -16,6 +16,7 @@
 #import "PhotoLoader.h"
 #import "AFHTTPRequestOperation.h"
 #import "UIImage+Resize.h"
+#import "FileManager.h"
 
 @interface DiaryViewController () <UIAlertViewDelegate,NSURLSessionTaskDelegate>
 {
@@ -63,17 +64,17 @@
     _videoPlayView.layer.cornerRadius = _videoPlayView.frame.size.width/2;
     _videoPlayView.layer.borderWidth = 4.0f;
     _videoPlayView.layer.borderColor = [[UIColor whiteColor]CGColor];
+    
     // Put that image onto the screen in our image view
+    FileManager *fm = [[FileManager alloc]initWithKey:_diaryData.diaryKey];
+    _diaryPhoto.image = [[fm loadCollectionImage] resizeImageToSize:_diaryPhoto.frame.size];
     if (_diaryData.diaryVideoThumbnail) {
-        _diaryPhoto.image = _diaryData.diaryVideoThumbnail;
         UITapGestureRecognizer *videoTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(playVideo)];
         [_videoPlayView addGestureRecognizer:videoTap];
         _videoPlayView.hidden = NO;
         
     } else {
-        _diaryPhoto.image = [_diaryData.diaryImage resizeImageToSize:_diaryPhoto.frame.size];
         _videoPlayView.hidden = YES;
-
     }
 
    _diaryDetailTextView.text = _diaryData.diaryText;
@@ -153,7 +154,8 @@
         [shareSheet setInitialText:_diaryData.diaryText];
         
         //  分享照片
-        if (![shareSheet addImage:_diaryData.diaryImage]) {
+        FileManager *fm = [[FileManager alloc]initWithKey:_diaryData.diaryKey];
+        if (![shareSheet addImage:[fm loadCollectionImage]]) {
             NSLog(@"Unable to add the image!");
         }
         

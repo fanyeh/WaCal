@@ -13,23 +13,41 @@
 
 - (UIImage *)resizeImageToSize:(CGSize)newSize
 {
-    // Put that image onto the screen in our image view
-    float hfactor = self.size.width / newSize.width;
-    float vfactor = self.size.height /newSize.height;
+//    // Put that image onto the screen in our image view
+//    float hfactor = self.size.width / newSize.width;
+//    float vfactor = self.size.height /newSize.height;
+//    
+//    float factor = fmax(hfactor, vfactor);
+//    factor = fmaxf(factor, 1);
+//    
+//    // Divide the size by the greater of the vertical or horizontal shrinkage factor
+//    float newWidth = self.size.width / factor;
+//    float newHeight = self.size.height / factor;
+//
+//    // Create a bitmap context.
+//    UIGraphicsBeginImageContextWithOptions(CGSizeMake(newWidth, newHeight), YES, [UIScreen mainScreen].scale);
+//    [self drawInRect:CGRectMake(0,0,newWidth,newHeight)];
+//    UIImage* finalImage = UIGraphicsGetImageFromCurrentImageContext();
+//    UIGraphicsEndImageContext();
+//    return finalImage;
     
-    float factor = fmax(hfactor, vfactor);
-    factor = fmaxf(factor, 1);
-    
-    // Divide the size by the greater of the vertical or horizontal shrinkage factor
-    float newWidth = self.size.width / factor;
-    float newHeight = self.size.height / factor;
-
-    // Create a bitmap context.
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(newWidth, newHeight), YES, [UIScreen mainScreen].scale);
-    [self drawInRect:CGRectMake(0,0,newWidth,newHeight)];
-    UIImage* finalImage = UIGraphicsGetImageFromCurrentImageContext();
+    CGSize origImageSize = [self size];
+    CGRect newRect = CGRectMake(0, 0, newSize.width, newSize.height); // thumbnail photo image size
+    float ratio = MAX(newRect.size.width / origImageSize.width,
+                      newRect.size.height / origImageSize.height);
+    UIGraphicsBeginImageContextWithOptions(newRect.size, NO, 0.0);
+    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:newRect
+                                                    cornerRadius:0.0];
+    [path addClip];
+    CGRect projectRect;
+    projectRect.size.width = ratio * origImageSize.width;
+    projectRect.size.height = ratio * origImageSize.height;
+    projectRect.origin.x = (newRect.size.width - projectRect.size.width) / 2.0;
+    projectRect.origin.y = (newRect.size.height - projectRect.size.height) / 2.0;
+    [self drawInRect:projectRect];
+    UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    return finalImage;
+    return smallImage;
 }
 
 - (UIImage *)transformOrientationForSave

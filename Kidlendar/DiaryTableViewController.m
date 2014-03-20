@@ -17,9 +17,10 @@
 #import <AVFoundation/AVFoundation.h>
 #import "DiaryPageViewController.h"
 #import "UIImage+Resize.h"
+#import "FileManager.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
-#define MainColor [UIColor colorWithRed:(45 / 255.0) green:(105 / 255.0) blue:(96 / 255.0) alpha:1.0]
+#define MainColor [UIColor colorWithRed:(64 / 255.0) green:(98 / 255.0) blue:(124 / 255.0) alpha:1.0]
 
 @interface DiaryTableViewController ()
 {
@@ -97,12 +98,9 @@
 
 - (void)sortDiaryToSection
 {
-    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO];
-    NSArray *diaryArray = [[[DiaryDataStore sharedStore]allItems] sortedArrayUsingDescriptors:@[sortDescriptor]];
-    
     diaryInSections = [[NSMutableDictionary alloc]init];
 
-    for (DiaryData *d in diaryArray) {
+    for (DiaryData *d in [[DiaryDataStore sharedStore]allItems]) {
         NSDate *diaryDate = [NSDate dateWithTimeIntervalSinceReferenceDate:d.dateCreated];
         NSDateComponents *comp = [[NSCalendar currentCalendar]components:(NSCalendarUnitYear|NSCalendarUnitMonth) fromDate:diaryDate];
         NSString *sectionKey = [NSString stringWithFormat:@"%@ %ld",monthArray[[comp month]-1],(long)[comp year]];
@@ -163,8 +161,17 @@
             dayString = @"th";
             break;
     }
+    NSMutableAttributedString *dateString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%ld%@ %@",(long)day,dayString,[weekdayFormatter stringFromDate:diaryDate]]];
+    NSRange selectedRange = NSMakeRange(2, 2); // 4 characters, starting at index 22
     
-    cell.dateLabel.text = [NSString stringWithFormat:@"%ld%@ %@",(long)day,dayString,[weekdayFormatter stringFromDate:diaryDate]];
+    [dateString beginEditing];
+    
+    [dateString addAttribute:NSFontAttributeName
+                   value:[UIFont fontWithName:@"HelveticaNeue-Light" size:11.0]
+                   range:selectedRange];
+    
+    [dateString endEditing];
+    cell.dateLabel.attributedText = dateString;
     
     if (d.location.length > 0) {
         cell.locationTag.hidden = NO;
@@ -184,7 +191,7 @@
         cell.videoPlayView.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.700];
         cell.videoPlayView.hidden = NO;
     } else {
-        cell.cellImageView.image = [d.diaryImage resizeImageToSize:cell.contentView.frame.size];
+        cell.cellImageView.image = [d.diaryPhotoThumbnail resizeImageToSize:cell.cellImageView.frame.size];
         cell.videoPlayView.hidden = YES;
     }
     return cell;
@@ -197,6 +204,8 @@
         // Delete the row from the data source
         NSString *sectionKey =diaryInSections.allKeys[indexPath.section];
         DiaryData *d = [[diaryInSections objectForKey:sectionKey] objectAtIndex:indexPath.row];
+        FileManager *fm = [[FileManager alloc]initWithKey:d.diaryKey];
+        [fm removeCollectionImage];
         [[DiaryDataStore sharedStore] removeItem:d];
         
         // Delete item from sort diary and row

@@ -609,7 +609,6 @@
                 [photoCollectionView selectItemAtIndexPath:path animated:NO scrollPosition:UICollectionViewScrollPositionCenteredVertically];
                 AlbumPhotoCell *cell = (AlbumPhotoCell *)[photoCollectionView cellForItemAtIndexPath:path];
                 cell.selectNumber.text = [NSString stringWithFormat:@"%ld", (long)selectNumber];
-
             }
         }
     });
@@ -639,12 +638,10 @@
     // Perform face detection and setup diary collection view
     [faceDetectingActivity startAnimating];
     [self performSelectorInBackground:@selector(processFaceDetection) withObject:nil];
-    
 }
 
 -(void)cancelPhotoSelection
 {
-    
     for (int i = 0; i < [selectedPhotoOrderingInfo count] ; i++) {
         NSArray *n = [selectedPhotoOrderingInfo objectAtIndex:i];
         [photoCollectionView deselectItemAtIndexPath:n[0] animated:YES];
@@ -867,7 +864,6 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (collectionView.tag==0) {
-        NSLog(@"index row %ld",indexPath.row);
         NSValue *cellSizeValue = sizeArray[indexPath.row];
         return [cellSizeValue CGSizeValue];
     } else {
@@ -1100,6 +1096,11 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)dealloc
+{
+
 }
 
 @end

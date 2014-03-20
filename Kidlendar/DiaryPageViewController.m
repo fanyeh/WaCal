@@ -41,7 +41,7 @@
     
     modelArray = [[DiaryDataStore sharedStore]allItems];
     
-    diaryPageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll
+    diaryPageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl
                                                          navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
     diaryPageViewController.delegate = self;
     diaryPageViewController.dataSource = self;

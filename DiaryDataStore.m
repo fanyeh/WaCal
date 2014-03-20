@@ -66,6 +66,11 @@
     }
 }
 
+- (DiaryData *)fetchDiaryData:(NSManagedObjectID *)objectID
+{
+    return (DiaryData *)[context existingObjectWithID:objectID error:nil];
+}
+
 - (BOOL)saveChanges
 {
     NSError *err = nil;
@@ -73,6 +78,7 @@
     if (!successful) {
         NSLog(@"Error saving: %@", [err localizedDescription]);
     }
+    NSLog(@"Diary save ok");
     return successful;
 }
 

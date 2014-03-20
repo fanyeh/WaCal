@@ -141,19 +141,19 @@
                             <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="locationTag20.png" translatesAutoresizingMaskIntoConstraints="NO" id="GcY-rb-Ez4">
-                            <rect key="frame" x="15" y="107" width="15" height="15"/>
+                            <rect key="frame" x="15" y="103" width="20" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="reminder.png" translatesAutoresizingMaskIntoConstraints="NO" id="A3r-Oc-cwm">
-                            <rect key="frame" x="15" y="145" width="15" height="15"/>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="reminderTag20.png" translatesAutoresizingMaskIntoConstraints="NO" id="A3r-Oc-cwm">
+                            <rect key="frame" x="15" y="142" width="20" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="repeat.png" translatesAutoresizingMaskIntoConstraints="NO" id="rH9-re-nD0">
-                            <rect key="frame" x="15" y="182" width="15" height="15"/>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="repeatTag20.png" translatesAutoresizingMaskIntoConstraints="NO" id="rH9-re-nD0">
+                            <rect key="frame" x="15" y="179" width="20" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="repeat.png" translatesAutoresizingMaskIntoConstraints="NO" id="L1l-2J-AbU">
-                            <rect key="frame" x="15" y="219" width="15" height="15"/>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="eventCalendar20.png" translatesAutoresizingMaskIntoConstraints="NO" id="L1l-2J-AbU">
+                            <rect key="frame" x="15" y="216" width="20" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
                         <label opaque="NO" clipsSubviews="YES" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Reminder" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BvA-AU-p65">
@@ -192,7 +192,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wwM-ca-QVL" userLabel=" separator 1">
-                            <rect key="frame" x="5" y="238" width="290" height="1"/>
+                            <rect key="frame" x="5" y="239" width="290" height="1"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
@@ -226,7 +226,7 @@
                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dme-ka-lkt" userLabel="Save - Button">
                     <rect key="frame" x="270" y="313" width="35" height="35"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" red="0.1764705882" green="0.41176470590000003" blue="0.37647058820000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.25098039220000001" green="0.38431372549999998" blue="0.48627450979999998" alpha="1" colorSpace="calibratedRGB"/>
                     <state key="normal" image="save.png">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -267,10 +267,11 @@
         </view>
     </objects>
     <resources>
+        <image name="eventCalendar20.png" width="20" height="20"/>
         <image name="locationTag20.png" width="20" height="20"/>
         <image name="mapicon.png" width="40" height="40"/>
-        <image name="reminder.png" width="20" height="20"/>
-        <image name="repeat.png" width="512" height="512"/>
+        <image name="reminderTag20.png" width="20" height="20"/>
+        <image name="repeatTag20.png" width="20" height="20"/>
         <image name="save.png" width="35" height="35"/>
     </resources>
 </document>

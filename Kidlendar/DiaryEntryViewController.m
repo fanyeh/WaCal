@@ -14,7 +14,7 @@
 #import "LocationData.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "UIImage+Resize.h"
-#import "GPUImage.h"
+#import "FileManager.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 #define kGOOGLE_API_KEY @"AIzaSyAD9e182Fr19_2DcJFZYUHf6wEeXjxs_kQ"
@@ -29,6 +29,7 @@
     double locationLat;
     BOOL hasText;
 }
+@property (weak, nonatomic) IBOutlet UIView *contentView;
 @property (weak, nonatomic) IBOutlet UIView *searchMaskView;
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundView;
 @property (weak, nonatomic) IBOutlet UIView *locationSearchView;
@@ -37,7 +38,10 @@
 @property (weak, nonatomic) IBOutlet UITextField *diarySubjectField;
 @property (weak, nonatomic) IBOutlet UITableView *searchResultTable;
 @property (weak, nonatomic) IBOutlet UISearchBar *locationSearchBar;
+@property (weak, nonatomic) IBOutlet UIView *toolBar;
 @property (weak, nonatomic) IBOutlet UITextView *diaryEntryView;
+@property (weak, nonatomic) IBOutlet UIButton *deleteButton;
+@property (weak, nonatomic) IBOutlet UIButton *saveButton;
 @end
 
 @implementation DiaryEntryViewController
@@ -57,16 +61,17 @@
     // Do any additional setup after loading the view from its nib.
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.navigationItem.title = @"Words";
-
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                                               target:self
-                                                                               action:@selector(saveDiary)];
+    self.navigationItem.hidesBackButton = YES;
     
-    self.navigationItem.rightBarButtonItem = doneButton;
-  
-    GPUImageiOSBlurFilter *blurFilter = [[GPUImageiOSBlurFilter alloc]init];
-    blurFilter.blurRadiusInPixels = 0.5f;
-    _backgroundView.image =  [blurFilter imageByFilteringImage:_diaryImage];
+    _contentView.layer.cornerRadius = 3.0f;
+    _contentView.layer.shadowColor = [[UIColor grayColor]CGColor];
+    _contentView.layer.shadowOpacity = 0.7f;
+    _contentView.layer.shadowOffset = CGSizeMake(1, 1);
+    
+    _toolBar.layer.cornerRadius = 3.0f;
+    _deleteButton.layer.cornerRadius = _deleteButton.frame.size.width/2;
+    _saveButton.layer.cornerRadius = _saveButton.frame.size.width/2;
+    _backgroundView.image =  [_diaryImage resizeImageToSize:_backgroundView.frame.size];
 
     // Setup Date picker
     datePicker = [[UIDatePicker alloc]init];
@@ -81,9 +86,7 @@
     dateFormatter.timeZone = [NSTimeZone systemTimeZone];
     
     _diaryEntryView.delegate = self;
-    _diaryEntryView.layer.cornerRadius = 5.0f;
     _diaryEntryView.text = @"This moment...";
-    _diaryEntryView.textColor = [UIColor colorWithWhite:0.333 alpha:1.000];
     hasText = NO;
     
     _diarySubjectField.delegate = self;
@@ -91,6 +94,10 @@
     _diarySubjectField.tag = 0;
     
     _locationField.delegate = self;
+//    UIImageView *leftView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 10, 10)];
+//    leftView.image = [UIImage imageNamed:@"locationTag10.png"];
+//    _locationField.leftView = leftView;
+//    _locationField.leftViewMode = UITextFieldViewModeAlways;
 
     _locationSearchBar.delegate = self;
     
@@ -178,8 +185,11 @@
 {
     _diaryTimeField.text = [dateFormatter stringFromDate:datePicker.date];
 }
-
-- (void)saveDiary
+- (IBAction)deleteDiary:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+- (IBAction)saveDiary:(id)sender
 {
     // Update diary details
     DiaryData *diary = [[DiaryDataStore sharedStore]createItem];
@@ -193,16 +203,19 @@
     if (_locationField.text.length > 0)
         diary.location = _locationField.text;
     
+    FileManager *fm = [[FileManager alloc]initWithKey:diary.diaryKey];
     
     // Photo diary
     if (_selectedMediaType == kMediaTypePhoto) {
-        diary.diaryImageDataFromImage = _diaryImage;
+        [diary setDiaryPhotoThumbDataFromImage:_diaryImage];
+        [fm saveCollectionImage:_diaryImage];
     }
     // Video diary
     else {
         diary.diaryVideoPath = [NSString stringWithFormat:@"%@",_asset.defaultRepresentation.url];
         UIImage *image = [UIImage imageWithCGImage: _asset.defaultRepresentation.fullScreenImage];
-        [diary setDiaryVideoThumbDataFromImage:[image cropWithFaceDetect:CGSizeMake(320, 320)]];
+        [diary setDiaryVideoThumbDataFromImage:image];
+        [fm saveCollectionImage:image];
     }
     
     [[DiaryDataStore sharedStore]saveChanges];
@@ -243,7 +256,7 @@
 {
     if (!hasText) {
         _diaryEntryView.text = @"";
-        _diaryEntryView.textColor = [UIColor whiteColor];
+        _diaryEntryView.textColor = [UIColor colorWithWhite:0.400 alpha:1.000];
     }
     return YES;
 }

@@ -12,13 +12,19 @@
 #import "DiaryDataStore.h"
 #import "DiaryData.h"
 #import "CalendarStore.h"
+#import "KidlendarAppDelegate.h"
 
 @implementation MonthModel
+{
+    NSManagedObjectContext *context;
+}
 
 - (id)initMonthCalendarWithDate:(NSDate *)date andCalendar:(NSCalendar *)calendar
 {
     self = [super init];
     if (self) {
+        KidlendarAppDelegate *aDelegate = (KidlendarAppDelegate *)[[UIApplication sharedApplication] delegate];
+        context = aDelegate.managedObjectContext;
         _datesInMonth = [[NSMutableArray alloc]init];
         _gregorian = calendar;
         _eventsInDate = [[NSMutableArray alloc]init];
@@ -158,6 +164,15 @@
         _eventsInMonth = events;
     }
     else {
+//        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(dateCreated >= %@) AND (dateCreated <= %@)", startDate, endDate];
+//        NSFetchRequest *request = [[NSFetchRequest alloc] init];
+//        [request setEntity:[NSEntityDescription entityForName:@"DiaryData" inManagedObjectContext:context]];
+//        [request setPredicate:predicate];
+//        
+//        NSError *error = nil;
+//        NSArray *results = [context executeFetchRequest:request error:&error];
+//        _diarysInMonth = results;
+        
         NSMutableArray *fetchedDiary = [[NSMutableArray alloc]init];
         for (DiaryData *d in [[DiaryDataStore sharedStore]allItems]) {
             if (d.dateCreated > [startDate timeIntervalSinceReferenceDate] && d.dateCreated < [endDate timeIntervalSinceReferenceDate]) {

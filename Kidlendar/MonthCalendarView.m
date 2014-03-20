@@ -13,7 +13,7 @@
 #import "WeekdayView.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
-#define MainColor [UIColor colorWithRed:(45 / 255.0) green:(105 / 255.0) blue:(96 / 255.0) alpha:1.0]
+#define MainColor [UIColor colorWithRed:(64 / 255.0) green:(98 / 255.0) blue:(124 / 255.0) alpha:1.0]
 #define TodayColor [UIColor colorWithRed:(217 / 255.0) green:(100 / 255.0) blue:(89 / 255.0) alpha:1.0]
 
 
