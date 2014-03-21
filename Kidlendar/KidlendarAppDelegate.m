@@ -210,7 +210,7 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
     // Set up diary controller
     DiaryTableViewController *diaryController = [[DiaryTableViewController alloc]init];
     UINavigationController *diaryNavigationController = [[UINavigationController alloc]initWithRootViewController:diaryController];
-    diaryNavigationController.tabBarItem = [[UITabBarItem alloc]initWithTitle:@"Write" image:[UIImage imageNamed:@"newDiary.png"] selectedImage:[UIImage imageNamed:@"newDiary.png"]];
+    diaryNavigationController.tabBarItem = [[UITabBarItem alloc]initWithTitle:@"Write" image:[UIImage imageNamed:@"diaryTab.png"] selectedImage:[UIImage imageNamed:@"diaryTab.png"]];
     
     // Set up setting controller
     SettingViewController *settingController = [[SettingViewController alloc]init];

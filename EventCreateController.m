@@ -19,7 +19,10 @@
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 #define kGOOGLE_API_KEY @"AIzaSyAD9e182Fr19_2DcJFZYUHf6wEeXjxs_kQ"
-#define MainColor [UIColor colorWithRed:(45 / 255.0) green:(105 / 255.0) blue:(96 / 255.0) alpha:1.0]
+#define MainColor [UIColor colorWithRed:(64 / 255.0) green:(98 / 255.0) blue:(124 / 255.0) alpha:1.0]
+#define LightGrayColor [UIColor colorWithRed:(170 / 255.0) green:(170 / 255.0) blue:(170 / 255.0) alpha:1.0]
+#define CustomRedColor [UIColor colorWithRed:(217 / 255.0) green:(100 / 255.0) blue:(89 / 255.0) alpha:1.0]
+
 
 
 @interface EventCreateController () <UITextFieldDelegate,UITableViewDataSource, UITableViewDelegate,UISearchBarDelegate,UIPickerViewDelegate,UIPickerViewDataSource>
@@ -68,6 +71,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *calenderNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *calendarLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *mapIcon;
+@property (weak, nonatomic) IBOutlet UIImageView *locationImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *reminderImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *repeatImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *calendarImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *startTimeArrow;
 
 @end
 
@@ -89,7 +97,7 @@
     
     // Navgition bar
     self.navigationItem.title = @"New Event";
-
+    
     _locationSearchBar.delegate = self;
     _searchResultTable.delegate = self;
     _searchResultTable.dataSource = self;
@@ -126,12 +134,10 @@
     hideFrame = reminder.frame;
 
     // Set up All Day button
-    _alldayView.layer.borderColor = [[UIColor colorWithWhite:0.667 alpha:1.000]CGColor];
+    _alldayView.layer.borderColor = [LightGrayColor CGColor];
     _alldayView.layer.borderWidth = 1.0f;
     UITapGestureRecognizer *alldayTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(alldayAction)];
     [_alldayView addGestureRecognizer:alldayTap];
-    _startTimeView.layer.cornerRadius = 5.0f;
-    _endTimeView.layer.cornerRadius = 5.0f;
     
     // Set up date formatter
     dateFormatter = [[NSDateFormatter alloc]init];
@@ -238,30 +244,37 @@
 
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
-    // Tag 0 = title , 1 = startTime , 2 = endTime , 3 = locatoin
+    // Tag 0 = title , 1 = startTime , 2 = endTime , 3 = locatoin , 5 = calendar
+    [self hideAllImage];
     switch (textField.tag) {
         case 1:
             if ([_subjectField isFirstResponder])
                 _datePicker.minimumDate = nil;
             [_datePicker setDate:event.startDate];
-            _startTimeView.layer.borderColor = [Rgb2UIColor(33, 138, 251) CGColor];
-            _startTimeView.layer.borderWidth = 2.0f;
-            _endTimeView.layer.borderWidth = 0.0f;
+            _startTimeView.backgroundColor = MainColor;
+            _startDateLabel.textColor = [UIColor whiteColor];
+            _startTimeLabel.textColor = [UIColor whiteColor];
+            _startTimeArrow.hidden = NO;
             break;
         case 2:
             _datePicker.minimumDate = minimumDate;
             [_datePicker setDate:event.endDate];
-            _endTimeView.layer.borderColor = [Rgb2UIColor(33, 138, 251) CGColor];
-            _endTimeView.layer.borderWidth = 2.0f;
-            _startTimeView.layer.borderWidth = 0.0f;
+            
+            _endTimeView.backgroundColor = MainColor;
+            _endTimeLabel.textColor = [UIColor whiteColor];
+            _endDateLabel.textColor = [UIColor whiteColor];
+            _startTimeArrow.hidden = YES;
             break;
         case 3:
+            [self showImage:textField.tag];
             _mapIcon.hidden = YES;
+            break;
+        case 5:
+            [self showImage:textField.tag];
             break;
         default:
             break;
     }
-    
     repeat.frame = hideFrame;
     repeat.show = NO;
     reminder.frame = hideFrame;
@@ -270,13 +283,135 @@
     return YES;
 }
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+- (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    _saveButton.hidden = NO;
-    return YES;
+    switch (textField.tag) {
+        case 1:
+            _startTimeView.backgroundColor = [UIColor whiteColor];
+            _startDateLabel.textColor = [UIColor blackColor];
+            _startTimeLabel.textColor = [UIColor blackColor];
+            _startTimeArrow.hidden = YES;
+            break;
+        case 2:
+            _endTimeView.backgroundColor = [UIColor whiteColor];
+            _endDateLabel.textColor = LightGrayColor;
+            _endTimeLabel.textColor = LightGrayColor;
+            break;
+        default:
+            break;
+    }
 }
 
+//- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+//{
+//    _saveButton.hidden = NO;
+//    return YES;
+//}
+
 #pragma mark - User actions
+
+- (void)showImage:(NSInteger)tag
+{
+    switch (tag) {
+        case 5:
+            // Calendar
+            [self showCalendar];
+            break;
+        case 3:
+            // Location
+            [self showLocation];
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)hideAllImage
+{
+    [self hideCalendar];
+    [self hideReminder];
+    [self hideRepeat];
+    [self hideLocation];
+}
+
+// Show
+
+- (void)showCalendar
+{
+    _calendarImageView.image = [UIImage imageNamed:@"eventCalendarFill20.png"];
+    _calenderNameLabel.textColor = MainColor;
+    _calendarLabel.textColor = MainColor;
+}
+
+- (void)showRepeat
+{
+    if (!repeat.show) {
+        _repeatImageView.image = [UIImage imageNamed:@"eventRepeatFill20.png"];
+        _repeatLabel.textColor = MainColor;
+        _repeatValueLabel.textColor = MainColor;
+        [self.view endEditing:YES];
+        repeat.frame = CGRectOffset(repeat.frame, 0, -256);
+        repeat.show = YES;
+        _saveButton.frame = saveButtonFrameMove;
+        [self hideLocation];
+        [self hideReminder];
+        [self hideCalendar];
+    }
+}
+
+- (void)showReminder
+{
+    if (!reminder.show) {
+        _reminderImageView.image = [UIImage imageNamed:@"eventReminderFill20.png"];
+        _reminderLabel.textColor = MainColor;
+        _reminderValueLabel.textColor = MainColor;
+        [self.view endEditing:YES];
+        reminder.frame = CGRectOffset(reminder.frame, 0, -256);
+        reminder.show = YES;
+        _saveButton.frame = saveButtonFrameMove;
+        [self hideLocation];
+        [self hideRepeat];
+        [self hideCalendar];
+    }
+}
+
+- (void)showLocation
+{
+    _locationImageView.image = [UIImage imageNamed:@"eventLocationFill20.png"];
+}
+
+// Hide
+
+- (void)hideCalendar
+{
+    _calendarImageView.image = [UIImage imageNamed:@"eventCalendarLine20.png"];
+    _calenderNameLabel.textColor = LightGrayColor;
+    _calendarLabel.textColor = LightGrayColor;
+}
+
+- (void)hideRepeat
+{
+    _repeatImageView.image = [UIImage imageNamed:@"eventRepeatLine20.png"];
+    _repeatValueLabel.textColor = LightGrayColor;
+    _repeatLabel.textColor = LightGrayColor;
+    repeat.frame = hideFrame;
+    repeat.show = NO;
+}
+
+- (void)hideReminder
+{
+    _reminderImageView.image = [UIImage imageNamed:@"eventReminderLine20.png"];
+    _reminderValueLabel.textColor = LightGrayColor;
+    _reminderLabel.textColor = LightGrayColor;
+    reminder.frame = hideFrame;
+    reminder.show = NO;
+}
+
+- (void)hideLocation
+{
+    _locationImageView.image = [UIImage imageNamed:@"eventLocationLine20.png"];
+
+}
 
 - (IBAction)saveEvent:(id)sender
 {
@@ -309,38 +444,16 @@
     _maskView.hidden = NO;
 }
 
--(void)showReminder
-{
-    if (!reminder.show) {
-        [self.view endEditing:YES];
-        repeat.frame = hideFrame;
-        repeat.show = NO;
-        reminder.frame = CGRectOffset(reminder.frame, 0, -256);
-        reminder.show = YES;
-        _saveButton.frame = saveButtonFrameMove;
-    }
-}
-
--(void)showRepeat
-{
-    if (!repeat.show) {
-        [self.view endEditing:YES];
-        reminder.frame = hideFrame;
-        reminder.show = NO;
-        repeat.frame = CGRectOffset(repeat.frame, 0, -256);
-        repeat.show = YES;
-        _saveButton.frame = saveButtonFrameMove;
-    }
-}
-
 - (void)alldayAction
 {
+    [self hideAllImage];
+
     if (event.allDay) {
         event.allDay = NO;
         _alldayView.backgroundColor = [UIColor whiteColor];
         _alldayView.layer.borderWidth = 1.0f;
-        _allLabel.textColor = [UIColor grayColor];
-        _dayLabel.textColor = [UIColor grayColor];
+        _allLabel.textColor = LightGrayColor;
+        _dayLabel.textColor = LightGrayColor;
         
         _startDateLabel.frame = CGRectOffset(_startDateLabel.frame, 0, 13);
         _endDateLabel.frame = CGRectOffset(_endDateLabel.frame, 0 , 13);
@@ -356,7 +469,7 @@
 
     } else {
         event.allDay = YES;
-        _alldayView.backgroundColor = MainColor;
+        _alldayView.backgroundColor = CustomRedColor;
         _alldayView.layer.borderWidth = 0.0f;
         _allLabel.textColor = [UIColor whiteColor];
         _dayLabel.textColor = [UIColor whiteColor];

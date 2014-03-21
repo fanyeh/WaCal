@@ -40,6 +40,7 @@
 @property (weak, nonatomic) IBOutlet UIView *uploadView;
 @property (weak, nonatomic) IBOutlet UIProgressView *progress;
 
+@property (weak, nonatomic) IBOutlet UIImageView *locationTag;
 
 @end
 
@@ -79,7 +80,14 @@
 
    _diaryDetailTextView.text = _diaryData.diaryText;
     _subjectLabel.text = _diaryData.subject;
-    _locationLabel.text= _diaryData.location;
+    
+    if (_diaryData.location.length > 0) {
+        _locationLabel.text= _diaryData.location;
+        _locationTag.hidden = NO;
+    } else {
+        _locationLabel.text= nil;
+        _locationTag.hidden = YES;
+    }
     NSDate *diaryDate = [NSDate dateWithTimeIntervalSinceReferenceDate:_diaryData.dateCreated];
     
     NSDateComponents *dateComp = [[NSCalendar currentCalendar] components:(NSCalendarUnitMonth|NSCalendarUnitYear|NSCalendarUnitDay|NSCalendarUnitWeekday) fromDate:diaryDate];

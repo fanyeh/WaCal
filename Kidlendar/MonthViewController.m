@@ -168,13 +168,15 @@
     [self.view addSubview:eventTableView];
     
     // Bar button for adding event
-    UIBarButtonItem *addEventButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
+    UIBarButtonItem *addEventButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
                                                                                    target:self
                                                                                    action:@selector(addEvent)];
-    UIBarButtonItem *addDiaryButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"write.png"] style:UIBarButtonItemStylePlain target:self action:@selector(addDiary)];
+//    UIBarButtonItem *addDiaryButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"newDiary22.png"] style:UIBarButtonItemStylePlain target:self action:@selector(addDiary)];
     
     
-    self.navigationItem.rightBarButtonItems = @[addEventButton,addDiaryButton];
+//    self.navigationItem.rightBarButtonItems = @[addEventButton,addDiaryButton];
+    self.navigationItem.rightBarButtonItem = addEventButton;
+
     
     // Custom navgation left button view
     UIView *leftBarButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 150, 44)];
