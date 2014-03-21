@@ -208,7 +208,7 @@
     photoLoader = [[PhotoLoader alloc]initWithSourceType:kSourceTypeAll];
     photoAssets = [[NSMutableArray alloc]init];
     
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithTitle:@"Next >" style:UIBarButtonItemStylePlain target:self action:@selector(doneSelection)];
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(doneSelection)];
     self.navigationItem.rightBarButtonItem = doneButton;
 
     // Face detection

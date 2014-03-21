@@ -350,7 +350,7 @@
         _repeatLabel.textColor = MainColor;
         _repeatValueLabel.textColor = MainColor;
         [self.view endEditing:YES];
-        repeat.frame = CGRectOffset(repeat.frame, 0, -256);
+        repeat.frame = CGRectOffset(repeat.frame, 0, -250);
         repeat.show = YES;
         _saveButton.frame = saveButtonFrameMove;
         [self hideLocation];
@@ -366,7 +366,7 @@
         _reminderLabel.textColor = MainColor;
         _reminderValueLabel.textColor = MainColor;
         [self.view endEditing:YES];
-        reminder.frame = CGRectOffset(reminder.frame, 0, -256);
+        reminder.frame = CGRectOffset(reminder.frame, 0, -250);
         reminder.show = YES;
         _saveButton.frame = saveButtonFrameMove;
         [self hideLocation];

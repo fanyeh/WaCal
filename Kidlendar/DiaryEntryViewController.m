@@ -264,7 +264,7 @@
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
     if(_diaryEntryView.text.length == 0){
-        _diaryEntryView.textColor = [UIColor colorWithWhite:0.333 alpha:1.000];
+        _diaryEntryView.textColor = [UIColor colorWithWhite:0.667 alpha:1.000];
         _diaryEntryView.text = @"This moment...";
         hasText = NO;
     } else
