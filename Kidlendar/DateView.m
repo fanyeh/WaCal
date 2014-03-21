@@ -33,7 +33,7 @@
 //        NSLog(@"Rect %@",rect);
         _dateLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:20];
         _dateLabel.textAlignment = NSTextAlignmentCenter;
-        _dateLabel.layer.cornerRadius = _dateLabel.frame.size.width/2;
+//        _dateLabel.layer.cornerRadius = _dateLabel.frame.size.width/2;
         [self addSubview:_dateLabel];
         _dateLabel.opaque = YES;
         _isToday = NO;

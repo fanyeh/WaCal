@@ -30,6 +30,7 @@
     CGRect dateGroupFrame;
     UIView *borderView ;
     CGRect borderFrame;
+    DateView *deselectedView;
 }
 
 
@@ -298,7 +299,7 @@
         weekdayView.selectedLabel.backgroundColor = MainColor;
     }
     
-//    view.dateLabel.layer.cornerRadius = 5.0f;
+    view.dateLabel.layer.cornerRadius = view.dateLabel.frame.size.width/2;
     view.dateLabel.textColor = [UIColor whiteColor];
     view.isSelected = YES;
 }
@@ -306,15 +307,15 @@
 - (void)setAppearanceOnDeselectDate:(NSDate *)date dateNotInCurrentMonth:(BOOL)inMonth
 {
     DateView *view =[self viewFromDate:date];
+    view.isSelected = NO;
     WeekdayView *weekdayView = weekdayArray[view.column];
-    weekdayView.selectedLabel.hidden = YES;
 
     CATransition *animation = [CATransition animation];
     animation.duration = 0.3f;
+    animation.delegate = self;
     animation.type = kCATransitionFade;
     animation.subtype = kCATransitionFromTop;
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-    
     [view.dateLabel.layer addAnimation:animation forKey:nil];
     [weekdayView.selectedLabel.layer addAnimation:animation forKey:nil];
 
@@ -326,7 +327,14 @@
     }
     
     view.dateLabel.backgroundColor =[UIColor clearColor];
-    view.isSelected = NO;
+    weekdayView.selectedLabel.hidden = YES;
+    deselectedView = view;
+}
+
+- (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
+{
+    deselectedView.dateLabel.layer.cornerRadius = 0.0f;
+    //do what you need to do when animation ends...
 }
 
 - (DateView *)viewFromDate:(NSDate *)date

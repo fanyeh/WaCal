@@ -45,7 +45,7 @@
     alarmPicker.delegate = self;
     alarmPicker.dataSource = self;
     
-    alarm = @[@"On Time",@"5 Min",@"15 Min",@"30 Min",@"1 Hour",@"2 Hour",@"1 Day",@"2 Day",@"7 Day"];
+    alarm = @[@"On Time",@"5 Min",@"15 Min",@"30 Min",@"1 Hour",@"2 Hours",@"1 Day",@"2 Days",@"1 Week"];
     
     fakeAlarmField = [[UITextField alloc]init];
     fakeAlarmField.inputView = alarmPicker;
@@ -116,6 +116,44 @@
     [fakeAlarmField resignFirstResponder];
 }
 
+- (NSString *)minuteToString:(NSInteger)minute
+{
+    NSString *time;
+    switch (minute/-1) {
+        case 0:
+            time = @"On Time";
+            break;
+        case 300:
+            time = @"5 Min";
+            break;
+        case 900:
+            time = @"15 Min";
+            break;
+        case 1800:
+            time = @"30 Min";
+            break;
+        case 3600:
+            time = @"1 Hour";
+            break;
+        case 7200:
+            time = @"2 Hours";
+            break;
+        case 86400:
+            time = @"1 Day";
+            break;
+        case 172800:
+            time = @"2 Days";
+            break;
+        case 604800:
+            time = @"1 Week";
+            break;
+        default:
+            break;
+    }
+    
+    return time;
+}
+
 
 #pragma mark - Table view data source
 
@@ -175,7 +213,7 @@
         }
         
         cell.textLabel.text =@"Calendar Reminder";
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld Min", [[NSUserDefaults standardUserDefaults] integerForKey:@"defaultAlarm"]/-60];
+        cell.detailTextLabel.text =[self minuteToString:[[NSUserDefaults standardUserDefaults] integerForKey:@"defaultAlarm"]];
         [cell.contentView addSubview:fakeAlarmField];
         
         return cell;
