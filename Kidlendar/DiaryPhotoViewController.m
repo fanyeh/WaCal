@@ -154,7 +154,7 @@
     
     imageLayer = [CALayer layer];
     imageLayer.frame = _photoImageView.frame;
-    imageLayer.backgroundColor = [[UIColor colorWithWhite:0.000 alpha:0.700] CGColor];
+    imageLayer.backgroundColor = [[UIColor colorWithWhite:0.000 alpha:0.600] CGColor];
     imageLayer.mask = _maskLayer;
     [imageLayer addSublayer:borderLayer];
 }

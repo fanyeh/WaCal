@@ -123,9 +123,9 @@
         
         // Configure color for dates not in current month
         if (dateModel.isCurrentMonth)
-            dateView.dateLabel.textColor = [UIColor colorWithWhite:0.298 alpha:1.000];
+            dateView.dateLabel.textColor = [UIColor colorWithWhite:0.600 alpha:1.000];
         else
-            dateView.dateLabel.textColor = [UIColor colorWithWhite:0.500 alpha:0.500];
+            dateView.dateLabel.textColor = [UIColor colorWithWhite:0.902 alpha:1.000];
         
         // Configure color for today
         if (dateModel.isToday) {
@@ -318,16 +318,13 @@
     [view.dateLabel.layer addAnimation:animation forKey:nil];
     [weekdayView.selectedLabel.layer addAnimation:animation forKey:nil];
 
-    if (!inMonth)
-        view.dateLabel.textColor = [UIColor colorWithWhite:0.500 alpha:0.500];
-    else {
-        if (view.isToday) {
-            view.dateLabel.textColor = TodayColor;
-        }
-        else {
-            view.dateLabel.textColor = [UIColor blackColor];
-        }
+    if (view.isToday) {
+        view.dateLabel.textColor = TodayColor;
     }
+    else {
+        view.dateLabel.textColor = [UIColor colorWithWhite:0.600 alpha:1.000];
+    }
+    
     view.dateLabel.backgroundColor =[UIColor clearColor];
     view.isSelected = NO;
 }

@@ -100,7 +100,10 @@
 {
     diaryInSections = [[NSMutableDictionary alloc]init];
 
-    for (DiaryData *d in [[DiaryDataStore sharedStore]allItems]) {
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"dateCreated" ascending:NO];
+    NSArray *sortedArray = [[[DiaryDataStore sharedStore]allItems] sortedArrayUsingDescriptors:@[sortDescriptor]];
+    
+    for (DiaryData *d in sortedArray) {
         NSDate *diaryDate = [NSDate dateWithTimeIntervalSinceReferenceDate:d.dateCreated];
         NSDateComponents *comp = [[NSCalendar currentCalendar]components:(NSCalendarUnitYear|NSCalendarUnitMonth) fromDate:diaryDate];
         NSString *sectionKey = [NSString stringWithFormat:@"%@ %ld",monthArray[[comp month]-1],(long)[comp year]];

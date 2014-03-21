@@ -19,6 +19,7 @@
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 #define kGOOGLE_API_KEY @"AIzaSyAD9e182Fr19_2DcJFZYUHf6wEeXjxs_kQ"
 #define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+#define MainColor [UIColor colorWithRed:(64 / 255.0) green:(98 / 255.0) blue:(124 / 255.0) alpha:1.0]
 
 @interface DiaryEntryViewController () <UITextViewDelegate,UITextFieldDelegate,UITableViewDataSource,UITableViewDelegate,UISearchBarDelegate>
 {
@@ -94,17 +95,27 @@
     _diarySubjectField.tag = 0;
     
     _locationField.delegate = self;
-//    UIImageView *leftView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 10, 10)];
-//    leftView.image = [UIImage imageNamed:@"locationTag10.png"];
-//    _locationField.leftView = leftView;
-//    _locationField.leftViewMode = UITextFieldViewModeAlways;
-
-    _locationSearchBar.delegate = self;
+    UIImageView *locationTag = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
+    locationTag.image = [UIImage imageNamed:@"eventLocationFill20.png"];
+    UIView *locationLeftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
+    [locationLeftView addSubview:locationTag];
+    locationTag.center = locationLeftView.center;
+    _locationField.rightView = locationLeftView;
+    _locationField.rightViewMode = UITextFieldViewModeAlways;
     
     _diaryTimeField.delegate = self;
     _diaryTimeField.inputView = datePicker;
     _diaryTimeField.tag = 1;
     _diaryTimeField.text = [dateFormatter stringFromDate:[NSDate date]];
+    UIImageView *timeTag = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
+    timeTag.image = [UIImage imageNamed:@"eventCalendarFill20.png"];
+    UIView *timeLeftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
+    [timeLeftView addSubview:timeTag];
+    timeTag.center = timeLeftView.center;
+    _diaryTimeField.rightView = timeLeftView;
+    _diaryTimeField.rightViewMode = UITextFieldViewModeAlways;
+    
+    _locationSearchBar.delegate = self;
     
     _searchResultTable.delegate = self;
     _searchResultTable.dataSource = self;
@@ -195,9 +206,10 @@
     DiaryData *diary = [[DiaryDataStore sharedStore]createItem];
     
     diary.subject = _diarySubjectField.text;
-    if (hasText) {
+    if (hasText || ([_diaryEntryView isFirstResponder] && _diaryEntryView.text.length > 0)) {
         diary.diaryText = _diaryEntryView.text;
     }
+    
     diary.dateCreated = [[dateFormatter dateFromString: _diaryTimeField.text] timeIntervalSinceReferenceDate];
     
     if (_locationField.text.length > 0)
@@ -267,7 +279,7 @@
         _diaryEntryView.textColor = [UIColor colorWithWhite:0.667 alpha:1.000];
         _diaryEntryView.text = @"This moment...";
         hasText = NO;
-    } else
+    } else 
         hasText = YES;
 }
 

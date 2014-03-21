@@ -398,9 +398,12 @@
 			name = Diary;
 			sourceTree = "<group>";
 		};
-		4C0E892B18DBEDE3008F0842 /* event */ = {
+		4C0E892B18DBEDE3008F0842 /* Event */ = {
 			isa = PBXGroup;
 			children = (
+				4CC417D018D9725000EE8DBE /* mapicon@2x.png */,
+				4CC417D318D9731C00EE8DBE /* save@2x.png */,
+				4CC417D418D9731C00EE8DBE /* delete@2x.png */,
 				4C0E894218DC2493008F0842 /* evnetTimeArrowStart@2x.png */,
 				4C0E894318DC2493008F0842 /* eventTimeArrowEnd@2x.png */,
 				4C0E892C18DBEDFD008F0842 /* eventRepeatLine20@2x.png */,
@@ -412,7 +415,38 @@
 				4C0E893218DBEDFD008F0842 /* eventCalendarLine20@2x.png */,
 				4C0E893318DBEDFD008F0842 /* eventCalendarFill20@2x.png */,
 			);
-			name = event;
+			name = Event;
+			sourceTree = "<group>";
+		};
+		4C0E894618DC88A1008F0842 /* Others */ = {
+			isa = PBXGroup;
+			children = (
+				4C0E892318DBD8B5008F0842 /* settingTab@2x.png */,
+				4C0E891F18DBD743008F0842 /* diaryTab@2x.png */,
+				4CDE495F18DBD6DD0062DE9E /* recurrenceTag20@2x.png */,
+				4CDE496018DBD6DD0062DE9E /* calendarTab@2x.png */,
+				4CDE496118DBD6DD0062DE9E /* alarmTag20@2x.png */,
+				4C7EA60618DAC36400460153 /* locationTag20@2x.png */,
+				4C7EA60718DAC36400460153 /* locationTag10@2x.png */,
+				4C0E892918DBE121008F0842 /* newDiary22@2x.png */,
+				4C7EA5F418DAB48000460153 /* video@2x.png */,
+				4C761D0F18D8AE2500AE97DE /* lookup_amatorka.png */,
+				4CFB1B8318C8676300EC443A /* selectPhoto@2x.png */,
+				4CF5152518C325730050E330 /* MetroUI-Apps-Dropbox-icon.png */,
+			);
+			name = Others;
+			sourceTree = "<group>";
+		};
+		4C0E894718DC88B0008F0842 /* Diary */ = {
+			isa = PBXGroup;
+			children = (
+				4C68CABE18C63A51003776D2 /* playButton@2x.png */,
+				4C3FBA5518C4CCFF0097C67D /* face_white.png */,
+				4C3FBA5618C4CCFF0097C67D /* face_yellow.png */,
+				4C0E892518DBD9BD008F0842 /* twitter40@2x.png */,
+				4C0E892618DBD9BD008F0842 /* faceboo40@2x.png */,
+			);
+			name = Diary;
 			sourceTree = "<group>";
 		};
 		4C1E40B318B4616300A273A1 /* Products */ = {
@@ -522,27 +556,9 @@
 		4C68CAB718C6303F003776D2 /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				4C0E892B18DBEDE3008F0842 /* event */,
-				4C0E892518DBD9BD008F0842 /* twitter40@2x.png */,
-				4C0E892618DBD9BD008F0842 /* faceboo40@2x.png */,
-				4C0E892318DBD8B5008F0842 /* settingTab@2x.png */,
-				4C0E891F18DBD743008F0842 /* diaryTab@2x.png */,
-				4CDE495F18DBD6DD0062DE9E /* recurrenceTag20@2x.png */,
-				4CDE496018DBD6DD0062DE9E /* calendarTab@2x.png */,
-				4CDE496118DBD6DD0062DE9E /* alarmTag20@2x.png */,
-				4C7EA60618DAC36400460153 /* locationTag20@2x.png */,
-				4C7EA60718DAC36400460153 /* locationTag10@2x.png */,
-				4C0E892918DBE121008F0842 /* newDiary22@2x.png */,
-				4C7EA5F418DAB48000460153 /* video@2x.png */,
-				4CC417D318D9731C00EE8DBE /* save@2x.png */,
-				4CC417D418D9731C00EE8DBE /* delete@2x.png */,
-				4CC417D018D9725000EE8DBE /* mapicon@2x.png */,
-				4C761D0F18D8AE2500AE97DE /* lookup_amatorka.png */,
-				4CFB1B8318C8676300EC443A /* selectPhoto@2x.png */,
-				4C68CABE18C63A51003776D2 /* playButton@2x.png */,
-				4C3FBA5518C4CCFF0097C67D /* face_white.png */,
-				4C3FBA5618C4CCFF0097C67D /* face_yellow.png */,
-				4CF5152518C325730050E330 /* MetroUI-Apps-Dropbox-icon.png */,
+				4C0E894718DC88B0008F0842 /* Diary */,
+				4C0E894618DC88A1008F0842 /* Others */,
+				4C0E892B18DBEDE3008F0842 /* Event */,
 			);
 			name = Images;
 			sourceTree = "<group>";

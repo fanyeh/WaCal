@@ -607,7 +607,7 @@
     //            NSOrderedSame  //dateOne and dateTwo are the same
     //            NSOrderedDescending  //dateOne is after dateTwo
     
-    if ([_selectedDate compare:[NSDate date]] == NSOrderedAscending)
+    if ([_selectedDate compare:previousDateModel.date] == NSOrderedAscending)
         animation.subtype = kCATransitionFromLeft;
     else
         animation.subtype = kCATransitionFromRight;
