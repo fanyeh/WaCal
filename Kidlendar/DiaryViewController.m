@@ -211,6 +211,12 @@
     _uploadView.hidden = NO;
     __block SLRequest *facebookRequest;
     __block NSData *data;
+    
+    if (!_diaryData.subject)
+        _diaryData.subject = @"";
+    if (!_diaryData.diaryText)
+        _diaryData.diaryText = @"";
+    
     NSDictionary *params = @{@"title": _diaryData.subject,
                              @"description": _diaryData.diaryText};
     
@@ -249,6 +255,7 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     float uploadProgress = totalBytesWritten/(float)totalBytesExpectedToWrite;
                     [_progress setProgress:uploadProgress animated:YES];
+                    NSLog(@"upload progress %f ",uploadProgress);
                 });
 
             }];
