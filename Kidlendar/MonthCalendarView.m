@@ -28,9 +28,7 @@
     CGFloat weekdayViewHeight;
     NSMutableArray *weekdayArray;
     CGRect dateGroupFrame;
-    UIView *borderView ;
-    CGRect borderFrame;
-    DateView *deselectedView;
+    DateView *fadeDateView;
 }
 
 
@@ -61,9 +59,6 @@
     _dateGroupView.backgroundColor = [UIColor clearColor];
     
     dateGroupFrame = _dateGroupView.frame;
-    borderView = [[UIView alloc]initWithFrame:CGRectMake(0, weekdayViewHeight+dateGroupFrame.size.height, 320, 1)];
-    borderView.backgroundColor = [UIColor colorWithWhite:0.902 alpha:1.000];
-    borderFrame = borderView.frame;
 
     [self addSubview:_dateGroupView];
     
@@ -92,7 +87,6 @@
 {
     self.frame = monthViewFrame;
     _dateGroupView.frame = dateGroupFrame;
-    borderView.frame = borderFrame;
     
     for (DateView *subview in _dateGroupView.subviews) {
         [subview removeFromSuperview];
@@ -164,7 +158,6 @@
         [UIView animateWithDuration:0.4f animations:^{
             // 1. Shift original frame
             _dateGroupView.frame = CGRectOffset(dateGroupFrame, 0, -shiftOffset);
-            borderView.frame = CGRectOffset(borderFrame, 0, -shiftOffset);
             
         } completion:^(BOOL finished) {
             [UIView animateWithDuration:0.4f animations:^{
@@ -181,9 +174,6 @@
                         view.alpha = 0;
                     }
                 }
-                
-                // 4. Shift border to final position
-                borderView.frame =CGRectOffset(borderView.frame, 0, - shrinkOffset);
             } completion:^(BOOL finished) {
                 block();
             }];
@@ -195,10 +185,7 @@
                                           _dateGroupView.frame.origin.y-shiftOffset,
                                           _dateGroupView.frame.size.width,
                                           _dateGroupView.frame.size.height - shrinkOffset);
-        
-        borderView.frame =CGRectOffset(borderView.frame, 0, -shrinkOffset-shiftOffset);
 
-        
         // 2. Invis dates not in selected row
         for (DateView *view in _dateGroupView.subviews) {
             if (view.row != row && view.row > -1) {
@@ -227,7 +214,6 @@
             
             // 2. Shift current frame to original poistion
             _dateGroupView.frame = CGRectOffset(_dateGroupView.frame, 0, shiftOffset);
-            borderView.frame = CGRectOffset(borderView.frame, 0, shiftOffset);
             
         } completion:^(BOOL finished) {
             [UIView animateWithDuration:0.4f animations:^{
@@ -238,9 +224,6 @@
                         view.alpha = 1;
                     }
                 }
-                
-                // 4. Shift border to final position
-                borderView.frame =CGRectOffset(borderView.frame, 0, expandOffset);
                 
                 // 5. Expand frame
                 _dateGroupView.frame = CGRectMake(_dateGroupView.frame.origin.x,
@@ -259,8 +242,6 @@
                                           _dateGroupView.frame.size.width,
                                           _dateGroupView.frame.size.height + expandOffset);
         
-        borderView.frame =CGRectOffset(borderView.frame, 0, expandOffset+shiftOffset);
-
         // 2. Unhide dates not in selected row
         for (DateView *view in _dateGroupView.subviews) {
             if (view.row != row && view.row > -1) {
@@ -273,18 +254,16 @@
     self.shrink = NO;
 }
 
-
-
 - (void)setAppearanceOnSelectDate:(NSDate *)date
 {
     DateView *view =[self viewFromDate:date];
     WeekdayView *weekdayView = weekdayArray[view.column];
     weekdayView.selectedLabel.hidden = NO;
+    view.dateLabel.layer.cornerRadius = view.dateLabel.frame.size.width/2;
 
     CATransition *animation = [CATransition animation];
     animation.duration = 0.3f;
     animation.type = kCATransitionFade;
-    animation.subtype = kCATransitionFromBottom;
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
 
     [view.dateLabel.layer addAnimation:animation forKey:nil];
@@ -299,7 +278,6 @@
         weekdayView.selectedLabel.backgroundColor = MainColor;
     }
     
-    view.dateLabel.layer.cornerRadius = view.dateLabel.frame.size.width/2;
     view.dateLabel.textColor = [UIColor whiteColor];
     view.isSelected = YES;
 }
@@ -309,32 +287,33 @@
     DateView *view =[self viewFromDate:date];
     view.isSelected = NO;
     WeekdayView *weekdayView = weekdayArray[view.column];
-
+    fadeDateView = view;
+    
     CATransition *animation = [CATransition animation];
     animation.duration = 0.3f;
     animation.delegate = self;
     animation.type = kCATransitionFade;
-    animation.subtype = kCATransitionFromTop;
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-    [view.dateLabel.layer addAnimation:animation forKey:nil];
-    [weekdayView.selectedLabel.layer addAnimation:animation forKey:nil];
 
+    [view.dateLabel.layer addAnimation:animation forKey:nil];
+    view.dateLabel.backgroundColor =[UIColor clearColor];
     if (view.isToday) {
         view.dateLabel.textColor = TodayColor;
     }
-    else {
+    else
         view.dateLabel.textColor = [UIColor colorWithWhite:0.600 alpha:1.000];
-    }
     
-    view.dateLabel.backgroundColor =[UIColor clearColor];
+    CATransition *fadeWeekday = [CATransition animation];
+    fadeWeekday.duration = 0.3f;
+    fadeWeekday.type = kCATransitionFade;
+    fadeWeekday.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    [weekdayView.selectedLabel.layer addAnimation:fadeWeekday forKey:nil];
     weekdayView.selectedLabel.hidden = YES;
-    deselectedView = view;
 }
 
-- (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
+-(void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
 {
-    deselectedView.dateLabel.layer.cornerRadius = 0.0f;
-    //do what you need to do when animation ends...
+    fadeDateView.dateLabel.layer.cornerRadius = 0.0f;
 }
 
 - (DateView *)viewFromDate:(NSDate *)date

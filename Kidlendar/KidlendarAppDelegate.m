@@ -195,11 +195,19 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
 - (void)createAllViewControllers
 {
     NSMutableArray *allCalendars = [[NSMutableArray alloc]initWithArray:[[[CalendarStore sharedStore]eventStore] calendarsForEntityType:EKEntityTypeEvent]];
+    
     for (EKCalendar *c in allCalendars) {
-        if (c.source.sourceType==EKSourceTypeCalDAV) {
+            if (c.source.sourceType== EKSourceTypeCalDAV) {
             [[[CalendarStore sharedStore]allCalendars] addObject:c];
         }
     }
+    
+    for (EKCalendar *c in allCalendars) {
+        if (c.type == EKCalendarTypeBirthday) {
+            [[[CalendarStore sharedStore]allCalendars] addObject:c];
+        }
+    }
+    
     [[CalendarStore sharedStore]setCalendar:[CalendarStore sharedStore].allCalendars[0]];
 
     // Set up calendar controller
@@ -210,7 +218,7 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
     // Set up diary controller
     DiaryTableViewController *diaryController = [[DiaryTableViewController alloc]init];
     UINavigationController *diaryNavigationController = [[UINavigationController alloc]initWithRootViewController:diaryController];
-    diaryNavigationController.tabBarItem = [[UITabBarItem alloc]initWithTitle:@"Write" image:[UIImage imageNamed:@"diaryTab.png"] selectedImage:[UIImage imageNamed:@"diaryTab.png"]];
+    diaryNavigationController.tabBarItem = [[UITabBarItem alloc]initWithTitle:@"Moments" image:[UIImage imageNamed:@"diaryTab.png"] selectedImage:[UIImage imageNamed:@"diaryTab.png"]];
     
     // Set up setting controller
     SettingViewController *settingController = [[SettingViewController alloc]init];

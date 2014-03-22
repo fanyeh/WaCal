@@ -29,6 +29,7 @@
     double locationLng;
     double locationLat;
     BOOL hasText;
+    BOOL locationFirstLoad;
 }
 @property (weak, nonatomic) IBOutlet UIView *contentView;
 @property (weak, nonatomic) IBOutlet UIView *searchMaskView;
@@ -43,6 +44,8 @@
 @property (weak, nonatomic) IBOutlet UITextView *diaryEntryView;
 @property (weak, nonatomic) IBOutlet UIButton *deleteButton;
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
+@property (weak, nonatomic) IBOutlet UIView *videoPlayView;
+
 @end
 
 @implementation DiaryEntryViewController
@@ -63,6 +66,13 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.navigationItem.title = @"Words";
     self.navigationItem.hidesBackButton = YES;
+    
+    if ([_asset valueForProperty:ALAssetPropertyType] == ALAssetTypeVideo) {
+        _videoPlayView.layer.cornerRadius = _videoPlayView.frame.size.width/2;
+        _videoPlayView.layer.borderColor = [[UIColor whiteColor]CGColor];
+        _videoPlayView.layer.borderWidth = 2.0f;
+        _videoPlayView.hidden = NO;
+    }
     
     _contentView.layer.cornerRadius = 3.0f;
     _contentView.layer.shadowColor = [[UIColor grayColor]CGColor];
@@ -102,6 +112,7 @@
     locationTag.center = locationLeftView.center;
     _locationField.rightView = locationLeftView;
     _locationField.rightViewMode = UITextFieldViewModeAlways;
+    locationFirstLoad = YES;
     
     _diaryTimeField.delegate = self;
     _diaryTimeField.inputView = datePicker;
@@ -120,15 +131,19 @@
     _searchResultTable.delegate = self;
     _searchResultTable.dataSource = self;
     
-    for (NSDictionary *meta in _imageMeta) {
-        NSDictionary *GPS = [meta objectForKey:@"{GPS}"];
-        double longitude = [[GPS objectForKey:@"Longitude"] doubleValue];
-        double latitude = [[GPS objectForKey:@"Latitude"] doubleValue];
-        [self queryGooglePlacesLongitude:longitude andLatitude:latitude withName:nil];
+    
+    // Query place from Google Places using location in selected photo
+    if ([_imageMeta count] > 0) {
+        for (NSDictionary *meta in _imageMeta) {
+            NSDictionary *GPS = [meta objectForKey:@"{GPS}"];
+            double longitude = [[GPS objectForKey:@"Longitude"] doubleValue];
+            double latitude = [[GPS objectForKey:@"Latitude"] doubleValue];
+            [self queryGooglePlacesLongitude:longitude andLatitude:latitude withName:nil];
+        }
+    } else {
+        locationFirstLoad = NO;
     }
-    
     _locationSearchView.layer.cornerRadius = 10.0f;
-    
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -247,6 +262,18 @@
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
+#pragma mark - UITextFieldDelegate
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    if (textField.tag == 9 && locationFirstLoad) {
+        [_locationSearchBar becomeFirstResponder];
+        _searchMaskView.hidden = NO;
+        locationFirstLoad = NO;
+    }
+    return YES;
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     if (textField.returnKeyType == UIReturnKeySearch) {
@@ -295,7 +322,7 @@
         url = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/textsearch/json?query=%@&sensor=true&language=zh-TW&key=%@",name,kGOOGLE_API_KEY];
     }
 
-    NSLog(@"URL %@",url);
+//    NSLog(@"URL %@",url);
     //Formulate the string as a URL object.
     NSURL *googleRequestURL=[NSURL URLWithString:[url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     // Retrieve the results of the URL.
@@ -313,11 +340,11 @@
                                                                                           error:&connectionError];
                                    //The results from Google will be an array obtained from the NSDictionary object with the key "results".
                                    places = [json objectForKey:@"results"];
-//                                   NSLog(@"Places %@",places);
-                                   dispatch_async(dispatch_get_main_queue(), ^{
-                                       [_searchResultTable reloadData];
-                                   });
-                                   
+                                   if ([places count] > 0) {
+                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                           [_searchResultTable reloadData];
+                                       });
+                                   }
                                } else if ([data length]==0 && connectionError==nil) {
                                    //沒有資料，連線沒有錯誤
                                } else if (connectionError != nil) {

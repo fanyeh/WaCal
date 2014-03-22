@@ -14,6 +14,7 @@
 @property (strong,nonatomic)  EKEventStore *eventStore;
 @property (strong,nonatomic)  EKCalendar *calendar;
 @property (strong,nonatomic)  NSMutableArray *allCalendars;
+@property (strong,nonatomic)  NSMutableDictionary *calendarSourceTitle;
 
 + (CalendarStore *)sharedStore;
 

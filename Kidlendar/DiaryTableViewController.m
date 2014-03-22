@@ -191,7 +191,7 @@
         cell.videoPlayView.layer.borderWidth = 2.0f;
         cell.videoPlayView.layer.borderColor = [[UIColor whiteColor]CGColor];
         cell.videoPlayView.layer.cornerRadius = cell.videoPlayView.frame.size.width/2;
-        cell.videoPlayView.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.700];
+        cell.videoPlayView.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.500];
         cell.videoPlayView.hidden = NO;
     } else {
         cell.cellImageView.image = [d.diaryPhotoThumbnail resizeImageToSize:cell.cellImageView.frame.size];

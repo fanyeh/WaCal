@@ -191,6 +191,8 @@
     // Map icon
     UITapGestureRecognizer *mapIconTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showMap)];
     [_mapIcon addGestureRecognizer:mapIconTap];
+    
+    _reminderValueLabel.text = [self minuteToString: [[NSUserDefaults standardUserDefaults]integerForKey:@"defaultAlarm"]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -609,6 +611,45 @@
     [self removeAllAlarms];
     [event addAlarm:alarm];
 }
+
+- (NSString *)minuteToString:(NSInteger)minute
+{
+    NSString *time;
+    switch (minute/-1) {
+        case 0:
+            time = @"On Time";
+            break;
+        case 300:
+            time = @"5 Min";
+            break;
+        case 900:
+            time = @"15 Min";
+            break;
+        case 1800:
+            time = @"30 Min";
+            break;
+        case 3600:
+            time = @"1 Hour";
+            break;
+        case 7200:
+            time = @"2 Hours";
+            break;
+        case 86400:
+            time = @"1 Day";
+            break;
+        case 172800:
+            time = @"2 Days";
+            break;
+        case 604800:
+            time = @"1 Week";
+            break;
+        default:
+            break;
+    }
+    
+    return time;
+}
+
 
 #pragma mark - Repeat
 

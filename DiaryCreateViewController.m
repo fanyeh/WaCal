@@ -66,6 +66,8 @@
     
     UIView *videoView;
     UIImageView *videoImageView;
+    
+    UIBarButtonItem *nextButton;
 }
 
 @property (weak, nonatomic) IBOutlet UIView *noPhotoView;
@@ -208,9 +210,8 @@
     photoLoader = [[PhotoLoader alloc]initWithSourceType:kSourceTypeAll];
     photoAssets = [[NSMutableArray alloc]init];
     
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(doneSelection)];
-    self.navigationItem.rightBarButtonItem = doneButton;
-
+    nextButton = [[UIBarButtonItem alloc]initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(doneSelection)];
+    
     // Face detection
     faceDetectingActivity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     faceDetectingActivity.frame = diaryPhotosView.frame;
@@ -574,6 +575,14 @@
     }
 }
 
+-(void)showNextButton:(BOOL)show
+{
+    if (show)
+        [self.navigationItem setRightBarButtonItem:nextButton animated:YES];
+    else
+        [self.navigationItem setRightBarButtonItem:nil animated:YES];
+}
+
 - (void)setupPhotoCollectionView
 {
     NSArray *sourceKeys = photoLoader.sourceDictionary.allKeys;
@@ -616,6 +625,8 @@
 
 - (void)selectedPhoto:(NSIndexPath *)indexPath
 {
+    if ([fullScreenImageArray count]==0)
+        [self showNextButton:YES];
     _noPhotoView.hidden = YES;
     ALAsset *asset =  [photoAssets objectAtIndex:indexPath.row];
     
@@ -747,7 +758,6 @@
 
     else {
         photoCollectionView.userInteractionEnabled = NO;
-
         ALAsset *asset =  [photoAssets objectAtIndex:indexPath.row];
         if ([asset valueForProperty:ALAssetPropertyType]==ALAssetTypeVideo) {
             if ([fullScreenImageArray count] > 0) {
@@ -762,17 +772,21 @@
             UIImage *cellImage = [UIImage imageWithCGImage:[asset.defaultRepresentation fullScreenImage]];
             videoImageView.image = [cellImage cropWithFaceDetect:videoImageView.frame.size];
             videoView.hidden = NO;
+            
             [self.view bringSubviewToFront:videoView];
             [self.view bringSubviewToFront:scroller];
             [self.view bringSubviewToFront:photoAlbumTable];
             [self.view bringSubviewToFront:photoCollectionView];
-            
+
             photoCollectionView.userInteractionEnabled = YES;
+            [self showNextButton:YES];
             
         } else if ([fullScreenImageArray count] < 5) {
-            [self cancelMPMoviePlayer];
-            videoIndexPath = nil;
-            selectedMediaType = kMediaTypePhoto;
+            if (selectedMediaType != kMediaTypePhoto) {
+                [self cancelMPMoviePlayer];
+                videoIndexPath = nil;
+                selectedMediaType = kMediaTypePhoto;
+            }
             [self selectedPhoto:indexPath];
         }
     }
@@ -826,6 +840,8 @@
             [imageMeta removeObjectAtIndex:index];
             [fullScreenImageArray removeObjectAtIndex:index];
             navItem.rightBarButtonItem.title = [NSString stringWithFormat:@"%ld/5",(unsigned long)[fullScreenImageArray count]];
+            if ([fullScreenImageArray count] <1)
+                [self showNextButton:NO];
 
             // Remove image info from ordering info
             [selectedPhotoOrderingInfo removeObject:imageInfo];
@@ -993,13 +1009,7 @@
     [videoPlayer.moviePlayer requestThumbnailImagesAtTimes:@[[NSNumber numberWithFloat:1.0]] timeOption:MPMovieTimeOptionExact];
     // Setup the player
     videoPlayer.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
-    videoPlayer.moviePlayer.shouldAutoplay = NO;
-    
-    // Add Movie Player to parent's view
-    //    [videoPlayer.view setFrame:CGRectMake(2, 46, 316, 320)];
-    videoPlayer.view.layer.borderColor = [[UIColor whiteColor]CGColor];
-    videoPlayer.view.layer.borderWidth = 2.0f;
-    [videoPlayer.moviePlayer setScalingMode:MPMovieScalingModeAspectFill];
+    videoPlayer.moviePlayer.shouldAutoplay = YES;
     
     videoPlayer.moviePlayer.view.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     [self presentMoviePlayerViewControllerAnimated:videoPlayer];
@@ -1030,6 +1040,7 @@
     diaryPhotosView.hidden = NO;
     [cellImageArray removeAllObjects];
     videoView.hidden = YES;
+    [self showNextButton:NO];
 }
 
 #pragma mark Media Playback Notification Methods

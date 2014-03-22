@@ -31,7 +31,7 @@
 {
     CGFloat detailViewHeight;
     UITableView *eventTableView;
-    DateView *previousDateView;
+//    DateView *previousDateView;
     DateModel *previousDateModel;
     MonthModel *monthModel;
     EKEvent *_comingUpEvent;
@@ -86,8 +86,6 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-//    self.view.layer.borderColor = [Rgb2UIColor(33, 138, 251) CGColor];
-//    self.view.layer.borderWidth = 5.0f;
 
     UITapGestureRecognizer *emptyEventTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(addEvent)];
     UITapGestureRecognizer *emptyDiaryTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(addDiary)];
@@ -97,7 +95,7 @@
 
     _videoPlayView.layer.cornerRadius = _videoPlayView.frame.size.width/2;
     _videoPlayView.layer.borderColor = [[UIColor whiteColor]CGColor];
-    _videoPlayView.layer.borderWidth = 3.0f;
+    _videoPlayView.layer.borderWidth = 2.0f;
     
     dateFormatter = [[NSDateFormatter alloc]init];
     dateFormatter.dateFormat = @"yyyy/MM/dd";
@@ -171,13 +169,8 @@
     UIBarButtonItem *addEventButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
                                                                                    target:self
                                                                                    action:@selector(addEvent)];
-//    UIBarButtonItem *addDiaryButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"newDiary22.png"] style:UIBarButtonItemStylePlain target:self action:@selector(addDiary)];
-    
-    
-//    self.navigationItem.rightBarButtonItems = @[addEventButton,addDiaryButton];
     self.navigationItem.rightBarButtonItem = addEventButton;
 
-    
     // Custom navgation left button view
     UIView *leftBarButtonView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 150, 44)];
     monthLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 5, 150, 24)];
@@ -543,7 +536,7 @@
     DateModel *dateModel = [[monthModel datesInMonth]objectAtIndex:dateView.tag];
     dateModel.isSelected = YES;
 
-    if (![dateModel isEqual: previousDateView.date]) {
+    if ([dateModel.date compare: previousDateModel.date] != NSOrderedSame) {
         [_monthView setAppearanceOnDeselectDate:previousDateModel.date dateNotInCurrentMonth:previousDateModel.isCurrentMonth];
         previousDateModel.isSelected = NO;
     }

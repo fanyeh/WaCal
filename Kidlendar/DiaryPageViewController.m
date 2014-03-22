@@ -36,6 +36,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+
+    
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self  action:@selector(createDiary)];
     self.navigationItem.rightBarButtonItem = addButton;
     
@@ -58,6 +60,9 @@
     [self.view addSubview:diaryPageViewController.view];
     
     [diaryPageViewController didMoveToParentViewController:self];
+    
+    NSUInteger currentIndex = [modelArray indexOfObject:[contentViewController diaryData]];
+    self.navigationItem.title = [NSString stringWithFormat:@"%ld/%ld",currentIndex+1,[modelArray count]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -78,27 +83,30 @@
 
 #pragma mark - UIPageViewControllerDataSource
 
-- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController
-      viewControllerBeforeViewController:(UIViewController *)viewController
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
 {
     NSUInteger currentIndex = [modelArray indexOfObject:[(DiaryViewController *)viewController diaryData]];
     if(currentIndex == 0)
     {
         return nil;
     }
+    
+    self.navigationItem.title = [NSString stringWithFormat:@"%ld/%ld",currentIndex,[modelArray count]];
     DiaryViewController *contentViewController = [[DiaryViewController alloc] init];
     contentViewController.diaryData = [modelArray objectAtIndex:currentIndex - 1];
     return contentViewController;
 }
 
-- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController
-       viewControllerAfterViewController:(UIViewController *)viewController
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
 {
     NSUInteger currentIndex = [modelArray indexOfObject:[(DiaryViewController *)viewController diaryData]];
+
     if(currentIndex == modelArray.count-1)
     {
         return nil;
     }
+    
+    self.navigationItem.title = [NSString stringWithFormat:@"%ld/%ld",currentIndex+2,[modelArray count]];
     DiaryViewController *contentViewController = [[DiaryViewController alloc] init];
     contentViewController.diaryData = [modelArray objectAtIndex:currentIndex + 1];
     return contentViewController;

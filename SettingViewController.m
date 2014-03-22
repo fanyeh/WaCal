@@ -10,6 +10,7 @@
 #import "CalendarStore.h"
 #import <EventKit/EventKit.h>
 #import "SwitchCell.h"
+#import "SettingTableCell.h"
 
 @interface SettingViewController () <UIPickerViewDataSource,UIPickerViewDelegate>
 {
@@ -39,7 +40,8 @@
     self.navigationController.navigationBar.titleTextAttributes = size;
     self.navigationItem.title = @"Setting";
     
-    [self.tableView registerClass:[SwitchCell class] forCellReuseIdentifier:@"SwitchCell"];
+//    [self.tableView registerClass:[SwitchCell class] forCellReuseIdentifier:@"SwitchCell"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"SettingTableCell" bundle:nil] forCellReuseIdentifier:@"CalendarCell"];
     
     alarmPicker = [[UIPickerView alloc]init];
     alarmPicker.delegate = self;
@@ -49,6 +51,11 @@
     
     fakeAlarmField = [[UITextField alloc]init];
     fakeAlarmField.inputView = alarmPicker;
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning
@@ -156,11 +163,36 @@
 
 
 #pragma mark - Table view data source
+#define MainColor [UIColor colorWithRed:(64 / 255.0) green:(98 / 255.0) blue:(124 / 255.0) alpha:1.0]
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 30;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *headerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 30)];
+    headerView.backgroundColor = [UIColor colorWithWhite:0.95 alpha:1.000];
+    headerView.layer.shadowOpacity = 0.3f;
+    headerView.layer.shadowColor = [[UIColor colorWithWhite:0.502 alpha:1.000]CGColor];
+    headerView.layer.shadowOffset = CGSizeMake(0, 1);
+    
+    UILabel *headerLabel = [[UILabel alloc]initWithFrame:CGRectMake(30, 0, 300, 30)];
+    headerLabel.textColor = MainColor;
+    headerLabel.textAlignment = NSTextAlignmentLeft;
+    headerLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:17];
+    headerLabel.center = headerView.center;
+    headerLabel.text = @"Calendar";
+    [headerView addSubview:headerLabel];
+    return headerView;
+}
+
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 3;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -174,24 +206,30 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    // Calendar
     if (indexPath.section == 0) {
 
-        static NSString *CellIdentifier = @"Cell";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        static NSString *CellIdentifier = @"CalendarCell";
+        SettingTableCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
+            cell = [[SettingTableCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
         }
     
         // Configure the cell...
         NSArray *allCalendars = [[CalendarStore sharedStore]allCalendars];
         EKCalendar *calendar = allCalendars[indexPath.row];
-        if (cell.isSelected)
+        if (calendar == [[CalendarStore sharedStore]calendar]) {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+        }
         
-        cell.textLabel.text = calendar.title;
+        cell.calendarColorView.layer.cornerRadius = cell.calendarColorView.frame.size.width/2;
+        cell.calendarColorView.backgroundColor = [UIColor colorWithCGColor:calendar.CGColor];
+        cell.calendarNameLabel.text = calendar.title;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
+    // Face Detection
     else  if (indexPath.section == 1){
         static NSString *CellIdentifier = @"SwitchCell";
         SwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -205,6 +243,7 @@
         return cell;
     }
     
+    // Default Alarm
     else {
         static NSString *CellIdentifier = @"Cell";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];

@@ -87,6 +87,9 @@
 		4C91918718AF3A4900ED4695 /* ImageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C91918618AF3A4900ED4695 /* ImageStore.m */; };
 		4C9214CB185AAA29009A3090 /* DateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9214CA185AAA29009A3090 /* DateView.m */; };
 		4C92155A185AD39E009A3090 /* MonthCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C921559185AD39E009A3090 /* MonthCalendarView.m */; };
+		4C97EA7E18DDDD8C00BB19A8 /* SettingTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C97EA7D18DDDD8C00BB19A8 /* SettingTableCell.m */; };
+		4C97EA8018DDDDA100BB19A8 /* SettingTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C97EA7F18DDDDA100BB19A8 /* SettingTableCell.xib */; };
+		4C97EA8318DDEAE900BB19A8 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C97EA8118DDEAE900BB19A8 /* Reachability.m */; };
 		4C9CC3D318D943F400F899F0 /* DiaryPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9CC3D218D943F400F899F0 /* DiaryPageViewController.m */; };
 		4CA0368C18B7A12100015184 /* DiaryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA0368B18B7A12100015184 /* DiaryTableViewCell.m */; };
 		4CA0369018B7A29F00015184 /* DiaryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CA0368F18B7A29F00015184 /* DiaryTableViewCell.xib */; };
@@ -282,6 +285,11 @@
 		4C9214CA185AAA29009A3090 /* DateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateView.m; sourceTree = "<group>"; };
 		4C921558185AD39E009A3090 /* MonthCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthCalendarView.h; sourceTree = "<group>"; };
 		4C921559185AD39E009A3090 /* MonthCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonthCalendarView.m; sourceTree = "<group>"; };
+		4C97EA7C18DDDD8C00BB19A8 /* SettingTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingTableCell.h; sourceTree = "<group>"; };
+		4C97EA7D18DDDD8C00BB19A8 /* SettingTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingTableCell.m; sourceTree = "<group>"; };
+		4C97EA7F18DDDDA100BB19A8 /* SettingTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingTableCell.xib; sourceTree = "<group>"; };
+		4C97EA8118DDEAE900BB19A8 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		4C97EA8218DDEAE900BB19A8 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		4C9CC3D118D943F400F899F0 /* DiaryPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryPageViewController.h; sourceTree = "<group>"; };
 		4C9CC3D218D943F400F899F0 /* DiaryPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryPageViewController.m; sourceTree = "<group>"; };
 		4CA0368A18B7A12100015184 /* DiaryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryTableViewCell.h; sourceTree = "<group>"; };
@@ -588,6 +596,8 @@
 		4C91918818AF3D3100ED4695 /* Other Model */ = {
 			isa = PBXGroup;
 			children = (
+				4C97EA8118DDEAE900BB19A8 /* Reachability.m */,
+				4C97EA8218DDEAE900BB19A8 /* Reachability.h */,
 				4CEEB9FC18B47BAF00C7FA80 /* CloudData.h */,
 				4CEEB9FD18B47BAF00C7FA80 /* CloudData.m */,
 				4C91918518AF3A4900ED4695 /* ImageStore.h */,
@@ -627,6 +637,9 @@
 				4CB3BD2B18A330D80006AFD4 /* SettingViewController.xib */,
 				4C67BAD518B6FBC300452539 /* SwitchCell.h */,
 				4C67BAD618B6FBC300452539 /* SwitchCell.m */,
+				4C97EA7C18DDDD8C00BB19A8 /* SettingTableCell.h */,
+				4C97EA7D18DDDD8C00BB19A8 /* SettingTableCell.m */,
+				4C97EA7F18DDDDA100BB19A8 /* SettingTableCell.xib */,
 			);
 			name = Setting;
 			sourceTree = "<group>";
@@ -877,6 +890,7 @@
 				4C761D1018D8AE2500AE97DE /* lookup_amatorka.png in Resources */,
 				4CBA4BB618CD9B4F00B380AB /* PhotoAlbumTableCell.xib in Resources */,
 				4C68CABF18C63A51003776D2 /* playButton@2x.png in Resources */,
+				4C97EA8018DDDDA100BB19A8 /* SettingTableCell.xib in Resources */,
 				4CDE496418DBD6DD0062DE9E /* calendarTab@2x.png in Resources */,
 				4C61326D18BF16990025FD00 /* EventCreateController.xib in Resources */,
 				4CA0369018B7A29F00015184 /* DiaryTableViewCell.xib in Resources */,
@@ -965,6 +979,7 @@
 				4C4F991C18CF5E51007D3746 /* AFHTTPRequestOperation.m in Sources */,
 				4CA2506C1869377000AEA94E /* UIImage+Resize.m in Sources */,
 				4C91918718AF3A4900ED4695 /* ImageStore.m in Sources */,
+				4C97EA7E18DDDD8C00BB19A8 /* SettingTableCell.m in Sources */,
 				4C92155A185AD39E009A3090 /* MonthCalendarView.m in Sources */,
 				4C84A57318BF7278005A30AB /* ReminderButton.m in Sources */,
 				4C4F991E18CF5E51007D3746 /* AFHTTPSessionManager.m in Sources */,
@@ -972,6 +987,7 @@
 				4C4F991F18CF5E51007D3746 /* AFNetworkReachabilityManager.m in Sources */,
 				4C4F992318CF5E51007D3746 /* AFURLResponseSerialization.m in Sources */,
 				4CEEB9FE18B47BAF00C7FA80 /* CloudData.m in Sources */,
+				4C97EA8318DDEAE900BB19A8 /* Reachability.m in Sources */,
 				4C7EA60E18DB310300460153 /* FileManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

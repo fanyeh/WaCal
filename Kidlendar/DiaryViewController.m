@@ -17,6 +17,7 @@
 #import "AFHTTPRequestOperation.h"
 #import "UIImage+Resize.h"
 #import "FileManager.h"
+#import "Reachability.h"
 
 @interface DiaryViewController () <UIAlertViewDelegate,NSURLSessionTaskDelegate>
 {
@@ -58,19 +59,21 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.navigationItem.title = _diaryData.subject;
 
     // Do any additional setup after loading the view from its nib.
-    _videoPlayView.layer.cornerRadius = _videoPlayView.frame.size.width/2;
-    _videoPlayView.layer.borderWidth = 4.0f;
-    _videoPlayView.layer.borderColor = [[UIColor whiteColor]CGColor];
-    
+
     // Put that image onto the screen in our image view
     FileManager *fm = [[FileManager alloc]initWithKey:_diaryData.diaryKey];
     _diaryPhoto.image = [[fm loadCollectionImage] resizeImageToSize:_diaryPhoto.frame.size];
+    
+    // Setup if it's a video
     if (_diaryData.diaryVideoThumbnail) {
+        _diaryPhoto.layer.borderColor = [[UIColor whiteColor]CGColor];
+        _diaryPhoto.layer.borderWidth = 2.0f;
         UITapGestureRecognizer *videoTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(playVideo)];
+        _videoPlayView.layer.cornerRadius = _videoPlayView.frame.size.width/2;
+        _videoPlayView.layer.borderWidth = 2.0f;
+        _videoPlayView.layer.borderColor = [[UIColor whiteColor]CGColor];
         [_videoPlayView addGestureRecognizer:videoTap];
         _videoPlayView.hidden = NO;
         
@@ -123,52 +126,53 @@
 
 - (void)showShareSheet:(UITapGestureRecognizer *)sender
 {
-    
-    NSString *serviceType;
-    switch (sender.view.tag) {
-        case 0:
-            serviceType = SLServiceTypeTwitter;
-            break;
-        case 1:
-            serviceType = SLServiceTypeSinaWeibo;
-            break;
-        case 2:
-            serviceType = SLServiceTypeFacebook;
-            break;
-        default:
-            break;
-    }
-    
-    if (serviceType==SLServiceTypeFacebook && _diaryData.diaryVideoPath) {
-        [self uploadVideoToFacebook];
-    } else {
-        //  Create an instance of the share Sheet
-        SLComposeViewController *shareSheet = [SLComposeViewController
-                                               composeViewControllerForServiceType:
-                                               serviceType]; // Service Type 有 Facebook/Twitter/微博 可以選
-        
-        shareSheet.completionHandler = ^(SLComposeViewControllerResult result) {
-            switch(result) {
-                    //  This means the user cancelled without sending the Tweet
-                case SLComposeViewControllerResultCancelled:
-                    break;
-                    //  This means the user hit 'Send'
-                case SLComposeViewControllerResultDone:
-                    break;
-            }
-        };
-        
-        //  Set the initial body of the share sheet
-        [shareSheet setInitialText:_diaryData.diaryText];
-        
-        //  分享照片
-        FileManager *fm = [[FileManager alloc]initWithKey:_diaryData.diaryKey];
-        if (![shareSheet addImage:[fm loadCollectionImage]]) {
-            NSLog(@"Unable to add the image!");
+    if ([self checkInternetConnection]) {
+        NSString *serviceType;
+        switch (sender.view.tag) {
+            case 0:
+                serviceType = SLServiceTypeTwitter;
+                break;
+            case 1:
+                serviceType = SLServiceTypeSinaWeibo;
+                break;
+            case 2:
+                serviceType = SLServiceTypeFacebook;
+                break;
+            default:
+                break;
         }
         
-        //  Presents the share Sheet to the user
-        [self presentViewController:shareSheet animated:NO completion:nil];
+        if (serviceType==SLServiceTypeFacebook && _diaryData.diaryVideoPath) {
+            [self uploadVideoToFacebook];
+        } else {
+            //  Create an instance of the share Sheet
+            SLComposeViewController *shareSheet = [SLComposeViewController
+                                                   composeViewControllerForServiceType:
+                                                   serviceType]; // Service Type 有 Facebook/Twitter/微博 可以選
+            
+            shareSheet.completionHandler = ^(SLComposeViewControllerResult result) {
+                switch(result) {
+                        //  This means the user cancelled without sending the Tweet
+                    case SLComposeViewControllerResultCancelled:
+                        break;
+                        //  This means the user hit 'Send'
+                    case SLComposeViewControllerResultDone:
+                        break;
+                }
+            };
+            
+            //  Set the initial body of the share sheet
+            [shareSheet setInitialText:_diaryData.diaryText];
+            
+            //  分享照片
+            FileManager *fm = [[FileManager alloc]initWithKey:_diaryData.diaryKey];
+            if (![shareSheet addImage:[fm loadCollectionImage]]) {
+                NSLog(@"Unable to add the image!");
+            }
+            
+            //  Presents the share Sheet to the user
+            [self presentViewController:shareSheet animated:NO completion:nil];
+        }
     }
 }
 
@@ -298,16 +302,6 @@
     }];
 }
 
-//- (void)viewWillAppear:(BOOL)animated
-//{
-//    self.tabBarController.tabBar.hidden = YES;
-//}
-//
-//- (void)viewWillDisappear:(BOOL)animated
-//{
-//    self.tabBarController.tabBar.hidden = NO;
-//}
-
 #pragma mark - Memory management
 
 - (void)didReceiveMemoryWarning
@@ -328,13 +322,7 @@
     [videoPlayer.moviePlayer requestThumbnailImagesAtTimes:@[[NSNumber numberWithFloat:1.0]] timeOption:MPMovieTimeOptionExact];
     // Setup the player
     videoPlayer.moviePlayer.controlStyle = MPMovieControlStyleFullscreen;
-    videoPlayer.moviePlayer.shouldAutoplay = NO;
-    
-    // Add Movie Player to parent's view
-//    [videoPlayer.view setFrame:CGRectMake(2, 46, 316, 320)];
-    videoPlayer.view.layer.borderColor = [[UIColor whiteColor]CGColor];
-    videoPlayer.view.layer.borderWidth = 2.0f;
-   [videoPlayer.moviePlayer setScalingMode:MPMovieScalingModeAspectFill];
+    videoPlayer.moviePlayer.shouldAutoplay = YES;
     
     videoPlayer.moviePlayer.view.autoresizingMask=UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     [self presentMoviePlayerViewControllerAnimated:videoPlayer];
@@ -419,5 +407,17 @@
 	}
 }
 
+- (BOOL)checkInternetConnection
+{
+    Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
+    NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
+    if (networkStatus == NotReachable) {
+        UIAlertView *noInternetAlert = [[UIAlertView alloc]initWithTitle:@"No Internet Connection" message:nil delegate:self cancelButtonTitle:@"Close" otherButtonTitles:nil, nil];
+        [noInternetAlert show];
+        return NO;
+    } else {
+        return YES;
+    }
+}
 
 @end
