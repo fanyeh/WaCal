@@ -43,6 +43,7 @@
 		4C48FFAC188D65620038AE6F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFAB188D65620038AE6F /* CoreVideo.framework */; };
 		4C48FFAD188D656F0038AE6F /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFA7188D61C40038AE6F /* OpenGLES.framework */; };
 		4C48FFAF188D65820038AE6F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFAE188D65820038AE6F /* AVFoundation.framework */; };
+		4C4E837A18DEAD8200FA9A74 /* CircleProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4E837918DEAD8200FA9A74 /* CircleProgressView.m */; };
 		4C4F991C18CF5E51007D3746 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F990A18CF5E51007D3746 /* AFHTTPRequestOperation.m */; };
 		4C4F991D18CF5E51007D3746 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F990C18CF5E51007D3746 /* AFHTTPRequestOperationManager.m */; };
 		4C4F991E18CF5E51007D3746 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4F990E18CF5E51007D3746 /* AFHTTPSessionManager.m */; };
@@ -211,6 +212,8 @@
 		4C48FFA9188D65580038AE6F /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		4C48FFAB188D65620038AE6F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		4C48FFAE188D65820038AE6F /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		4C4E837818DEAD8200FA9A74 /* CircleProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleProgressView.h; sourceTree = "<group>"; };
+		4C4E837918DEAD8200FA9A74 /* CircleProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleProgressView.m; sourceTree = "<group>"; };
 		4C4F990918CF5E50007D3746 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		4C4F990A18CF5E51007D3746 /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
 		4C4F990B18CF5E51007D3746 /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
@@ -531,6 +534,8 @@
 				4CA2506E1869517400AEA94E /* DiaryPhotoCell.m */,
 				4C9CC3D118D943F400F899F0 /* DiaryPageViewController.h */,
 				4C9CC3D218D943F400F899F0 /* DiaryPageViewController.m */,
+				4C4E837818DEAD8200FA9A74 /* CircleProgressView.h */,
+				4C4E837918DEAD8200FA9A74 /* CircleProgressView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -940,6 +945,7 @@
 				4CFB086C187E696A00456D5D /* DateModel.m in Sources */,
 				4CA0368C18B7A12100015184 /* DiaryTableViewCell.m in Sources */,
 				4CEEB9F818B4656100C7FA80 /* DiaryData.m in Sources */,
+				4C4E837A18DEAD8200FA9A74 /* CircleProgressView.m in Sources */,
 				4C5C8FFC18A8730100B40F7E /* DiaryEntryViewController.m in Sources */,
 				4C570B3518D2D6D600BFA3C4 /* MapViewController.m in Sources */,
 				4C417E7618714A4C000878FC /* DiaryDataStore.m in Sources */,

@@ -8,8 +8,16 @@
 
 #import <UIKit/UIKit.h>
 @class DiaryData;
+@protocol diaryViewDelegate <NSObject>
+@required
+- (void)uploadProgress:(float)progress;
+@end
 
 @interface DiaryViewController : UIViewController
+{
+    __weak id<diaryViewDelegate>_delegate;
+}
+@property (weak,nonatomic) id<diaryViewDelegate>delegate;
 @property (strong,nonatomic) DiaryData *diaryData;
 //@property NSInteger index;
 

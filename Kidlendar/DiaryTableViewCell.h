@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CircleProgressView.h"
 
 @interface DiaryTableViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *cellImageView;
@@ -17,5 +18,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UIView *videoPlayView;
 @property (weak, nonatomic) IBOutlet UIImageView *locationTag;
+@property (weak, nonatomic) IBOutlet CircleProgressView *circleProgressView;
+@property (weak, nonatomic) IBOutlet UILabel *progressLabel;
 
 @end

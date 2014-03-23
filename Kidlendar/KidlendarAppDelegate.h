@@ -26,6 +26,7 @@ extern NSString *const AccountFacebookAccountAccessGranted;
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
 - (void)getFacebookAccount;
+- (void)getPublishStream;
 
 - (void)presentErrorWithMessage:(NSString *)errorMessage;
 

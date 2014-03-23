@@ -74,6 +74,8 @@
                                                 name:@"diaryChange" object:nil];
     
     self.tableView.showsVerticalScrollIndicator = NO;
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(showUploadProgress:) name:@"uploadVideo" object:nil];
+
 
 }
 
@@ -117,6 +119,31 @@
             [diarySet addObject:d];
         }
     }
+}
+
+-(void)showUploadProgress:(NSNotification *)notification
+{
+    NSLog(@"Table view progress");
+    NSString *diaryKey = [[notification userInfo]objectForKey:@"diaryKey"];
+    
+    NSArray *sectionKeys = diaryInSections.allKeys;
+    for (NSString *k in sectionKeys) {
+        NSMutableArray *m = [diaryInSections objectForKey:k];
+        for (DiaryData *d in m) {
+            if ([d.diaryKey isEqualToString:diaryKey]) {
+                NSInteger section = [sectionKeys indexOfObject:k];
+                NSInteger index = [m indexOfObject:d];
+                NSIndexPath *path = [NSIndexPath indexPathForItem:index inSection:section];
+                DiaryTableViewCell *cell = (DiaryTableViewCell *)[self.tableView cellForRowAtIndexPath:path];
+                cell.circleProgressView.hidden = NO;
+                float progress = [[notification object] floatValue];
+                [cell.circleProgressView updateProgress:progress];
+                cell.progressLabel.text = [NSString stringWithFormat:@"%0.f%%",progress*100];
+                [self.tableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
+            }
+        }
+    }
+    
 }
 
 #pragma mark - Table view data source
@@ -197,6 +224,8 @@
         cell.cellImageView.image = [d.diaryPhotoThumbnail resizeImageToSize:cell.cellImageView.frame.size];
         cell.videoPlayView.hidden = YES;
     }
+    
+    
     return cell;
 }
 

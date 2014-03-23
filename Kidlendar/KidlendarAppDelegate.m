@@ -131,7 +131,7 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
         // 3
         NSDictionary *facebookOptions = @{ACFacebookAppIdKey : @"1450548605159832",
                                           ACFacebookPermissionsKey : @[@"publish_stream"],
-                                          ACFacebookAudienceKey : ACFacebookAudienceEveryone };
+                                          ACFacebookAudienceKey : ACFacebookAudienceFriends };
         // 4
         [weakSelf.accountStore requestAccessToAccountsWithType:facebookAccountType
                                                        options:facebookOptions completion:^(BOOL granted,

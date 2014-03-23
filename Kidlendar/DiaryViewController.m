@@ -18,6 +18,7 @@
 #import "UIImage+Resize.h"
 #import "FileManager.h"
 #import "Reachability.h"
+#import "CircleProgressView.h"
 
 @interface DiaryViewController () <UIAlertViewDelegate,NSURLSessionTaskDelegate>
 {
@@ -37,11 +38,13 @@
 @property (weak, nonatomic) IBOutlet UIView *videoPlayView;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 
+@property (weak, nonatomic) IBOutlet CircleProgressView *circleProgressView;
 
 @property (weak, nonatomic) IBOutlet UIView *uploadView;
 @property (weak, nonatomic) IBOutlet UIProgressView *progress;
 
 @property (weak, nonatomic) IBOutlet UIImageView *locationTag;
+@property (weak, nonatomic) IBOutlet UILabel *progressLabel;
 
 @end
 
@@ -61,7 +64,7 @@
     [super viewDidLoad];
 
     // Do any additional setup after loading the view from its nib.
-
+    
     // Put that image onto the screen in our image view
     FileManager *fm = [[FileManager alloc]initWithKey:_diaryData.diaryKey];
     _diaryPhoto.image = [[fm loadCollectionImage] resizeImageToSize:_diaryPhoto.frame.size];
@@ -115,11 +118,23 @@
         _twitterImageView.hidden = YES;
         _weiboImageView.hidden = YES;
     }
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(showUploadProgress:) name:@"uploadVideo" object:nil];
 }
 
 - (void)playVideo
 {
     [self playMovieWithURL:[NSURL URLWithString:_diaryData.diaryVideoPath]];
+}
+
+- (void)showUploadProgress:(NSNotification *)notification
+{
+    NSString *diaryKey = [[notification userInfo]objectForKey:@"diaryKey"];
+    if ([diaryKey isEqualToString:_diaryData.diaryKey]) {
+        float uploadProgress = [[notification object] floatValue];
+        [_circleProgressView updateProgress:uploadProgress];
+        _progressLabel.text = [NSString stringWithFormat:@"%.0f%%",uploadProgress*100];
+    }
 }
 
 #pragma mark - Social share
@@ -202,7 +217,7 @@
 {
     if (buttonIndex != 0) {
         KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        [appDelegate getFacebookAccount];
+        [appDelegate getPublishStream];
     }
 }
 
@@ -255,13 +270,20 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     float uploadProgress = totalBytesWritten/(float)totalBytesExpectedToWrite;
                     [_progress setProgress:uploadProgress animated:YES];
-                    NSLog(@"upload progress %f ",uploadProgress);
+                    [[NSNotificationCenter defaultCenter]postNotificationName:@"uploadVideo" object:[NSString stringWithFormat:@"%f",uploadProgress] userInfo:@{@"diaryKey":_diaryData.diaryKey}];
                 });
-
             }];
             
             [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
                 _uploadView.hidden = YES;
+                [[NSNotificationCenter defaultCenter]removeObserver:self name:_diaryData.diaryKey object:nil];
+                UIAlertView *loginAlert = [[UIAlertView alloc]initWithTitle:[NSString stringWithFormat:@"Diary %@ is uploaded",_diaryData.subject]
+                                                                    message:nil
+                                                                   delegate:self
+                                                          cancelButtonTitle:@"OK"
+                                                          otherButtonTitles:nil, nil];
+                
+                [loginAlert show];
 
                 NSLog(@"Facebook upload success");
                 
