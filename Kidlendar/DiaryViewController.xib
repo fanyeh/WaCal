@@ -13,11 +13,9 @@
                 <outlet property="facebookImageView" destination="ZyT-W9-LV6" id="pOP-Vd-u1T"/>
                 <outlet property="locationLabel" destination="YFJ-Yx-eVo" id="7xL-e2-VL8"/>
                 <outlet property="locationTag" destination="H4n-Sn-R8x" id="pOO-fo-WlY"/>
-                <outlet property="progress" destination="ii2-4f-fBo" id="KkP-cS-w5W"/>
                 <outlet property="progressLabel" destination="yn9-mz-EZl" id="cbr-uI-I7e"/>
                 <outlet property="subjectLabel" destination="vbX-PE-Xav" id="OhQ-vJ-LIf"/>
                 <outlet property="twitterImageView" destination="aFh-Gf-UDH" id="w4A-L4-u97"/>
-                <outlet property="uploadView" destination="ITT-cE-RZd" id="iqK-rF-Xhz"/>
                 <outlet property="videoPlayView" destination="wfd-Cd-OhF" id="qwy-2m-X3j"/>
                 <outlet property="view" destination="1" id="3"/>
                 <outlet property="weekdayLabel" destination="EDV-aG-qGt" id="oa5-9Q-FE1"/>
@@ -94,35 +92,6 @@
                     <rect key="frame" x="227" y="386" width="40" height="40"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 </imageView>
-                <view hidden="YES" contentMode="scaleToFill" id="ITT-cE-RZd" userLabel="Upload progress view">
-                    <rect key="frame" x="10" y="183" width="300" height="82"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Uploading Photo" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="mVH-tb-Hqp">
-                            <rect key="frame" x="95" y="6" width="130" height="21"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="sAf-tp-gPx">
-                            <rect key="frame" x="131" y="52" width="59" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" title="Cancel">
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="cancelUpload:" destination="-1" eventType="touchUpInside" id="vZj-nf-QMP"/>
-                            </connections>
-                        </button>
-                        <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" id="ii2-4f-fBo">
-                            <rect key="frame" x="85" y="42" width="150" height="2"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        </progressView>
-                    </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                </view>
                 <view hidden="YES" contentMode="scaleToFill" id="wfd-Cd-OhF" userLabel="videoPlayView">
                     <rect key="frame" x="116" y="180" width="88" height="88"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

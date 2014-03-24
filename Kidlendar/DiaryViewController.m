@@ -40,9 +40,6 @@
 
 @property (weak, nonatomic) IBOutlet CircleProgressView *circleProgressView;
 
-@property (weak, nonatomic) IBOutlet UIView *uploadView;
-@property (weak, nonatomic) IBOutlet UIProgressView *progress;
-
 @property (weak, nonatomic) IBOutlet UIImageView *locationTag;
 @property (weak, nonatomic) IBOutlet UILabel *progressLabel;
 
@@ -226,6 +223,9 @@
     // 2
     NSURLSession *upLoadSession = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil];
     
+    NSLog(@"HTTPmethod %@",request.HTTPMethod);
+    NSLog(@"HTTPBodyStream %@",request.HTTPBodyStream);
+    
 //    // for now just create a random file name, dropbox will handle it if we overwrite a file and create a new name..
 //    NSURL *url = [Dropbox createPhotoUploadURL];
 //    
@@ -236,7 +236,6 @@
     self.uploadTask = [upLoadSession uploadTaskWithRequest:request fromData:videoData];
     
     // 4
-    self.uploadView.hidden = NO;
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     // 5
@@ -254,7 +253,6 @@
 
 - (void)proceedVideoUploadToFB
 {
-    _uploadView.hidden = NO;
     __block SLRequest *facebookRequest;
     __block NSData *data;
     
@@ -290,76 +288,115 @@
                                          type:@"video/quicktime"
                                      filename:@"test1.mov"];
             
+            NSLog(@"request desc %@",[facebookRequest description]);
+            
             KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
             
             
             facebookRequest.account = appDelegate.facebookAccount;
             
             
-            AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:facebookRequest.preparedURLRequest];
-            [operation setUploadProgressBlock:^(NSUInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    float uploadProgress = totalBytesWritten/(float)totalBytesExpectedToWrite;
-                    [_progress setProgress:uploadProgress animated:YES];
-                    [[NSNotificationCenter defaultCenter]postNotificationName:@"uploadVideo" object:[NSString stringWithFormat:@"%f",uploadProgress] userInfo:@{@"diaryKey":_diaryData.diaryKey}];
-                });
-            }];
+            [self uploadImage:[facebookRequest preparedURLRequest] withData:data];
             
-            [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-                _uploadView.hidden = YES;
-                [[NSNotificationCenter defaultCenter]removeObserver:self name:_diaryData.diaryKey object:nil];
-                UIAlertView *loginAlert = [[UIAlertView alloc]initWithTitle:[NSString stringWithFormat:@"Diary %@ is uploaded",_diaryData.subject]
-                                                                    message:nil
-                                                                   delegate:self
-                                                          cancelButtonTitle:@"OK"
-                                                          otherButtonTitles:nil, nil];
-                
-                [loginAlert show];
-
-                NSLog(@"Facebook upload success");
-                
-            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                _uploadView.hidden = YES;
-
-                NSLog(@"Facebook upload error %@",error);
-            }];
-            
-            [operation start];
-            
-            
-            [facebookRequest performRequestWithHandler:^(NSData* responseData, NSHTTPURLResponse* urlResponse, NSError* error) {
-                if (error) {
-                    // 4
-                    KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-                    [appDelegate presentErrorWithMessage:[NSString
-                                                          stringWithFormat:@"There was an error uploading media. %@",
-                                                          [error localizedDescription]]];
-                }
-                else
-                {
-                    // 5
-                    NSError *jsonError;
-                    NSDictionary *responseJSON = [NSJSONSerialization
-                                                  JSONObjectWithData:responseData
-                                                  options:NSJSONReadingAllowFragments
-                                                  error:&jsonError];
-                    if (jsonError) {
-                        // 6
-                        KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-                        [appDelegate presentErrorWithMessage:[NSString
-                                                              stringWithFormat:@"There was an error uploading media. %@",
-                                                              [error localizedDescription]]];
-                    } else {
-                        NSLog(@"Response data %@",responseJSON);
-                    }
-                }
-            }];
+//            AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:facebookRequest.preparedURLRequest];
+//            [operation setUploadProgressBlock:^(NSUInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite) {
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    float uploadProgress = totalBytesWritten/(float)totalBytesExpectedToWrite;
+//                    [_progress setProgress:uploadProgress animated:YES];
+//                    [[NSNotificationCenter defaultCenter]postNotificationName:@"uploadVideo" object:[NSString stringWithFormat:@"%f",uploadProgress] userInfo:@{@"diaryKey":_diaryData.diaryKey}];
+//                });
+//            }];
+//            
+//            [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+//                _uploadView.hidden = YES;
+//                [[NSNotificationCenter defaultCenter]removeObserver:self name:_diaryData.diaryKey object:nil];
+//                UIAlertView *loginAlert = [[UIAlertView alloc]initWithTitle:[NSString stringWithFormat:@"Diary %@ is uploaded",_diaryData.subject]
+//                                                                    message:nil
+//                                                                   delegate:self
+//                                                          cancelButtonTitle:@"OK"
+//                                                          otherButtonTitles:nil, nil];
+//                
+//                [loginAlert show];
+//
+//                NSLog(@"Facebook upload success");
+//                
+//            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//                _uploadView.hidden = YES;
+//
+//                NSLog(@"Facebook upload error %@",error);
+//            }];
+//            
+//            [operation start];
+//            
+//            
+//            [facebookRequest performRequestWithHandler:^(NSData* responseData, NSHTTPURLResponse* urlResponse, NSError* error) {
+//                if (error) {
+//                    // 4
+//                    KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+//                    [appDelegate presentErrorWithMessage:[NSString
+//                                                          stringWithFormat:@"There was an error uploading media. %@",
+//                                                          [error localizedDescription]]];
+//                }
+//                else
+//                {
+//                    // 5
+//                    NSError *jsonError;
+//                    NSDictionary *responseJSON = [NSJSONSerialization
+//                                                  JSONObjectWithData:responseData
+//                                                  options:NSJSONReadingAllowFragments
+//                                                  error:&jsonError];
+//                    if (jsonError) {
+//                        // 6
+//                        KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+//                        [appDelegate presentErrorWithMessage:[NSString
+//                                                              stringWithFormat:@"There was an error uploading media. %@",
+//                                                              [error localizedDescription]]];
+//                    } else {
+//                        NSLog(@"Response data %@",responseJSON);
+//                    }
+//                }
+//            }];
 
         });
         
     } failureBlock:^(NSError *error) {
         NSLog(@"Converting error %@",error);
     }];
+}
+
+#pragma mark - NSURLSessionTaskDelegate methods
+
+- (void)URLSession:(NSURLSession *)session
+              task:(NSURLSessionTask *)task
+   didSendBodyData:(int64_t)bytesSent
+    totalBytesSent:(int64_t)totalBytesSent
+totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+
+        float uploadProgress = (double)totalBytesSent / (double)totalBytesExpectedToSend;
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"uploadVideo" object:[NSString stringWithFormat:@"%f",uploadProgress] userInfo:@{@"diaryKey":_diaryData.diaryKey}];
+    });
+}
+
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
+{
+    // 1
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+
+    });
+    
+    if (!error) {
+        // 2
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"Upload completed");
+            
+        });
+    } else {
+        // Alert for error
+    }
 }
 
 #pragma mark - Memory management
@@ -375,7 +412,6 @@
 
 -(void) playMovieWithURL: (NSURL*) theURL
 {
-    
     videoPlayer = [[MPMoviePlayerViewController alloc] initWithContentURL: theURL];
     [videoPlayer.moviePlayer setContentURL:theURL];
     
@@ -413,7 +449,6 @@
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:NO];
 }
 
-
 - (void) moviePreloadDidFinish:(NSNotification*)notification
 {
     [self dismissPreparingAlert];
@@ -431,11 +466,6 @@
     [[NSNotificationCenter defaultCenter] removeObserver: self
                                                     name: MPMoviePlayerPlaybackDidFinishNotification
                                                   object: moviePlayer];
-    
-    // Remove from the parent's view
-//    [moviePlayer.view removeFromSuperview];
-    
-    // Stop before release to workaround iOS's bug
     [moviePlayer stop];
 }
 
