@@ -207,7 +207,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Calendar
-    if (indexPath.section == 0) {
+//    if (indexPath.section == 0) {
 
         static NSString *CellIdentifier = @"CalendarCell";
         SettingTableCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -220,43 +220,44 @@
         EKCalendar *calendar = allCalendars[indexPath.row];
         if (calendar == [[CalendarStore sharedStore]calendar]) {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            cell.calendarColorView.hidden = NO;
             [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
         }
         
         cell.calendarColorView.layer.cornerRadius = cell.calendarColorView.frame.size.width/2;
-        cell.calendarColorView.backgroundColor = [UIColor colorWithCGColor:calendar.CGColor];
+//        cell.calendarColorView.backgroundColor = [UIColor colorWithCGColor:calendar.CGColor];
         cell.calendarNameLabel.text = calendar.title;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
-    }
-    // Face Detection
-    else  if (indexPath.section == 1){
-        static NSString *CellIdentifier = @"SwitchCell";
-        SwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            cell = [[SwitchCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        }
-
-        cell.textLabel.text =@"Face Detection";
-        [cell.cellSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"FaceDetection"]];
-        [cell.cellSwitch addTarget:self action:@selector(disableFaceDetection:) forControlEvents:UIControlEventValueChanged];
-        return cell;
-    }
-    
-    // Default Alarm
-    else {
-        static NSString *CellIdentifier = @"Cell";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
-        }
-        
-        cell.textLabel.text =@"Calendar Reminder";
-        cell.detailTextLabel.text =[self minuteToString:[[NSUserDefaults standardUserDefaults] integerForKey:@"defaultAlarm"]];
-        [cell.contentView addSubview:fakeAlarmField];
-        
-        return cell;
-    }
+//    }
+//    // Face Detection
+//    else  if (indexPath.section == 1){
+//        static NSString *CellIdentifier = @"SwitchCell";
+//        SwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+//        if (cell == nil) {
+//            cell = [[SwitchCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+//        }
+//
+//        cell.textLabel.text =@"Face Detection";
+//        [cell.cellSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"FaceDetection"]];
+//        [cell.cellSwitch addTarget:self action:@selector(disableFaceDetection:) forControlEvents:UIControlEventValueChanged];
+//        return cell;
+//    }
+//    
+//    // Default Alarm
+//    else {
+//        static NSString *CellIdentifier = @"Cell";
+//        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+//        if (cell == nil) {
+//            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
+//        }
+//        
+//        cell.textLabel.text =@"Calendar Reminder";
+//        cell.detailTextLabel.text =[self minuteToString:[[NSUserDefaults standardUserDefaults] integerForKey:@"defaultAlarm"]];
+//        [cell.contentView addSubview:fakeAlarmField];
+//        
+//        return cell;
+//    }
 }
 
 
@@ -274,7 +275,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
-        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        SettingTableCell *cell = (SettingTableCell *)[tableView cellForRowAtIndexPath:indexPath];
+        cell.calendarColorView.hidden = NO;
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         NSArray *allCalendars = [[CalendarStore sharedStore]allCalendars];
         EKCalendar *calendar = allCalendars[indexPath.row];
@@ -289,8 +291,9 @@
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
-        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        SettingTableCell *cell = (SettingTableCell *)[tableView cellForRowAtIndexPath:indexPath];
         cell.accessoryType = UITableViewCellAccessoryNone;
+        cell.calendarColorView.hidden = YES;
     } else if (indexPath.section == 2) {
         [fakeAlarmField resignFirstResponder];
     }

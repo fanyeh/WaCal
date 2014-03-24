@@ -7,6 +7,7 @@
 //
 
 #import "CircleProgressView.h"
+#define MainColor [UIColor colorWithRed:(64 / 255.0) green:(98 / 255.0) blue:(124 / 255.0) alpha:1.0]
 
 @implementation CircleProgressView {
     CGFloat startAngle;
@@ -37,14 +38,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        // Determine our start and stop angles for the arc (in radians)
-        startAngle = M_PI * 1.5;
-        endAngle = startAngle + (M_PI * 2);
-        circleLayer = [[CAShapeLayer alloc]init];
-        backgroundLayer = [[CAShapeLayer alloc]init];
-        [self.layer addSublayer:backgroundLayer];
-        [self.layer addSublayer:circleLayer];
-        [self setBackgroundPath];
+
     }
     return self;
 }
@@ -56,8 +50,8 @@
     circleLayer.path = p1;
     CGPathRelease(p1);
 
-    circleLayer.lineWidth = 2.0f;
-    circleLayer.strokeColor = [UIColor blueColor].CGColor;
+    circleLayer.lineWidth = 3.0f;
+    circleLayer.strokeColor = MainColor.CGColor;
     circleLayer.fillColor = [UIColor clearColor].CGColor;
 }
 
@@ -68,10 +62,9 @@
     backgroundLayer.path = p2;
     CGPathRelease(p2);
     
-    backgroundLayer.lineWidth = 2.0f;
-    backgroundLayer.strokeColor = [UIColor colorWithWhite:0.702 alpha:1.000].CGColor;
+    backgroundLayer.lineWidth = 3.0f;
+    backgroundLayer.strokeColor = [UIColor colorWithWhite:0.902 alpha:1.000].CGColor;
     backgroundLayer.fillColor = [UIColor clearColor].CGColor;
 }
-
 
 @end

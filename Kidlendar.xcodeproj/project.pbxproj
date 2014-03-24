@@ -76,6 +76,10 @@
 		4C6C49C0186DDB680042EB61 /* DiaryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C49BF186DDB680042EB61 /* DiaryTableViewController.m */; };
 		4C6C49C4186DDDDF0042EB61 /* DiaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C49C2186DDDDF0042EB61 /* DiaryViewController.m */; };
 		4C6C49C5186DDDDF0042EB61 /* DiaryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C6C49C3186DDDDF0042EB61 /* DiaryViewController.xib */; };
+		4C6C935F18E00A19004D7D68 /* EmptyTableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C6C935E18E00A19004D7D68 /* EmptyTableView.xib */; };
+		4C6C936A18E01E13004D7D68 /* emptyDiary90@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6C936918E01E13004D7D68 /* emptyDiary90@2x.png */; };
+		4C6C936D18E02812004D7D68 /* UploadStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6C936C18E02812004D7D68 /* UploadStore.m */; };
+		4C6C936F18E0712F004D7D68 /* uploadCircle50@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C6C936E18E0712F004D7D68 /* uploadCircle50@2x.png */; };
 		4C73E02018BFA5F3007ECCEC /* EventReviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C73E01E18BFA5F3007ECCEC /* EventReviewController.m */; };
 		4C73E02118BFA5F3007ECCEC /* EventReviewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C73E01F18BFA5F3007ECCEC /* EventReviewController.xib */; };
 		4C761D1018D8AE2500AE97DE /* lookup_amatorka.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C761D0F18D8AE2500AE97DE /* lookup_amatorka.png */; };
@@ -269,6 +273,11 @@
 		4C6C49C1186DDDDF0042EB61 /* DiaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryViewController.h; sourceTree = "<group>"; };
 		4C6C49C2186DDDDF0042EB61 /* DiaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryViewController.m; sourceTree = "<group>"; };
 		4C6C49C3186DDDDF0042EB61 /* DiaryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiaryViewController.xib; sourceTree = "<group>"; };
+		4C6C935E18E00A19004D7D68 /* EmptyTableView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EmptyTableView.xib; sourceTree = "<group>"; };
+		4C6C936918E01E13004D7D68 /* emptyDiary90@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "emptyDiary90@2x.png"; sourceTree = "<group>"; };
+		4C6C936B18E02812004D7D68 /* UploadStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadStore.h; sourceTree = "<group>"; };
+		4C6C936C18E02812004D7D68 /* UploadStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploadStore.m; sourceTree = "<group>"; };
+		4C6C936E18E0712F004D7D68 /* uploadCircle50@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "uploadCircle50@2x.png"; sourceTree = "<group>"; };
 		4C73E01D18BFA5F3007ECCEC /* EventReviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventReviewController.h; path = ../EventReviewController.h; sourceTree = "<group>"; };
 		4C73E01E18BFA5F3007ECCEC /* EventReviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EventReviewController.m; path = ../EventReviewController.m; sourceTree = "<group>"; };
 		4C73E01F18BFA5F3007ECCEC /* EventReviewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EventReviewController.xib; path = ../EventReviewController.xib; sourceTree = "<group>"; };
@@ -516,6 +525,7 @@
 				4CBA4BB518CD9B4F00B380AB /* PhotoAlbumTableCell.xib */,
 				4C6C49BE186DDB680042EB61 /* DiaryTableViewController.h */,
 				4C6C49BF186DDB680042EB61 /* DiaryTableViewController.m */,
+				4C6C935E18E00A19004D7D68 /* EmptyTableView.xib */,
 				4CA0368A18B7A12100015184 /* DiaryTableViewCell.h */,
 				4CA0368B18B7A12100015184 /* DiaryTableViewCell.m */,
 				4CA0368F18B7A29F00015184 /* DiaryTableViewCell.xib */,
@@ -601,6 +611,8 @@
 		4C91918818AF3D3100ED4695 /* Other Model */ = {
 			isa = PBXGroup;
 			children = (
+				4C6C936B18E02812004D7D68 /* UploadStore.h */,
+				4C6C936C18E02812004D7D68 /* UploadStore.m */,
 				4C97EA8118DDEAE900BB19A8 /* Reachability.m */,
 				4C97EA8218DDEAE900BB19A8 /* Reachability.h */,
 				4CEEB9FC18B47BAF00C7FA80 /* CloudData.h */,
@@ -652,6 +664,8 @@
 		4CB3DD6F18521DC400673478 = {
 			isa = PBXGroup;
 			children = (
+				4C6C936E18E0712F004D7D68 /* uploadCircle50@2x.png */,
+				4C6C936918E01E13004D7D68 /* emptyDiary90@2x.png */,
 				4C1E40B218B4616300A273A1 /* GPUImage.xcodeproj */,
 				4CB3DD8118521DC400673478 /* Kidlendar */,
 				4CB3DD8218521DC400673478 /* Supporting Files */,
@@ -900,6 +914,7 @@
 				4C61326D18BF16990025FD00 /* EventCreateController.xib in Resources */,
 				4CA0369018B7A29F00015184 /* DiaryTableViewCell.xib in Resources */,
 				4CC417D718D9731C00EE8DBE /* delete@2x.png in Resources */,
+				4C6C935F18E00A19004D7D68 /* EmptyTableView.xib in Resources */,
 				4C73E02118BFA5F3007ECCEC /* EventReviewController.xib in Resources */,
 				4C0E892018DBD743008F0842 /* diaryTab@2x.png in Resources */,
 				4C61325618BECAED0025FD00 /* EventTableCell.xib in Resources */,
@@ -920,7 +935,9 @@
 				4CB3DD8E18521DC400673478 /* Images.xcassets in Resources */,
 				4C0E893A18DBEDFD008F0842 /* eventCalendarLine20@2x.png in Resources */,
 				4CF5152918C325730050E330 /* MetroUI-Apps-Dropbox-icon.png in Resources */,
+				4C6C936A18E01E13004D7D68 /* emptyDiary90@2x.png in Resources */,
 				4C3FBA5718C4CCFF0097C67D /* face_white.png in Resources */,
+				4C6C936F18E0712F004D7D68 /* uploadCircle50@2x.png in Resources */,
 				4CF592E1186D5BE500F1BEEB /* MonthViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -990,6 +1007,7 @@
 				4C84A57318BF7278005A30AB /* ReminderButton.m in Sources */,
 				4C4F991E18CF5E51007D3746 /* AFHTTPSessionManager.m in Sources */,
 				4C68365018BB0FD100FAA259 /* FilterCell.m in Sources */,
+				4C6C936D18E02812004D7D68 /* UploadStore.m in Sources */,
 				4C4F991F18CF5E51007D3746 /* AFNetworkReachabilityManager.m in Sources */,
 				4C4F992318CF5E51007D3746 /* AFURLResponseSerialization.m in Sources */,
 				4CEEB9FE18B47BAF00C7FA80 /* CloudData.m in Sources */,

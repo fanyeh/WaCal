@@ -18,7 +18,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UIView *videoPlayView;
 @property (weak, nonatomic) IBOutlet UIImageView *locationTag;
-@property (weak, nonatomic) IBOutlet CircleProgressView *circleProgressView;
-@property (weak, nonatomic) IBOutlet UILabel *progressLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *uploadCircle;
 
 @end

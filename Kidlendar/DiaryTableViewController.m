@@ -18,6 +18,7 @@
 #import "DiaryPageViewController.h"
 #import "UIImage+Resize.h"
 #import "FileManager.h"
+#import "UploadStore.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 #define MainColor [UIColor colorWithRed:(64 / 255.0) green:(98 / 255.0) blue:(124 / 255.0) alpha:1.0]
@@ -31,7 +32,10 @@
     NSArray *monthArray;
     NSArray *weekdayArray;
     NSMutableDictionary *diaryInSections;
+    UIView *emptyTableView;
+    NSMutableDictionary *allUploadTasks;
 }
+
 @end
 
 @implementation DiaryTableViewController
@@ -44,11 +48,18 @@
     }
     return self;
 }
+- (IBAction)newDiary:(id)sender
+{
+    [self createDiary];
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
+    
+    emptyTableView = [[[NSBundle mainBundle] loadNibNamed:@"EmptyTableView" owner:self options:nil] objectAtIndex:0];
+    [self.view addSubview:emptyTableView];
     
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self  action:@selector(createDiary)];
     self.navigationItem.rightBarButtonItem = addButton;
@@ -74,9 +85,8 @@
                                                 name:@"diaryChange" object:nil];
     
     self.tableView.showsVerticalScrollIndicator = NO;
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(showUploadProgress:) name:@"uploadVideo" object:nil];
-
-
+    
+    allUploadTasks = [[UploadStore sharedStore]allTasks];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -84,6 +94,11 @@
     [self.tableView reloadData];
     [[self.tabBarController.tabBar.items objectAtIndex:1]setBadgeValue:nil];
     [self.tableView endEditing:YES];
+    [self.tableView reloadData];
+    if ([[[DiaryDataStore sharedStore]allItems] count] > 0)
+        emptyTableView.hidden = YES;
+    else
+        emptyTableView.hidden = NO;
 }
 
 - (void)didReceiveMemoryWarning
@@ -96,6 +111,25 @@
 {
     [self sortDiaryToSection];
     [self.tableView reloadData];
+    if ([[[DiaryDataStore sharedStore]allItems] count] > 0)
+        emptyTableView.hidden = YES;
+    else
+        emptyTableView.hidden = NO;
+}
+
+-(CABasicAnimation *)uploadAnimation
+{
+    CABasicAnimation *rotate = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
+    
+    rotate.fromValue = [NSNumber numberWithFloat:0];
+    
+    rotate.toValue = [NSNumber numberWithFloat:M_PI * -2.0];
+    
+    rotate.duration = 0.5; // seconds
+    
+    rotate.repeatCount = HUGE_VAL;
+    
+    return rotate;
 }
 
 - (void)sortDiaryToSection
@@ -119,31 +153,6 @@
             [diarySet addObject:d];
         }
     }
-}
-
--(void)showUploadProgress:(NSNotification *)notification
-{
-    NSLog(@"Table view progress");
-    NSString *diaryKey = [[notification userInfo]objectForKey:@"diaryKey"];
-    
-    NSArray *sectionKeys = diaryInSections.allKeys;
-    for (NSString *k in sectionKeys) {
-        NSMutableArray *m = [diaryInSections objectForKey:k];
-        for (DiaryData *d in m) {
-            if ([d.diaryKey isEqualToString:diaryKey]) {
-                NSInteger section = [sectionKeys indexOfObject:k];
-                NSInteger index = [m indexOfObject:d];
-                NSIndexPath *path = [NSIndexPath indexPathForItem:index inSection:section];
-                DiaryTableViewCell *cell = (DiaryTableViewCell *)[self.tableView cellForRowAtIndexPath:path];
-                cell.circleProgressView.hidden = NO;
-                float progress = [[notification object] floatValue];
-                [cell.circleProgressView updateProgress:progress];
-                cell.progressLabel.text = [NSString stringWithFormat:@"%0.f%%",progress*100];
-                [self.tableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
-            }
-        }
-    }
-    
 }
 
 #pragma mark - Table view data source
@@ -210,6 +219,7 @@
         cell.locationTag.hidden = YES;
         cell.locationLabel.text = nil;
     }
+
     cell.diaryDetail.text = d.diaryText;
     cell.diarySubject.text = d.subject;
     
@@ -225,7 +235,13 @@
         cell.videoPlayView.hidden = YES;
     }
     
-    
+    if ([allUploadTasks objectForKey:d.diaryKey]) {
+        cell.uploadCircle.hidden = NO;
+        [cell.uploadCircle.layer addAnimation:[self uploadAnimation] forKey:nil];
+    } else {
+        cell.uploadCircle.hidden = YES;
+        [cell.uploadCircle.layer removeAllAnimations];
+    }
     return cell;
 }
 
@@ -266,7 +282,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 80; // 可在 XIB 檔案，點選 My Talbe View Cell 從 Size inspector 得知
+    return 87; // 可在 XIB 檔案，點選 My Talbe View Cell 從 Size inspector 得知
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section

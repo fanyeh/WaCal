@@ -6,46 +6,46 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="DiaryTableViewCell" rowHeight="80" id="JkN-HF-EEY" customClass="DiaryTableViewCell">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="DiaryTableViewCell" rowHeight="87" id="JkN-HF-EEY" customClass="DiaryTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="87"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JkN-HF-EEY" id="G5c-Kf-esP">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="79"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="86"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7WO-sT-lQD">
-                        <rect key="frame" x="5" y="5" width="70" height="70"/>
+                        <rect key="frame" x="2" y="6" width="75" height="75"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Location" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bzW-UH-2Pv">
-                        <rect key="frame" x="97" y="59" width="122" height="21"/>
+                        <rect key="frame" x="97" y="65" width="122" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="locationTag10.png" translatesAutoresizingMaskIntoConstraints="NO" id="jxT-JL-PUC" userLabel="locationTag">
-                        <rect key="frame" x="83" y="65" width="10" height="10"/>
+                        <rect key="frame" x="83" y="71" width="10" height="10"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hqD-Ga-YAd">
-                        <rect key="frame" x="83" y="5" width="180" height="19"/>
+                        <rect key="frame" x="83" y="2" width="188" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="15"/>
                         <color key="textColor" red="0.40000000596046448" green="0.40000000596046448" blue="0.40000000596046448" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" scrollEnabled="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CXH-7h-ptv">
-                        <rect key="frame" x="78" y="14" width="188" height="45"/>
+                        <rect key="frame" x="78" y="12" width="239" height="68"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                        <mutableString key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
                         <color key="textColor" red="0.40000000596046448" green="0.40000000596046448" blue="0.40000000596046448" alpha="1" colorSpace="calibratedRGB"/>
-                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                     </textView>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6AC-gm-XOx">
-                        <rect key="frame" x="227" y="59" width="87" height="21"/>
+                        <rect key="frame" x="230" y="65" width="87" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <attributedString key="attributedText">
                             <fragment content="31st">
@@ -59,11 +59,11 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VZh-0a-uqq">
-                        <rect key="frame" x="20" y="20" width="40" height="40"/>
+                        <rect key="frame" x="19" y="24" width="40" height="40"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="playButton.png" translatesAutoresizingMaskIntoConstraints="NO" id="NKC-cj-BQi">
-                                <rect key="frame" x="13" y="10" width="20" height="20"/>
+                                <rect key="frame" x="12" y="10" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                         </subviews>
@@ -71,39 +71,27 @@
                         <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     </view>
                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AvZ-Pm-xCu">
-                        <rect key="frame" x="0.0" y="78" width="320" height="1"/>
+                        <rect key="frame" x="0.0" y="86" width="320" height="1"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" red="0.90196078430000004" green="0.90196078430000004" blue="0.90196078430000004" alpha="1" colorSpace="calibratedRGB"/>
                         <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     </view>
-                    <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NS5-6A-az3" customClass="CircleProgressView">
-                        <rect key="frame" x="274" y="5" width="40" height="40"/>
+                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="uploadCircle50.png" translatesAutoresizingMaskIntoConstraints="NO" id="3oP-Ao-VmB">
+                        <rect key="frame" x="297" y="2" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6AG-Cl-ysB">
-                                <rect key="frame" x="0.0" y="10" width="40" height="20"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
+                    </imageView>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </tableViewCellContentView>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <connections>
                 <outlet property="cellImageView" destination="7WO-sT-lQD" id="hdv-34-sWd"/>
-                <outlet property="circleProgressView" destination="NS5-6A-az3" id="6Hw-ar-bOv"/>
                 <outlet property="dateLabel" destination="6AC-gm-XOx" id="tZk-zC-Q8d"/>
                 <outlet property="diaryDetail" destination="CXH-7h-ptv" id="AyT-Ea-Gsc"/>
                 <outlet property="diarySubject" destination="hqD-Ga-YAd" id="lfh-Sz-t0t"/>
                 <outlet property="locationLabel" destination="bzW-UH-2Pv" id="x2h-Kd-YcP"/>
                 <outlet property="locationTag" destination="jxT-JL-PUC" id="gic-wc-QOF"/>
-                <outlet property="progressLabel" destination="6AG-Cl-ysB" id="d2J-eF-aQS"/>
+                <outlet property="uploadCircle" destination="3oP-Ao-VmB" id="9XA-2E-ZD6"/>
                 <outlet property="videoPlayButton" destination="NKC-cj-BQi" id="k9l-3R-mzS"/>
                 <outlet property="videoPlayView" destination="VZh-0a-uqq" id="X3f-CY-IQs"/>
             </connections>
@@ -112,5 +100,6 @@
     <resources>
         <image name="locationTag10.png" width="10" height="10"/>
         <image name="playButton.png" width="44" height="44"/>
+        <image name="uploadCircle50.png" width="25" height="25"/>
     </resources>
 </document>

@@ -13,7 +13,6 @@
                 <outlet property="facebookImageView" destination="ZyT-W9-LV6" id="pOP-Vd-u1T"/>
                 <outlet property="locationLabel" destination="YFJ-Yx-eVo" id="7xL-e2-VL8"/>
                 <outlet property="locationTag" destination="H4n-Sn-R8x" id="pOO-fo-WlY"/>
-                <outlet property="progressLabel" destination="yn9-mz-EZl" id="cbr-uI-I7e"/>
                 <outlet property="subjectLabel" destination="vbX-PE-Xav" id="OhQ-vJ-LIf"/>
                 <outlet property="twitterImageView" destination="aFh-Gf-UDH" id="w4A-L4-u97"/>
                 <outlet property="videoPlayView" destination="wfd-Cd-OhF" id="qwy-2m-X3j"/>
@@ -85,11 +84,11 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <imageView tag="2" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="faceboo40.png" id="ZyT-W9-LV6">
-                    <rect key="frame" x="275" y="386" width="40" height="40"/>
+                    <rect key="frame" x="270" y="386" width="40" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="twitter40.png" id="aFh-Gf-UDH">
-                    <rect key="frame" x="227" y="386" width="40" height="40"/>
+                    <rect key="frame" x="222" y="386" width="40" height="40"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 </imageView>
                 <view hidden="YES" contentMode="scaleToFill" id="wfd-Cd-OhF" userLabel="videoPlayView">
@@ -103,17 +102,15 @@
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="calibratedWhite"/>
                 </view>
-                <view contentMode="scaleToFill" id="7LB-6j-6NQ" customClass="CircleProgressView">
-                    <rect key="frame" x="116" y="518" width="40" height="40"/>
+                <view hidden="YES" contentMode="scaleToFill" id="7LB-6j-6NQ" customClass="CircleProgressView">
+                    <rect key="frame" x="273" y="388" width="35" height="35"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100 %" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="yn9-mz-EZl">
-                            <rect key="frame" x="-1" y="9" width="42" height="21"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                            <nil key="highlightedColor"/>
-                        </label>
+                        <view contentMode="scaleToFill" id="uSH-P6-5gA">
+                            <rect key="frame" x="10" y="10" width="15" height="15"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <color key="backgroundColor" red="0.25098039220000001" green="0.38431372549999998" blue="0.48627450979999998" alpha="1" colorSpace="calibratedRGB"/>
+                        </view>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>

@@ -108,7 +108,6 @@
     eventTimeFormatter = [[NSDateFormatter alloc]init];
     eventTimeFormatter.dateFormat = @"hh:mm aa";
     eventTimeFormatter.timeZone = [NSTimeZone systemTimeZone];
-    
 
     UITapGestureRecognizer *eventTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showEventView)];
     [_comingEventView addGestureRecognizer:eventTap];
