@@ -46,6 +46,9 @@
 @property (weak, nonatomic) IBOutlet UIImageView *locationTag;
 @property (weak, nonatomic) IBOutlet UILabel *progressLabel;
 
+
+@property (strong,nonatomic) NSURLSession *session;
+@property (strong,nonatomic) NSURLSessionUploadTask *uploadTask;
 @end
 
 @implementation DiaryViewController
@@ -212,6 +215,34 @@
         [loginAlert show];
     }
 }
+
+- (void)uploadImage:(NSURLRequest *)request withData:(NSData *)videoData
+{
+    // 1
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+    config.HTTPMaximumConnectionsPerHost = 1;
+//    [config setHTTPAdditionalHeaders:@{@"Authorization": [Dropbox apiAuthorizationHeader]}];
+    
+    // 2
+    NSURLSession *upLoadSession = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil];
+    
+//    // for now just create a random file name, dropbox will handle it if we overwrite a file and create a new name..
+//    NSURL *url = [Dropbox createPhotoUploadURL];
+//    
+//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+//    [request setHTTPMethod:@"PUT"];
+    
+    // 3
+    self.uploadTask = [upLoadSession uploadTaskWithRequest:request fromData:videoData];
+    
+    // 4
+    self.uploadView.hidden = NO;
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    // 5
+    [_uploadTask resume];
+}
+
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
