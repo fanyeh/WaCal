@@ -84,6 +84,7 @@
                                             selector:@selector(refreshDiary:)
                                                 name:@"diaryChange" object:nil];
     
+    
     self.tableView.showsVerticalScrollIndicator = NO;
     
     allUploadTasks = [[UploadStore sharedStore]allTasks];
@@ -236,11 +237,11 @@
     }
     
     if ([allUploadTasks objectForKey:d.diaryKey]) {
+        [cell.uploadCircle.layer addAnimation:[self uploadAnimation] forKey:[NSString stringWithFormat:@"%d", arc4random()]];
         cell.uploadCircle.hidden = NO;
-        [cell.uploadCircle.layer addAnimation:[self uploadAnimation] forKey:nil];
     } else {
-        cell.uploadCircle.hidden = YES;
         [cell.uploadCircle.layer removeAllAnimations];
+        cell.uploadCircle.hidden = YES;
     }
     return cell;
 }
@@ -312,19 +313,6 @@
 {
     DiaryCreateViewController *createViewController = [[DiaryCreateViewController alloc]init];
     [self.navigationController pushViewController:createViewController animated:YES];
-}
-
--(void)editDiaryTable
-{
-    if (self.navigationItem.leftBarButtonItem.tag == 0) {
-        [self setEditing:YES animated:YES];
-        self.navigationItem.leftBarButtonItem.tag = 1;
-    }
-    else
-    {
-        [self setEditing:NO animated:YES];
-        self.navigationItem.leftBarButtonItem.tag = 0;
-    }
 }
 
 @end

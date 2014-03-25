@@ -90,6 +90,7 @@
 		4C80F2F018E11FB300B4600C /* lookup_soft_elegance_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C80F2ED18E11FB300B4600C /* lookup_soft_elegance_2.png */; };
 		4C80F2F118E11FB300B4600C /* lookup_soft_elegance_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C80F2EE18E11FB300B4600C /* lookup_soft_elegance_1.png */; };
 		4C80F2F218E11FB300B4600C /* lookup_miss_etikate.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C80F2EF18E11FB300B4600C /* lookup_miss_etikate.png */; };
+		4C80F2F718E1654600B4600C /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C80F2F618E1654600B4600C /* Icon.png */; };
 		4C84A57318BF7278005A30AB /* ReminderButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C84A57218BF7278005A30AB /* ReminderButton.m */; };
 		4C88B387188E56E100F4F47E /* DiaryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88B386188E56E100F4F47E /* DiaryCell.m */; };
 		4C91918718AF3A4900ED4695 /* ImageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C91918618AF3A4900ED4695 /* ImageStore.m */; };
@@ -293,6 +294,7 @@
 		4C80F2ED18E11FB300B4600C /* lookup_soft_elegance_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lookup_soft_elegance_2.png; sourceTree = "<group>"; };
 		4C80F2EE18E11FB300B4600C /* lookup_soft_elegance_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lookup_soft_elegance_1.png; sourceTree = "<group>"; };
 		4C80F2EF18E11FB300B4600C /* lookup_miss_etikate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lookup_miss_etikate.png; sourceTree = "<group>"; };
+		4C80F2F618E1654600B4600C /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		4C84A57118BF7278005A30AB /* ReminderButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReminderButton.h; sourceTree = "<group>"; };
 		4C84A57218BF7278005A30AB /* ReminderButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReminderButton.m; sourceTree = "<group>"; };
 		4C88B385188E56E100F4F47E /* DiaryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryCell.h; sourceTree = "<group>"; };
@@ -683,6 +685,7 @@
 		4CB3DD6F18521DC400673478 = {
 			isa = PBXGroup;
 			children = (
+				4C80F2F618E1654600B4600C /* Icon.png */,
 				4C1E40B218B4616300A273A1 /* GPUImage.xcodeproj */,
 				4CB3DD8118521DC400673478 /* Kidlendar */,
 				4CB3DD8218521DC400673478 /* Supporting Files */,
@@ -928,6 +931,7 @@
 				4C80F2F118E11FB300B4600C /* lookup_soft_elegance_1.png in Resources */,
 				4CBA4BB618CD9B4F00B380AB /* PhotoAlbumTableCell.xib in Resources */,
 				4C68CABF18C63A51003776D2 /* playButton@2x.png in Resources */,
+				4C80F2F718E1654600B4600C /* Icon.png in Resources */,
 				4C97EA8018DDDDA100BB19A8 /* SettingTableCell.xib in Resources */,
 				4CDE496418DBD6DD0062DE9E /* calendarTab@2x.png in Resources */,
 				4C61326D18BF16990025FD00 /* EventCreateController.xib in Resources */,

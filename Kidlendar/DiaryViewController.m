@@ -277,16 +277,13 @@
                                      withName:@"source"
                                          type:@"video/quicktime"
                                      filename:@"test1.mov"];
-            
-            NSLog(@"request desc %@",[facebookRequest description]);
-            
+                        
             KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
             
             
             facebookRequest.account = appDelegate.facebookAccount;
             data = nil;
             [self uploadVidoeWithNSURLSession:facebookRequest];
-//            [self uploadVidoeWithAFNetwork:facebookRequest];
         });
         
     } failureBlock:^(NSError *error) {
@@ -303,11 +300,7 @@
 totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-
         float uploadProgress = (double)totalBytesSent / (double)videoSize;
-        NSLog(@"total byte to send %lld",videoSize);
-        NSLog(@"total byte sent %lld",totalBytesSent);
-        NSLog(@"upload progress %f",uploadProgress);
         [[NSNotificationCenter defaultCenter]postNotificationName:@"uploadVideo" object:[NSString stringWithFormat:@"%f",uploadProgress] userInfo:@{@"diaryKey":_diaryData.diaryKey}];
     });
 }
@@ -319,6 +312,7 @@ totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
     _facebookImageView.hidden = NO;
     [[[UploadStore sharedStore]allTasks]removeObjectForKey:_diaryData.diaryKey];
     free(buffer);
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"diaryChange" object:nil];
 }
 
 - (void)uploadVidoeWithNSURLSession:(SLRequest *)request
@@ -406,7 +400,11 @@ totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
         // 2
         dispatch_async(dispatch_get_main_queue(), ^{
             NSLog(@"Upload completed");
+            _circleProgressView.hidden = YES;
+            _facebookImageView.hidden = NO;
+            [[[UploadStore sharedStore]allTasks]removeObjectForKey:_diaryData.diaryKey];
             free(buffer);
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"diaryChange" object:nil];
         });
     } else {
         // Alert for error

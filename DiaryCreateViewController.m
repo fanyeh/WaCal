@@ -29,7 +29,7 @@
     UICollectionView *diaryPhotosView; // Tag 0
     CGPoint _priorPoint;
     BOOL deleteDiaryPhotos;
-    NSArray *sizeArray;
+    NSMutableArray *sizeArray;
     NSMutableDictionary *selectedPhotoInfo;
     NSMutableArray *cellImageArray;
     NSMutableArray *fullScreenImageArray;
@@ -213,9 +213,10 @@
     nextButton = [[UIBarButtonItem alloc]initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(doneSelection)];
     
     // Face detection
-    faceDetectingActivity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    faceDetectingActivity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     faceDetectingActivity.frame = diaryPhotosView.frame;
     [self.view addSubview:faceDetectingActivity];
+    [self.view bringSubviewToFront:faceDetectingActivity];
     
     UIPanGestureRecognizer *faceDetectPan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panFaceDetectView:)];
     [_faceImageView addGestureRecognizer:faceDetectPan];
@@ -305,7 +306,6 @@
     [self processFaceDetection];
 }
 
-
 - (void)processFaceDetection
 {
     [self cellSizeArray];
@@ -325,39 +325,37 @@
             cellImage = [[resizeImage cropWithoutFaceOutDetect:size] resizeImageToSize:size];
 
         [cellImageArray addObject:cellImage];
-        
-        [self performSelectorOnMainThread:@selector(reloadDiaryPhotosView) withObject:nil waitUntilDone:YES];
     }
+//    [diaryPhotosView reloadData];
+    [UIView animateWithDuration:0 animations:^{
+        [diaryPhotosView performBatchUpdates:^{
+            [diaryPhotosView reloadSections:[NSIndexSet indexSetWithIndex:0]];
+            [faceDetectingActivity stopAnimating];
+            
+        } completion:nil];
+    }];
 }
 
-- (void)processFaceDetectionWithIndexPath:(NSIndexPath *)path
+- (void)processFaceDetectionWithIndexPath:(NSArray *)paths
 {
-    CGSize size = [sizeArray[path.row] CGSizeValue];
-    
-    UIImage *fullScreenImage = fullScreenImageArray[path.row];
-    
-    UIImage *cellImage;
-    
-    if ([[NSUserDefaults standardUserDefaults]boolForKey:@"FaceDetection"])
-        cellImage = [[fullScreenImage cropWithFaceDetect:size]resizeImageToSize:size];
-    else
-        cellImage = [[fullScreenImage cropWithoutFaceOutDetect:size]resizeImageToSize:size];
-    
-    cellImageArray[path.row] = cellImage;
+    for (NSIndexPath *path in paths) {
+        CGSize size = [sizeArray[path.row] CGSizeValue];
         
-    [self performSelectorOnMainThread:@selector(reloadCellWithIndexPath:) withObject:path waitUntilDone:YES];
-}
-
-- (void)reloadDiaryPhotosView
-{
-    [diaryPhotosView reloadData];
-    [faceDetectingActivity stopAnimating];
-    photoCollectionView.userInteractionEnabled = YES;
-}
-
-- (void)reloadCellWithIndexPath:(NSIndexPath *)path
-{
-    [diaryPhotosView reloadItemsAtIndexPaths:@[path]];
+        UIImage *fullScreenImage = fullScreenImageArray[path.row];
+        
+        UIImage *cellImage;
+        
+        if ([[NSUserDefaults standardUserDefaults]boolForKey:@"FaceDetection"])
+            cellImage = [[fullScreenImage cropWithFaceDetect:size]resizeImageToSize:size];
+        else
+            cellImage = [[fullScreenImage cropWithoutFaceOutDetect:size]resizeImageToSize:size];
+        
+        cellImageArray[path.row] = cellImage;
+    }
+    
+    [diaryPhotosView performBatchUpdates:^{
+        [diaryPhotosView reloadItemsAtIndexPaths:paths];
+    } completion:nil];
 }
 
 #pragma mark -User Actions
@@ -374,37 +372,37 @@
     switch ([selectedPhotoOrderingInfo count]) {
         case 1:
             //
-            sizeArray = @[[NSValue valueWithCGSize:CGSizeMake(sizeWidth, sizeHeight)]];
+            sizeArray = [[NSMutableArray alloc]initWithArray:@[[NSValue valueWithCGSize:CGSizeMake(sizeWidth, sizeHeight)]]];
             break;
         case 2:
             //
-            sizeArray = @[[NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight-diaryMinimunLineSpace)/2)],
+            sizeArray = [[NSMutableArray alloc]initWithArray:@[[NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight-diaryMinimunLineSpace)/2)],
                           [NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight-diaryMinimunLineSpace)/2)]
-                          ];
+                          ]];
             break;
         case 3:
             //
-            sizeArray = @[[NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight-diaryMinimunLineSpace)/2)],
+            sizeArray = [[NSMutableArray alloc]initWithArray:@[[NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight-diaryMinimunLineSpace)/2)],
                           [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace)/2, (sizeHeight-diaryMinimunLineSpace)/2)],
                           [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace)/2, (sizeHeight-diaryMinimunLineSpace)/2)]
-                          ];
+                          ]];
             break;
         case 4:
             //
-            sizeArray = @[[NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace)/2, (sizeHeight-diaryMinimunLineSpace)/2)],
+            sizeArray = [[NSMutableArray alloc]initWithArray:@[[NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace)/2, (sizeHeight-diaryMinimunLineSpace)/2)],
                           [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace)/2, (sizeHeight-diaryMinimunLineSpace)/2)],
                           [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace)/2, (sizeHeight-diaryMinimunLineSpace)/2)],
                           [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace)/2, (sizeHeight-diaryMinimunLineSpace)/2)]
-                          ];
+                          ]];
             break;
         case 5:
             //
-            sizeArray = @[[NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace*2)/3, (sizeHeight-diaryMinimunLineSpace)/2)],
+            sizeArray =[[NSMutableArray alloc]initWithArray: @[[NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace*2)/3, (sizeHeight-diaryMinimunLineSpace)/2)],
                           [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace*2)/3, (sizeHeight-diaryMinimunLineSpace)/2)],
                           [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace*2)/3, (sizeHeight-diaryMinimunLineSpace)/2)],
                           [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace)/2, (sizeHeight-diaryMinimunLineSpace)/2)],
                           [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace)/2, (sizeHeight-diaryMinimunLineSpace)/2)]
-                          ];
+                          ]];
             break;
         default:
             break;
@@ -414,7 +412,8 @@
 - (void)movePhoto:(UIPanGestureRecognizer *)sender
 {
     UICollectionViewCell *cell = (UICollectionViewCell *)sender.view;
-    
+    [diaryPhotosView bringSubviewToFront:sender.view];
+
     // Pan the cell
     CGPoint point = [sender locationInView:sender.view.superview];
     if (sender.state == UIGestureRecognizerStateChanged) {
@@ -428,46 +427,30 @@
     // Resize cell back when state ended or cancelled
     if (sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateCancelled)
     {
-        cell.transform = CGAffineTransformIdentity;
-        cell.layer.borderWidth = 0.0f;
-
         NSIndexPath *touchedCellPath = [diaryPhotosView indexPathForItemAtPoint:CGPointMake(sender.view.center.x, sender.view.center.y)];
         NSIndexPath *currentCellIndexPath = [diaryPhotosView indexPathForCell:cell];
         
-        if (touchedCellPath != currentCellIndexPath) {
-            [self.view bringSubviewToFront:sender.view];
-            [diaryPhotosView performBatchUpdates:^{
-                [diaryPhotosView moveItemAtIndexPath:currentCellIndexPath toIndexPath:touchedCellPath];
-                [diaryPhotosView moveItemAtIndexPath:touchedCellPath toIndexPath:currentCellIndexPath];
-                
-            } completion:^(BOOL finished) {
-                // Also need to adjust index position in data source
-                [selectedPhotoOrderingInfo exchangeObjectAtIndex:currentCellIndexPath.row withObjectAtIndex:touchedCellPath.row];
-                [fullScreenImageArray exchangeObjectAtIndex:currentCellIndexPath.row withObjectAtIndex:touchedCellPath.row];
-//                [self processFaceDetection];
-                [self processFaceDetectionWithIndexPath:touchedCellPath];
-                [self processFaceDetectionWithIndexPath:currentCellIndexPath];
+        if (!touchedCellPath || touchedCellPath == currentCellIndexPath)
+        {
+            [UIView animateWithDuration:0 animations:^{
+                [diaryPhotosView reloadItemsAtIndexPaths:@[currentCellIndexPath]];
 
             }];
         }
-        else {
-            [diaryPhotosView reloadItemsAtIndexPaths:@[currentCellIndexPath]];
+        else if (touchedCellPath != currentCellIndexPath) {
+            [self.view bringSubviewToFront:sender.view];
+            
+            [diaryPhotosView performBatchUpdates:^{
+                [diaryPhotosView moveItemAtIndexPath:currentCellIndexPath toIndexPath:touchedCellPath];
+                [diaryPhotosView moveItemAtIndexPath:touchedCellPath toIndexPath:currentCellIndexPath];
+            } completion:^(BOOL finished) {
+                [selectedPhotoOrderingInfo exchangeObjectAtIndex:currentCellIndexPath.row withObjectAtIndex:touchedCellPath.row];
+                [fullScreenImageArray exchangeObjectAtIndex:currentCellIndexPath.row withObjectAtIndex:touchedCellPath.row];
+                
+                if (![sizeArray[currentCellIndexPath.row]isEqualToValue:sizeArray[touchedCellPath.row]])
+                [self processFaceDetectionWithIndexPath:@[currentCellIndexPath,touchedCellPath]];
+            }];
         }
-    }
-}
-
-- (void)deletePhotoOnLongPress:(UILongPressGestureRecognizer *)sender
-{
-    // Enlarge cell when long pressed
-    UICollectionViewCell *cell = (UICollectionViewCell *)sender.view;
-    if (sender.state == UIGestureRecognizerStateBegan) {
-        cell.layer.borderColor = [[UIColor colorWithRed:0.114 green:0.443 blue:0.718 alpha:1.000]CGColor];
-        cell.layer.borderWidth = 3.0f;
-        [UIView animateWithDuration:0.2f animations:^{
-            cell.transform = CGAffineTransformScale(cell.transform, 1.05 , 1.05);
-        } completion:^(BOOL finished) {
-            cell.transform = CGAffineTransformIdentity;
-        }];
     }
 }
 
@@ -514,7 +497,7 @@
 //    [self processFaceDetectionWithIndexPath:path];
     
     CGSize cellSize = [sizeArray[path.row] CGSizeValue];
-    cellImageArray[path.row] =[image resizeImageToSize:cellSize];
+    cellImageArray[path.row] = [image resizeImageToSize:cellSize];
     [diaryPhotosView reloadData];
 }
 
@@ -635,7 +618,7 @@
     // Create info array for diary collection view
     NSArray *imageInfo = @[indexPath,assetGroupPropertyName];
     [selectedPhotoOrderingInfo addObject:imageInfo];
-
+    
     // Save image meta data
     [imageMeta addObject:asset.defaultRepresentation.metadata];
     
@@ -683,17 +666,21 @@
 {
     if (collectionView.tag==0) {
         DiaryPhotoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"DiaryPhotoCell" forIndexPath:indexPath];
-        [cell deletePhotoBadger:deleteDiaryPhotos];
-        [UIView animateWithDuration:0.5f animations:^{
-            cell.photoView.frame = cell.contentView.bounds;
-        }];
-
+        
         if ([cellImageArray count] > 0)
             cell.photoView.image = cellImageArray[indexPath.row];
+        
+        [UIView animateWithDuration:0.5f animations:^{
+            cell.photoView.frame = cell.contentView.bounds;
+
+        }];
         
         // Add gesture to each cell
         UIPanGestureRecognizer *panCell = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(movePhoto:)];
         [cell addGestureRecognizer:panCell];
+        
+        photoCollectionView.userInteractionEnabled = YES;
+
         return cell;
         
     } else {
@@ -702,6 +689,7 @@
         cell.asset = asset;
         
         cell.cellImageView.image = [UIImage imageWithCGImage: asset.thumbnail];
+        
         for (int i = 0; i < [selectedPhotoOrderingInfo count] ; i++) {
             NSArray *n = [selectedPhotoOrderingInfo objectAtIndex:i];
             if(indexPath == n[0])
@@ -713,7 +701,6 @@
         } else {
             cell.videoTimeLabel.hidden = YES;
         }
-        
         return cell;
     }
 }
@@ -859,7 +846,6 @@
             break;
         }
     }
-    
     // Reload diary view data
     [diaryPhotosView reloadData];
 }

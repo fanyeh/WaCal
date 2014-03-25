@@ -41,8 +41,6 @@ typedef NS_ENUM(NSInteger, FilterType)
 }
 @property (weak, nonatomic) IBOutlet UIImageView *photoImageView;
 @property (weak, nonatomic) IBOutlet UICollectionView *filterCollectionView;
-@property (weak, nonatomic) IBOutlet UIView *photoAdjustSlider;
-@property (weak, nonatomic) IBOutlet UISlider *adjustSlider;
 @property (weak, nonatomic) IBOutlet GPUImageView *filterView;
 
 @end
@@ -114,11 +112,16 @@ typedef NS_ENUM(NSInteger, FilterType)
     //  radius: In integer specifying the number of pixels out from the center pixel to test when applying the filter, with a default of 4.
     //  A higher value creates a more abstracted image, but at the cost of much greater processing time.
     GPUImageKuwaharaFilter *kuwaharaFilter = [[GPUImageKuwaharaFilter alloc]init];
-        
-    //  GPUImageHighlightShadowFilter: Adjusts the shadows and highlights of an image
-    //  shadows: Increase to lighten shadows, from 0.0 to 1.0, with 0.0 as the default.
-    //  highlights: Decrease to darken highlights, from 0.0 to 1.0, with 1.0 as the default.
-    GPUImageHighlightShadowFilter *highlightShadowFiltre = [[GPUImageHighlightShadowFilter alloc]init];
+    
+    //  GPUImageSharpenFilter: Sharpens the image
+    //  sharpness: The sharpness adjustment to apply (-4.0 - 4.0, with 0.0 as the default)
+    sharpenFilter = [[GPUImageSharpenFilter alloc]init];
+    sharpenFilter.sharpness = 0.3;
+    
+//    //  GPUImageHighlightShadowFilter: Adjusts the shadows and highlights of an image
+//    //  shadows: Increase to lighten shadows, from 0.0 to 1.0, with 0.0 as the default.
+//    //  highlights: Decrease to darken highlights, from 0.0 to 1.0, with 1.0 as the default.
+//    GPUImageHighlightShadowFilter *highlightShadowFilter = [[GPUImageHighlightShadowFilter alloc]init];
     
     //  GPUImageMonochromeFilter: Converts the image to a single-color version, based on the luminance of each pixel
     //  intensity: The degree to which the specific color replaces the normal image color (0.0 - 1.0, with 1.0 as the default)
@@ -144,33 +147,30 @@ typedef NS_ENUM(NSInteger, FilterType)
     //  brightness: The adjusted brightness (-1.0 - 1.0, with 0.0 as the default)
     brightnessFilter = [[GPUImageBrightnessFilter alloc]init];
     
-    //  GPUImageSharpenFilter: Sharpens the image
-    //  sharpness: The sharpness adjustment to apply (-4.0 - 4.0, with 0.0 as the default)
-    sharpenFilter = [[GPUImageSharpenFilter alloc]init];
-    
     filterName = @[@"Origin",
-                   @"Amatorka",
-                   @"MissEtikate",
-                   @"SoftElegance",
+                   @"Sharpen",
+                   @"Jungle",
+                   @"Sky",
+                   @"Coffee",
+                   @"Vintage",
+                   @"B&W",
                    @"Sketch",
                    @"Toon",
                    @"Film",
-                   @"BlackWhite",
-                   @"Vintage",
-                   @"Paint",
-                   @"Hilight"];
+                   @"Paint"];
     
     filterContainter = @[_photoImage,
+                         sharpenFilter,
                          AmatorkaFilter,
                          missEtikateFilter,
                          softEleganceFilter,
+                         sepiaFilter,
+                         grayScaleFilter,
                          SketchFilter,
                          SmoothToonFilter,
                          colorInventFilter,
-                         grayScaleFilter,
-                         sepiaFilter,
                          kuwaharaFilter,
-                         highlightShadowFiltre];
+                         ];
     
     filterImageArray = [[NSMutableArray alloc]init];
     CGSize cellSize = CGSizeMake(70, 70);
@@ -306,7 +306,9 @@ typedef NS_ENUM(NSInteger, FilterType)
 
 - (void)done
 {
-     [_delegate filteredImage:[_photoImageView.image cropImageWithRectImageView:_cropRect view:_photoImageView] indexPath:_indexPath];
+    [_delegate filteredImage:_photoImageView.image indexPath:_indexPath];
+
+//     [_delegate filteredImage:[_photoImageView.image cropImageWithRectImageView:_cropRect view:_photoImageView] indexPath:_indexPath];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -316,16 +318,16 @@ typedef NS_ENUM(NSInteger, FilterType)
 {
     if (indexPath.row == 0)
         _photoImageView.image = _photoImage;
-    else if (indexPath.row == 1) {
+    else if (indexPath.row == 2) {
         GPUImageAmatorkaFilter *amatorkaFilter = [[GPUImageAmatorkaFilter alloc]init];
         _photoImageView.image = [amatorkaFilter imageByFilteringImage:_photoImage];
     }
-    else if (indexPath.row == 2) {
+    else if (indexPath.row == 3) {
         //  GPUImageMissEtikateFilter
         GPUImageMissEtikateFilter *missEtikateFilter = [[GPUImageMissEtikateFilter alloc]init];
         _photoImageView.image = [missEtikateFilter imageByFilteringImage:_photoImage];
     }
-    else if (indexPath.row == 3) {
+    else if (indexPath.row == 4) {
         //  GPUImageSoftEleganceFilter
         GPUImageSoftEleganceFilter *softEleganceFilter = [[GPUImageSoftEleganceFilter alloc]init];
         _photoImageView.image = [softEleganceFilter imageByFilteringImage:_photoImage];
@@ -348,65 +350,5 @@ typedef NS_ENUM(NSInteger, FilterType)
     cell.filterNameLabel.text = [filterName objectAtIndex:indexPath.row];
     return cell;
 }
-
-- (IBAction)exposure:(id)sender
-{
-    //  GPUImageExposureFilter
-    //  exposure: The adjusted exposure (-10.0 - 10.0, with 0.0 as the default)
-
-    [exposureFilter addTarget:_filterView];
-    filter = kFilterTypeExposure;
-    _adjustSlider.minimumValue = -2.0f;
-    _adjustSlider.maximumValue = 2.0f;
-    [_adjustSlider setValue:0.0 animated:NO];
-    [self showSlider];
-}
-
-- (IBAction)cancelSlider:(id)sender
-{
-    [_filterView endProcessing];
-//    _photoImageView.image = _photoImage;
-    [exposureFilter removeAllTargets];
-    [self hideSlider];
-}
-
-- (IBAction)getProcessedImage:(id)sender
-{
-    _photoImageView.image = [exposureFilter imageFromCurrentlyProcessedOutput];
-    [exposureFilter removeAllTargets];
-    [self hideSlider];
-}
-
-- (IBAction)adjust:(UISlider *)sender
-{
-    if (filter == kFilterTypeExposure) {
-        exposureFilter.exposure = sender.value;
-        stillImageSource = [[GPUImagePicture alloc] initWithImage:_photoImage];
-        [stillImageSource addTarget:exposureFilter];
-        [stillImageSource processImage];
-    }
-    _photoImageView.image = nil;
-}
-
-- (void)showSlider
-{
-    _photoAdjustSlider.hidden = NO;
-    [UIView animateWithDuration:0.3f animations:^{
-        _photoAdjustSlider.frame = CGRectOffset(_photoAdjustSlider.frame, 0, -160);
-        
-    }];
-}
-
-- (void)hideSlider
-{
-    [UIView animateWithDuration:0.3f animations:^{
-        _photoAdjustSlider.frame = CGRectOffset(_photoAdjustSlider.frame, 0, 160);
-        
-    } completion:^(BOOL finished) {
-        _photoAdjustSlider.hidden = YES;
-        
-    }];
-}
-
 
 @end

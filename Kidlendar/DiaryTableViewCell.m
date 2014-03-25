@@ -25,7 +25,6 @@
     if (self) {
 
     }
-    
     return self;
 }
 
