@@ -11,6 +11,14 @@
 #import "FilterCell.h"
 #import "UIImage+Resize.h"
 
+typedef NS_ENUM(NSInteger, FilterType)
+{
+    kFilterTypeExposure,
+    kFilterTypeContrast,
+    kFilterTypeBrightness,
+    kFilterTypeSharpen
+};
+
 @interface DiaryPhotoViewController () <UICollectionViewDataSource,UICollectionViewDelegate>
 {
     NSArray *filterContainter;
@@ -22,9 +30,20 @@
     CGRect _cropRect;
     UIPanGestureRecognizer *pan;
     NSMutableArray *filterImageArray;
+    FilterType filter;
+
+    GPUImageContrastFilter *contrastFilter;
+    GPUImageExposureFilter *exposureFilter;
+    GPUImageBrightnessFilter *brightnessFilter;
+    GPUImageSharpenFilter *sharpenFilter;
+    
+    GPUImagePicture *stillImageSource;
 }
 @property (weak, nonatomic) IBOutlet UIImageView *photoImageView;
 @property (weak, nonatomic) IBOutlet UICollectionView *filterCollectionView;
+@property (weak, nonatomic) IBOutlet UIView *photoAdjustSlider;
+@property (weak, nonatomic) IBOutlet UISlider *adjustSlider;
+@property (weak, nonatomic) IBOutlet GPUImageView *filterView;
 
 @end
 
@@ -60,24 +79,98 @@
     _photoImageView.image = _photoImage;
     [_photoImageView addGestureRecognizer:pan];
 
-    
     // Filters
     _filterCollectionView.allowsMultipleSelection = NO;
     [_filterCollectionView registerClass:[FilterCell class] forCellWithReuseIdentifier:@"FilterCell"];
     _filterCollectionView.delegate = self;
     _filterCollectionView.dataSource = self;
-    
-    GPUImagePolkaDotFilter *polkaDotFilter = [[GPUImagePolkaDotFilter alloc]init];
+
+    //  GPUImageAmatorkaFilter
     GPUImageAmatorkaFilter *AmatorkaFilter = [[GPUImageAmatorkaFilter alloc]init];
-    GPUImageSketchFilter *SketchFilter = [[GPUImageSketchFilter alloc]init];
-    GPUImageSmoothToonFilter *SmoothToonFilter = [[GPUImageSmoothToonFilter alloc]init];
-    GPUImagePinchDistortionFilter *pinchDistortionFilter = [[GPUImagePinchDistortionFilter alloc]init];
-    GPUImageContrastFilter *contrastFilter = [[GPUImageContrastFilter alloc]init];
-    GPUImageExposureFilter *exposureFilter = [[GPUImageExposureFilter alloc]init];
-    exposureFilter.exposure = 1;
     
-    filterName = @[@"Origin",@"Polka", @"Amatorka",@"Sketch",@"SmoothToon",@"Pinch",@"Contrast",@"Exposure"];
-    filterContainter = @[_photoImage,polkaDotFilter,AmatorkaFilter,SketchFilter,SmoothToonFilter,pinchDistortionFilter,contrastFilter,exposureFilter];
+    //  GPUImageMissEtikateFilter
+    GPUImageMissEtikateFilter *missEtikateFilter = [[GPUImageMissEtikateFilter alloc]init];
+    
+    //  GPUImageSoftEleganceFilter
+    GPUImageSoftEleganceFilter *softEleganceFilter = [[GPUImageSoftEleganceFilter alloc]init];
+    
+    //  GPUImageSketchFilter
+    GPUImageSketchFilter *SketchFilter = [[GPUImageSketchFilter alloc]init];
+    
+    //  GPUImageSmoothToonFilter
+    GPUImageSmoothToonFilter *SmoothToonFilter = [[GPUImageSmoothToonFilter alloc]init];
+    
+    //  GPUImageColorInvertFilter
+    GPUImageColorInvertFilter *colorInventFilter = [[GPUImageColorInvertFilter alloc]init];
+    
+    //  GPUImageGrayscaleFilter
+    GPUImageGrayscaleFilter *grayScaleFilter = [[GPUImageGrayscaleFilter alloc]init];
+        
+    //  GPUImageSepiaFilter: Simple sepia tone filter
+    //  intensity: The degree to which the sepia tone replaces the normal image color (0.0 - 1.0, with 1.0 as the default)
+    GPUImageSepiaFilter *sepiaFilter = [[GPUImageSepiaFilter alloc]init];
+    
+    //  GPUImageKuwaharaFilter:
+    //  radius: In integer specifying the number of pixels out from the center pixel to test when applying the filter, with a default of 4.
+    //  A higher value creates a more abstracted image, but at the cost of much greater processing time.
+    GPUImageKuwaharaFilter *kuwaharaFilter = [[GPUImageKuwaharaFilter alloc]init];
+        
+    //  GPUImageHighlightShadowFilter: Adjusts the shadows and highlights of an image
+    //  shadows: Increase to lighten shadows, from 0.0 to 1.0, with 0.0 as the default.
+    //  highlights: Decrease to darken highlights, from 0.0 to 1.0, with 1.0 as the default.
+    GPUImageHighlightShadowFilter *highlightShadowFiltre = [[GPUImageHighlightShadowFilter alloc]init];
+    
+    //  GPUImageMonochromeFilter: Converts the image to a single-color version, based on the luminance of each pixel
+    //  intensity: The degree to which the specific color replaces the normal image color (0.0 - 1.0, with 1.0 as the default)
+    //  color: The color to use as the basis for the effect, with (0.6, 0.45, 0.3, 1.0) as the default.
+    
+    //  GPUImagePolkaDotFilter
+    //  fractionalWidthOfAPixel: How large the dots are, as a fraction of the width and height of the image (0.0 - 1.0, default 0.05)
+    //  dotScaling: What fraction of each grid space is taken up by a dot, from 0.0 to 1.0 with a default of 0.9.
+    //  GPUImagePolkaDotFilter *polkaDotFilter = [[GPUImagePolkaDotFilter alloc]init];
+    
+    
+    // **** Put on tool bar ****
+    
+    //  GPUImageContrastFilter
+    //  contrast: The adjusted contrast (0.0 - 4.0, with 1.0 as the default)
+    contrastFilter = [[GPUImageContrastFilter alloc]init];
+    
+    //  GPUImageExposureFilter
+    //  exposure: The adjusted exposure (-10.0 - 10.0, with 0.0 as the default)
+    exposureFilter = [[GPUImageExposureFilter alloc]init];
+    
+    //  GPUBrightnessFilter
+    //  brightness: The adjusted brightness (-1.0 - 1.0, with 0.0 as the default)
+    brightnessFilter = [[GPUImageBrightnessFilter alloc]init];
+    
+    //  GPUImageSharpenFilter: Sharpens the image
+    //  sharpness: The sharpness adjustment to apply (-4.0 - 4.0, with 0.0 as the default)
+    sharpenFilter = [[GPUImageSharpenFilter alloc]init];
+    
+    filterName = @[@"Origin",
+                   @"Amatorka",
+                   @"MissEtikate",
+                   @"SoftElegance",
+                   @"Sketch",
+                   @"Toon",
+                   @"Film",
+                   @"BlackWhite",
+                   @"Vintage",
+                   @"Paint",
+                   @"Hilight"];
+    
+    filterContainter = @[_photoImage,
+                         AmatorkaFilter,
+                         missEtikateFilter,
+                         softEleganceFilter,
+                         SketchFilter,
+                         SmoothToonFilter,
+                         colorInventFilter,
+                         grayScaleFilter,
+                         sepiaFilter,
+                         kuwaharaFilter,
+                         highlightShadowFiltre];
     
     filterImageArray = [[NSMutableArray alloc]init];
     CGSize cellSize = CGSizeMake(70, 70);
@@ -91,6 +184,7 @@
     [self createImageMask];
     
     [self.view.layer addSublayer:imageLayer];
+    
 }
 
 - (CGSize)resizeCropSize:(CGSize)newSize
@@ -222,11 +316,20 @@
 {
     if (indexPath.row == 0)
         _photoImageView.image = _photoImage;
-    else if (indexPath.row == 2) {
+    else if (indexPath.row == 1) {
         GPUImageAmatorkaFilter *amatorkaFilter = [[GPUImageAmatorkaFilter alloc]init];
         _photoImageView.image = [amatorkaFilter imageByFilteringImage:_photoImage];
     }
-        
+    else if (indexPath.row == 2) {
+        //  GPUImageMissEtikateFilter
+        GPUImageMissEtikateFilter *missEtikateFilter = [[GPUImageMissEtikateFilter alloc]init];
+        _photoImageView.image = [missEtikateFilter imageByFilteringImage:_photoImage];
+    }
+    else if (indexPath.row == 3) {
+        //  GPUImageSoftEleganceFilter
+        GPUImageSoftEleganceFilter *softEleganceFilter = [[GPUImageSoftEleganceFilter alloc]init];
+        _photoImageView.image = [softEleganceFilter imageByFilteringImage:_photoImage];
+    }
     else
         _photoImageView.image = [[filterContainter objectAtIndex:indexPath.row]imageByFilteringImage:_photoImage];
 }
@@ -245,5 +348,65 @@
     cell.filterNameLabel.text = [filterName objectAtIndex:indexPath.row];
     return cell;
 }
+
+- (IBAction)exposure:(id)sender
+{
+    //  GPUImageExposureFilter
+    //  exposure: The adjusted exposure (-10.0 - 10.0, with 0.0 as the default)
+
+    [exposureFilter addTarget:_filterView];
+    filter = kFilterTypeExposure;
+    _adjustSlider.minimumValue = -2.0f;
+    _adjustSlider.maximumValue = 2.0f;
+    [_adjustSlider setValue:0.0 animated:NO];
+    [self showSlider];
+}
+
+- (IBAction)cancelSlider:(id)sender
+{
+    [_filterView endProcessing];
+//    _photoImageView.image = _photoImage;
+    [exposureFilter removeAllTargets];
+    [self hideSlider];
+}
+
+- (IBAction)getProcessedImage:(id)sender
+{
+    _photoImageView.image = [exposureFilter imageFromCurrentlyProcessedOutput];
+    [exposureFilter removeAllTargets];
+    [self hideSlider];
+}
+
+- (IBAction)adjust:(UISlider *)sender
+{
+    if (filter == kFilterTypeExposure) {
+        exposureFilter.exposure = sender.value;
+        stillImageSource = [[GPUImagePicture alloc] initWithImage:_photoImage];
+        [stillImageSource addTarget:exposureFilter];
+        [stillImageSource processImage];
+    }
+    _photoImageView.image = nil;
+}
+
+- (void)showSlider
+{
+    _photoAdjustSlider.hidden = NO;
+    [UIView animateWithDuration:0.3f animations:^{
+        _photoAdjustSlider.frame = CGRectOffset(_photoAdjustSlider.frame, 0, -160);
+        
+    }];
+}
+
+- (void)hideSlider
+{
+    [UIView animateWithDuration:0.3f animations:^{
+        _photoAdjustSlider.frame = CGRectOffset(_photoAdjustSlider.frame, 0, 160);
+        
+    } completion:^(BOOL finished) {
+        _photoAdjustSlider.hidden = YES;
+        
+    }];
+}
+
 
 @end

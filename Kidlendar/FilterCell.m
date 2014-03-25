@@ -25,6 +25,7 @@
                                                                     cellWidth,
                                                                     cellHeight - cellWidth - 10)];
         _filterNameLabel.textColor = [UIColor whiteColor];
+        _filterNameLabel.font = [UIFont fontWithName:@"Helvetica-bold" size:13];
         _filterNameLabel.textAlignment = NSTextAlignmentCenter;
         
         [self.contentView addSubview:_cellImageView];
