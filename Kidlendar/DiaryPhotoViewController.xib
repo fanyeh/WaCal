@@ -7,7 +7,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DiaryPhotoViewController">
             <connections>
                 <outlet property="filterCollectionView" destination="zYQ-tK-FPJ" id="mBg-C0-kqs"/>
-                <outlet property="photoImageView" destination="Mev-Wy-dzg" id="Rh2-ZA-9Zd"/>
+                <outlet property="photoImageView" destination="Mev-Wy-dzg" id="cdm-Ee-sGc"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
         </placeholder>

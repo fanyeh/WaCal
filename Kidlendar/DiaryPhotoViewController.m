@@ -41,7 +41,6 @@ typedef NS_ENUM(NSInteger, FilterType)
 }
 @property (weak, nonatomic) IBOutlet UIImageView *photoImageView;
 @property (weak, nonatomic) IBOutlet UICollectionView *filterCollectionView;
-@property (weak, nonatomic) IBOutlet GPUImageView *filterView;
 
 @end
 
@@ -182,29 +181,6 @@ typedef NS_ENUM(NSInteger, FilterType)
     }
     
     [self createImageMask];
-    
-    [self.view.layer addSublayer:imageLayer];
-    
-}
-
-- (CGSize)resizeCropSize:(CGSize)newSize
-{
-    CGFloat imageRatio = _photoImageView.frame.size.width/_photoImageView.frame.size.height;
-    
-    CGFloat gapFromBoundary = 30;
-    CGFloat imageWidth = _photoImageView.frame.size.width - (gapFromBoundary*imageRatio);
-    CGFloat imageHeight =  _photoImageView.frame.size.height - gapFromBoundary;
-    
-    CGFloat cropRatio = newSize.width/newSize.height;
-    
-    CGFloat maxCropHeight = imageWidth/cropRatio;
-    CGFloat maxCropWidth = imageWidth;
-    
-    if (maxCropHeight > imageHeight) {
-        maxCropHeight = imageHeight;
-        maxCropWidth = imageHeight*cropRatio;
-    }
-    return CGSizeMake(maxCropWidth, maxCropHeight);
 }
 
 - (void)updateMaskPath:(CGRect)cropRect
@@ -230,8 +206,10 @@ typedef NS_ENUM(NSInteger, FilterType)
     boundsCenter.x = (imageBounds.origin.x + imageBounds.size.width)/2;
     boundsCenter.y = (imageBounds.origin.y + imageBounds.size.height)/2;
     
+    // Adjust cropRect size proportionally based on collection view cell size
     _cropRectSize = [self resizeCropSize:_cropRectSize];
     
+    // Setup crop rect
     _cropRect = CGRectMake(boundsCenter.x - _cropRectSize.width/2 ,
                            boundsCenter.y - _cropRectSize.height/2,
                            _cropRectSize.width,
@@ -251,8 +229,28 @@ typedef NS_ENUM(NSInteger, FilterType)
     imageLayer.backgroundColor = [[UIColor colorWithWhite:0.000 alpha:0.600] CGColor];
     imageLayer.mask = _maskLayer;
     [imageLayer addSublayer:borderLayer];
+    [self.view.layer addSublayer:imageLayer];
 }
 
+- (CGSize)resizeCropSize:(CGSize)newSize
+{
+    CGFloat imageRatio = _photoImageView.frame.size.width/_photoImageView.frame.size.height;
+    
+    CGFloat gapFromBoundary = 30;
+    CGFloat imageWidth = _photoImageView.frame.size.width - (gapFromBoundary*imageRatio);
+    CGFloat imageHeight =  _photoImageView.frame.size.height - gapFromBoundary;
+    
+    CGFloat cropRatio = newSize.width/newSize.height;
+    
+    CGFloat maxCropHeight = imageWidth/cropRatio;
+    CGFloat maxCropWidth = imageWidth;
+    
+    if (maxCropHeight > imageHeight) {
+        maxCropHeight = imageHeight;
+        maxCropWidth = imageHeight*cropRatio;
+    }
+    return CGSizeMake(maxCropWidth, maxCropHeight);
+}
 
 - (void)handlePan:(UIPanGestureRecognizer *)sender
 {
@@ -306,9 +304,7 @@ typedef NS_ENUM(NSInteger, FilterType)
 
 - (void)done
 {
-    [_delegate filteredImage:_photoImageView.image indexPath:_indexPath];
-
-//     [_delegate filteredImage:[_photoImageView.image cropImageWithRectImageView:_cropRect view:_photoImageView] indexPath:_indexPath];
+     [_delegate filteredImage:[_photoImageView.image cropImageWithRectImageView:_cropRect view:_photoImageView] indexPath:_indexPath];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

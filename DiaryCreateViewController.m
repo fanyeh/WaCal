@@ -492,13 +492,14 @@
     [selectedPhotoDict setObject:image forKey:imageInfo[0]];
     
     // Replace image in fullscreenimage array
-//    fullScreenImageArray[path.row] = image;
+    fullScreenImageArray[path.row] = image;
 //
 //    [self processFaceDetectionWithIndexPath:path];
     
     CGSize cellSize = [sizeArray[path.row] CGSizeValue];
     cellImageArray[path.row] = [image resizeImageToSize:cellSize];
-    [diaryPhotosView reloadData];
+//    [diaryPhotosView reloadData];
+    [diaryPhotosView reloadItemsAtIndexPaths:@[path]];
 }
 
 #pragma mark - Photo collection view relate
@@ -616,7 +617,7 @@
     UIImage* image = [UIImage imageWithCGImage:[asset.defaultRepresentation fullScreenImage]];
     
     // Create info array for diary collection view
-    NSArray *imageInfo = @[indexPath,assetGroupPropertyName];
+    NSArray *imageInfo = @[indexPath,assetGroupPropertyName,[NSNumber numberWithBool:NO]];
     [selectedPhotoOrderingInfo addObject:imageInfo];
     
     // Save image meta data
@@ -820,6 +821,7 @@
     for (NSArray *imageInfo in selectedPhotoOrderingInfo) {
         // ImageInfo[0] = indexpath
         // ImageInfo[1] = assset group name
+        // ImageInfo[3] = crop status
         if (imageInfo[0] == path) {
             
             // Remove image from resize image array
