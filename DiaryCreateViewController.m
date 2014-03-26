@@ -883,7 +883,10 @@ static int deleteLabelSize = 30;
         photoViewController.cropRectSize = [sizeArray[indexPath.row] CGSizeValue];
         photoViewController.indexPath = indexPath;
         photoViewController.delegate = self;
-
+        
+        DiaryPhotoCell *selectedCell = (DiaryPhotoCell *)[diaryPhotosView cellForItemAtIndexPath:indexPath];
+        selectedCell.deleteBadger.hidden = YES;
+        
         ALAsset *asset;
         // If image has not been filtered , pass image from asset library
         if ([[fullScreenImageArray objectAtIndex:indexPath.row] isKindOfClass:[ALAsset class]]) {
