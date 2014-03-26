@@ -19,23 +19,14 @@
         
         _deleteBadger = [[UILabel alloc]init];
         _deleteBadger.text = @"X";
+        _deleteBadger.textColor = [UIColor whiteColor];
         _deleteBadger.textAlignment = NSTextAlignmentCenter;
-        _deleteBadger.backgroundColor = [UIColor redColor];
-        _deleteBadger.hidden = YES;
-        [self.contentView addSubview:_deleteBadger];
+        _deleteBadger.font = [UIFont fontWithName:@"Helvetica-Bold" size:13];
+        _deleteBadger.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.500];
+        _deleteBadger.userInteractionEnabled = YES;
+        [self addSubview:_deleteBadger];
     }
     return self;
-}
-
-- (void)deletePhotoBadger:(BOOL)deletePhotoBadger
-{
-    if (deletePhotoBadger) {
-        _deleteBadger.frame = CGRectMake(self.frame.size.width-25, 0, 25, 25);
-        self.deleteBadger.hidden = NO;
-        
-    }
-    else
-        self.deleteBadger.hidden = YES;
 }
 
 /*

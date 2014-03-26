@@ -495,6 +495,22 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		4C2FA10C18E323560078C097 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				4CA2506D1869517400AEA94E /* DiaryPhotoCell.h */,
+				4CA2506E1869517400AEA94E /* DiaryPhotoCell.m */,
+				4C68364E18BB0FD100FAA259 /* FilterCell.h */,
+				4C68364F18BB0FD100FAA259 /* FilterCell.m */,
+				4CA0368A18B7A12100015184 /* DiaryTableViewCell.h */,
+				4CA0368B18B7A12100015184 /* DiaryTableViewCell.m */,
+				4CA0368F18B7A29F00015184 /* DiaryTableViewCell.xib */,
+				4C68364918BAE4B200FAA259 /* AlbumPhotoCell.h */,
+				4C68364A18BAE4B200FAA259 /* AlbumPhotoCell.m */,
+			);
+			name = Cell;
+			sourceTree = "<group>";
+		};
 		4C315C7C18AB299500A2A363 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -535,34 +551,26 @@
 				4C5B01F318ACBD7E0030FCCC /* DiaryCreateViewController.h */,
 				4C5B01F418ACBD7E0030FCCC /* DiaryCreateViewController.m */,
 				4C5B01F518ACBD7E0030FCCC /* DiaryCreateViewController.xib */,
-				4C68364918BAE4B200FAA259 /* AlbumPhotoCell.h */,
-				4C68364A18BAE4B200FAA259 /* AlbumPhotoCell.m */,
 				4CBA4BB918CD9BFC00B380AB /* PhotoAlbumTableCell.h */,
 				4CBA4BBA18CD9BFC00B380AB /* PhotoAlbumTableCell.m */,
 				4CBA4BB518CD9B4F00B380AB /* PhotoAlbumTableCell.xib */,
 				4C6C49BE186DDB680042EB61 /* DiaryTableViewController.h */,
 				4C6C49BF186DDB680042EB61 /* DiaryTableViewController.m */,
 				4C6C935E18E00A19004D7D68 /* EmptyTableView.xib */,
-				4CA0368A18B7A12100015184 /* DiaryTableViewCell.h */,
-				4CA0368B18B7A12100015184 /* DiaryTableViewCell.m */,
-				4CA0368F18B7A29F00015184 /* DiaryTableViewCell.xib */,
 				4C5C8FF918A8730100B40F7E /* DiaryEntryViewController.h */,
 				4C5C8FFA18A8730100B40F7E /* DiaryEntryViewController.m */,
 				4C5C8FFB18A8730100B40F7E /* DiaryEntryViewController.xib */,
 				4CFFD581189775270070C33C /* DiaryPhotoViewController.h */,
 				4CFFD582189775270070C33C /* DiaryPhotoViewController.m */,
 				4CFFD583189775270070C33C /* DiaryPhotoViewController.xib */,
-				4C68364E18BB0FD100FAA259 /* FilterCell.h */,
-				4C68364F18BB0FD100FAA259 /* FilterCell.m */,
 				4C6C49C1186DDDDF0042EB61 /* DiaryViewController.h */,
 				4C6C49C2186DDDDF0042EB61 /* DiaryViewController.m */,
 				4C6C49C3186DDDDF0042EB61 /* DiaryViewController.xib */,
-				4CA2506D1869517400AEA94E /* DiaryPhotoCell.h */,
-				4CA2506E1869517400AEA94E /* DiaryPhotoCell.m */,
 				4C9CC3D118D943F400F899F0 /* DiaryPageViewController.h */,
 				4C9CC3D218D943F400F899F0 /* DiaryPageViewController.m */,
 				4C4E837818DEAD8200FA9A74 /* CircleProgressView.h */,
 				4C4E837918DEAD8200FA9A74 /* CircleProgressView.m */,
+				4C2FA10C18E323560078C097 /* Cell */,
 			);
 			name = View;
 			sourceTree = "<group>";

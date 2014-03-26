@@ -11,6 +11,5 @@
 @interface DiaryPhotoCell : UICollectionViewCell
 @property (strong,nonatomic) UIImageView *photoView;
 @property (strong,nonatomic) UILabel *deleteBadger;
-- (void)deletePhotoBadger:(BOOL)deletePhotoBadger;
 
 @end

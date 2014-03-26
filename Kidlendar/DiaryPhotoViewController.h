@@ -17,7 +17,6 @@
     __weak id<filterImageDelegate>_delegate;
 }
 @property (strong,nonatomic) UIImage *photoImage;
-@property (strong,nonatomic) UIImage *originalImage;
 @property (weak,nonatomic) id<filterImageDelegate>delegate;
 @property NSIndexPath *indexPath;
 @property CGSize cropRectSize;

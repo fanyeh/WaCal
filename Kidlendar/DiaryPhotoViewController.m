@@ -39,6 +39,8 @@ typedef NS_ENUM(NSInteger, FilterType)
     GPUImagePicture *stillImageSource;
     
     BOOL isCrop;
+    
+    UIImage *filteredImage;
 }
 @property (weak, nonatomic) IBOutlet UIImageView *photoImageView;
 @property (weak, nonatomic) IBOutlet UICollectionView *filterCollectionView;
@@ -76,14 +78,8 @@ typedef NS_ENUM(NSInteger, FilterType)
     
     // create crop rect pan gesture
     pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-    
-    if (!_photoImage) {
-        _originalImage = [[_originalImage cropWithFaceDetect:_photoImageView.frame.size] resizeImageToSize:_photoImageView.frame.size];
-        _photoImage = _originalImage;
-    } else {
-        _originalImage = [[_originalImage cropWithFaceDetect:_photoImageView.frame.size] resizeImageToSize:_photoImageView.frame.size];
-        _photoImage = [[_photoImage cropWithFaceDetect:_photoImageView.frame.size] resizeImageToSize:_photoImageView.frame.size];
-    }
+//    _photoImage = [[_photoImage cropWithFaceDetect:_photoImageView.frame.size] resizeImageToSize:_photoImageView.frame.size];
+    filteredImage = _photoImage;
     _photoImageView.image = _photoImage;
     [_photoImageView addGestureRecognizer:pan];
 
@@ -183,7 +179,7 @@ typedef NS_ENUM(NSInteger, FilterType)
     CGSize cellSize = CGSizeMake(70, 70);
     for (int i = 0;i<[filterName count]; i++) {
         if (i == 0)
-            [filterImageArray addObject:[_originalImage resizeImageToSize:cellSize]];
+            [filterImageArray addObject:[_photoImage resizeImageToSize:cellSize]];
         else
             [filterImageArray addObject:[[filterContainter objectAtIndex:i]imageByFilteringImage:[_photoImage resizeImageToSize:cellSize]]];
     }
@@ -326,7 +322,7 @@ typedef NS_ENUM(NSInteger, FilterType)
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0)
-        _photoImageView.image = _originalImage;
+        _photoImageView.image = _photoImage;
     else if (indexPath.row == 2) {
         GPUImageAmatorkaFilter *amatorkaFilter = [[GPUImageAmatorkaFilter alloc]init];
         _photoImageView.image = [amatorkaFilter imageByFilteringImage:_photoImage];
@@ -345,8 +341,8 @@ typedef NS_ENUM(NSInteger, FilterType)
         _photoImageView.image = [[filterContainter objectAtIndex:indexPath.row]imageByFilteringImage:_photoImage];
     }
     
-    _photoImage = _photoImageView.image;
-    stillImageSource = [[GPUImagePicture alloc] initWithImage:_photoImageView.image];
+    filteredImage = _photoImageView.image;
+    stillImageSource = [[GPUImagePicture alloc] initWithImage:filteredImage];
     [stillImageSource addTarget:brightnessFilter];
     [stillImageSource processImage];
     [brightnessFilter endProcessing];
@@ -379,7 +375,7 @@ typedef NS_ENUM(NSInteger, FilterType)
     _adjustSlider.minimumValue = -0.5f;
     _adjustSlider.maximumValue = 0.5f;
     [_adjustSlider setValue:brightnessFilter.brightness animated:NO];
-    stillImageSource = [[GPUImagePicture alloc] initWithImage:_photoImage];
+    stillImageSource = [[GPUImagePicture alloc] initWithImage:filteredImage];
     [stillImageSource addTarget:brightnessFilter];
     [stillImageSource processImage];
     [self showSlider];

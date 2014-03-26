@@ -16,10 +16,10 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="aWi-q9-vSS">
-                    <rect key="frame" x="250" y="54" width="44" height="44"/>
+                <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="aWi-q9-vSS" userLabel="facedetectivew">
+                    <rect key="frame" x="10" y="54" width="44" height="44"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.29999999999999999" colorSpace="calibratedWhite"/>
                 </imageView>
                 <view contentMode="scaleToFill" id="biw-ZG-Adq">
                     <rect key="frame" x="2" y="46" width="316" height="316"/>
