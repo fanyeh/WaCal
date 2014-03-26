@@ -315,7 +315,13 @@
         
         CGSize size = [sizeArray[i] CGSizeValue];
         
-        UIImage *resizeImage = fullScreenImageArray[i];
+        UIImage *resizeImage;
+
+        if ([fullScreenImageArray[i] isKindOfClass:[ALAsset class]]) {
+            ALAsset *asset = fullScreenImageArray[i];
+            resizeImage = [UIImage imageWithCGImage:[asset.defaultRepresentation fullScreenImage]];
+        } else
+            resizeImage = fullScreenImageArray[i];
         
         UIImage *cellImage;
         
@@ -331,7 +337,6 @@
         [diaryPhotosView performBatchUpdates:^{
             [diaryPhotosView reloadSections:[NSIndexSet indexSetWithIndex:0]];
             [faceDetectingActivity stopAnimating];
-            
         } completion:nil];
     }];
 }
@@ -341,7 +346,13 @@
     for (NSIndexPath *path in paths) {
         CGSize size = [sizeArray[path.row] CGSizeValue];
         
-        UIImage *fullScreenImage = fullScreenImageArray[path.row];
+        UIImage *fullScreenImage;
+        
+        if ([fullScreenImageArray[path.row] isKindOfClass:[ALAsset class]]) {
+            ALAsset *asset = fullScreenImageArray[path.row];
+            fullScreenImage = [UIImage imageWithCGImage:[asset.defaultRepresentation fullScreenImage]];
+        } else
+            fullScreenImage = fullScreenImageArray[path.row];
         
         UIImage *cellImage;
         
@@ -355,6 +366,7 @@
     
     [diaryPhotosView performBatchUpdates:^{
         [diaryPhotosView reloadItemsAtIndexPaths:paths];
+        [faceDetectingActivity stopAnimating];
     } completion:nil];
 }
 
@@ -427,6 +439,8 @@
     // Resize cell back when state ended or cancelled
     if (sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateCancelled)
     {
+        [faceDetectingActivity startAnimating];
+
         NSIndexPath *touchedCellPath = [diaryPhotosView indexPathForItemAtPoint:CGPointMake(sender.view.center.x, sender.view.center.y)];
         NSIndexPath *currentCellIndexPath = [diaryPhotosView indexPathForCell:cell];
         
@@ -440,6 +454,9 @@
         else if (touchedCellPath != currentCellIndexPath) {
             [self.view bringSubviewToFront:sender.view];
             
+            if ([sizeArray[currentCellIndexPath.row]isEqualToValue:sizeArray[touchedCellPath.row]])
+                [faceDetectingActivity stopAnimating];
+            
             [diaryPhotosView performBatchUpdates:^{
                 [diaryPhotosView moveItemAtIndexPath:currentCellIndexPath toIndexPath:touchedCellPath];
                 [diaryPhotosView moveItemAtIndexPath:touchedCellPath toIndexPath:currentCellIndexPath];
@@ -448,7 +465,7 @@
                 [fullScreenImageArray exchangeObjectAtIndex:currentCellIndexPath.row withObjectAtIndex:touchedCellPath.row];
                 
                 if (![sizeArray[currentCellIndexPath.row]isEqualToValue:sizeArray[touchedCellPath.row]])
-                [self processFaceDetectionWithIndexPath:@[currentCellIndexPath,touchedCellPath]];
+                    [self processFaceDetectionWithIndexPath:@[currentCellIndexPath,touchedCellPath]];
             }];
         }
     }
@@ -483,23 +500,18 @@
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
--(void)filteredImage:(UIImage *)image indexPath:(NSIndexPath *)path
+-(void)filteredImage:(UIImage *)fullImage andCropImage:(UIImage *)croppedImage indexPath:(NSIndexPath *)path
 {
-    NSArray *imageInfo =  selectedPhotoOrderingInfo[path.row];
-    
-    // Replace image in selectedPhotoDict
-    NSMutableDictionary *selectedPhotoDict = [selectedPhotoInfo objectForKey:imageInfo[1]];
-    [selectedPhotoDict setObject:image forKey:imageInfo[0]];
-    
     // Replace image in fullscreenimage array
-    fullScreenImageArray[path.row] = image;
-//
-//    [self processFaceDetectionWithIndexPath:path];
-    
+    fullScreenImageArray[path.row] = fullImage;
     CGSize cellSize = [sizeArray[path.row] CGSizeValue];
-    cellImageArray[path.row] = [image resizeImageToSize:cellSize];
-//    [diaryPhotosView reloadData];
-    [diaryPhotosView reloadItemsAtIndexPaths:@[path]];
+    if (croppedImage) {
+        cellImageArray[path.row] = [croppedImage resizeImageToSize:cellSize];
+        [diaryPhotosView reloadItemsAtIndexPaths:@[path]];
+    } else {
+        cellImageArray[path.row] = fullImage;
+        [self processFaceDetectionWithIndexPath:@[path]];
+    }
 }
 
 #pragma mark - Photo collection view relate
@@ -613,18 +625,18 @@
         [self showNextButton:YES];
     _noPhotoView.hidden = YES;
     ALAsset *asset =  [photoAssets objectAtIndex:indexPath.row];
-    
-    UIImage* image = [UIImage imageWithCGImage:[asset.defaultRepresentation fullScreenImage]];
-    
     // Create info array for diary collection view
-    NSArray *imageInfo = @[indexPath,assetGroupPropertyName,[NSNumber numberWithBool:NO]];
+    // ImageInfo[0] = indexpath
+    // ImageInfo[1] = assset group name
+    // ImageInfo[4] = asset
+    NSArray *imageInfo = @[indexPath,assetGroupPropertyName,asset];
     [selectedPhotoOrderingInfo addObject:imageInfo];
     
     // Save image meta data
     [imageMeta addObject:asset.defaultRepresentation.metadata];
     
     // Resize the image
-    [fullScreenImageArray addObject:image];
+    [fullScreenImageArray addObject:asset];
     navItem.rightBarButtonItem.title = [NSString stringWithFormat:@"%ld/5",(unsigned long)[fullScreenImageArray count]];
     
     AlbumPhotoCell *cell = (AlbumPhotoCell *)[photoCollectionView cellForItemAtIndexPath:indexPath];
@@ -711,39 +723,28 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (collectionView.tag==0) {
-        if (deleteDiaryPhotos) {
-            [collectionView performBatchUpdates:^{
-                // Get image info index path
-                NSArray *imageInfo = selectedPhotoOrderingInfo[indexPath.row];
-                
-                // Remove image from selectedPhotoDict and selectedPhotoOrderingInfo
-                [self removePhotoWithIndexPath:imageInfo[0]];
-                
-                // Remove image from resize image array
-                [fullScreenImageArray removeObjectAtIndex:indexPath.row];
-                [collectionView deleteItemsAtIndexPaths:@[indexPath]];
-                
-            } completion:^(BOOL finished) {
-                deleteDiaryPhotos = NO;
-                [self processFaceDetection];
-            }];
-        }
-        else {
-            DiaryPhotoViewController *photoViewController = [[DiaryPhotoViewController alloc]init];
-            
-            // Get image from selectedPhotoInfo
-            //            UIImage *photo = [self getPhotoWithImageInfo:[selectedPhotoOrderingInfo objectAtIndex:indexPath.row]];
-            UIImage *photo = [fullScreenImageArray objectAtIndex:indexPath.row];
-            photoViewController.cropRectSize = [sizeArray[indexPath.row] CGSizeValue];
-            photoViewController.photoImage = photo;
-            photoViewController.indexPath = indexPath;
-            photoViewController.delegate = self;
-            [self.navigationController pushViewController:photoViewController animated:YES];
-        }
-    }
-    
-    // Photo collection view select
 
+        DiaryPhotoViewController *photoViewController = [[DiaryPhotoViewController alloc]init];
+        photoViewController.cropRectSize = [sizeArray[indexPath.row] CGSizeValue];
+        photoViewController.indexPath = indexPath;
+        photoViewController.delegate = self;
+
+        ALAsset *asset;
+        // If image has not been filtered , pass image from asset library
+        if ([[fullScreenImageArray objectAtIndex:indexPath.row] isKindOfClass:[ALAsset class]]) {
+            asset = [fullScreenImageArray objectAtIndex:indexPath.row];
+        }
+        // Otherwise , pass both original and filterd image
+        else {
+            NSArray *imageInfo = [selectedPhotoOrderingInfo objectAtIndex:indexPath.row];
+            asset = imageInfo[2];
+            photoViewController.photoImage = [fullScreenImageArray objectAtIndex:indexPath.row];
+        }
+        photoViewController.originalImage = [UIImage imageWithCGImage:[asset.defaultRepresentation fullScreenImage]];
+
+        [self.navigationController pushViewController:photoViewController animated:YES];
+    }
+    // Photo collection view select
     else {
         photoCollectionView.userInteractionEnabled = NO;
         ALAsset *asset =  [photoAssets objectAtIndex:indexPath.row];
@@ -821,7 +822,8 @@
     for (NSArray *imageInfo in selectedPhotoOrderingInfo) {
         // ImageInfo[0] = indexpath
         // ImageInfo[1] = assset group name
-        // ImageInfo[3] = crop status
+        // ImageInfo[2] = asset
+        
         if (imageInfo[0] == path) {
             
             // Remove image from resize image array
@@ -851,17 +853,6 @@
     // Reload diary view data
     [diaryPhotosView reloadData];
 }
-
-#pragma mark -Get Photo
-
-- (UIImage *)getPhotoWithImageInfo:(NSArray *)imageInfo
-{
-    // Remove image from selectedPhotoDict - dict selected based on assetgroup name
-    NSMutableDictionary *selectedPhotoDict = [selectedPhotoInfo objectForKey:imageInfo[1]];
-    UIImage *image = [selectedPhotoDict objectForKey:imageInfo[0]];
-    return image;
-}
-
 
 #pragma mark -UICollectionViewDelegateFlowlayout
 

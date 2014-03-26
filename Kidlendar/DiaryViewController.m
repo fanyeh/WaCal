@@ -218,6 +218,8 @@
 
     if (appDelegate.facebookAccount)
     {
+        _circleProgressView.hidden = NO;
+        _facebookImageView.hidden = YES;
         [self proceedVideoUploadToFB];
     }
     else

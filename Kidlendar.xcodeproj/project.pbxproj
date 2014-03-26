@@ -33,6 +33,10 @@
 		4C1E40BE18B4619B00A273A1 /* libGPUImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C1E40B918B4616300A273A1 /* libGPUImage.a */; };
 		4C23964618B3B5E800BB87E7 /* TempDiaryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C23964518B3B5E800BB87E7 /* TempDiaryData.m */; };
 		4C2E83BD1890BB450051215F /* CalendarStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2E83BC1890BB450051215F /* CalendarStore.m */; };
+		4C2FA10318E2AF040078C097 /* brightnessLight22@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2FA0FF18E2AF040078C097 /* brightnessLight22@2x.png */; };
+		4C2FA10418E2AF040078C097 /* brightnessDark22@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2FA10018E2AF040078C097 /* brightnessDark22@2x.png */; };
+		4C2FA10A18E2B2500078C097 /* cropBar35@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2FA10818E2B2500078C097 /* cropBar35@2x.png */; };
+		4C2FA10B18E2B2500078C097 /* brightness35@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2FA10918E2B2500078C097 /* brightness35@2x.png */; };
 		4C315C7B18AB298800A2A363 /* PhotoLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C315C7A18AB298800A2A363 /* PhotoLoader.m */; };
 		4C3ECBBD18BC3C75002CD2FB /* WeekdayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ECBBC18BC3C75002CD2FB /* WeekdayView.m */; };
 		4C3EDA6F18C0CB1D00FD7235 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3EDA6E18C0CB1D00FD7235 /* MobileCoreServices.framework */; };
@@ -205,6 +209,10 @@
 		4C23964518B3B5E800BB87E7 /* TempDiaryData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TempDiaryData.m; sourceTree = "<group>"; };
 		4C2E83BB1890BB450051215F /* CalendarStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarStore.h; sourceTree = "<group>"; };
 		4C2E83BC1890BB450051215F /* CalendarStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarStore.m; sourceTree = "<group>"; };
+		4C2FA0FF18E2AF040078C097 /* brightnessLight22@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "brightnessLight22@2x.png"; sourceTree = "<group>"; };
+		4C2FA10018E2AF040078C097 /* brightnessDark22@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "brightnessDark22@2x.png"; sourceTree = "<group>"; };
+		4C2FA10818E2B2500078C097 /* cropBar35@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cropBar35@2x.png"; sourceTree = "<group>"; };
+		4C2FA10918E2B2500078C097 /* brightness35@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "brightness35@2x.png"; sourceTree = "<group>"; };
 		4C315C7918AB298800A2A363 /* PhotoLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoLoader.h; sourceTree = "<group>"; };
 		4C315C7A18AB298800A2A363 /* PhotoLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoLoader.m; sourceTree = "<group>"; };
 		4C3ECBBB18BC3C75002CD2FB /* WeekdayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeekdayView.h; sourceTree = "<group>"; };
@@ -685,6 +693,10 @@
 		4CB3DD6F18521DC400673478 = {
 			isa = PBXGroup;
 			children = (
+				4C2FA10818E2B2500078C097 /* cropBar35@2x.png */,
+				4C2FA10918E2B2500078C097 /* brightness35@2x.png */,
+				4C2FA0FF18E2AF040078C097 /* brightnessLight22@2x.png */,
+				4C2FA10018E2AF040078C097 /* brightnessDark22@2x.png */,
 				4C80F2F618E1654600B4600C /* Icon.png */,
 				4C1E40B218B4616300A273A1 /* GPUImage.xcodeproj */,
 				4CB3DD8118521DC400673478 /* Kidlendar */,
@@ -921,6 +933,7 @@
 				4C7EA5F518DAB48000460153 /* video@2x.png in Resources */,
 				4CDE496518DBD6DD0062DE9E /* alarmTag20@2x.png in Resources */,
 				4C3FBA5818C4CCFF0097C67D /* face_yellow.png in Resources */,
+				4C2FA10418E2AF040078C097 /* brightnessDark22@2x.png in Resources */,
 				4C0E893818DBEDFD008F0842 /* eventLocationLine20@2x.png in Resources */,
 				4C0E892A18DBE121008F0842 /* newDiary22@2x.png in Resources */,
 				4C0E893918DBEDFD008F0842 /* eventLocationFill20@2x.png in Resources */,
@@ -959,9 +972,12 @@
 				4C80F2F218E11FB300B4600C /* lookup_miss_etikate.png in Resources */,
 				4C0E893A18DBEDFD008F0842 /* eventCalendarLine20@2x.png in Resources */,
 				4CF5152918C325730050E330 /* MetroUI-Apps-Dropbox-icon.png in Resources */,
+				4C2FA10B18E2B2500078C097 /* brightness35@2x.png in Resources */,
 				4C6C936A18E01E13004D7D68 /* emptyDiary90@2x.png in Resources */,
 				4C3FBA5718C4CCFF0097C67D /* face_white.png in Resources */,
 				4C6C936F18E0712F004D7D68 /* uploadCircle50@2x.png in Resources */,
+				4C2FA10A18E2B2500078C097 /* cropBar35@2x.png in Resources */,
+				4C2FA10318E2AF040078C097 /* brightnessLight22@2x.png in Resources */,
 				4CF592E1186D5BE500F1BEEB /* MonthViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

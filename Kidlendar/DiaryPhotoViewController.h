@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 @protocol filterImageDelegate <NSObject>
 @required
-- (void)filteredImage:(UIImage *)image indexPath:(NSIndexPath *)path;
+-(void)filteredImage:(UIImage *)fullImage andCropImage:(UIImage *)croppedImage indexPath:(NSIndexPath *)path;
 @end
 
 @interface DiaryPhotoViewController : UIViewController
@@ -17,6 +17,7 @@
     __weak id<filterImageDelegate>_delegate;
 }
 @property (strong,nonatomic) UIImage *photoImage;
+@property (strong,nonatomic) UIImage *originalImage;
 @property (weak,nonatomic) id<filterImageDelegate>delegate;
 @property NSIndexPath *indexPath;
 @property CGSize cropRectSize;
