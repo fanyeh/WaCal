@@ -16,6 +16,7 @@
 #import "SelectedLocation.h"
 #import "LocationDataStore.h"
 #import "MapViewController.h"
+#import "Reachability.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 #define kGOOGLE_API_KEY @"AIzaSyAD9e182Fr19_2DcJFZYUHf6wEeXjxs_kQ"
@@ -170,8 +171,11 @@
     _startTimeLabel.text = [timeFormatter stringFromDate:_selectedDate];
     _startDateLabel.text = [dateFormatter stringFromDate:_selectedDate];
     
-    _endTimeLabel.text = [timeFormatter stringFromDate:[NSDate dateWithTimeInterval:300 sinceDate:_selectedDate]];
-    _endDateLabel.text =  [dateFormatter stringFromDate:[NSDate dateWithTimeInterval:300 sinceDate:_selectedDate]];
+    _endTimeLabel.text = [timeFormatter stringFromDate:[NSDate dateWithTimeInterval:3600 sinceDate:_selectedDate]];
+    _endDateLabel.text =  [dateFormatter stringFromDate:[NSDate dateWithTimeInterval:3600 sinceDate:_selectedDate]];
+    
+    minimumDate = [NSDate dateWithTimeInterval:300 sinceDate:_selectedDate];
+    _datePicker.minimumDate = minimumDate;
     
     // Initialize new event
     event = [EKEvent eventWithEventStore:[[CalendarStore sharedStore]eventStore]];
@@ -250,8 +254,7 @@
     [self hideAllImage];
     switch (textField.tag) {
         case 1:
-            if ([_subjectField isFirstResponder])
-                _datePicker.minimumDate = nil;
+            _datePicker.minimumDate = nil;
             [_datePicker setDate:event.startDate];
             _startTimeView.backgroundColor = MainColor;
             _startDateLabel.textColor = [UIColor whiteColor];
@@ -259,9 +262,7 @@
             _startTimeArrow.hidden = NO;
             break;
         case 2:
-            _datePicker.minimumDate = minimumDate;
             [_datePicker setDate:event.endDate];
-            
             _endTimeView.backgroundColor = MainColor;
             _endTimeLabel.textColor = [UIColor whiteColor];
             _endDateLabel.textColor = [UIColor whiteColor];
@@ -293,6 +294,7 @@
             _startDateLabel.textColor = [UIColor blackColor];
             _startTimeLabel.textColor = [UIColor blackColor];
             _startTimeArrow.hidden = YES;
+            _datePicker.minimumDate = minimumDate;
             break;
         case 2:
             _endTimeView.backgroundColor = [UIColor whiteColor];
@@ -304,13 +306,62 @@
     }
 }
 
-//- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
-//{
-//    _saveButton.hidden = NO;
-//    return YES;
-//}
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    if (textField.returnKeyType == UIReturnKeySearch) {
+        if ([self checkInternetConnection]) {
+            _locationSearchBar.text = _locationField.text;
+            
+            // Start searching from google when search key is pressed
+            [self queryGooglePlaces:_locationField.text];
+            
+            // Show the search table and search bar
+            _maskView.hidden = NO;
+            [_locationSearchBar becomeFirstResponder];
+            return YES;
+        } else
+            return NO;
+    }
+    return YES;
+}
 
 #pragma mark - User actions
+-(void)changeDate
+{
+    if (!event.allDay) {
+        if (_startTimeField.isFirstResponder) {
+            _startDateLabel.text = [dateFormatter stringFromDate: _datePicker.date];
+            _startTimeLabel.text = [timeFormatter stringFromDate: _datePicker.date];
+            event.startDate = _datePicker.date;
+            
+            // Minimum end time after start time is selected
+            minimumDate = [NSDate dateWithTimeInterval:300 sinceDate:_datePicker.date];
+            event.endDate = [NSDate dateWithTimeInterval:3600 sinceDate:_datePicker.date];
+            _endDateLabel.text = [dateFormatter stringFromDate:event.endDate];
+            _endTimeLabel.text = [timeFormatter stringFromDate:event.endDate];
+        }
+        else {
+            _endTimeLabel.text = [timeFormatter stringFromDate: _datePicker.date];
+            _endDateLabel.text = [dateFormatter stringFromDate: _datePicker.date];
+            event.endDate = _datePicker.date;
+        }
+    }
+    else {
+        if (_startTimeField.isFirstResponder) {
+            _startDateLabel.text = [dateFormatter stringFromDate: _datePicker.date];
+            event.startDate = _datePicker.date;
+
+            minimumDate = _datePicker.date;
+
+            _endDateLabel.text = [dateFormatter stringFromDate:minimumDate];
+            event.endDate = minimumDate;
+        }
+        else {
+            _endDateLabel.text = [dateFormatter stringFromDate: _datePicker.date];
+            event.endDate = _datePicker.date;
+        }
+    }
+}
 
 - (void)showImage:(NSInteger)tag
 {
@@ -442,7 +493,7 @@
 - (void)searchLocation
 {
     _locationSearchBar.text = _locationField.text;
-    [self queryGooglePlacesLongitude:_locationField.text];
+    [self queryGooglePlaces:_locationField.text];
     _maskView.hidden = NO;
 }
 
@@ -471,7 +522,7 @@
 
     } else {
         event.allDay = YES;
-        _alldayView.backgroundColor = CustomRedColor;
+        _alldayView.backgroundColor = MainColor;
         _alldayView.layer.borderWidth = 0.0f;
         _allLabel.textColor = [UIColor whiteColor];
         _dayLabel.textColor = [UIColor whiteColor];
@@ -485,43 +536,6 @@
         _endTimeLabel.hidden = YES;
         
         _datePicker.datePickerMode = UIDatePickerModeDate;
-    }
-}
-
--(void)changeDate
-{
-    if (!event.allDay) {
-        if (_startTimeField.isFirstResponder) {
-            _startDateLabel.text = [dateFormatter stringFromDate: _datePicker.date];
-            _startTimeLabel.text = [timeFormatter stringFromDate: _datePicker.date];
-            event.startDate = _datePicker.date;
-            
-            // Minimum end time after start time is selected
-            minimumDate = [NSDate dateWithTimeInterval:300 sinceDate:_datePicker.date];
-            _endDateLabel.text = [dateFormatter stringFromDate:minimumDate];
-            _endTimeLabel.text = [timeFormatter stringFromDate:minimumDate];
-            event.endDate = minimumDate;
-        }
-        else {
-            _endTimeLabel.text = [timeFormatter stringFromDate: _datePicker.date];
-            _endDateLabel.text = [dateFormatter stringFromDate: _datePicker.date];
-            event.endDate = _datePicker.date;
-        }
-    }
-    else {
-        if (_startTimeField.isFirstResponder) {
-            _startDateLabel.text = [dateFormatter stringFromDate: _datePicker.date];
-            event.startDate = _datePicker.date;
-            
-            // Minimum end time after start time is selected
-            minimumDate = [NSDate dateWithTimeInterval:60*60*24 sinceDate:_datePicker.date];
-            _endDateLabel.text = [dateFormatter stringFromDate:minimumDate];
-            event.endDate = minimumDate;
-        }
-        else {
-            _endDateLabel.text = [dateFormatter stringFromDate: _datePicker.date];
-            event.endDate = _datePicker.date;
-        }
     }
 }
 
@@ -722,7 +736,7 @@
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     _locationField.text = searchBar.text;
-    [self queryGooglePlacesLongitude:searchBar.text];
+    [self queryGooglePlaces:searchBar.text];
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
@@ -772,25 +786,9 @@
     _mapIcon.hidden = NO;
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-    if (textField.returnKeyType == UIReturnKeySearch) {
-        _locationSearchBar.text = _locationField.text;
-        
-        // Start searching from google when search key is pressed
-        [self queryGooglePlacesLongitude:_locationField.text];
-        
-        // Show the search table and search bar
-        _maskView.hidden = NO;
-        [_locationSearchBar becomeFirstResponder];
-    }
-    [textField resignFirstResponder];
-    return YES;
-}
-
 #pragma mark - Google Places Search
 
--(void) queryGooglePlacesLongitude:(NSString *)name
+-(void) queryGooglePlaces:(NSString *)name
 {
     // Sensor = true means search using GPS
     NSString *url;
@@ -825,6 +823,19 @@
                                    NSLog(@"error %@",connectionError);
                                }
                            }];
+}
+
+- (BOOL)checkInternetConnection
+{
+    Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
+    NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
+    if (networkStatus == NotReachable) {
+        UIAlertView *noInternetAlert = [[UIAlertView alloc]initWithTitle:nil message:@"No Internet Connection" delegate:self cancelButtonTitle:@"Close" otherButtonTitles:nil, nil];
+        [noInternetAlert show];
+        return NO;
+    } else {
+        return YES;
+    }
 }
 
 @end

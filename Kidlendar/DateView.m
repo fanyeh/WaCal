@@ -25,15 +25,9 @@
                                                               32,
                                                               32
                                                               )];
-//        NSValue *rect = [NSValue valueWithCGRect:CGRectMake(sizeOffset/2,
-//                                                            1,
-//                                                            self.frame.size.width-sizeOffset,
-//                                                            self.frame.size.width-sizeOffset
-//                                                            )];
-//        NSLog(@"Rect %@",rect);
-        _dateLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:20];
+
+        _dateLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:19];
         _dateLabel.textAlignment = NSTextAlignmentCenter;
-//        _dateLabel.layer.cornerRadius = _dateLabel.frame.size.width/2;
         [self addSubview:_dateLabel];
         _dateLabel.opaque = YES;
         _isToday = NO;
@@ -67,16 +61,5 @@
     hasDiaryView.backgroundColor = Rgb2UIColor(41, 217, 194);
     [self addSubview:hasDiaryView];
 }
-
-
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
 
 @end

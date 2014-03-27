@@ -17,7 +17,7 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import "PhotoAlbumTableCell.h"
 
-#define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
+#define MainColor [UIColor colorWithRed:(64 / 255.0) green:(98 / 255.0) blue:(124 / 255.0) alpha:1.0]
 
 static int deleteLabelSize = 30;
 
@@ -100,12 +100,13 @@ static int deleteLabelSize = 30;
     self.navigationItem.title = @"Photos";
     
     videoView = [[UIView alloc]initWithFrame:CGRectMake(2, 46, 316, 316)];
-    UITapGestureRecognizer *videoTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(cancelMPMoviePlayer)];
+    UITapGestureRecognizer *videoTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(playMovie)];
     [videoView addGestureRecognizer:videoTap];
     
     videoImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 316, 316)];
     videoImageView.userInteractionEnabled  = YES;
-    
+    UILongPressGestureRecognizer *showDeleteVideo = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(showDeleteVideoButton:)];
+    [videoImageView addGestureRecognizer:showDeleteVideo];
     
     videoDeleteLabel = [[UILabel alloc]initWithFrame:CGRectMake(videoView.frame.size.width-deleteLabelSize-3, 3, deleteLabelSize, deleteLabelSize)];
     videoDeleteLabel.backgroundColor = [UIColor redColor];
@@ -118,16 +119,13 @@ static int deleteLabelSize = 30;
     videoDeleteLabel.layer.borderWidth = 2.0f;
     videoDeleteLabel.layer.cornerRadius = videoDeleteLabel.frame.size.width/2;
     videoDeleteLabel.hidden = YES;
-    UILongPressGestureRecognizer *showDeleteVideo = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(showDeleteVideoButton:)];
-    [videoImageView addGestureRecognizer:showDeleteVideo];
-    
-    UITapGestureRecognizer *videoDeleteTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(playMovie)];
+    videoDeleteLabel.userInteractionEnabled = YES;
+    UITapGestureRecognizer *videoDeleteTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(cancelMPMoviePlayer)];
     [videoDeleteLabel addGestureRecognizer:videoDeleteTap];
     
     [videoView addSubview:videoImageView];
     [videoView addSubview:videoDeleteLabel];
     [self.view addSubview:videoView];
-
     
     UIView *videoPlayView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 88, 88)];
     videoPlayView.layer.borderColor = [[UIColor whiteColor]CGColor];
@@ -539,7 +537,7 @@ static int deleteLabelSize = 30;
         
         CABasicAnimation* anim = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
         [anim setToValue:[NSNumber numberWithFloat:0.0f]];
-        [anim setFromValue:[NSNumber numberWithDouble:M_PI/32]]; // rotation angle
+        [anim setFromValue:[NSNumber numberWithDouble:M_PI/48]]; // rotation angle
         [anim setDuration:0.1];
         [anim setRepeatCount:1];
         [anim setAutoreverses:YES];
@@ -569,7 +567,7 @@ static int deleteLabelSize = 30;
     if (sender.state == UIGestureRecognizerStateBegan) {
         CABasicAnimation* anim = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
         [anim setToValue:[NSNumber numberWithFloat:0.0f]];
-        [anim setFromValue:[NSNumber numberWithDouble:M_PI/32]]; // rotation angle
+        [anim setFromValue:[NSNumber numberWithDouble:M_PI/48]]; // rotation angle
         [anim setDuration:0.1];
         [anim setRepeatCount:1];
         [anim setAutoreverses:YES];
@@ -1207,11 +1205,6 @@ static int deleteLabelSize = 30;
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
--(void)dealloc
-{
-
 }
 
 @end

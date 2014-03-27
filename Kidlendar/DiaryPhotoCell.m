@@ -21,7 +21,7 @@
         _deleteBadger.text = @"X";
         _deleteBadger.textColor = [UIColor whiteColor];
         _deleteBadger.textAlignment = NSTextAlignmentCenter;
-        _deleteBadger.font = [UIFont fontWithName:@"Helvetica-Bold" size:13];
+        _deleteBadger.font = [UIFont fontWithName:@"Helvetica-Bold" size:14];
         _deleteBadger.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.500];
         _deleteBadger.userInteractionEnabled = YES;
         [self addSubview:_deleteBadger];

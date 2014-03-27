@@ -15,6 +15,7 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "UIImage+Resize.h"
 #import "FileManager.h"
+#import "Reachability.h"
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 #define kGOOGLE_API_KEY @"AIzaSyAD9e182Fr19_2DcJFZYUHf6wEeXjxs_kQ"
@@ -25,11 +26,13 @@
 {
     UIDatePicker *datePicker;
     NSDateFormatter *dateFormatter;
+    NSDateFormatter *photoDateFormatter;
+
     NSArray* places;
     double locationLng;
     double locationLat;
     BOOL hasText;
-    BOOL locationFirstLoad;
+//    BOOL locationFirstLoad;
 }
 @property (weak, nonatomic) IBOutlet UIView *contentView;
 @property (weak, nonatomic) IBOutlet UIView *searchMaskView;
@@ -96,6 +99,10 @@
     dateFormatter.dateFormat = @"yyyy/MM/dd";
     dateFormatter.timeZone = [NSTimeZone systemTimeZone];
     
+    photoDateFormatter = [[NSDateFormatter alloc]init];
+    photoDateFormatter.dateFormat = @"yyyy:MM:dd hh:mm:ss";
+    photoDateFormatter.timeZone = [NSTimeZone systemTimeZone];
+    
     _diaryEntryView.delegate = self;
     _diaryEntryView.text = @"This moment...";
     hasText = NO;
@@ -112,7 +119,7 @@
     locationTag.center = locationLeftView.center;
     _locationField.rightView = locationLeftView;
     _locationField.rightViewMode = UITextFieldViewModeAlways;
-    locationFirstLoad = YES;
+//    locationFirstLoad = YES;
     
     _diaryTimeField.delegate = self;
     _diaryTimeField.inputView = datePicker;
@@ -135,13 +142,24 @@
     // Query place from Google Places using location in selected photo
     if ([_imageMeta count] > 0) {
         for (NSDictionary *meta in _imageMeta) {
-            NSDictionary *GPS = [meta objectForKey:@"{GPS}"];
-            double longitude = [[GPS objectForKey:@"Longitude"] doubleValue];
-            double latitude = [[GPS objectForKey:@"Latitude"] doubleValue];
-            [self queryGooglePlacesLongitude:longitude andLatitude:latitude withName:nil];
+//            NSDictionary *GPS = [meta objectForKey:@"{GPS}"];
+//            double longitude = [[GPS objectForKey:@"Longitude"] doubleValue];
+//            double latitude = [[GPS objectForKey:@"Latitude"] doubleValue];
+//            [self queryGooglePlacesLongitude:longitude andLatitude:latitude withName:nil];
+            
+            NSDictionary *TIFF = [meta objectForKey:@"{TIFF}"];
+            if (TIFF) {
+                NSString *dateTime = [TIFF objectForKey:@"DateTime"];
+                if (dateTime) {
+                    NSDate *photoDate = [photoDateFormatter dateFromString:dateTime];
+                    _diaryTimeField.text = [dateFormatter stringFromDate:photoDate];
+                    datePicker.date = photoDate;
+                }
+            }
+            
         }
-    } else {
-        locationFirstLoad = NO;
+//    } else {
+//        locationFirstLoad = NO;
     }
     _locationSearchView.layer.cornerRadius = 10.0f;
 }
@@ -264,25 +282,30 @@
 
 #pragma mark - UITextFieldDelegate
 
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
-{
-    if (textField.tag == 9 && locationFirstLoad) {
-        [_locationSearchBar becomeFirstResponder];
-        _searchMaskView.hidden = NO;
-        locationFirstLoad = NO;
-    }
-    return YES;
-}
+//- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+//{
+//    if (textField.tag == 9 && locationFirstLoad) {
+//        if ([self checkInternetConnection]) {
+//            [_locationSearchBar becomeFirstResponder];
+//            _searchMaskView.hidden = NO;
+//            locationFirstLoad = NO;
+//        }
+//    }
+//    return YES;
+//}
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     if (textField.returnKeyType == UIReturnKeySearch) {
-        _locationSearchBar.text = _locationField.text;
-        [self queryGooglePlacesLongitude:0 andLatitude:0 withName:_locationField.text];
-        _searchMaskView.hidden = NO;
-        [_locationSearchBar becomeFirstResponder];
+        if ([self checkInternetConnection]) {
+            _locationSearchBar.text = _locationField.text;
+            [self queryGooglePlacesLongitude:0 andLatitude:0 withName:_locationField.text];
+            _searchMaskView.hidden = NO;
+            [_locationSearchBar becomeFirstResponder];
+            return YES;
+        }else
+            return NO;
     }
-    [textField resignFirstResponder];
     if (textField.tag == 0) {
         [_diaryTimeField becomeFirstResponder];
     }
@@ -352,6 +375,19 @@
                                    NSLog(@"error %@",connectionError);
                                }
                            }];
+}
+
+- (BOOL)checkInternetConnection
+{
+    Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
+    NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
+    if (networkStatus == NotReachable) {
+        UIAlertView *noInternetAlert = [[UIAlertView alloc]initWithTitle:nil message:@"No Internet Connection" delegate:self cancelButtonTitle:@"Close" otherButtonTitles:nil, nil];
+        [noInternetAlert show];
+        return NO;
+    } else {
+        return YES;
+    }
 }
 
 @end
