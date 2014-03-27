@@ -233,7 +233,7 @@ static int deleteLabelSize = 30;
     photoLoader = [[PhotoLoader alloc]initWithSourceType:kSourceTypeAll];
     photoAssets = [[NSMutableArray alloc]init];
     
-    nextButton = [[UIBarButtonItem alloc]initWithTitle:@"Next" style:UIBarButtonItemStylePlain target:self action:@selector(doneSelection)];
+    nextButton = [[UIBarButtonItem alloc]initWithTitle:@"Words" style:UIBarButtonItemStylePlain target:self action:@selector(doneSelection)];
     
     // Face detection
     faceDetectingActivity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];

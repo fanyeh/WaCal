@@ -43,6 +43,9 @@
 		4C3FBA5718C4CCFF0097C67D /* face_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C3FBA5518C4CCFF0097C67D /* face_white.png */; };
 		4C3FBA5818C4CCFF0097C67D /* face_yellow.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C3FBA5618C4CCFF0097C67D /* face_yellow.png */; };
 		4C417E7618714A4C000878FC /* DiaryDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C417E7518714A4C000878FC /* DiaryDataStore.m */; };
+		4C42E50118E4706900DB4D1C /* ICON-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C42E4FF18E4706900DB4D1C /* ICON-2.png */; };
+		4C42E50218E4706900DB4D1C /* ICON-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C42E50018E4706900DB4D1C /* ICON-1.png */; };
+		4C42E50818E4712E00DB4D1C /* LaunchImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C42E50718E4712E00DB4D1C /* LaunchImage.png */; };
 		4C48FFAA188D65580038AE6F /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFA9188D65580038AE6F /* CoreMedia.framework */; };
 		4C48FFAC188D65620038AE6F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFAB188D65620038AE6F /* CoreVideo.framework */; };
 		4C48FFAD188D656F0038AE6F /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFA7188D61C40038AE6F /* OpenGLES.framework */; };
@@ -224,6 +227,9 @@
 		4C3FBA5618C4CCFF0097C67D /* face_yellow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = face_yellow.png; sourceTree = "<group>"; };
 		4C417E7418714A4C000878FC /* DiaryDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiaryDataStore.h; path = ../DiaryDataStore.h; sourceTree = "<group>"; };
 		4C417E7518714A4C000878FC /* DiaryDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiaryDataStore.m; path = ../DiaryDataStore.m; sourceTree = "<group>"; };
+		4C42E4FF18E4706900DB4D1C /* ICON-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ICON-2.png"; sourceTree = "<group>"; };
+		4C42E50018E4706900DB4D1C /* ICON-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ICON-1.png"; sourceTree = "<group>"; };
+		4C42E50718E4712E00DB4D1C /* LaunchImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchImage.png; sourceTree = "<group>"; };
 		4C48FFA7188D61C40038AE6F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		4C48FFA9188D65580038AE6F /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		4C48FFAB188D65620038AE6F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
@@ -701,6 +707,9 @@
 		4CB3DD6F18521DC400673478 = {
 			isa = PBXGroup;
 			children = (
+				4C42E50718E4712E00DB4D1C /* LaunchImage.png */,
+				4C42E4FF18E4706900DB4D1C /* ICON-2.png */,
+				4C42E50018E4706900DB4D1C /* ICON-1.png */,
 				4C2FA10818E2B2500078C097 /* cropBar35@2x.png */,
 				4C2FA10918E2B2500078C097 /* brightness35@2x.png */,
 				4C2FA0FF18E2AF040078C097 /* brightnessLight22@2x.png */,
@@ -939,6 +948,8 @@
 				4CDE496318DBD6DD0062DE9E /* recurrenceTag20@2x.png in Resources */,
 				4C6C49C5186DDDDF0042EB61 /* DiaryViewController.xib in Resources */,
 				4C7EA5F518DAB48000460153 /* video@2x.png in Resources */,
+				4C42E50818E4712E00DB4D1C /* LaunchImage.png in Resources */,
+				4C42E50218E4706900DB4D1C /* ICON-1.png in Resources */,
 				4CDE496518DBD6DD0062DE9E /* alarmTag20@2x.png in Resources */,
 				4C3FBA5818C4CCFF0097C67D /* face_yellow.png in Resources */,
 				4C2FA10418E2AF040078C097 /* brightnessDark22@2x.png in Resources */,
@@ -981,6 +992,7 @@
 				4C0E893A18DBEDFD008F0842 /* eventCalendarLine20@2x.png in Resources */,
 				4CF5152918C325730050E330 /* MetroUI-Apps-Dropbox-icon.png in Resources */,
 				4C2FA10B18E2B2500078C097 /* brightness35@2x.png in Resources */,
+				4C42E50118E4706900DB4D1C /* ICON-2.png in Resources */,
 				4C6C936A18E01E13004D7D68 /* emptyDiary90@2x.png in Resources */,
 				4C3FBA5718C4CCFF0097C67D /* face_white.png in Resources */,
 				4C6C936F18E0712F004D7D68 /* uploadCircle50@2x.png in Resources */,
@@ -1197,7 +1209,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1223,7 +1234,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
