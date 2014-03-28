@@ -11,19 +11,24 @@
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 
 @implementation DateView
+{
+    float labelSize;
+    float dotSize;
+    float dotY;
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        float sizeOffset = 14;
+        labelSize = 29;
+        dotSize = 6;
         self.backgroundColor = [UIColor whiteColor];
-        self.opaque = YES;
-        _dateLabel = [[UILabel alloc]initWithFrame:CGRectMake(sizeOffset/2,
+        _dateLabel = [[UILabel alloc]initWithFrame:CGRectMake((self.frame.size.width - labelSize)/2,
                                                               1,
-                                                              32,
-                                                              32
+                                                              labelSize,
+                                                              labelSize
                                                               )];
 
         _dateLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:19];
@@ -32,16 +37,17 @@
         _dateLabel.opaque = YES;
         _isToday = NO;
         _isSelected = NO;
+        dotY = _dateLabel.frame.size.height+3;
     }
     return self;
 }
 
 -(void)addHasEventView
 {
-    UIView *hasEventView = [[UIView alloc]initWithFrame:CGRectMake(_dateLabel.center.x -self.frame.size.width/7-2,
-                                                                   _dateLabel.frame.size.height+2,
-                                                                   8,
-                                                                   8)];
+    UIView *hasEventView = [[UIView alloc]initWithFrame:CGRectMake(_dateLabel.center.x - dotSize - 3,
+                                                                   dotY,
+                                                                   dotSize,
+                                                                   dotSize)];
     
     hasEventView.layer.cornerRadius = hasEventView.frame.size.width/2;
     
@@ -51,15 +57,21 @@
 
 -(void)addHasDiaryView
 {
-    UIView *hasDiaryView = [[UIView alloc]initWithFrame:CGRectMake(_dateLabel.center.x +2,
-                                                                   _dateLabel.frame.size.height+2,
-                                                                   8,
-                                                                   8)];
+    UIView *hasDiaryView = [[UIView alloc]initWithFrame:CGRectMake(_dateLabel.center.x + 3,
+                                                                   dotY,
+                                                                   dotSize,
+                                                                   dotSize)];
     
     hasDiaryView.layer.cornerRadius = hasDiaryView.frame.size.width/2;
     
     hasDiaryView.backgroundColor = Rgb2UIColor(41, 217, 194);
     [self addSubview:hasDiaryView];
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    _dateLabel.layer.cornerRadius = _dateLabel.frame.size.width/2;
 }
 
 @end

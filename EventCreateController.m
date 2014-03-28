@@ -36,13 +36,13 @@
     RepeatView *repeat;
     EKAlarm *alarm;
     EKRecurrenceRule *recurrenceRule;
-    CGRect hideFrame;
     NSArray *places;
     SelectedLocation *selectedLocation;
     CGRect saveButtonFrame;
     CGRect saveButtonFrameMove;
     EKCalendar *selectedCalendar;
     CLLocationCoordinate2D destination;
+    UIView *toolView;
 }
 
 @property (weak, nonatomic) IBOutlet UITextField *subjectField;
@@ -63,7 +63,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *dayLabel;
 @property (weak, nonatomic) IBOutlet UIView *startTimeView;
 @property (weak, nonatomic) IBOutlet UIView *endTimeView;
-@property (weak, nonatomic) IBOutlet UIButton *saveButton;
 @property (weak, nonatomic) IBOutlet UILabel *repeatLabel;
 @property (weak, nonatomic) IBOutlet UILabel *reminderLabel;
 @property (weak, nonatomic) IBOutlet UILabel *reminderValueLabel;
@@ -77,6 +76,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *repeatImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *calendarImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *startTimeArrow;
+@property (weak, nonatomic) IBOutlet UITextField *reminderTextField;
+@property (weak, nonatomic) IBOutlet UITextField *repeatTextField;
 
 @end
 
@@ -98,6 +99,17 @@
     
     // Navgition bar
     self.navigationItem.title = @"New Event";
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    
+    toolView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 40)];
+    toolView.backgroundColor = [UIColor whiteColor];
+    
+    UIButton *saveButton = [[UIButton alloc]initWithFrame:CGRectMake(320-45, 2.5, 35, 35)];
+    saveButton.backgroundColor = MainColor;
+    [saveButton setImage:[UIImage imageNamed:@"save.png"] forState:UIControlStateNormal];
+    saveButton.layer.cornerRadius = saveButton.frame.size.width/2;
+    [saveButton addTarget:self action:@selector(saveEvent:) forControlEvents:UIControlEventTouchDown];
+    [toolView addSubview:saveButton];
     
     _locationSearchBar.delegate = self;
     _searchResultTable.delegate = self;
@@ -113,26 +125,21 @@
     _calendarNameField.tintColor = [UIColor clearColor];
     _calendarNameField.inputView = calendarPicker;
 
-    UITapGestureRecognizer *reminderTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showReminder)];
-    UITapGestureRecognizer *repeatTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showRepeat)];
-    [_reminderLabel addGestureRecognizer:reminderTap];
-    [_repeatLabel addGestureRecognizer:repeatTap];
-
     // Reminder selection view
     reminder = [[ReminderView alloc]init];
     for (UIButton *b in reminder.subviews) {
         [b addTarget:self action:@selector(alarmTap:) forControlEvents:UIControlEventTouchDown];
     }
-    [self.view addSubview:reminder];
+    _reminderTextField.delegate = self;
+    _reminderTextField.inputView = reminder;
     
     // Repeat selection view
     repeat = [[RepeatView alloc]init];
     for (UIButton *b in repeat.subviews) {
         [b addTarget:self action:@selector(recurrenceBtn:) forControlEvents:UIControlEventTouchDown];
     }
-    [self.view addSubview:repeat];
-
-    hideFrame = reminder.frame;
+    _repeatTextField.delegate = self;
+    _repeatTextField.inputView = repeat;
 
     // Set up All Day button
     _alldayView.layer.borderColor = [LightGrayColor CGColor];
@@ -186,11 +193,6 @@
     event.allDay = NO;
     
     selectedLocation = [[SelectedLocation alloc]init];
-    
-    // Save Button
-    _saveButton.layer.cornerRadius = _saveButton.frame.size.width/2;
-    saveButtonFrame = _saveButton.frame;
-    saveButtonFrameMove = CGRectOffset(_saveButton.frame, 0, 215);
     
     // Map icon
     UITapGestureRecognizer *mapIconTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showMap)];
@@ -250,7 +252,7 @@
 
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
-    // Tag 0 = title , 1 = startTime , 2 = endTime , 3 = locatoin , 5 = calendar
+    // Tag 0 = title , 1 = startTime , 2 = endTime , 3 = locatoin , 4 = reminder , 5 = repeat , 6 = calendar
     [self hideAllImage];
     switch (textField.tag) {
         case 1:
@@ -268,21 +270,17 @@
             _endDateLabel.textColor = [UIColor whiteColor];
             _startTimeArrow.hidden = YES;
             break;
-        case 3:
-            [self showImage:textField.tag];
-            _mapIcon.hidden = YES;
-            break;
-        case 5:
-            [self showImage:textField.tag];
-            break;
         default:
             break;
     }
-    repeat.frame = hideFrame;
-    repeat.show = NO;
-    reminder.frame = hideFrame;
-    reminder.show = NO;
-    _saveButton.frame = saveButtonFrame;
+    if (textField.tag >2) {
+        [self showImage:textField.tag];
+        if (textField.tag == 3)
+            _mapIcon.hidden = YES;
+    }
+    
+    textField.inputAccessoryView = toolView;
+
     return YES;
 }
 
@@ -366,13 +364,21 @@
 - (void)showImage:(NSInteger)tag
 {
     switch (tag) {
-        case 5:
-            // Calendar
-            [self showCalendar];
-            break;
         case 3:
             // Location
             [self showLocation];
+            break;
+        case 4:
+            // Reminder
+            [self showReminder];
+            break;
+        case 5:
+            // Repeat
+            [self showRepeat];
+            break;
+        case 6:
+            // Calendar
+            [self showCalendar];
             break;
         default:
             break;
@@ -381,10 +387,10 @@
 
 - (void)hideAllImage
 {
-    [self hideCalendar];
+    [self hideLocation];
     [self hideReminder];
     [self hideRepeat];
-    [self hideLocation];
+    [self hideCalendar];
 }
 
 // Show
@@ -398,34 +404,16 @@
 
 - (void)showRepeat
 {
-    if (!repeat.show) {
-        _repeatImageView.image = [UIImage imageNamed:@"eventRepeatFill20.png"];
-        _repeatLabel.textColor = MainColor;
-        _repeatValueLabel.textColor = MainColor;
-        [self.view endEditing:YES];
-        repeat.frame = CGRectOffset(repeat.frame, 0, -250);
-        repeat.show = YES;
-        _saveButton.frame = saveButtonFrameMove;
-        [self hideLocation];
-        [self hideReminder];
-        [self hideCalendar];
-    }
+    _repeatImageView.image = [UIImage imageNamed:@"eventRepeatFill20.png"];
+    _repeatLabel.textColor = MainColor;
+    _repeatValueLabel.textColor = MainColor;
 }
 
 - (void)showReminder
 {
-    if (!reminder.show) {
-        _reminderImageView.image = [UIImage imageNamed:@"eventReminderFill20.png"];
-        _reminderLabel.textColor = MainColor;
-        _reminderValueLabel.textColor = MainColor;
-        [self.view endEditing:YES];
-        reminder.frame = CGRectOffset(reminder.frame, 0, -250);
-        reminder.show = YES;
-        _saveButton.frame = saveButtonFrameMove;
-        [self hideLocation];
-        [self hideRepeat];
-        [self hideCalendar];
-    }
+    _reminderImageView.image = [UIImage imageNamed:@"eventReminderFill20.png"];
+    _reminderLabel.textColor = MainColor;
+    _reminderValueLabel.textColor = MainColor;
 }
 
 - (void)showLocation
@@ -447,8 +435,6 @@
     _repeatImageView.image = [UIImage imageNamed:@"eventRepeatLine20.png"];
     _repeatValueLabel.textColor = LightGrayColor;
     _repeatLabel.textColor = LightGrayColor;
-    repeat.frame = hideFrame;
-    repeat.show = NO;
 }
 
 - (void)hideReminder
@@ -456,17 +442,14 @@
     _reminderImageView.image = [UIImage imageNamed:@"eventReminderLine20.png"];
     _reminderValueLabel.textColor = LightGrayColor;
     _reminderLabel.textColor = LightGrayColor;
-    reminder.frame = hideFrame;
-    reminder.show = NO;
 }
 
 - (void)hideLocation
 {
     _locationImageView.image = [UIImage imageNamed:@"eventLocationLine20.png"];
-
 }
 
-- (IBAction)saveEvent:(id)sender
+- (void)saveEvent:(id)sender
 {
     // Create new event
     event.title = _subjectField.text;

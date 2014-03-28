@@ -24,17 +24,15 @@
 }
 
 - (id)init {
-    self = [super initWithFrame:CGRectMake(10,568, 300, 216)];
+    self = [super initWithFrame:CGRectMake(0,0, 320, 216)];
     if (self) {
         // Initialization code
         _show = NO;
-//        self.backgroundColor = [UIColor blackColor];
-        
-        CGFloat gapX = 50;
-        CGFloat gapY = 8;
+        CGFloat gapX = 35;
+        CGFloat gapY = 9;
         int alarmButtonCount = 10;
-        CGFloat alarmButtonX = 10;
-        CGFloat alarmButtonY = 8;
+        CGFloat alarmButtonX = 35;
+        CGFloat alarmButtonY = 9;
         CGFloat buttonSize = 60;
         
         // Tag : 1 - on time , 2 - 5min , 3 - 15min , 4 - 30min , 5 - 1hour , 6 - 2hour ,7 - 1day , 8 - 2Day , 9 - 1week

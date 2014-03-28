@@ -40,7 +40,6 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     RepeatView *repeat;
     EKAlarm *alarm;
     EKRecurrenceRule *recurrenceRule;
-    CGRect hideFrame;
     NSArray *places;
     
     SelectedLocation *selectedLocation;
@@ -51,6 +50,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     
     CGRect trashButtonFrame;
     CGRect trashButtonFrameMove;
+    UIView *toolView;
 }
 
 @property (weak, nonatomic) IBOutlet UILabel *calendarLabel;
@@ -77,8 +77,6 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 @property (weak, nonatomic) IBOutlet UIView *alldayView;
 @property (weak, nonatomic) IBOutlet UILabel *allLabel;
 @property (weak, nonatomic) IBOutlet UILabel *dayLabel;
-@property (weak, nonatomic) IBOutlet UIButton *trashButton;
-@property (weak, nonatomic) IBOutlet UIButton *saveButton;
 
 @property (weak, nonatomic) IBOutlet UILabel *calendarName;
 @property (weak, nonatomic) IBOutlet UITextField *calendarNameField;
@@ -93,6 +91,8 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 @property (weak, nonatomic) IBOutlet UIImageView *repeatImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *calendarImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *startTimeArrow;
+@property (weak, nonatomic) IBOutlet UITextField *reminderTextField;
+@property (weak, nonatomic) IBOutlet UITextField *repeatTextField;
 
 @end
 
@@ -114,7 +114,26 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     
     // View controller
     self.navigationItem.title = _event.title;
+    self.automaticallyAdjustsScrollViewInsets = NO;
     
+    toolView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 40)];
+    toolView.backgroundColor = [UIColor whiteColor];
+    
+    UIButton *saveButton = [[UIButton alloc]initWithFrame:CGRectMake(320-45, 2.5, 35, 35)];
+    saveButton.backgroundColor = MainColor;
+    [saveButton setImage:[UIImage imageNamed:@"save.png"] forState:UIControlStateNormal];
+    saveButton.layer.cornerRadius = saveButton.frame.size.width/2;
+    [saveButton addTarget:self action:@selector(saveEvent:) forControlEvents:UIControlEventTouchDown];
+    [toolView addSubview:saveButton];
+    
+    
+    UIButton *deleteButton = [[UIButton alloc]initWithFrame:CGRectMake(10, 2.5, 35, 35)];
+    deleteButton.backgroundColor = CustomRedColor;
+    [deleteButton setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
+    deleteButton.layer.cornerRadius = deleteButton.frame.size.width/2;
+    [deleteButton addTarget:self action:@selector(deleteEvent:) forControlEvents:UIControlEventTouchDown];
+    [toolView addSubview:deleteButton];
+
     // Calendar
     _calendarName.text = [[[CalendarStore sharedStore]calendar]title];
     UIPickerView *calendarPicker = [[UIPickerView alloc]init];
@@ -124,21 +143,14 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     _calendarNameField.tintColor = [UIColor clearColor];
     _calendarNameField.inputView = calendarPicker;
     
-    // Reminder view
-    UITapGestureRecognizer *reminderTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showReminder)];
-    [_reminderLabel addGestureRecognizer:reminderTap];
-    
     // Reminder selection view
     reminder = [[ReminderView alloc]init];
     for (UIButton *b in reminder.subviews) {
         [b addTarget:self action:@selector(alarmTap:) forControlEvents:UIControlEventTouchDown];
     }
     [self checkAlarm];
-    [self.view addSubview:reminder];
-    
-    // Repeat view
-    UITapGestureRecognizer *repeatTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showRepeat)];
-    [_repeatLabel addGestureRecognizer:repeatTap];
+    _reminderTextField.delegate = self;
+    _reminderTextField.inputView = reminder;
     
     // Repeat selection view
     repeat = [[RepeatView alloc]init];
@@ -146,9 +158,8 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
         [b addTarget:self action:@selector(recurrenceBtn:) forControlEvents:UIControlEventTouchDown];
     }
     [self checkRule];
-    [self.view addSubview:repeat];
-    
-    hideFrame = reminder.frame;
+    _repeatTextField.delegate = self;
+    _repeatTextField.inputView = repeat;
     
     // Set up All Day button
     _alldayView.layer.borderColor = [LightGrayColor CGColor];
@@ -197,17 +208,6 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     _searchResultTable.delegate = self;
     _searchResultTable.dataSource = self;
     _locationSearchView.layer.cornerRadius = 10.0f;
-    
-    // Save Button
-    _saveButton.layer.cornerRadius = _saveButton.frame.size.width/2;
-    saveButtonFrame = _saveButton.frame;
-    saveButtonFrameMove = CGRectOffset(_saveButton.frame, 0, 215);
-    
-    
-    // Trash Button
-    _trashButton.layer.cornerRadius = _trashButton.frame.size.width/2;
-    trashButtonFrame = _trashButton.frame;
-    trashButtonFrameMove = CGRectOffset(_trashButton.frame, 0, 215);
     
     // Map icon
     UITapGestureRecognizer *mapIconTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showMap)];
@@ -327,7 +327,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
-    // Tag 0 = title , 1 = startTime , 2 = endTime , 3 = locatoin
+    // Tag 0 = title , 1 = startTime , 2 = endTime , 3 = locatoin , 4 = reminder , 5 = repeat , 6 = calendar
     [self hideAllImage];
     switch (textField.tag) {
         case 1:
@@ -345,22 +345,38 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
             _endDateLabel.textColor = [UIColor whiteColor];
             _startTimeArrow.hidden = YES;
             break;
-        case 3:
-            [self showImage:textField.tag];
+        default:
+            break;
+    }
+    if (textField.tag >2) {
+        [self showImage:textField.tag];
+        if (textField.tag == 3)
             _mapIcon.hidden = YES;
-        case 5:
-            [self showImage:textField.tag];
+    }
+    
+    textField.inputAccessoryView = toolView;
+    
+    return YES;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    switch (textField.tag) {
+        case 1:
+            _startTimeView.backgroundColor = [UIColor whiteColor];
+            _startDateLabel.textColor = [UIColor blackColor];
+            _startTimeLabel.textColor = [UIColor blackColor];
+            _startTimeArrow.hidden = YES;
+            _datePicker.minimumDate = minimumDate;
+            break;
+        case 2:
+            _endTimeView.backgroundColor = [UIColor whiteColor];
+            _endDateLabel.textColor = LightGrayColor;
+            _endTimeLabel.textColor = LightGrayColor;
             break;
         default:
             break;
     }
-    repeat.frame = hideFrame;
-    repeat.show = NO;
-    reminder.frame = hideFrame;
-    reminder.show = NO;
-    _saveButton.frame = saveButtonFrame;
-    _trashButton.frame = trashButtonFrame;
-    return YES;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -382,38 +398,27 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     return YES;
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    switch (textField.tag) {
-        case 1:
-            _startTimeView.backgroundColor = [UIColor whiteColor];
-            _startDateLabel.textColor = [UIColor blackColor];
-            _startTimeLabel.textColor = [UIColor blackColor];
-            _startTimeArrow.hidden = YES;
-            _datePicker.minimumDate = minimumDate;
-            break;
-        case 2:
-            _endTimeView.backgroundColor = [UIColor whiteColor];
-            _endDateLabel.textColor = LightGrayColor;
-            _endTimeLabel.textColor = LightGrayColor;
-            break;
-        default:
-        break;
-    }
-}
 
 #pragma mark - User actions
 
 - (void)showImage:(NSInteger)tag
 {
     switch (tag) {
-        case 5:
-            // Calendar
-            [self showCalendar];
-            break;
         case 3:
             // Location
             [self showLocation];
+            break;
+        case 4:
+            // Reminder
+            [self showReminder];
+            break;
+        case 5:
+            // Repeat
+            [self showRepeat];
+            break;
+        case 6:
+            // Calendar
+            [self showCalendar];
             break;
         default:
             break;
@@ -439,38 +444,16 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 
 - (void)showRepeat
 {
-    if (!repeat.show) {
-        _repeatImageView.image = [UIImage imageNamed:@"eventRepeatFill20.png"];
-        _repeatLabel.textColor = MainColor;
-        _repeatValueLabel.textColor = MainColor;
-        [self.view endEditing:YES];
-        repeat.frame = CGRectOffset(repeat.frame, 0, -250);
-        repeat.show = YES;
-        _saveButton.frame = saveButtonFrameMove;
-        _trashButton.frame = trashButtonFrameMove;
-
-        [self hideLocation];
-        [self hideReminder];
-        [self hideCalendar];
-    }
+    _repeatImageView.image = [UIImage imageNamed:@"eventRepeatFill20.png"];
+    _repeatLabel.textColor = MainColor;
+    _repeatValueLabel.textColor = MainColor;
 }
 
 - (void)showReminder
 {
-    if (!reminder.show) {
-        _reminderImageView.image = [UIImage imageNamed:@"eventReminderFill20.png"];
-        _reminderLabel.textColor = MainColor;
-        _reminderValueLabel.textColor = MainColor;
-        [self.view endEditing:YES];
-        reminder.frame = CGRectOffset(reminder.frame, 0, -250);
-        reminder.show = YES;
-        _saveButton.frame = saveButtonFrameMove;
-        _trashButton.frame = trashButtonFrameMove;
-
-        [self hideLocation];
-        [self hideRepeat];
-        [self hideCalendar];
-    }
+    _reminderImageView.image = [UIImage imageNamed:@"eventReminderFill20.png"];
+    _reminderLabel.textColor = MainColor;
+    _reminderValueLabel.textColor = MainColor;
 }
 
 - (void)showLocation
@@ -492,8 +475,6 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     _repeatImageView.image = [UIImage imageNamed:@"eventRepeatLine20.png"];
     _repeatValueLabel.textColor = LightGrayColor;
     _repeatLabel.textColor = LightGrayColor;
-    repeat.frame = hideFrame;
-    repeat.show = NO;
 }
 
 - (void)hideReminder
@@ -501,8 +482,6 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     _reminderImageView.image = [UIImage imageNamed:@"eventReminderLine20.png"];
     _reminderValueLabel.textColor = LightGrayColor;
     _reminderLabel.textColor = LightGrayColor;
-    reminder.frame = hideFrame;
-    reminder.show = NO;
 }
 
 - (void)hideLocation
@@ -557,7 +536,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction)deleteBtn:(id)sender
+- (void)deleteEvent:(id)sender
 {
     UIAlertView *deleteAlert;
     if (_event.hasRecurrenceRules) {

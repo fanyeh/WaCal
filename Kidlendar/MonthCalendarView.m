@@ -11,6 +11,7 @@
 #import "MonthModel.h"
 #import "DateModel.h"
 #import "WeekdayView.h"
+#import <QuartzCore/QuartzCore.h>
 
 #define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 #define MainColor [UIColor colorWithRed:(64 / 255.0) green:(98 / 255.0) blue:(124 / 255.0) alpha:1.0]
@@ -48,14 +49,13 @@
     _monthModel = monthModel;
     CGFloat xOffSet = 0.0f;
     CGFloat yOffSet = 0.0f;
+    weekdayViewHeight = 30;
     calendarWidth = self.frame.size.width;
     calendarHeight = self.frame.size.height - weekdayViewHeight;
-    
     dateViewWidth = calendarWidth/7;
-    dateViewHeight = calendarHeight/7;
-    weekdayViewHeight = 40;
+    dateViewHeight = calendarHeight/6;
     
-    _dateGroupView = [[UIView alloc]initWithFrame:CGRectMake(0, weekdayViewHeight, calendarWidth,calendarHeight-  weekdayViewHeight+1)];
+    _dateGroupView = [[UIView alloc]initWithFrame:CGRectMake(0, weekdayViewHeight, calendarWidth,calendarHeight)];
     _dateGroupView.backgroundColor = [UIColor clearColor];
     
     dateGroupFrame = _dateGroupView.frame;
@@ -68,6 +68,7 @@
     // Set weekdays
     for (int i=1;i<8;i++) {
         WeekdayView *dateView = [[WeekdayView alloc]initWithFrame:CGRectMake(xOffSet,yOffSet,dateViewWidth,weekdayViewHeight)];
+//        dateView.layer.borderWidth  =1 ;
         [dateView.dateLabel setText:weekDay[i-1]];
         dateView.dateLabel.frame = CGRectMake(0,0, dateViewWidth, weekdayViewHeight);
         xOffSet += dateViewWidth;
@@ -109,7 +110,7 @@
         // Init date view
         DateView *dateView = [[DateView alloc]initWithFrame:CGRectMake(xOffSet, yOffSet, dateViewWidth, dateViewHeight)];
         [_dateGroupView addSubview:dateView];
-
+//        dateView.layer.borderWidth = 1;
 
         dateView.row = dateModel.row;
         dateView.tag = i; // Index to link view and date model
@@ -143,7 +144,6 @@
         } else {
             xOffSet += dateViewWidth;
         }
-        
         dateView.column = i%7;
     }
 }
@@ -257,10 +257,11 @@
 - (void)setAppearanceOnSelectDate:(NSDate *)date
 {
     DateView *view =[self viewFromDate:date];
+    view.dateLabel.layer.masksToBounds = YES;
     WeekdayView *weekdayView = weekdayArray[view.column];
     weekdayView.selectedLabel.hidden = NO;
     view.dateLabel.layer.cornerRadius = view.dateLabel.frame.size.width/2;
-
+        
     CATransition *animation = [CATransition animation];
     animation.duration = 0.3f;
     animation.type = kCATransitionFade;
@@ -285,6 +286,7 @@
 - (void)setAppearanceOnDeselectDate:(NSDate *)date dateNotInCurrentMonth:(BOOL)inMonth
 {
     DateView *view =[self viewFromDate:date];
+    view.dateLabel.layer.masksToBounds = NO;
     view.isSelected = NO;
     WeekdayView *weekdayView = weekdayArray[view.column];
     fadeDateView = view;

@@ -31,7 +31,6 @@
 {
     CGFloat detailViewHeight;
     UITableView *eventTableView;
-//    DateView *previousDateView;
     DateModel *previousDateModel;
     MonthModel *monthModel;
     EKEvent *_comingUpEvent;
@@ -64,7 +63,7 @@
 @property (weak, nonatomic) IBOutlet UIView *videoPlayView;
 @property (weak, nonatomic) IBOutlet UIImageView *locationTag;
 @property (weak, nonatomic) IBOutlet UILabel *endEventLabel;
-
+@property (weak, nonatomic) IBOutlet UILabel *addDiaryLabel;
 
 @end
 
@@ -86,7 +85,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-
+    
     UITapGestureRecognizer *emptyEventTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(addEvent)];
     UITapGestureRecognizer *emptyDiaryTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(addDiary)];
 
@@ -114,8 +113,7 @@
     _dotView.layer.cornerRadius = _dotView.frame.size.width/2;
     
     _dotViewGray.layer.cornerRadius = _dotView.frame.size.width/2;
-    
-    
+
     _selectedDate = [monthModel dateModelForDate:[NSDate date]].date;
     [_monthView initCalendar:monthModel];
     [self resetCalendarBySelectDate:NO];
@@ -611,9 +609,9 @@
         [eventTableView.layer addAnimation:animation forKey:nil];
         eventTableView.hidden = NO;
         eventTableView.frame = CGRectMake(0,
-                                          _monthView.shrinkFrame.origin.y+_monthView.shrinkFrame.size.height+11,
+                                          134,
                                           self.view.frame.size.width,
-                                          _diaryView.frame.origin.y-(_monthView.shrinkFrame.origin.y+_monthView.shrinkFrame.size.height));
+                                          260);
     } else if (_emptyEventView.hidden){
         eventTableView.hidden = YES;
         [_emptyEventView.layer addAnimation:animation forKey:nil];

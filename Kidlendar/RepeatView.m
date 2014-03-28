@@ -20,20 +20,18 @@
 }
 
 - (id)init {
-    self = [super initWithFrame:CGRectMake(0,568, 320, 216)];
+    self = [super initWithFrame:CGRectMake(0,0, 320, 216)];
+    self = [super init];
     if (self) {
         // Initialization code
         
         _show = NO;
-
-        
-        CGFloat gapX = 50;
-        CGFloat gapY =8;
-
         int alarmButtonCount = 7;
-        CGFloat alarmButtonX = 10;
-        CGFloat alarmButtonY =8;
+        CGFloat alarmButtonX = 35;
+        CGFloat alarmButtonY = 35;
         CGFloat buttonSize = 60;
+        CGFloat gapX = 35;
+        CGFloat gapY =8;
         
         for (int i = 1; i < alarmButtonCount ;i++) {
             // Tag 1 - Never ; 2 - Day ; 3 - Week ; 4 - Two Week ; 5 - Month ; 6 - Year
