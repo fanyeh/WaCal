@@ -12,7 +12,6 @@
 @interface AlbumPhotoCell : UICollectionViewCell
 @property (strong,nonatomic) UILabel *selectNumber;
 @property (strong,nonatomic) UIImageView *videoLabel;
-
 @property (strong,nonatomic) UILabel *videoTimeLabel;
 @property (strong,nonatomic) UIImageView *cellImageView;
 @property (strong,nonatomic) ALAsset *asset;

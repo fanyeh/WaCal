@@ -8,7 +8,6 @@
 
 #import "DateView.h"
 #import "DateModel.h"
-#define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 
 @implementation DateView
 {
@@ -51,7 +50,7 @@
     
     hasEventView.layer.cornerRadius = hasEventView.frame.size.width/2;
     
-    hasEventView.backgroundColor = [UIColor colorWithRed:1.000 green:0.827 blue:0.306 alpha:1.000];
+    hasEventView.backgroundColor = Rgb2UIColor(249, 203, 143);
     [self addSubview:hasEventView];
 }
 
@@ -64,7 +63,7 @@
     
     hasDiaryView.layer.cornerRadius = hasDiaryView.frame.size.width/2;
     
-    hasDiaryView.backgroundColor = Rgb2UIColor(41, 217, 194);
+    hasDiaryView.backgroundColor = MainColor;
     [self addSubview:hasDiaryView];
 }
 

@@ -9,11 +9,16 @@
 #import "DiaryPhotoCell.h"
 
 @implementation DiaryPhotoCell
+{
+    UIView *highlightMask;
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.contentView.layer.borderColor = [MainColor CGColor];
+
         _photoView = [[UIImageView alloc] initWithFrame:self.contentView.bounds];
         [self.contentView addSubview:_photoView];
         
@@ -24,7 +29,16 @@
         _deleteBadger.font = [UIFont fontWithName:@"Helvetica-Bold" size:14];
         _deleteBadger.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.500];
         _deleteBadger.userInteractionEnabled = YES;
+        _deleteBadger.layer.masksToBounds = YES;
         [self addSubview:_deleteBadger];
+        
+        highlightMask = [[UIView alloc]initWithFrame:self.contentView.bounds];
+//        highlightMask.layer.borderWidth = 3.0f;
+//        highlightMask.layer.borderColor = [MainColor CGColor];
+        highlightMask.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.500];
+        highlightMask.hidden = YES;
+        
+        [self addSubview:highlightMask];
     }
     return self;
 }
@@ -37,5 +51,16 @@
     // Drawing code
 }
 */
+
+-(void)showHighlight:(BOOL)show
+{
+    if (show) {
+        highlightMask.frame = self.contentView.frame;
+        highlightMask.hidden = NO;
+    }
+    else 
+        highlightMask.hidden = YES;
+    _isHighlight = show;
+}
 
 @end

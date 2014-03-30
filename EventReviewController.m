@@ -20,11 +20,7 @@
 #import "MapViewController.h"
 #import "Reachability.h"
 
-#define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 #define kGOOGLE_API_KEY @"AIzaSyAD9e182Fr19_2DcJFZYUHf6wEeXjxs_kQ"
-#define MainColor [UIColor colorWithRed:(64 / 255.0) green:(98 / 255.0) blue:(124 / 255.0) alpha:1.0]
-#define LightGrayColor [UIColor colorWithRed:(170 / 255.0) green:(170 / 255.0) blue:(170 / 255.0) alpha:1.0]
-#define CustomRedColor [UIColor colorWithRed:(217 / 255.0) green:(100 / 255.0) blue:(89 / 255.0) alpha:1.0]
 
 typedef void (^LocationCallback)(CLLocationCoordinate2D);
 
@@ -119,7 +115,11 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     toolView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 40)];
     toolView.backgroundColor = [UIColor whiteColor];
     
-    UIButton *saveButton = [[UIButton alloc]initWithFrame:CGRectMake(320-45, 2.5, 35, 35)];
+    UIView *topBorder = [[UIView alloc]initWithFrame:CGRectMake(0, 40, 320, 1)];
+    topBorder.backgroundColor = [UIColor colorWithWhite:0.902 alpha:1.000];
+    [toolView addSubview:topBorder];
+    
+    UIButton *saveButton = [[UIButton alloc]initWithFrame:CGRectMake(320-42.5, 1.5, 35, 35)];
     saveButton.backgroundColor = MainColor;
     [saveButton setImage:[UIImage imageNamed:@"save.png"] forState:UIControlStateNormal];
     saveButton.layer.cornerRadius = saveButton.frame.size.width/2;
@@ -127,8 +127,8 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     [toolView addSubview:saveButton];
     
     
-    UIButton *deleteButton = [[UIButton alloc]initWithFrame:CGRectMake(10, 2.5, 35, 35)];
-    deleteButton.backgroundColor = CustomRedColor;
+    UIButton *deleteButton = [[UIButton alloc]initWithFrame:CGRectMake(7.5, 1.5, 35, 35)];
+    deleteButton.backgroundColor = TodayColor;
     [deleteButton setImage:[UIImage imageNamed:@"delete.png"] forState:UIControlStateNormal];
     deleteButton.layer.cornerRadius = deleteButton.frame.size.width/2;
     [deleteButton addTarget:self action:@selector(deleteEvent:) forControlEvents:UIControlEventTouchDown];
@@ -145,21 +145,26 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     
     // Reminder selection view
     reminder = [[ReminderView alloc]init];
-    for (UIButton *b in reminder.subviews) {
-        [b addTarget:self action:@selector(alarmTap:) forControlEvents:UIControlEventTouchDown];
+    for (UIView *b in reminder.subviews) {
+        if ([b isKindOfClass:[ReminderButton class]])
+            [(ReminderButton *)b addTarget:self action:@selector(alarmTap:) forControlEvents:UIControlEventTouchDown];
     }
+
     [self checkAlarm];
     _reminderTextField.delegate = self;
     _reminderTextField.inputView = reminder;
+    _reminderTextField.tintColor = [UIColor clearColor];
     
     // Repeat selection view
     repeat = [[RepeatView alloc]init];
-    for (UIButton *b in repeat.subviews) {
-        [b addTarget:self action:@selector(recurrenceBtn:) forControlEvents:UIControlEventTouchDown];
+    for (UIView *b in repeat.subviews) {
+        if ([b isKindOfClass:[ReminderButton class]])
+            [(ReminderButton *)b addTarget:self action:@selector(recurrenceBtn:) forControlEvents:UIControlEventTouchDown];
     }
     [self checkRule];
     _repeatTextField.delegate = self;
     _repeatTextField.inputView = repeat;
+    _repeatTextField.tintColor = [UIColor clearColor];
     
     // Set up All Day button
     _alldayView.layer.borderColor = [LightGrayColor CGColor];
@@ -191,8 +196,10 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     
     _startTimeField.delegate = self;
     _startTimeField.inputView = _datePicker;
+    _startTimeField.tintColor = [UIColor clearColor];
     _endTimeField.delegate = self;
     _endTimeField.inputView = _datePicker;
+    _endTimeField.tintColor = [UIColor clearColor];
     
     _startTimeLabel.text = [timeFormatter stringFromDate:_event.startDate];
     _startDateLabel.text = [dateFormatter stringFromDate:_event.startDate];
@@ -348,13 +355,18 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
         default:
             break;
     }
-    if (textField.tag >2) {
+    if (textField.tag >2)
         [self showImage:textField.tag];
-        if (textField.tag == 3)
-            _mapIcon.hidden = YES;
-    }
     
+    textField.inputView.backgroundColor = [UIColor whiteColor];
     textField.inputAccessoryView = toolView;
+    
+    return YES;
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    if (textField.tag == 3)
+        _mapIcon.hidden = YES;
     
     return YES;
 }
@@ -684,7 +696,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
         if (sender.tag < 10) {
             sender.backgroundColor = MainColor;
             [self createAlarm:sender.tag];
-            _reminderValueLabel.text = sender.titleLabel.text;
+            _reminderValueLabel.text = [sender.titleLabel.text stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
         }
         
         // Change all other buttons to unselect
@@ -882,7 +894,8 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     _locationField.text = [places[indexPath.row] objectForKey:@"name"];
-    
+    [_locationField becomeFirstResponder];
+
     // Create temp location data
     NSDictionary *selectedPlace = [places objectAtIndex:indexPath.row];
     selectedLocation.latitude =  [[[[selectedPlace objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"] doubleValue];

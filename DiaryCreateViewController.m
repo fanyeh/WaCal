@@ -17,8 +17,6 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import "PhotoAlbumTableCell.h"
 
-#define MainColor [UIColor colorWithRed:(64 / 255.0) green:(98 / 255.0) blue:(124 / 255.0) alpha:1.0]
-
 static int deleteLabelSize = 30;
 
 @interface DiaryCreateViewController () <UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,filterImageDelegate,UITableViewDataSource,UITableViewDelegate>
@@ -62,14 +60,15 @@ static int deleteLabelSize = 30;
     UIView *scroller;
     
     NSIndexPath *videoIndexPath;
-    
     MediaType selectedMediaType;
-    
     UIView *videoView;
     UIImageView *videoImageView;
-    
     UIBarButtonItem *nextButton;
     UILabel *videoDeleteLabel;
+    
+    DiaryPhotoCell *touchedCell;
+    UIView *frameView;
+
 }
 
 @property (weak, nonatomic) IBOutlet UIView *noPhotoView;
@@ -98,6 +97,7 @@ static int deleteLabelSize = 30;
     // Do any additional setup after loading the view from its nib.
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.navigationItem.title = @"Photos";
+    
     
     videoView = [[UIView alloc]initWithFrame:CGRectMake(2, 46, 316, 316)];
     UITapGestureRecognizer *videoTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(playMovie)];
@@ -140,6 +140,7 @@ static int deleteLabelSize = 30;
     playButtonView.center = videoImageView.center;
     playButtonView.frame = CGRectOffset(playButtonView.frame, 5, 0);
     [videoImageView addSubview:playButtonView];
+    videoImageView.hidden = YES;
     
     // Set up diary photo collection view
     diaryCollectionViewInset = UIEdgeInsetsMake(2, 2, 2, 2);
@@ -152,9 +153,7 @@ static int deleteLabelSize = 30;
     diaryPhotosView.dataSource = self;
     diaryPhotosView.tag = 0;
     diaryPhotosView.allowsMultipleSelection = NO;
-    diaryPhotosView.backgroundColor = [UIColor whiteColor];
     [diaryPhotosView registerClass:[DiaryPhotoCell class] forCellWithReuseIdentifier:@"DiaryPhotoCell"];
-//    selectedPhotoInfo = [[NSMutableDictionary alloc]init];
     fullScreenImageArray = [[NSMutableArray alloc]init];
     cellImageArray = [[NSMutableArray alloc]init];
     selectedPhotoOrderingInfo = [[NSMutableArray alloc]init];
@@ -224,6 +223,7 @@ static int deleteLabelSize = 30;
     photoAlbumTable.allowsSelection = YES;
     [photoAlbumTable registerNib:[UINib nibWithNibName:@"PhotoAlbumTableCell" bundle:nil]
          forCellReuseIdentifier:@"PhotoAlbumTableCell"];
+    photoAlbumTable.tintColor = MainColor;
     [self.view addSubview:photoAlbumTable];
     showAlbumTable = NO;
 
@@ -265,6 +265,7 @@ static int deleteLabelSize = 30;
 {
     self.tabBarController.tabBar.hidden = YES;
     photoAlbumTable.hidden = YES;
+    diaryPhotosView.backgroundColor = [UIColor clearColor];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -337,20 +338,20 @@ static int deleteLabelSize = 30;
         
         CGSize size = [sizeArray[i] CGSizeValue];
         
-        UIImage *resizeImage;
+        UIImage *fullscreenImage;
 
         if ([fullScreenImageArray[i] isKindOfClass:[ALAsset class]]) {
             ALAsset *asset = fullScreenImageArray[i];
-            resizeImage = [UIImage imageWithCGImage:[asset.defaultRepresentation fullScreenImage]];
+            fullscreenImage = [UIImage imageWithCGImage:[asset.defaultRepresentation fullScreenImage]];
         } else
-            resizeImage = fullScreenImageArray[i];
+            fullscreenImage = fullScreenImageArray[i];
         
         UIImage *cellImage;
         
         if ([[NSUserDefaults standardUserDefaults]boolForKey:@"FaceDetection"])
-            cellImage = [[resizeImage cropWithFaceDetect:size] resizeImageToSize:size];
+            cellImage = [[fullscreenImage cropWithFaceDetect:size] resizeImageToSize:size];
         else
-            cellImage = [[resizeImage cropWithoutFaceOutDetect:size] resizeImageToSize:size];
+            cellImage = [[fullscreenImage cropWithoutFaceOutDetect:size] resizeImageToSize:size];
 
         [cellImageArray addObject:cellImage];
     }
@@ -381,11 +382,12 @@ static int deleteLabelSize = 30;
         
         cellImageArray[path.row] = cellImage;
     }
-    
-    [diaryPhotosView performBatchUpdates:^{
-        [diaryPhotosView reloadItemsAtIndexPaths:paths];
-        [faceDetectingActivity stopAnimating];
-    } completion:nil];
+    [UIView animateWithDuration:0 animations:^{
+        [diaryPhotosView performBatchUpdates:^{
+            [diaryPhotosView reloadItemsAtIndexPaths:paths];
+            [faceDetectingActivity stopAnimating];
+        } completion:nil];
+    }];
 }
 
 #pragma mark -User Actions
@@ -436,47 +438,92 @@ static int deleteLabelSize = 30;
 
 - (void)movePhoto:(UIPanGestureRecognizer *)sender
 {
-    
     DiaryPhotoCell *cell = (DiaryPhotoCell *)sender.view;
-    cell.deleteBadger.hidden = YES;
-    [diaryPhotosView bringSubviewToFront:sender.view];
+    
+    // Shrink cell when it moved
+    if (sender.state == UIGestureRecognizerStateBegan)
+    {
+        _noPhotoView.hidden = YES;
+        CGRect frame = [cell convertRect:cell.contentView.frame toView:self.view];
+        frameView = [[UIView alloc]initWithFrame:frame];
+        frameView.layer.borderColor = [MainColor CGColor];
+        frameView.layer.borderWidth = 3.0f;
+        frameView.backgroundColor = SuperLightGrayColor;
+        [self.view addSubview:frameView];
+        [self.view bringSubviewToFront:diaryPhotosView];
+        [diaryPhotosView bringSubviewToFront:sender.view];
+        [self.view bringSubviewToFront:_faceImageView];
+        [self.view bringSubviewToFront:faceDetectingActivity];
+        [UIView animateWithDuration:0.3 animations:^{
+            cell.transform = CGAffineTransformScale(cell.transform, 0.6, 0.6);
+            cell.center = [sender locationInView:sender.view.superview];
+        }];
+        
+        cell.deleteBadger.hidden = YES;
+    }
     
     // Pan the cell
-    CGPoint point = [sender locationInView:sender.view.superview];
+//    CGPoint point = [sender locationInView:sender.view.superview];
+    CGPoint point = [sender translationInView:self.view];
     if (sender.state == UIGestureRecognizerStateChanged) {
         CGPoint center = sender.view.center;
         center.x += point.x - _priorPoint.x;
         center.y += point.y - _priorPoint.y;
         sender.view.center = center;
+        
+        NSIndexPath *touchedCellPath = [diaryPhotosView indexPathForItemAtPoint:CGPointMake(sender.view.center.x, sender.view.center.y)];
+        NSIndexPath *currentCellIndexPath = [diaryPhotosView indexPathForCell:cell];
+        
+        if ((touchedCellPath != currentCellIndexPath) && (touchedCellPath != NULL)) {
+            if (touchedCell) {
+                [touchedCell showHighlight:NO];
+            }
+            touchedCell = (DiaryPhotoCell *)[diaryPhotosView cellForItemAtIndexPath:touchedCellPath];
+            [touchedCell showHighlight:YES];
+
+        } else {
+            if (touchedCell) {
+                [touchedCell showHighlight:NO];
+            }
+        }
     }
     _priorPoint = point;
     
     // Resize cell back when state ended or cancelled
     if (sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateCancelled)
     {
+        [frameView removeFromSuperview];
         [faceDetectingActivity startAnimating];
         
         NSIndexPath *touchedCellPath = [diaryPhotosView indexPathForItemAtPoint:CGPointMake(sender.view.center.x, sender.view.center.y)];
         NSIndexPath *currentCellIndexPath = [diaryPhotosView indexPathForCell:cell];
         
         if ((touchedCellPath != currentCellIndexPath) && (touchedCellPath != NULL)) {
-            DiaryPhotoCell *touchedCell = (DiaryPhotoCell *)[diaryPhotosView cellForItemAtIndexPath:touchedCellPath];
+            touchedCell = (DiaryPhotoCell *)[diaryPhotosView cellForItemAtIndexPath:touchedCellPath];
+            [touchedCell showHighlight:NO];
             touchedCell.deleteBadger.hidden = YES;
+            
             if ([sizeArray[currentCellIndexPath.row]isEqualToValue:sizeArray[touchedCellPath.row]])
                 [faceDetectingActivity stopAnimating];
             
-            [diaryPhotosView performBatchUpdates:^{
-                [diaryPhotosView moveItemAtIndexPath:currentCellIndexPath toIndexPath:touchedCellPath];
-                [diaryPhotosView moveItemAtIndexPath:touchedCellPath toIndexPath:currentCellIndexPath];
-            } completion:^(BOOL finished) {
+            if (![sizeArray[currentCellIndexPath.row]isEqualToValue:sizeArray[touchedCellPath.row]]) {
+                
                 [selectedPhotoOrderingInfo exchangeObjectAtIndex:currentCellIndexPath.row withObjectAtIndex:touchedCellPath.row];
                 [fullScreenImageArray exchangeObjectAtIndex:currentCellIndexPath.row withObjectAtIndex:touchedCellPath.row];
-                
-                if (![sizeArray[currentCellIndexPath.row]isEqualToValue:sizeArray[touchedCellPath.row]])
-                    [self processFaceDetectionWithIndexPath:@[currentCellIndexPath,touchedCellPath]];
-                else
+                [self processFaceDetectionWithIndexPath:@[currentCellIndexPath,touchedCellPath]];
+            }
+            else {
+                [diaryPhotosView performBatchUpdates:^{
+                    [diaryPhotosView moveItemAtIndexPath:currentCellIndexPath toIndexPath:touchedCellPath];
+                    [diaryPhotosView moveItemAtIndexPath:touchedCellPath toIndexPath:currentCellIndexPath];
+                } completion:^(BOOL finished) {
+                    [selectedPhotoOrderingInfo exchangeObjectAtIndex:currentCellIndexPath.row withObjectAtIndex:touchedCellPath.row];
+                    [fullScreenImageArray exchangeObjectAtIndex:currentCellIndexPath.row withObjectAtIndex:touchedCellPath.row];
                     [cellImageArray exchangeObjectAtIndex:currentCellIndexPath.row withObjectAtIndex:touchedCellPath.row];
-            }];
+                    [faceDetectingActivity stopAnimating];
+                }];
+            }
+
         } else {
             [UIView animateWithDuration:0.0 animations:^{
                 [diaryPhotosView reloadItemsAtIndexPaths:@[currentCellIndexPath]];
@@ -494,6 +541,7 @@ static int deleteLabelSize = 30;
     if (selectedMediaType == kMediaTypePhoto) {
         // Create Image from collection view
         UIGraphicsBeginImageContextWithOptions(diaryPhotosView.bounds.size, YES, [UIScreen mainScreen].scale);
+        diaryPhotosView.backgroundColor = [UIColor whiteColor];
         [diaryPhotosView.layer renderInContext:UIGraphicsGetCurrentContext()];
         UIImage *collectionViewImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
@@ -739,7 +787,9 @@ static int deleteLabelSize = 30;
     
     // Perform face detection and setup diary collection view
     [faceDetectingActivity startAnimating];
-    [self performSelectorInBackground:@selector(processFaceDetection) withObject:nil];
+//    [self performSelectorInBackground:@selector(processFaceDetection) withObject:nil];
+    
+    [self processFaceDetection];
 }
 
 -(void)cancelPhotoSelection
@@ -1090,7 +1140,7 @@ static int deleteLabelSize = 30;
 
 -(void) playMovie
 {
-    videoDeleteLabel.hidden = YES;
+//    videoDeleteLabel.hidden = YES;
     ALAsset *videoAsset = [photoAssets objectAtIndex:videoIndexPath.row];
     diaryPhotosView.hidden = YES;
     videoPlayer = [[MPMoviePlayerViewController alloc] initWithContentURL: videoAsset.defaultRepresentation.url];
@@ -1131,10 +1181,11 @@ static int deleteLabelSize = 30;
     diaryPhotosView.hidden = NO;
     [cellImageArray removeAllObjects];
     videoView.hidden = YES;
-    videoDeleteLabel.hidden = YES;
+//    videoDeleteLabel.hidden = YES;
     [self showNextButton:NO];
     videoIndexPath = nil;
     _noPhotoView.hidden = NO;
+//    videoImageView.hidden = YES;
     [self.view bringSubviewToFront:_noPhotoView];
     [self.view bringSubviewToFront:scroller];
     [self.view bringSubviewToFront:photoAlbumTable];

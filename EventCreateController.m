@@ -18,13 +18,7 @@
 #import "MapViewController.h"
 #import "Reachability.h"
 
-#define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 #define kGOOGLE_API_KEY @"AIzaSyAD9e182Fr19_2DcJFZYUHf6wEeXjxs_kQ"
-#define MainColor [UIColor colorWithRed:(64 / 255.0) green:(98 / 255.0) blue:(124 / 255.0) alpha:1.0]
-#define LightGrayColor [UIColor colorWithRed:(170 / 255.0) green:(170 / 255.0) blue:(170 / 255.0) alpha:1.0]
-#define CustomRedColor [UIColor colorWithRed:(217 / 255.0) green:(100 / 255.0) blue:(89 / 255.0) alpha:1.0]
-
-
 
 @interface EventCreateController () <UITextFieldDelegate,UITableViewDataSource, UITableViewDelegate,UISearchBarDelegate,UIPickerViewDelegate,UIPickerViewDataSource>
 {
@@ -104,7 +98,11 @@
     toolView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 40)];
     toolView.backgroundColor = [UIColor whiteColor];
     
-    UIButton *saveButton = [[UIButton alloc]initWithFrame:CGRectMake(320-45, 2.5, 35, 35)];
+    UIView *topBorder = [[UIView alloc]initWithFrame:CGRectMake(0, 40, 320, 1)];
+    topBorder.backgroundColor = [UIColor colorWithWhite:0.902 alpha:1.000];
+    [toolView addSubview:topBorder];
+    
+    UIButton *saveButton = [[UIButton alloc]initWithFrame:CGRectMake(320-42.5, 1.5, 35, 35)];
     saveButton.backgroundColor = MainColor;
     [saveButton setImage:[UIImage imageNamed:@"save.png"] forState:UIControlStateNormal];
     saveButton.layer.cornerRadius = saveButton.frame.size.width/2;
@@ -115,31 +113,36 @@
     _searchResultTable.delegate = self;
     _searchResultTable.dataSource = self;
     _locationSearchView.layer.cornerRadius = 10.0f;
-    
+
     // Calendar
     _calenderNameLabel.text = [[[CalendarStore sharedStore]calendar]title];
     UIPickerView *calendarPicker = [[UIPickerView alloc]init];
     calendarPicker.delegate = self;
     calendarPicker.dataSource = self;
+
     _calendarNameField.delegate = self;
     _calendarNameField.tintColor = [UIColor clearColor];
     _calendarNameField.inputView = calendarPicker;
 
     // Reminder selection view
     reminder = [[ReminderView alloc]init];
-    for (UIButton *b in reminder.subviews) {
-        [b addTarget:self action:@selector(alarmTap:) forControlEvents:UIControlEventTouchDown];
+    for (UIView *b in reminder.subviews) {
+        if ([b isKindOfClass:[ReminderButton class]])
+            [(ReminderButton *)b addTarget:self action:@selector(alarmTap:) forControlEvents:UIControlEventTouchDown];
     }
     _reminderTextField.delegate = self;
     _reminderTextField.inputView = reminder;
+    _reminderTextField.tintColor = [UIColor clearColor];
     
     // Repeat selection view
     repeat = [[RepeatView alloc]init];
-    for (UIButton *b in repeat.subviews) {
-        [b addTarget:self action:@selector(recurrenceBtn:) forControlEvents:UIControlEventTouchDown];
+    for (UIView *b in repeat.subviews) {
+        if ([b isKindOfClass:[ReminderButton class]])
+            [(ReminderButton *)b addTarget:self action:@selector(recurrenceBtn:) forControlEvents:UIControlEventTouchDown];
     }
     _repeatTextField.delegate = self;
     _repeatTextField.inputView = repeat;
+    _repeatTextField.tintColor = [UIColor clearColor];
 
     // Set up All Day button
     _alldayView.layer.borderColor = [LightGrayColor CGColor];
@@ -166,14 +169,15 @@
     
     // When enter bring up title and time view and keyboard
     _subjectField.delegate = self;
-    [_subjectField becomeFirstResponder];
     _locationField.delegate = self;
     _locationField.tag = 3;
     
     _startTimeField.delegate = self;
     _startTimeField.inputView = _datePicker;
+    _startTimeField.tintColor = [UIColor clearColor];
     _endTimeField.delegate = self;
     _endTimeField.inputView = _datePicker;
+    _endTimeField.tintColor = [UIColor clearColor];
     
     _startTimeLabel.text = [timeFormatter stringFromDate:_selectedDate];
     _startDateLabel.text = [dateFormatter stringFromDate:_selectedDate];
@@ -204,6 +208,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     self.tabBarController.tabBar.hidden = YES;
+    [_subjectField becomeFirstResponder];
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -252,7 +258,7 @@
 
 -(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
-    // Tag 0 = title , 1 = startTime , 2 = endTime , 3 = locatoin , 4 = reminder , 5 = repeat , 6 = calendar
+    // Tag 0 = title , 1 = startTime , 2 = endTime , 3 = locatoin , 4 = reminder , 5 = repeat , 6 = calenda
     [self hideAllImage];
     switch (textField.tag) {
         case 1:
@@ -273,14 +279,18 @@
         default:
             break;
     }
-    if (textField.tag >2) {
+    if (textField.tag >2)
         [self showImage:textField.tag];
-        if (textField.tag == 3)
-            _mapIcon.hidden = YES;
-    }
-    
-    textField.inputAccessoryView = toolView;
 
+    textField.inputView.backgroundColor = [UIColor whiteColor];
+    textField.inputAccessoryView = toolView;
+    return YES;
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    if (textField.tag == 3)
+        _mapIcon.hidden = YES;
+    
     return YES;
 }
 
@@ -559,7 +569,7 @@
         if (sender.tag < 10) {
             sender.backgroundColor = MainColor;
             [self createAlarm:sender.tag];
-            _reminderValueLabel.text = sender.titleLabel.text;
+            _reminderValueLabel.text = [sender.titleLabel.text stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
         }
         
         // Change all other buttons to unselect
@@ -755,6 +765,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     _locationField.text = [places[indexPath.row] objectForKey:@"name"];
+    [_locationField becomeFirstResponder];
     
     // Create temp location data
     NSDictionary *selectedPlace = [places objectAtIndex:indexPath.row];
@@ -767,6 +778,8 @@
     // Hide search table after row selected
     _maskView.hidden = YES;
     _mapIcon.hidden = NO;
+    
+    
 }
 
 #pragma mark - Google Places Search

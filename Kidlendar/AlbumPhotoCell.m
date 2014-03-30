@@ -8,8 +8,6 @@
 
 #import "AlbumPhotoCell.h"
 #import <AssetsLibrary/AssetsLibrary.h>
-#define MainColor [UIColor colorWithRed:(64 / 255.0) green:(98 / 255.0) blue:(124 / 255.0) alpha:1.0]
-
 
 @implementation AlbumPhotoCell
 {

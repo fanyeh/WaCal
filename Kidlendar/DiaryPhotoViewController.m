@@ -78,7 +78,8 @@ typedef NS_ENUM(NSInteger, FilterType)
     
     // create crop rect pan gesture
     pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-//    _photoImage = [[_photoImage cropWithFaceDetect:_photoImageView.frame.size] resizeImageToSize:_photoImageView.frame.size];
+    // Crop image first , to make sure ratio is maintained @ final crop
+    _photoImage = [_photoImage cropWithFaceDetect:_photoImageView.frame.size];
     filteredImage = _photoImage;
     _photoImageView.image = _photoImage;
     [_photoImageView addGestureRecognizer:pan];

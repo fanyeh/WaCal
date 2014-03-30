@@ -16,8 +16,6 @@
 
 NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGranted";
 
-#define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
-
 @implementation KidlendarAppDelegate
 {
     UITabBarController *tbc;
@@ -51,17 +49,14 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
         }];
     }
 
-//    self.window.backgroundColor = [UIColor whiteColor];
-
-
     [[UINavigationBar appearance] setBarStyle:UIBarStyleBlack];
-    [[UINavigationBar appearance] setBarTintColor:Rgb2UIColor(64 , 98 , 124)];
+    [[UINavigationBar appearance] setBarTintColor:BarColor];
 
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]]; //is the buttons text color
     NSDictionary *size = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0],NSFontAttributeName,
                           [UIColor whiteColor],NSForegroundColorAttributeName,nil];
     [[UINavigationBar appearance]setTitleTextAttributes:size];
-    [[UITabBar appearance] setTintColor:Rgb2UIColor(64 , 98 , 124)]; //is the buttons text color
+    [[UITabBar appearance] setTintColor:BarColor]; //is the buttons text color
 
     
     [self.window makeKeyAndVisible];

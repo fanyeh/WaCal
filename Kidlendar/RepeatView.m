@@ -7,6 +7,7 @@
 //
 
 #import "RepeatView.h"
+#import "ReminderButton.h"
 
 @implementation RepeatView
 
@@ -28,7 +29,7 @@
         _show = NO;
         int alarmButtonCount = 7;
         CGFloat alarmButtonX = 35;
-        CGFloat alarmButtonY = 35;
+        CGFloat alarmButtonY = 32;
         CGFloat buttonSize = 60;
         CGFloat gapX = 35;
         CGFloat gapY =8;
@@ -36,13 +37,7 @@
         for (int i = 1; i < alarmButtonCount ;i++) {
             // Tag 1 - Never ; 2 - Day ; 3 - Week ; 4 - Two Week ; 5 - Month ; 6 - Year
 
-            UIButton *alarmButton = [[UIButton alloc]initWithFrame:CGRectMake(alarmButtonX, alarmButtonY, buttonSize, buttonSize)];
-            [alarmButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-            [alarmButton setTitleColor:[UIColor colorWithWhite:0.667 alpha:1.000] forState:UIControlStateNormal];
-            alarmButton.titleLabel.font = [UIFont fontWithName:@"Avenir-light" size:14];
-            alarmButton.layer.cornerRadius = buttonSize/2;
-            alarmButton.layer.borderColor = [[UIColor colorWithWhite:0.667 alpha:1.000]CGColor];
-            alarmButton.layer.borderWidth = 1.0f;
+            ReminderButton *alarmButton = [[ReminderButton alloc]initWithFrame:CGRectMake(alarmButtonX, alarmButtonY, buttonSize, buttonSize)];
             alarmButton.tag = i;
             [self addSubview:alarmButton];
             alarmButtonX += buttonSize + gapX;
@@ -63,7 +58,7 @@
                     [alarmButton setTitle:@"Week" forState:UIControlStateNormal];
                     break;
                 case 4:
-                    [alarmButton setTitle:@"2 Week" forState:UIControlStateNormal];
+                    [alarmButton setTitle:@"Bi-Week" forState:UIControlStateNormal];
                     break;
                 case 5:
                     [alarmButton setTitle:@"Month" forState:UIControlStateNormal];

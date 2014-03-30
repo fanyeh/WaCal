@@ -19,10 +19,7 @@
 #import "FileManager.h"
 #import "Reachability.h"
 #import "CircleProgressView.h"
-
 #import "UploadStore.h"
-#define MainColor [UIColor colorWithRed:(64 / 255.0) green:(98 / 255.0) blue:(124 / 255.0) alpha:1.0]
-
 
 @interface DiaryViewController () <UIAlertViewDelegate,NSURLSessionTaskDelegate>
 {
@@ -124,9 +121,9 @@
     UITapGestureRecognizer *progressTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(cancelUpload)];
     [_circleProgressView addGestureRecognizer:progressTap];
     
-    _facebookImageView.layer.cornerRadius = _facebookImageView.frame.size.width/4;
+    _facebookImageView.layer.cornerRadius = _facebookImageView.frame.size.width/2;
     _facebookImageView.layer.masksToBounds = YES;
-    _twitterImageView.layer.cornerRadius = _twitterImageView.frame.size.width/4;
+    _twitterImageView.layer.cornerRadius = _twitterImageView.frame.size.width/2;
     _twitterImageView.layer.masksToBounds = YES;
 }
 

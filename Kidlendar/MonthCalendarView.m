@@ -13,11 +13,6 @@
 #import "WeekdayView.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
-#define MainColor [UIColor colorWithRed:(64 / 255.0) green:(98 / 255.0) blue:(124 / 255.0) alpha:1.0]
-#define TodayColor [UIColor colorWithRed:(217 / 255.0) green:(100 / 255.0) blue:(89 / 255.0) alpha:1.0]
-
-
 @implementation MonthCalendarView
 {
     CGFloat dateViewWidth;
@@ -257,9 +252,9 @@
 - (void)setAppearanceOnSelectDate:(NSDate *)date
 {
     DateView *view =[self viewFromDate:date];
-    view.dateLabel.layer.masksToBounds = YES;
     WeekdayView *weekdayView = weekdayArray[view.column];
     weekdayView.selectedLabel.hidden = NO;
+    view.dateLabel.layer.masksToBounds = YES;
     view.dateLabel.layer.cornerRadius = view.dateLabel.frame.size.width/2;
         
     CATransition *animation = [CATransition animation];
@@ -286,7 +281,6 @@
 - (void)setAppearanceOnDeselectDate:(NSDate *)date dateNotInCurrentMonth:(BOOL)inMonth
 {
     DateView *view =[self viewFromDate:date];
-    view.dateLabel.layer.masksToBounds = NO;
     view.isSelected = NO;
     WeekdayView *weekdayView = weekdayArray[view.column];
     fadeDateView = view;
@@ -316,6 +310,7 @@
 -(void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
 {
     fadeDateView.dateLabel.layer.cornerRadius = 0.0f;
+    fadeDateView.dateLabel.layer.masksToBounds = NO;
 }
 
 - (DateView *)viewFromDate:(NSDate *)date

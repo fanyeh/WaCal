@@ -15,6 +15,14 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        [self setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+        [self setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        self.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
+        self.layer.borderColor = [MainColor CGColor];
+        self.layer.borderWidth = 1.0f;
+        self.layer.cornerRadius = frame.size.width/2;
+        self.titleLabel.numberOfLines = 0;
+        self.titleLabel.textAlignment = NSTextAlignmentCenter;
     }
     return self;
 }

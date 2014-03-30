@@ -14,3 +14,12 @@
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
 #endif
+
+#define BarColor [UIColor colorWithRed:(60 / 255.0) green:(186 / 255.0) blue:(200 / 255.0) alpha:1.0]
+#define MainColor [UIColor colorWithRed:(60 / 255.0) green:(186 / 255.0) blue:(200 / 255.0) alpha:1.0]
+#define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
+#define TodayColor [UIColor colorWithRed:(241 / 255.0) green:(145 / 255.0) blue:(129 / 255.0) alpha:1.0]
+#define LightGrayColor [UIColor colorWithRed:(170 / 255.0) green:(170 / 255.0) blue:(170 / 255.0) alpha:1.0]
+#define TodayColor [UIColor colorWithRed:(241 / 255.0) green:(145 / 255.0) blue:(129 / 255.0) alpha:1.0]
+#define SuperLightGrayColor [UIColor colorWithRed:(230 / 255.0) green:(230 / 255.0) blue:(230 / 255.0) alpha:1.0]
+

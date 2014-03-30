@@ -8,6 +8,7 @@
             <connections>
                 <outlet property="contentScrollView" destination="6I1-Gq-6Wg" id="Ifk-TX-et1"/>
                 <outlet property="contentView" destination="Gja-IO-SS8" id="3gt-Ty-BC4"/>
+                <outlet property="deleteButton" destination="fwk-4Q-BOH" id="g3D-dG-zeu"/>
                 <outlet property="diaryEntryView" destination="7ee-j6-VgJ" id="ebD-g0-vZK"/>
                 <outlet property="diaryPhotoView" destination="yRz-sy-z0a" id="K2l-BD-kf4"/>
                 <outlet property="diarySubjectField" destination="aPc-K5-Mp3" id="2vg-Yn-AkJ"/>
@@ -16,8 +17,8 @@
                 <outlet property="locationSearchBar" destination="AdV-Sw-1gH" id="6rn-mn-uFo"/>
                 <outlet property="locationSearchView" destination="yFi-xE-eU6" id="ykT-Ru-OXd"/>
                 <outlet property="mainViewBackground" destination="TeP-rb-7Ve" id="cuu-is-od1"/>
+                <outlet property="saveButton" destination="KIU-NY-Znt" id="9uv-aH-q3c"/>
                 <outlet property="scrollViewBackground" destination="3x1-6O-smT" id="eeS-pu-bks"/>
-                <outlet property="searchMaskView" destination="oGR-eK-9f6" id="nLN-fp-ig7"/>
                 <outlet property="searchResultTable" destination="pS2-1Z-5YQ" id="s5Z-Zt-3f2"/>
                 <outlet property="videoPlayView" destination="PFO-EK-L9q" id="7t2-cR-Us8"/>
                 <outlet property="view" destination="1" id="3"/>
@@ -28,22 +29,36 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="TeP-rb-7Ve" userLabel="MainViewBackground">
-                    <rect key="frame" x="0.0" y="65" width="320" height="320"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="320" id="RBh-YI-kH9"/>
-                    </constraints>
-                </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="3x1-6O-smT" userLabel="ScrollViewBackground">
-                    <rect key="frame" x="20" y="74" width="280" height="267"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TeP-rb-7Ve" userLabel="MainViewBackground">
+                    <rect key="frame" x="0.0" y="64" width="320" height="320"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gja-IO-SS8">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3x1-6O-smT" userLabel="ScrollViewBackground">
+                    <rect key="frame" x="20" y="69" width="280" height="277"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yFi-xE-eU6" userLabel="search view">
+                    <rect key="frame" x="20" y="69" width="280" height="277"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="pS2-1Z-5YQ">
+                            <rect key="frame" x="0.0" y="44" width="280" height="223"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </tableView>
+                        <searchBar contentMode="redraw" fixedFrame="YES" searchBarStyle="minimal" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AdV-Sw-1gH">
+                            <rect key="frame" x="0.0" y="0.0" width="280" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <textInputTraits key="textInputTraits"/>
+                        </searchBar>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </view>
+                <view clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gja-IO-SS8">
                     <rect key="frame" x="20" y="74" width="280" height="267"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
-                        <scrollView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6I1-Gq-6Wg">
+                        <scrollView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6I1-Gq-6Wg">
                             <rect key="frame" x="0.0" y="0.0" width="280" height="267"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <subviews>
@@ -52,7 +67,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7ee-j6-VgJ">
-                                            <rect key="frame" x="10" y="40" width="180" height="134"/>
+                                            <rect key="frame" x="10" y="44" width="180" height="103"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -60,24 +75,19 @@
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                         </textView>
                                         <textField clipsSubviews="YES" tag="9" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Find location" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JjE-KJ-kih" userLabel="Location Field">
-                                            <rect key="frame" x="10" y="187" width="260" height="40"/>
+                                            <rect key="frame" x="8" y="187" width="260" height="40"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="search"/>
                                         </textField>
                                         <textField clipsSubviews="YES" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="2013/12/13 Saturday" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ggv-6Q-Bvg" userLabel="Date Field">
-                                            <rect key="frame" x="10" y="146" width="260" height="40"/>
+                                            <rect key="frame" x="8" y="146" width="260" height="40"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <textInputTraits key="textInputTraits"/>
                                         </textField>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="save.png" translatesAutoresizingMaskIntoConstraints="NO" id="9Q3-x9-dWV">
-                                            <rect key="frame" x="240" y="230" width="35" height="35"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <color key="backgroundColor" red="0.2047217153" green="0.51662294710000001" blue="0.68829835770000003" alpha="1" colorSpace="calibratedRGB"/>
-                                        </imageView>
                                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VXR-Y6-wkj">
                                             <rect key="frame" x="0.0" y="226" width="280" height="1"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -94,12 +104,12 @@
                                             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         </view>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yRz-sy-z0a">
-                                            <rect key="frame" x="195" y="40" width="80" height="78"/>
+                                            <rect key="frame" x="195" y="53" width="80" height="80"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </imageView>
                                         <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PFO-EK-L9q" userLabel="videoPlayView">
-                                            <rect key="frame" x="209" y="52" width="53" height="53"/>
+                                            <rect key="frame" x="209" y="66" width="53" height="53"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="playButton.png" translatesAutoresizingMaskIntoConstraints="NO" id="2L2-G7-Vle">
@@ -110,17 +120,39 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.52000000000000002" colorSpace="calibratedWhite"/>
                                         </view>
                                         <textField clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Subject" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aPc-K5-Mp3" userLabel="Subject">
-                                            <rect key="frame" x="10" y="2" width="260" height="30"/>
+                                            <rect key="frame" x="8" y="2" width="260" height="40"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
                                         </textField>
                                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LnO-CC-YXz">
-                                            <rect key="frame" x="0.0" y="31" width="280" height="1"/>
+                                            <rect key="frame" x="0.0" y="40" width="280" height="1"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KIU-NY-Znt" userLabel="save button">
+                                            <rect key="frame" x="240" y="232" width="35" height="35"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" red="0.23529411759999999" green="0.72941176470000002" blue="0.7843137255" alpha="1" colorSpace="calibratedRGB"/>
+                                            <state key="normal" image="save.png">
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="saveDiary:" destination="-1" eventType="touchUpInside" id="z4z-Xk-gON"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fwk-4Q-BOH" userLabel="delete button">
+                                            <rect key="frame" x="5" y="232" width="35" height="35"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="backgroundColor" red="0.94509803921568625" green="0.56862745098039214" blue="0.50588235294117645" alpha="1" colorSpace="calibratedRGB"/>
+                                            <state key="normal" image="delete.png">
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="deleteDiary:" destination="-1" eventType="touchUpInside" id="bcm-Bu-pU7"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -145,49 +177,13 @@
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-            <constraints>
-                <constraint firstItem="Gja-IO-SS8" firstAttribute="leading" secondItem="3x1-6O-smT" secondAttribute="leading" id="6fK-VE-Knw"/>
-                <constraint firstItem="TeP-rb-7Ve" firstAttribute="centerX" secondItem="Gja-IO-SS8" secondAttribute="centerX" id="FRd-2U-VH0"/>
-                <constraint firstAttribute="bottom" secondItem="Gja-IO-SS8" secondAttribute="bottom" constant="227" id="GiN-Zm-8tQ"/>
-                <constraint firstItem="Gja-IO-SS8" firstAttribute="top" secondItem="1" secondAttribute="top" constant="74" id="VFD-z3-cDq"/>
-                <constraint firstItem="Gja-IO-SS8" firstAttribute="top" secondItem="3x1-6O-smT" secondAttribute="top" id="aVj-q7-AWL"/>
-                <constraint firstItem="TeP-rb-7Ve" firstAttribute="top" secondItem="1" secondAttribute="top" constant="65" id="ae1-DP-bwL"/>
-                <constraint firstItem="Gja-IO-SS8" firstAttribute="bottom" secondItem="3x1-6O-smT" secondAttribute="bottom" id="cQR-X8-S5d"/>
-                <constraint firstItem="TeP-rb-7Ve" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="dls-41-KkA"/>
-                <constraint firstItem="Gja-IO-SS8" firstAttribute="trailing" secondItem="3x1-6O-smT" secondAttribute="trailing" id="mz7-WY-AVL"/>
-                <constraint firstAttribute="trailing" secondItem="Gja-IO-SS8" secondAttribute="trailing" constant="20" symbolic="YES" id="rbV-s7-oTP"/>
-                <constraint firstItem="Gja-IO-SS8" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="20" symbolic="YES" id="uoi-pJ-mGU"/>
-            </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
-        <view hidden="YES" contentMode="scaleToFill" id="oGR-eK-9f6" userLabel="search mask">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="300"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <subviews>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yFi-xE-eU6" userLabel="search view">
-                    <rect key="frame" x="20" y="20" width="280" height="260"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="pS2-1Z-5YQ">
-                            <rect key="frame" x="0.0" y="44" width="280" height="206"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        </tableView>
-                        <searchBar contentMode="redraw" fixedFrame="YES" searchBarStyle="minimal" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AdV-Sw-1gH">
-                            <rect key="frame" x="0.0" y="0.0" width="280" height="44"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            <textInputTraits key="textInputTraits"/>
-                        </searchBar>
-                    </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                </view>
-            </subviews>
-            <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="calibratedWhite"/>
-        </view>
     </objects>
     <resources>
+        <image name="delete.png" width="35" height="35"/>
         <image name="playButton.png" width="44" height="44"/>
         <image name="save.png" width="35" height="35"/>
     </resources>

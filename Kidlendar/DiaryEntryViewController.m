@@ -18,10 +18,8 @@
 #import "Reachability.h"
 #import "GPUImage.h"
 
-#define Rgb2UIColor(r, g, b)  [UIColor colorWithRed:((r) / 255.0) green:((g) / 255.0) blue:((b) / 255.0) alpha:1.0]
 #define kGOOGLE_API_KEY @"AIzaSyAD9e182Fr19_2DcJFZYUHf6wEeXjxs_kQ"
 #define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
-#define MainColor [UIColor colorWithRed:(64 / 255.0) green:(98 / 255.0) blue:(124 / 255.0) alpha:1.0]
 
 @interface DiaryEntryViewController () <UITextViewDelegate,UITextFieldDelegate,UITableViewDataSource,UITableViewDelegate,UISearchBarDelegate>
 {
@@ -49,6 +47,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *scrollViewBackground;
 @property (weak, nonatomic) IBOutlet UIImageView *mainViewBackground;
 @property (weak, nonatomic) IBOutlet UIView *contentView;
+@property (weak, nonatomic) IBOutlet UIButton *deleteButton;
+@property (weak, nonatomic) IBOutlet UIButton *saveButton;
 
 @end
 
@@ -68,40 +68,15 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.automaticallyAdjustsScrollViewInsets = NO;
+    self.navigationItem.hidesBackButton = YES;
     self.navigationItem.title = @"Words";
-    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveDiary:)];
-    self.navigationItem.rightBarButtonItem = saveButton;
+//    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveDiary:)];
+//    self.navigationItem.rightBarButtonItem = saveButton;
+    _saveButton.layer.masksToBounds = YES;
+    _saveButton.layer.cornerRadius = _saveButton.frame.size.width/2;
     
-//    _contentScrollView.contentSize = CGSizeMake(_contentScrollView.frame.size.width, _contentScrollView.frame.size.height+88);
-//    NSLog(@"content size %f",_contentScrollView.contentSize.height);
-//    NSLog(@"scroll size %f",_contentScrollView.frame.size.height);
-//    
-//    CGSize result = [[UIScreen mainScreen] bounds].size;
-//    if(result.height == 480)
-//    {
-//        // iPhone Classic
-//
-//        _contentScrollView.frame = CGRectMake(_contentScrollView.frame.origin.x,
-//                                              _contentScrollView.frame.origin.y,
-//                                              _contentScrollView.frame.size.width,
-//                                              _contentScrollView.frame.size.height-88);
-//        
-//        _contentScrollView.contentSize = CGSizeMake(_contentScrollView.frame.size.width, _contentScrollView.frame.size.height+88);
-//        
-//        _scrollViewBackground.frame = CGRectMake(_scrollViewBackground.frame.origin.x,
-//                                                 _scrollViewBackground.frame.origin.y,
-//                                                 _scrollViewBackground.frame.size.width,
-//                                                 _scrollViewBackground.frame.size.height-88);
-//        
-//        _contentView.frame = CGRectMake(_contentView.frame.origin.x,
-//                                        _contentView.frame.origin.y,
-//                                        _contentView.frame.size.width,
-//                                        _contentView.frame.size.height-88);
-//    }
-//    if(result.height == 568)
-//    {
-//        // iPhone 5
-//    }
+    _deleteButton.layer.masksToBounds = YES;
+    _deleteButton.layer.cornerRadius = _saveButton.frame.size.width/2;
     
     if ([_asset valueForProperty:ALAssetPropertyType] == ALAssetTypeVideo) {
         _videoPlayView.layer.cornerRadius = _videoPlayView.frame.size.width/2;
@@ -110,11 +85,9 @@
         _videoPlayView.hidden = NO;
     }
     
-
-    
     _mainViewBackground.image = _diaryImage;
     _diaryPhotoView.image =  [_diaryImage resizeImageToSize:_diaryPhotoView.frame.size];
-    UIImage *croppedImage = [_mainViewBackground.image cropImageWithRectImageView:_scrollViewBackground.frame view:_mainViewBackground];
+    UIImage *croppedImage = [_mainViewBackground.image cropImageWithRectImageView:_scrollViewBackground.bounds view:_mainViewBackground];
     GPUImageiOSBlurFilter *blurFilter = [[GPUImageiOSBlurFilter alloc]init];
     _scrollViewBackground.image = [blurFilter imageByFilteringImage:croppedImage];
     _scrollViewBackground.layer.masksToBounds = YES;
@@ -142,8 +115,6 @@
     photoDateFormatter.timeZone = [NSTimeZone systemTimeZone];
     
     _diaryEntryView.delegate = self;
-//    _diaryEntryView.text = @"This moment...";
-//    hasText = NO;
     
     _diarySubjectField.delegate = self;
     [_diarySubjectField becomeFirstResponder];
@@ -151,20 +122,19 @@
     
     _locationField.delegate = self;
     UIImageView *locationTag = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
-    locationTag.image = [UIImage imageNamed:@"eventLocationFill20.png"];
+    locationTag.image = [UIImage imageNamed:@"eventLocationLine20.png"];
     UIView *locationLeftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
     [locationLeftView addSubview:locationTag];
     locationTag.center = locationLeftView.center;
     _locationField.leftView = locationLeftView;
     _locationField.leftViewMode = UITextFieldViewModeAlways;
-//    locationFirstLoad = YES;
     
     _diaryTimeField.delegate = self;
     _diaryTimeField.inputView = datePicker;
     _diaryTimeField.tag = 1;
     _diaryTimeField.text = [dateFormatter stringFromDate:[NSDate date]];
     UIImageView *timeTag = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
-    timeTag.image = [UIImage imageNamed:@"eventCalendarFill20.png"];
+    timeTag.image = [UIImage imageNamed:@"eventCalendarLine20.png"];
     UIView *timeLeftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
     [timeLeftView addSubview:timeTag];
     timeTag.center = timeLeftView.center;
@@ -224,7 +194,8 @@
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
-    _searchMaskView.hidden = YES;
+    _locationSearchView.hidden = YES;
+    _contentView.hidden = NO;
 }
 
 #pragma mark - UITableViewDataSource
@@ -242,6 +213,7 @@
 
     cell.textLabel.text = locName;
     cell.detailTextLabel.text = address;
+    cell.backgroundColor = [UIColor clearColor];
 
     return cell;
 }
@@ -256,7 +228,8 @@
     _locationField.text = [places[indexPath.row] objectForKey:@"name"];
     locationLat =  [[[[places[indexPath.row] objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"] doubleValue];
     locationLng =  [[[[places[indexPath.row] objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
-    _searchMaskView.hidden = YES;
+    _locationSearchView.hidden = YES;
+    _contentView.hidden = NO;
 }
 
 - (void)didReceiveMemoryWarning
@@ -338,9 +311,10 @@
 {
     if (textField.returnKeyType == UIReturnKeySearch) {
         if ([self checkInternetConnection]) {
+            _contentView.hidden = YES;
+            _locationSearchView.hidden = NO;
             _locationSearchBar.text = _locationField.text;
             [self queryGooglePlacesLongitude:0 andLatitude:0 withName:_locationField.text];
-            _searchMaskView.hidden = NO;
             [_locationSearchBar becomeFirstResponder];
             return YES;
         }else

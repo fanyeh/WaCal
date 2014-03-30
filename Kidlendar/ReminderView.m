@@ -9,9 +9,6 @@
 #import "ReminderView.h"
 #import "ReminderButton.h"
 
-#define MainColor [UIColor colorWithRed:(64 / 255.0) green:(98 / 255.0) blue:(124 / 255.0) alpha:1.0]
-
-
 @implementation ReminderView
 
 - (id)initWithFrame:(CGRect)frame
@@ -41,12 +38,6 @@
             
             ReminderButton *alarmButton = [[ReminderButton alloc]initWithFrame:CGRectMake(alarmButtonX, alarmButtonY, buttonSize, buttonSize)];
             
-            [alarmButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-            [alarmButton setTitleColor:[UIColor colorWithWhite:0.667 alpha:1.000] forState:UIControlStateNormal];
-            alarmButton.titleLabel.font = [UIFont fontWithName:@"Avenir-light" size:14];
-            alarmButton.layer.borderColor = [[UIColor colorWithWhite:0.667 alpha:1.000]CGColor];
-            alarmButton.layer.borderWidth = 1.0f;
-            alarmButton.layer.cornerRadius = buttonSize/2;
             alarmButton.tag = i;
             [self addSubview:alarmButton];
             alarmButtonX += buttonSize + gapX;
@@ -58,38 +49,38 @@
             
             switch (i) {
                 case 1:
-                    [alarmButton setTitle:@"OnTime" forState:UIControlStateNormal];
+                    [alarmButton setTitle:@"On\nTime" forState:UIControlStateNormal];
                     break;
                 case 2:
-                    [alarmButton setTitle:@"5 Min" forState:UIControlStateNormal];
+                    [alarmButton setTitle:@"5\nMin" forState:UIControlStateNormal];
                     alarmButton.timeOffset = 300;
                     break;
                 case 3:
-                    [alarmButton setTitle:@"15 Min" forState:UIControlStateNormal];
+                    [alarmButton setTitle:@"15\nMin" forState:UIControlStateNormal];
                     alarmButton.timeOffset = 900;
                     break;
                 case 4:
-                    [alarmButton setTitle:@"30 Min" forState:UIControlStateNormal];
+                    [alarmButton setTitle:@"30\nMin" forState:UIControlStateNormal];
                     alarmButton.timeOffset = 1800;
                     break;
                 case 5:
-                    [alarmButton setTitle:@"1 Hour" forState:UIControlStateNormal];
+                    [alarmButton setTitle:@"1\nHour" forState:UIControlStateNormal];
                     alarmButton.timeOffset = 3600;
                     break;
                 case 6:
-                    [alarmButton setTitle:@"2 Hours" forState:UIControlStateNormal];
+                    [alarmButton setTitle:@"2\nHours" forState:UIControlStateNormal];
                     alarmButton.timeOffset = 7200;
                     break;
                 case 7:
-                    [alarmButton setTitle:@"1 Day" forState:UIControlStateNormal];
+                    [alarmButton setTitle:@"1\nDay" forState:UIControlStateNormal];
                     alarmButton.timeOffset = 86400;
                     break;
                 case 8:
-                    [alarmButton setTitle:@"2 Days" forState:UIControlStateNormal];
+                    [alarmButton setTitle:@"2\nDays" forState:UIControlStateNormal];
                     alarmButton.timeOffset = 172800;
                     break;
                 case 9:
-                    [alarmButton setTitle:@"1 Week" forState:UIControlStateNormal];
+                    [alarmButton setTitle:@"1\nWeek" forState:UIControlStateNormal];
                     alarmButton.timeOffset = 604800;
                     break;
                     

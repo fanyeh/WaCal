@@ -40,7 +40,7 @@
     self.navigationController.navigationBar.titleTextAttributes = size;
     self.navigationItem.title = @"Setting";
     
-//    [self.tableView registerClass:[SwitchCell class] forCellReuseIdentifier:@"SwitchCell"];
+    self.tableView.tintColor = MainColor;
     [self.tableView registerNib:[UINib nibWithNibName:@"SettingTableCell" bundle:nil] forCellReuseIdentifier:@"CalendarCell"];
     
     alarmPicker = [[UIPickerView alloc]init];
@@ -163,7 +163,6 @@
 
 
 #pragma mark - Table view data source
-#define MainColor [UIColor colorWithRed:(64 / 255.0) green:(98 / 255.0) blue:(124 / 255.0) alpha:1.0]
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {

@@ -7,8 +7,6 @@
 //
 
 #import "FilterCell.h"
-#define MainColor [UIColor colorWithRed:(52 / 255.0) green:(132 / 255.0) blue:(176 / 255.0) alpha:1.0]
-
 
 @implementation FilterCell
 {
