@@ -675,7 +675,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
                 if ((b.tag==1&&a.absoluteDate)||(b.timeOffset == a.relativeOffset*-1)) {
                     [b setSelected:YES];
                     b.backgroundColor =MainColor;
-                    _reminderValueLabel.text = b.titleLabel.text;
+                    _reminderValueLabel.text = [b.titleLabel.text stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
                     break;
                 }
             }

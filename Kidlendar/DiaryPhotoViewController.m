@@ -327,7 +327,6 @@ typedef NS_ENUM(NSInteger, FilterType)
         }
     }
     
-    NSLog(@"image after aspect fit: width=%f height=%f",newwidth,newheight);
     sizeAfterAspectFit = CGSizeMake(newwidth, newheight);
     return sizeAfterAspectFit;
 }
@@ -354,7 +353,6 @@ typedef NS_ENUM(NSInteger, FilterType)
         frame.origin.y = _photoImageView.bounds.origin.y + _photoImageView.bounds.size.height-gapFromBoundary-frame.size.height;
     
     _cropRect = frame;
-    NSLog(@"Crop rect size %@",[NSValue valueWithCGRect:_cropRect]);
     [self updateMaskPath:_cropRect];
     [sender setTranslation:CGPointMake(0, 0) inView:self.view];
 }
@@ -364,18 +362,6 @@ typedef NS_ENUM(NSInteger, FilterType)
     CGFloat ratio = _photoImage.size.width/sizeAfterAspectFit.width;
     CGAffineTransform t = CGAffineTransformMakeScale(ratio/initialRectRatio,ratio/initialRectRatio);
     CGRect scaledCropRect = CGRectApplyAffineTransform(_cropRect,t);
-    
-    if (scaledCropRect.origin.x < 0)
-        scaledCropRect.origin.x = 0;
-    
-    if (scaledCropRect.origin.y < 0)
-        scaledCropRect.origin.y = 0;
-    
-    if (scaledCropRect.size.width > _photoImage.size.width)
-        scaledCropRect.size.width = _photoImage.size.width;
-    
-    if (scaledCropRect.size.height > _photoImage.size.height)
-        scaledCropRect.size.height = _photoImage.size.height;
     
     return scaledCropRect;
 }

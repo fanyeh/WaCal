@@ -189,8 +189,9 @@ static int deleteLabelSize = 30;
     photoMinimunCellSpace = 1;
     photoMinimunLineSpace = 1;
 
-    photoCollectionExpandHeight = self.view.frame.size.height - 44 - scroller.frame.size.height;
-    photoCollectionShrinkHeight = self.view.frame.size.height - 44 - diaryPhotosView.frame.size.height - scroller.frame.size.height;
+    CGSize screenSize = [[UIScreen mainScreen]bounds].size;
+    photoCollectionExpandHeight = screenSize.height - 44 - scroller.frame.size.height;
+    photoCollectionShrinkHeight = screenSize.height - 44 - diaryPhotosView.frame.size.height - scroller.frame.size.height;
     
     UICollectionViewFlowLayout *photoFlowLayout = [[UICollectionViewFlowLayout alloc]init];
     
@@ -211,7 +212,7 @@ static int deleteLabelSize = 30;
     // Table view for change photo album
     photoAlbumTable = [[UITableView alloc]initWithFrame:CGRectMake(0, 418, 320, photoCollectionExpandHeight)
                                                   style:UITableViewStyleGrouped];
-    photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, -320, 0);
+    photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, 320, 0);
     photoAlbumTable.delegate = self;
     photoAlbumTable.dataSource = self;
     photoAlbumTable.contentInset = UIEdgeInsetsMake(-1.0f, 0.0f, 0.0f, 0.0);
@@ -258,19 +259,19 @@ static int deleteLabelSize = 30;
 -(void)viewWillAppear:(BOOL)animated
 {
     self.tabBarController.tabBar.hidden = YES;
-    photoAlbumTable.hidden = YES;
+//    photoAlbumTable.hidden = YES;
     diaryPhotosView.backgroundColor = [UIColor clearColor];
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
-    photoAlbumTable.hidden = NO;
+//    photoAlbumTable.hidden = NO;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     self.tabBarController.tabBar.hidden = NO;
-    photoAlbumTable.hidden = YES;
+//    photoAlbumTable.hidden = YES;
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -1086,11 +1087,11 @@ static int deleteLabelSize = 30;
     
     if (!showAlbumTable) {
         photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, 320, 0);
-        photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, 320, 0);
+        photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, -320, 0);
         showAlbumTable = YES;
     } else {
         photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, -320, 0);
-        photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, -320, 0);
+        photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, 320, 0);
         showAlbumTable = NO;
     }
 }

@@ -78,7 +78,6 @@
     if (!successful) {
         NSLog(@"Error saving: %@", [err localizedDescription]);
     }
-    NSLog(@"Diary save ok");
     return successful;
 }
 
@@ -89,7 +88,6 @@
     NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:d.diaryKey];
     if ([[NSFileManager defaultManager] fileExistsAtPath:dataPath])
         [[NSFileManager defaultManager] removeItemAtPath:dataPath error:nil]; //Delete folder
-    NSLog(@"Delete DatePath %@",dataPath);
     [allItems removeObjectIdenticalTo:d];
     [context deleteObject:d.cloudRelationship];
     [context deleteObject:d];
@@ -137,7 +135,6 @@
     
     double newOrderValue = (lowerBound + upperBound) / 2.0;
     
-    NSLog(@"moving to order %f", newOrderValue);
     [d setOrderingValue:newOrderValue];
 }
 

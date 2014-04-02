@@ -329,7 +329,6 @@
 
 -(void)refreshCalendarOnEventChange:(NSNotification *)notification
 {
-    NSLog(@"event change");
     NSDate *eventDate = [notification.userInfo objectForKey:@"startDate"];;
     _selectedDate = eventDate;
     [self resetCalendarBySelectDate:YES];

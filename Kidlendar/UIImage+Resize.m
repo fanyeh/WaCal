@@ -309,6 +309,18 @@
     CGAffineTransform t = CGAffineTransformMakeScale(1.0f / self.size.width, 1.0f / self.size.height);
     CGRect cropRegion = CGRectApplyAffineTransform(cropRect, t);
     
+    if (cropRegion.origin.x < 0)
+        cropRegion.origin.x = 0;
+    
+    if (cropRegion.origin.y < 0)
+        cropRegion.origin.y = 0;
+    
+    if (cropRegion.size.width > 1)
+        cropRegion.size.width = 1;
+    
+    if (cropRegion.size.height > 1)
+        cropRegion.size.height = 1;
+    
     // Process the filtering
     GPUImageCropFilter *cropFilter = [[GPUImageCropFilter alloc]init];
     cropFilter.cropRegion = cropRegion;

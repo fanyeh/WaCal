@@ -477,7 +477,6 @@
         eventLocation.locationAddress = selectedLocation.locationAddress;
         eventLocation.reference = selectedLocation.reference;
         [[LocationDataStore sharedStore]saveChanges];
-        NSLog(@"Created new location");
     }
     
     NSDictionary *startDate = [NSDictionary dictionaryWithObject:event.startDate forKey:@"startDate"];
@@ -538,11 +537,7 @@
 {
     event.title = _subjectField.text;
     NSError *err;
-    if ([[[CalendarStore sharedStore]eventStore] saveEvent:event span:EKSpanThisEvent commit:YES error:&err])
-        NSLog(@"New event created");
-    else
-        NSLog(@"Create new event fail");
-    NSLog(@"Error From calendar : %@", [err description]);
+    [[[CalendarStore sharedStore]eventStore] saveEvent:event span:EKSpanThisEvent commit:YES error:&err];
     NSDictionary *startDate = [NSDictionary dictionaryWithObject:event.startDate forKey:@"startDate"];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"eventChange" object:nil userInfo:startDate];
     [self.navigationController popToRootViewControllerAnimated:YES];
@@ -810,7 +805,6 @@
                                                                                           error:&connectionError];
                                    //The results from Google will be an array obtained from the NSDictionary object with the key "results".
                                    places = [json objectForKey:@"results"];
-                                   //                                   NSLog(@"Places %@",places);
                                    dispatch_async(dispatch_get_main_queue(), ^{
                                        [_searchResultTable reloadData];
                                    });
