@@ -37,14 +37,17 @@
                     <rect key="frame" x="20" y="69" width="280" height="277"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yFi-xE-eU6" userLabel="search view">
+                <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yFi-xE-eU6" userLabel="search view">
                     <rect key="frame" x="20" y="69" width="280" height="277"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="pS2-1Z-5YQ">
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="pS2-1Z-5YQ">
                             <rect key="frame" x="0.0" y="44" width="280" height="223"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="280" id="8EC-0x-aKM"/>
+                            </constraints>
                         </tableView>
                         <searchBar contentMode="redraw" fixedFrame="YES" searchBarStyle="minimal" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AdV-Sw-1gH">
                             <rect key="frame" x="0.0" y="0.0" width="280" height="44"/>
@@ -53,12 +56,16 @@
                         </searchBar>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="pS2-1Z-5YQ" secondAttribute="bottom" constant="10" id="3nL-lf-gvx"/>
+                        <constraint firstItem="pS2-1Z-5YQ" firstAttribute="top" secondItem="yFi-xE-eU6" secondAttribute="top" constant="44" id="phV-TP-Bjr"/>
+                    </constraints>
                 </view>
-                <view clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gja-IO-SS8">
+                <view clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gja-IO-SS8" userLabel="content">
                     <rect key="frame" x="20" y="74" width="280" height="267"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
-                        <scrollView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6I1-Gq-6Wg">
+                        <scrollView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6I1-Gq-6Wg">
                             <rect key="frame" x="0.0" y="0.0" width="280" height="267"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <subviews>
@@ -163,6 +170,7 @@
                                 <constraint firstItem="mcw-u9-is6" firstAttribute="leading" secondItem="6I1-Gq-6Wg" secondAttribute="leading" id="ASc-8f-1AB"/>
                                 <constraint firstAttribute="trailing" secondItem="mcw-u9-is6" secondAttribute="trailing" id="LUS-5o-CQw"/>
                                 <constraint firstAttribute="bottom" secondItem="mcw-u9-is6" secondAttribute="bottom" id="dG0-bb-Id2"/>
+                                <constraint firstAttribute="width" constant="280" id="wjI-4N-52q"/>
                             </constraints>
                             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                         </scrollView>
@@ -170,6 +178,7 @@
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="6I1-Gq-6Wg" firstAttribute="leading" secondItem="Gja-IO-SS8" secondAttribute="leading" id="1od-Xk-qyB"/>
+                        <constraint firstAttribute="width" constant="280" id="80T-wc-oWx"/>
                         <constraint firstAttribute="trailing" secondItem="6I1-Gq-6Wg" secondAttribute="trailing" id="Cye-hh-uQO"/>
                         <constraint firstItem="6I1-Gq-6Wg" firstAttribute="top" secondItem="Gja-IO-SS8" secondAttribute="top" id="MlP-4w-Tc5"/>
                         <constraint firstAttribute="bottom" secondItem="6I1-Gq-6Wg" secondAttribute="bottom" id="VcM-ih-yAP"/>
@@ -177,6 +186,12 @@
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="Gja-IO-SS8" secondAttribute="bottom" constant="227" id="SVv-Zc-T5g"/>
+                <constraint firstAttribute="bottom" secondItem="yFi-xE-eU6" secondAttribute="bottom" constant="222" id="YnJ-ph-yoQ"/>
+                <constraint firstItem="Gja-IO-SS8" firstAttribute="top" secondItem="1" secondAttribute="top" constant="74" id="l2O-La-RLx"/>
+                <constraint firstItem="yFi-xE-eU6" firstAttribute="top" secondItem="1" secondAttribute="top" constant="69" id="nZd-4P-QID"/>
+            </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>

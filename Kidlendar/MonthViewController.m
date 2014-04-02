@@ -206,6 +206,9 @@
 //{
 //    _monthView.hidden  = NO;
 //}
+//- (BOOL)prefersStatusBarHidden {
+//    return YES;
+//}
 
 - (void)didReceiveMemoryWarning
 {

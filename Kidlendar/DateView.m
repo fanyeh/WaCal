@@ -30,7 +30,7 @@
                                                               labelSize
                                                               )];
 
-        _dateLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:19];
+        _dateLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:19];
         _dateLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:_dateLabel];
         _dateLabel.opaque = YES;

@@ -110,8 +110,10 @@
     [toolView addSubview:saveButton];
     
     _locationSearchBar.delegate = self;
+    _locationSearchBar.tintColor = MainColor;
     _searchResultTable.delegate = self;
     _searchResultTable.dataSource = self;
+    
     _locationSearchView.layer.cornerRadius = 10.0f;
 
     // Calendar
@@ -735,6 +737,7 @@
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
     _maskView.hidden = YES;
+    [_locationField becomeFirstResponder];
 }
 
 #pragma mark - UITableViewDataSource

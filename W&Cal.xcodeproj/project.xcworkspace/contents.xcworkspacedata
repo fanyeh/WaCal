@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:Kidlendar.xcodeproj">
+      location = "self:W&amp;Cal.xcodeproj">
    </FileRef>
 </Workspace>

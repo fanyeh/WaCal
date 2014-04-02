@@ -29,7 +29,7 @@ static int deleteLabelSize = 30;
     UICollectionView *diaryPhotosView; // Tag 0
     CGPoint _priorPoint;
     NSMutableArray *sizeArray;
-    NSMutableDictionary *selectedPhotoInfo;
+//    NSMutableDictionary *selectedPhotoInfo;
     NSMutableArray *cellImageArray;
     NSMutableArray *fullScreenImageArray;
     NSMutableArray *selectedPhotoOrderingInfo;
@@ -54,7 +54,6 @@ static int deleteLabelSize = 30;
 
     BOOL showAlbumTable;
     
-    UIActivityIndicatorView *faceDetectingActivity;
     MPMoviePlayerViewController *videoPlayer;
     UIAlertView *preparingAlertView;
     UIView *scroller;
@@ -67,12 +66,13 @@ static int deleteLabelSize = 30;
     UILabel *videoDeleteLabel;
     
     DiaryPhotoCell *touchedCell;
-    UIView *frameView;
-
+    UILabel *frameView;
 }
 
 @property (weak, nonatomic) IBOutlet UIView *noPhotoView;
 @property (weak, nonatomic) IBOutlet UIImageView *faceImageView;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *faceDetectingActivity;
+
 
 @end
 
@@ -97,7 +97,6 @@ static int deleteLabelSize = 30;
     // Do any additional setup after loading the view from its nib.
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.navigationItem.title = @"Photos";
-    
     
     videoView = [[UIView alloc]initWithFrame:CGRectMake(2, 46, 316, 316)];
     UITapGestureRecognizer *videoTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(playMovie)];
@@ -140,7 +139,6 @@ static int deleteLabelSize = 30;
     playButtonView.center = videoImageView.center;
     playButtonView.frame = CGRectOffset(playButtonView.frame, 5, 0);
     [videoImageView addSubview:playButtonView];
-    videoImageView.hidden = YES;
     
     // Set up diary photo collection view
     diaryCollectionViewInset = UIEdgeInsetsMake(2, 2, 2, 2);
@@ -235,12 +233,6 @@ static int deleteLabelSize = 30;
     
     nextButton = [[UIBarButtonItem alloc]initWithTitle:@"Words" style:UIBarButtonItemStylePlain target:self action:@selector(doneSelection)];
     
-    // Face detection
-    faceDetectingActivity = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    faceDetectingActivity.frame = diaryPhotosView.frame;
-    [self.view addSubview:faceDetectingActivity];
-    [self.view bringSubviewToFront:faceDetectingActivity];
-    
     UIPanGestureRecognizer *faceDetectPan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panFaceDetectView:)];
     [_faceImageView addGestureRecognizer:faceDetectPan];
     UITapGestureRecognizer *faceDetectTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapFaceDetectView:)];
@@ -259,6 +251,8 @@ static int deleteLabelSize = 30;
     [self.view bringSubviewToFront:photoAlbumTable];
     [self.view bringSubviewToFront:photoCollectionView];
     [self.view bringSubviewToFront:scroller];
+    [self.view bringSubviewToFront:_faceDetectingActivity];
+
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -331,6 +325,7 @@ static int deleteLabelSize = 30;
 
 - (void)processFaceDetection
 {
+    [_faceDetectingActivity startAnimating];
     [self cellSizeArray];
     [cellImageArray removeAllObjects];
     // Process face detection
@@ -355,13 +350,17 @@ static int deleteLabelSize = 30;
 
         [cellImageArray addObject:cellImage];
     }
-
-    [diaryPhotosView reloadData];
-    [faceDetectingActivity stopAnimating];
+    
+    [diaryPhotosView performBatchUpdates:^{
+        [diaryPhotosView reloadSections:[NSIndexSet indexSetWithIndex:0]];
+    } completion:^(BOOL finished) {
+        [_faceDetectingActivity stopAnimating];
+    }];
 }
 
 - (void)processFaceDetectionWithIndexPath:(NSArray *)paths
 {
+    [_faceDetectingActivity startAnimating];
     for (NSIndexPath *path in paths) {
         CGSize size = [sizeArray[path.row] CGSizeValue];
         
@@ -382,12 +381,12 @@ static int deleteLabelSize = 30;
         
         cellImageArray[path.row] = cellImage;
     }
-    [UIView animateWithDuration:0 animations:^{
         [diaryPhotosView performBatchUpdates:^{
             [diaryPhotosView reloadItemsAtIndexPaths:paths];
-            [faceDetectingActivity stopAnimating];
-        } completion:nil];
-    }];
+        } completion:^(BOOL finished) {
+            [_faceDetectingActivity stopAnimating];
+
+        }];
 }
 
 #pragma mark -User Actions
@@ -436,6 +435,31 @@ static int deleteLabelSize = 30;
     }
 }
 
+-(void)hidePhoto
+{
+    _noPhotoView.hidden = YES;
+    diaryPhotosView.hidden = YES;
+    _faceImageView.hidden = YES;
+}
+
+-(void)showPhoto
+{
+    diaryPhotosView.hidden = NO;
+    _faceImageView.hidden = NO;
+}
+
+
+-(void)hideVideo
+{
+    _noPhotoView.hidden = YES;
+    videoView.hidden = YES;
+}
+
+-(void)showVideo
+{
+    videoView.hidden = NO;
+}
+
 - (void)movePhoto:(UIPanGestureRecognizer *)sender
 {
     DiaryPhotoCell *cell = (DiaryPhotoCell *)sender.view;
@@ -445,15 +469,19 @@ static int deleteLabelSize = 30;
     {
         _noPhotoView.hidden = YES;
         CGRect frame = [cell convertRect:cell.contentView.frame toView:self.view];
-        frameView = [[UIView alloc]initWithFrame:frame];
+        frameView = [[UILabel alloc]initWithFrame:frame];
         frameView.layer.borderColor = [MainColor CGColor];
-        frameView.layer.borderWidth = 3.0f;
-        frameView.backgroundColor = SuperLightGrayColor;
+        frameView.layer.borderWidth = 2.0f;
+        NSArray *imageInfo = [selectedPhotoOrderingInfo objectAtIndex:[diaryPhotosView indexPathForCell:cell].row];
+        frameView.text = imageInfo[2];
+        frameView.textColor = MainColor;
+        frameView.textAlignment = NSTextAlignmentCenter;
+        frameView.font = [UIFont fontWithName:@"Helvetica" size:30];
         [self.view addSubview:frameView];
         [self.view bringSubviewToFront:diaryPhotosView];
         [diaryPhotosView bringSubviewToFront:sender.view];
         [self.view bringSubviewToFront:_faceImageView];
-        [self.view bringSubviewToFront:faceDetectingActivity];
+        [self.view bringSubviewToFront:_faceDetectingActivity];
         [UIView animateWithDuration:0.3 animations:^{
             cell.transform = CGAffineTransformScale(cell.transform, 0.6, 0.6);
             cell.center = [sender locationInView:sender.view.superview];
@@ -493,8 +521,8 @@ static int deleteLabelSize = 30;
     if (sender.state == UIGestureRecognizerStateEnded || sender.state == UIGestureRecognizerStateCancelled)
     {
         [frameView removeFromSuperview];
-        [faceDetectingActivity startAnimating];
-        
+        [_faceDetectingActivity startAnimating];
+
         NSIndexPath *touchedCellPath = [diaryPhotosView indexPathForItemAtPoint:CGPointMake(sender.view.center.x, sender.view.center.y)];
         NSIndexPath *currentCellIndexPath = [diaryPhotosView indexPathForCell:cell];
         
@@ -503,11 +531,9 @@ static int deleteLabelSize = 30;
             [touchedCell showHighlight:NO];
             touchedCell.deleteBadger.hidden = YES;
             
-            if ([sizeArray[currentCellIndexPath.row]isEqualToValue:sizeArray[touchedCellPath.row]])
-                [faceDetectingActivity stopAnimating];
-            
+//            if ([sizeArray[currentCellIndexPath.row]isEqualToValue:sizeArray[touchedCellPath.row]])
+
             if (![sizeArray[currentCellIndexPath.row]isEqualToValue:sizeArray[touchedCellPath.row]]) {
-                
                 [selectedPhotoOrderingInfo exchangeObjectAtIndex:currentCellIndexPath.row withObjectAtIndex:touchedCellPath.row];
                 [fullScreenImageArray exchangeObjectAtIndex:currentCellIndexPath.row withObjectAtIndex:touchedCellPath.row];
                 [self processFaceDetectionWithIndexPath:@[currentCellIndexPath,touchedCellPath]];
@@ -520,15 +546,16 @@ static int deleteLabelSize = 30;
                     [selectedPhotoOrderingInfo exchangeObjectAtIndex:currentCellIndexPath.row withObjectAtIndex:touchedCellPath.row];
                     [fullScreenImageArray exchangeObjectAtIndex:currentCellIndexPath.row withObjectAtIndex:touchedCellPath.row];
                     [cellImageArray exchangeObjectAtIndex:currentCellIndexPath.row withObjectAtIndex:touchedCellPath.row];
-                    [faceDetectingActivity stopAnimating];
                 }];
+                [_faceDetectingActivity stopAnimating];
             }
 
         } else {
             [UIView animateWithDuration:0.0 animations:^{
                 [diaryPhotosView reloadItemsAtIndexPaths:@[currentCellIndexPath]];
             }];
-            [faceDetectingActivity stopAnimating];
+            [_faceDetectingActivity stopAnimating];
+
         }
     }
 }
@@ -651,6 +678,7 @@ static int deleteLabelSize = 30;
 -(void)deletePhotoFromDiaryView:(NSIndexPath *)indexPath andAsset:(ALAsset *)asset
 {
     if ([asset valueForProperty:ALAssetPropertyType]==ALAssetTypeVideo) {
+        _noPhotoView.hidden = NO;
         [self cancelMPMoviePlayer];
         navItem.rightBarButtonItem.title = @"0/1";
     } else
@@ -662,6 +690,9 @@ static int deleteLabelSize = 30;
 
 - (void)swipePhotoCollection:(UISwipeGestureRecognizer *)sender
 {
+    [self.view bringSubviewToFront:scroller];
+    [self.view bringSubviewToFront:photoAlbumTable];
+    [self.view bringSubviewToFront:photoCollectionView];
     if (sender.direction == UISwipeGestureRecognizerDirectionUp) {
         sender.direction = UISwipeGestureRecognizerDirectionDown;
         photoCollectionView.frame = CGRectMake(photoCollectionView.frame.origin.x,
@@ -769,12 +800,6 @@ static int deleteLabelSize = 30;
     _noPhotoView.hidden = YES;
     ALAsset *asset =  [photoAssets objectAtIndex:indexPath.row];
 
-    // Photo collectionview image info
-    // ImageInfo[0] = indexpath
-    // ImageInfo[1] = assset group name
-    NSArray *imageInfo = @[indexPath,assetGroupPropertyName];
-    [selectedPhotoOrderingInfo addObject:imageInfo];
-    
     // Save image meta data
     [imageMeta addObject:asset.defaultRepresentation.metadata];
     
@@ -785,10 +810,13 @@ static int deleteLabelSize = 30;
     AlbumPhotoCell *cell = (AlbumPhotoCell *)[photoCollectionView cellForItemAtIndexPath:indexPath];
     cell.selectNumber.text = [NSString stringWithFormat:@"%ld",(unsigned long)[fullScreenImageArray count]];
     
-    // Perform face detection and setup diary collection view
-    [faceDetectingActivity startAnimating];
-//    [self performSelectorInBackground:@selector(processFaceDetection) withObject:nil];
+    // Photo collectionview image info
+    // ImageInfo[0] = indexpath
+    // ImageInfo[1] = assset group name
+    NSArray *imageInfo = @[indexPath,assetGroupPropertyName,cell.selectNumber.text];
+    [selectedPhotoOrderingInfo addObject:imageInfo];
     
+    // Perform face detection and setup diary collection view
     [self processFaceDetection];
 }
 
@@ -963,12 +991,9 @@ static int deleteLabelSize = 30;
             selectedMediaType = kMediaTypeVideo;
             UIImage *cellImage = [UIImage imageWithCGImage:[asset.defaultRepresentation fullScreenImage]];
             videoImageView.image = [cellImage cropWithFaceDetect:videoImageView.frame.size];
-            videoView.hidden = NO;
             
-            [self.view bringSubviewToFront:videoView];
-            [self.view bringSubviewToFront:scroller];
-            [self.view bringSubviewToFront:photoAlbumTable];
-            [self.view bringSubviewToFront:photoCollectionView];
+            [self hidePhoto];
+            [self showVideo];
 
             photoCollectionView.userInteractionEnabled = YES;
             [self showNextButton:YES];
@@ -978,6 +1003,8 @@ static int deleteLabelSize = 30;
                 [self cancelMPMoviePlayer];
                 selectedMediaType = kMediaTypePhoto;
             }
+            [self hideVideo];
+            [self showPhoto];
             [self selectedPhoto:indexPath];
         }
     }
@@ -1140,9 +1167,7 @@ static int deleteLabelSize = 30;
 
 -(void) playMovie
 {
-//    videoDeleteLabel.hidden = YES;
     ALAsset *videoAsset = [photoAssets objectAtIndex:videoIndexPath.row];
-    diaryPhotosView.hidden = YES;
     videoPlayer = [[MPMoviePlayerViewController alloc] initWithContentURL: videoAsset.defaultRepresentation.url];
     [videoPlayer.moviePlayer setContentURL:videoAsset.defaultRepresentation.url];
     
@@ -1178,18 +1203,9 @@ static int deleteLabelSize = 30;
 {
     navItem.rightBarButtonItem.title = @"0/5";
     [photoCollectionView deselectItemAtIndexPath:videoIndexPath animated:YES];
-    diaryPhotosView.hidden = NO;
     [cellImageArray removeAllObjects];
-    videoView.hidden = YES;
-//    videoDeleteLabel.hidden = YES;
     [self showNextButton:NO];
     videoIndexPath = nil;
-    _noPhotoView.hidden = NO;
-//    videoImageView.hidden = YES;
-    [self.view bringSubviewToFront:_noPhotoView];
-    [self.view bringSubviewToFront:scroller];
-    [self.view bringSubviewToFront:photoAlbumTable];
-    [self.view bringSubviewToFront:photoCollectionView];
 }
 
 #pragma mark Media Playback Notification Methods

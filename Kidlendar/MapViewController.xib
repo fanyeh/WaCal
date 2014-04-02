@@ -70,19 +70,20 @@
                         </view>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.70000000000000007" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="280" id="ZVq-gg-zkl"/>
+                        <constraint firstAttribute="height" constant="93" id="svl-4N-sW4"/>
+                    </constraints>
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="YT8-GO-piR" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="0HO-Lr-Pco"/>
                 <constraint firstAttribute="bottom" secondItem="YT8-GO-piR" secondAttribute="bottom" id="1yN-Nu-atj"/>
-                <constraint firstAttribute="bottom" secondItem="Git-oz-oEk" secondAttribute="bottom" constant="20" symbolic="YES" id="2Qy-2D-Kis"/>
-                <constraint firstItem="Git-oz-oEk" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="20" symbolic="YES" id="33h-Zp-xbk"/>
                 <constraint firstAttribute="bottom" secondItem="YT8-GO-piR" secondAttribute="bottom" id="Klx-1m-eb7"/>
-                <constraint firstItem="YT8-GO-piR" firstAttribute="centerX" secondItem="Git-oz-oEk" secondAttribute="centerX" id="Ott-T1-GIj"/>
-                <constraint firstItem="Git-oz-oEk" firstAttribute="top" secondItem="1" secondAttribute="top" constant="455" id="WSx-N0-jtc"/>
                 <constraint firstItem="YT8-GO-piR" firstAttribute="top" secondItem="1" secondAttribute="top" id="fQq-tE-h7W"/>
-                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Git-oz-oEk" secondAttribute="bottom" constant="20" id="rui-jE-TAH"/>
+                <constraint firstItem="Git-oz-oEk" firstAttribute="centerX" secondItem="YT8-GO-piR" secondAttribute="centerX" id="mHj-JD-irM"/>
+                <constraint firstAttribute="bottom" secondItem="Git-oz-oEk" secondAttribute="bottom" constant="20" id="p6c-Vr-fY2"/>
                 <constraint firstAttribute="trailing" secondItem="YT8-GO-piR" secondAttribute="trailing" id="tPv-hT-a53"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>

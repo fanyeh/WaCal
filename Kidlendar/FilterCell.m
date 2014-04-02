@@ -23,10 +23,20 @@
         CGFloat cellHeight = self.contentView.frame.size.height;
         
         _cellImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0,0,cellWidth,cellWidth)];
-        _filterNameLabel = [[UILabel alloc]initWithFrame:CGRectMake(0,
-                                                                    cellWidth + 8,
-                                                                    cellWidth,
-                                                                    cellHeight - cellWidth - 10)];
+        
+        CGSize screenSzie = [[UIScreen mainScreen]bounds].size;
+        if (screenSzie.height == 480) {
+            _filterNameLabel = [[UILabel alloc]initWithFrame:CGRectMake(0,
+                                                                        cellWidth - 15,
+                                                                        cellWidth,
+                                                                        15)];
+        } else {
+            _filterNameLabel = [[UILabel alloc]initWithFrame:CGRectMake(0,
+                                                                        cellWidth + 8,
+                                                                        cellWidth,
+                                                                        cellHeight - cellWidth - 10)];
+        }
+
         _filterNameLabel.textColor = [UIColor whiteColor];
         _filterNameLabel.font = [UIFont fontWithName:@"Helvetica-bold" size:12];
         _filterNameLabel.textAlignment = NSTextAlignmentCenter;

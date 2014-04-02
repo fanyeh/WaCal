@@ -306,7 +306,7 @@
 {
     // Convert cropRect unit to cropRegion unit
 
-    CGAffineTransform t = CGAffineTransformMakeScale(1.0f / imageView.frame.size.width, 1.0f / imageView.frame.size.height);
+    CGAffineTransform t = CGAffineTransformMakeScale(1.0f / self.size.width, 1.0f / self.size.height);
     CGRect cropRegion = CGRectApplyAffineTransform(cropRect, t);
     
     // Process the filtering
@@ -315,6 +315,5 @@
     UIImage *cropImage =  [cropFilter imageByFilteringImage:self];
     return cropImage;
 }
-
 
 @end

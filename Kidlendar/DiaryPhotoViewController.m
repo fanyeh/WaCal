@@ -19,7 +19,7 @@ typedef NS_ENUM(NSInteger, FilterType)
     kFilterTypeSharpen
 };
 
-@interface DiaryPhotoViewController () <UICollectionViewDataSource,UICollectionViewDelegate>
+@interface DiaryPhotoViewController () <UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
 {
     NSArray *filterContainter;
     NSArray *filterName;
@@ -41,12 +41,21 @@ typedef NS_ENUM(NSInteger, FilterType)
     BOOL isCrop;
     
     UIImage *filteredImage;
+    
+    CGSize sizeAfterAspectFit;
+    
+    CGPoint photoCenter;
+    
+    CGFloat initialRectRatio;
+    
+    CGFloat sliderHeight;
 }
 @property (weak, nonatomic) IBOutlet UIImageView *photoImageView;
 @property (weak, nonatomic) IBOutlet UICollectionView *filterCollectionView;
 @property (weak, nonatomic) IBOutlet GPUImageView *filterView;
 @property (weak, nonatomic) IBOutlet UISlider *adjustSlider;
 @property (weak, nonatomic) IBOutlet UIView *adjustSliderView;
+@property (weak, nonatomic) IBOutlet UIView *toolBarView;
 
 @end
 
@@ -75,14 +84,35 @@ typedef NS_ENUM(NSInteger, FilterType)
     
     self.navigationItem.rightBarButtonItem = saveButton;
     
-    
     // create crop rect pan gesture
     pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-    // Crop image first , to make sure ratio is maintained @ final crop
-    _photoImage = [_photoImage cropWithFaceDetect:_photoImageView.frame.size];
+    
     filteredImage = _photoImage;
     _photoImageView.image = _photoImage;
     [_photoImageView addGestureRecognizer:pan];
+
+    CGSize screenSize = [[UIScreen mainScreen]bounds].size;
+    if (screenSize.height == 480) {
+        self.view.frame = CGRectMake(0, 0, 320, 480);
+        _photoImageView.frame = CGRectMake(0,44, 320, 320);
+        _toolBarView.frame = CGRectMake(0,364, 320, 35);
+        _filterCollectionView.frame = CGRectMake(0,399, 320, 81);
+        _adjustSliderView.frame = CGRectMake(0, 480, 320, 116);
+        sliderHeight = 116;
+    } else
+        sliderHeight = 150;
+    
+    // Adjust image view to fit photo
+    sizeAfterAspectFit = [self imageSizeAfterAspectFit:_photoImageView];
+    photoCenter = _photoImageView.center;
+    _photoImageView.frame = CGRectMake(_photoImageView.frame.origin.x,
+                                       _photoImageView.frame.origin.y,
+                                       sizeAfterAspectFit.width,
+                                       sizeAfterAspectFit.height);
+    _photoImageView.center = photoCenter;
+    _filterView.frame = _photoImageView.frame;
+    initialRectRatio = 0.95;
+    //    _filterView.fillMode = kGPUImageFillModePreserveAspectRatioAndFill;
 
     // Filters
     _filterCollectionView.allowsMultipleSelection = NO;
@@ -215,10 +245,24 @@ typedef NS_ENUM(NSInteger, FilterType)
     _cropRectSize = [self resizeCropSize:_cropRectSize];
     
     // Setup crop rect
-    _cropRect = CGRectMake(boundsCenter.x - _cropRectSize.width/2 ,
-                           boundsCenter.y - _cropRectSize.height/2,
-                           _cropRectSize.width,
-                           _cropRectSize.height);
+
+    if (_cropRectSize.width == _photoImageView.frame.size.width) {
+        _cropRect = CGRectMake(_photoImageView.bounds.origin.x ,
+                               _photoImageView.frame.size.height/2 - _cropRectSize.height/2,
+                               _cropRectSize.width,
+                               _cropRectSize.height);
+    } else if (_cropRectSize.height == _photoImageView.frame.size.height) {
+        _cropRect = CGRectMake(_photoImageView.frame.size.width/2 - _cropRectSize.width/2,
+                               _photoImageView.bounds.origin.y ,
+                               _cropRectSize.width,
+                               _cropRectSize.height);
+    } else {
+        _cropRect = CGRectMake(_photoImageView.frame.size.width/2 - _cropRectSize.width/2,
+                               _photoImageView.frame.size.height/2 - _cropRectSize.height/2,
+                               _cropRectSize.width,
+                               _cropRectSize.height);
+    }
+
     
     // create layer mask for the image
     _maskLayer =[[CAShapeLayer alloc]init];
@@ -237,15 +281,12 @@ typedef NS_ENUM(NSInteger, FilterType)
     [self.view.layer addSublayer:imageLayer];
 }
 
-- (CGSize)resizeCropSize:(CGSize)newSize
+- (CGSize)resizeCropSize:(CGSize)cropRectSize
 {
-    CGFloat imageRatio = _photoImageView.frame.size.width/_photoImageView.frame.size.height;
+    CGFloat imageWidth = sizeAfterAspectFit.width;
+    CGFloat imageHeight =  sizeAfterAspectFit.height;
     
-    CGFloat gapFromBoundary = 30;
-    CGFloat imageWidth = _photoImageView.frame.size.width - (gapFromBoundary*imageRatio);
-    CGFloat imageHeight =  _photoImageView.frame.size.height - gapFromBoundary;
-    
-    CGFloat cropRatio = newSize.width/newSize.height;
+    CGFloat cropRatio = cropRectSize.width/cropRectSize.height;
     
     CGFloat maxCropHeight = imageWidth/cropRatio;
     CGFloat maxCropWidth = imageWidth;
@@ -254,7 +295,41 @@ typedef NS_ENUM(NSInteger, FilterType)
         maxCropHeight = imageHeight;
         maxCropWidth = imageHeight*cropRatio;
     }
-    return CGSizeMake(maxCropWidth, maxCropHeight);
+    return CGSizeMake(maxCropWidth*initialRectRatio, maxCropHeight*initialRectRatio);
+}
+
+-(CGSize)imageSizeAfterAspectFit:(UIImageView*)imgview
+{
+    float newwidth;
+    float newheight;
+    
+    UIImage *image=imgview.image;
+    
+    if (image.size.height>=image.size.width){
+        newheight=imgview.frame.size.height;
+        newwidth=(image.size.width/image.size.height)*newheight;
+        
+        if(newwidth>imgview.frame.size.width){
+            float diff=imgview.frame.size.width-newwidth;
+            newheight=newheight+diff/newheight*newheight;
+            newwidth=imgview.frame.size.width;
+        }
+        
+    }
+    else{
+        newwidth=imgview.frame.size.width;
+        newheight=(image.size.height/image.size.width)*newwidth;
+        
+        if(newheight>imgview.frame.size.height){
+            float diff=imgview.frame.size.height-newheight;
+            newwidth=newwidth+diff/newwidth*newwidth;
+            newheight=imgview.frame.size.height;
+        }
+    }
+    
+    NSLog(@"image after aspect fit: width=%f height=%f",newwidth,newheight);
+    sizeAfterAspectFit = CGSizeMake(newwidth, newheight);
+    return sizeAfterAspectFit;
 }
 
 - (void)handlePan:(UIPanGestureRecognizer *)sender
@@ -263,8 +338,6 @@ typedef NS_ENUM(NSInteger, FilterType)
     _cropRect = CGRectOffset(_cropRect, translation.x, translation.y);
     
     CGRect frame = _cropRect;
-
-
     CGFloat gapFromBoundary = 1;
     
     if (frame.origin.x < _photoImageView.bounds.origin.x)
@@ -281,10 +354,30 @@ typedef NS_ENUM(NSInteger, FilterType)
         frame.origin.y = _photoImageView.bounds.origin.y + _photoImageView.bounds.size.height-gapFromBoundary-frame.size.height;
     
     _cropRect = frame;
-
-    
+    NSLog(@"Crop rect size %@",[NSValue valueWithCGRect:_cropRect]);
     [self updateMaskPath:_cropRect];
     [sender setTranslation:CGPointMake(0, 0) inView:self.view];
+}
+
+-(CGRect)scaleCropRect
+{
+    CGFloat ratio = _photoImage.size.width/sizeAfterAspectFit.width;
+    CGAffineTransform t = CGAffineTransformMakeScale(ratio/initialRectRatio,ratio/initialRectRatio);
+    CGRect scaledCropRect = CGRectApplyAffineTransform(_cropRect,t);
+    
+    if (scaledCropRect.origin.x < 0)
+        scaledCropRect.origin.x = 0;
+    
+    if (scaledCropRect.origin.y < 0)
+        scaledCropRect.origin.y = 0;
+    
+    if (scaledCropRect.size.width > _photoImage.size.width)
+        scaledCropRect.size.width = _photoImage.size.width;
+    
+    if (scaledCropRect.size.height > _photoImage.size.height)
+        scaledCropRect.size.height = _photoImage.size.height;
+    
+    return scaledCropRect;
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -310,7 +403,8 @@ typedef NS_ENUM(NSInteger, FilterType)
 - (void)done
 {
     if (isCrop) {
-        UIImage *croppedImage = [_photoImageView.image cropImageWithRectImageView:_cropRect view:_photoImageView];
+        
+        UIImage *croppedImage = [_photoImageView.image cropImageWithRectImageView:[self scaleCropRect] view:_photoImageView];
         [_delegate filteredImage:_photoImageView.image andCropImage:croppedImage indexPath:_indexPath];
     } else {
         [_delegate filteredImage:_photoImageView.image andCropImage:nil indexPath:_indexPath];
@@ -364,6 +458,16 @@ typedef NS_ENUM(NSInteger, FilterType)
     cell.cellImageView.image = [filterImageArray objectAtIndex:indexPath.row];
     cell.filterNameLabel.text = [filterName objectAtIndex:indexPath.row];
     return cell;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGSize screenSzie = [[UIScreen mainScreen]bounds].size;
+    if (screenSzie.height == 480) {
+        return CGSizeMake(71 , 71);
+    }
+    else
+        return CGSizeMake(70, 100);
 }
 
 #pragma mark - User actions
@@ -466,7 +570,7 @@ typedef NS_ENUM(NSInteger, FilterType)
     _filterView.hidden = NO;
     _adjustSliderView.hidden = NO;
     [UIView animateWithDuration:0.3f animations:^{
-        _adjustSliderView.frame = CGRectOffset(_adjustSliderView.frame, 0, -160);
+        _adjustSliderView.frame = CGRectOffset(_adjustSliderView.frame, 0, -sliderHeight);
         
     }];
 }
@@ -476,7 +580,7 @@ typedef NS_ENUM(NSInteger, FilterType)
     _photoImageView.hidden = NO;
     _filterView.hidden = YES;
     [UIView animateWithDuration:0.3f animations:^{
-        _adjustSliderView.frame = CGRectOffset(_adjustSliderView.frame, 0, 160);
+        _adjustSliderView.frame = CGRectOffset(_adjustSliderView.frame, 0, sliderHeight);
         
     } completion:^(BOOL finished) {
         _adjustSliderView.hidden = YES;

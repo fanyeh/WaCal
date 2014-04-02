@@ -36,6 +36,10 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
     
     if ([EKEventStore authorizationStatusForEntityType:EKEntityTypeEvent]==EKAuthorizationStatusAuthorized) {
         [self createAllViewControllers];
+    } else if ([EKEventStore authorizationStatusForEntityType:EKEntityTypeEvent]==EKAuthorizationStatusDenied) {
+        DiaryTableViewController *diaryController = [[DiaryTableViewController alloc]init];
+        UINavigationController *diaryNavigationController = [[UINavigationController alloc]initWithRootViewController:diaryController];
+        [[self window]setRootViewController:diaryNavigationController];
     }
     else {
         [[[CalendarStore sharedStore]eventStore] requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
@@ -44,8 +48,16 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
                     [self createAllViewControllers];
                 });
             }
-            else
+            else {
+                // Set up diary controller
+                dispatch_async(dispatch_get_main_queue(), ^{
+
+                DiaryTableViewController *diaryController = [[DiaryTableViewController alloc]init];
+                UINavigationController *diaryNavigationController = [[UINavigationController alloc]initWithRootViewController:diaryController];
+                [[self window]setRootViewController:diaryNavigationController];
+                });
                 NSLog(@"need permission , error %@",error);
+            }
         }];
     }
 
@@ -58,9 +70,7 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
     [[UINavigationBar appearance]setTitleTextAttributes:size];
     [[UITabBar appearance] setTintColor:BarColor]; //is the buttons text color
 
-    
     [self.window makeKeyAndVisible];
-
     return YES;
 }
 

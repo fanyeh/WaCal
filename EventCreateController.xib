@@ -257,15 +257,15 @@
                     </constraints>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                 </scrollView>
-                <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KUq-w4-c8J" userLabel="mask view">
+                <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KUq-w4-c8J" userLabel="mask view">
                     <rect key="frame" x="0.0" y="64" width="320" height="300"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M9c-II-rBs" userLabel="search view">
+                        <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M9c-II-rBs" userLabel="search view">
                             <rect key="frame" x="20" y="5" width="280" height="277"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="qcU-EL-V5m">
+                                <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="qcU-EL-V5m">
                                     <rect key="frame" x="0.0" y="44" width="280" height="223"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -277,15 +277,25 @@
                                 </searchBar>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="bottom" secondItem="qcU-EL-V5m" secondAttribute="bottom" constant="10" id="ZYb-qw-uka"/>
+                                <constraint firstItem="qcU-EL-V5m" firstAttribute="top" secondItem="M9c-II-rBs" secondAttribute="top" constant="44" id="hBK-n3-0wi"/>
+                            </constraints>
                         </view>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="M9c-II-rBs" secondAttribute="bottom" constant="18" id="Fpv-Vj-5VI"/>
+                        <constraint firstItem="M9c-II-rBs" firstAttribute="top" secondItem="KUq-w4-c8J" secondAttribute="top" constant="5" id="bIw-CW-w0n"/>
+                    </constraints>
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstAttribute="bottom" secondItem="KUq-w4-c8J" secondAttribute="bottom" constant="204" id="FwM-2S-Uat"/>
                 <constraint firstItem="rFg-jg-4Kb" firstAttribute="top" secondItem="1" secondAttribute="top" constant="64" id="Z1b-11-2eL"/>
                 <constraint firstAttribute="bottom" secondItem="rFg-jg-4Kb" secondAttribute="bottom" constant="245" id="aiw-E6-9dP"/>
+                <constraint firstItem="KUq-w4-c8J" firstAttribute="top" secondItem="1" secondAttribute="top" constant="64" id="dUf-ST-Lij"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>

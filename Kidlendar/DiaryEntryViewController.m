@@ -142,10 +142,10 @@
     _diaryTimeField.leftViewMode = UITextFieldViewModeAlways;
     
     _locationSearchBar.delegate = self;
+    _locationSearchBar.tintColor = MainColor;
     
     _searchResultTable.delegate = self;
     _searchResultTable.dataSource = self;
-    
     
     // Query place from Google Places using location in selected photo
     if ([_imageMeta count] > 0) {
