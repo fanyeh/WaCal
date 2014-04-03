@@ -26,17 +26,17 @@
 @dynamic subject;
 @dynamic cloudRelationship;
 
-//- (void)awakeFromInsert
-//{
-//    [super awakeFromInsert];
-//    NSTimeInterval t = [[NSDate date] timeIntervalSinceReferenceDate];
-//    [self setDateCreated:t];
-//}
+- (void)awakeFromInsert
+{
+    [super awakeFromInsert];
+    NSTimeInterval t = [[NSDate date] timeIntervalSinceReferenceDate];
+    [self setDateCreated:t];
+}
 
 - (void)setPhotoThumbnailDataFromImage:(UIImage *)image
 {
     CGSize origImageSize = [image size];
-    CGRect newRect = CGRectMake(0, 0, 40, 40); // thumbnail photo image size
+    CGRect newRect = CGRectMake(0, 0, 90, 90); // thumbnail photo image size
     float ratio = MAX(newRect.size.width / origImageSize.width,
                       newRect.size.height / origImageSize.height);
     UIGraphicsBeginImageContextWithOptions(newRect.size, NO, 0.0);
@@ -83,10 +83,10 @@
 {
     [super awakeFromFetch];
     UIImage *pn = [UIImage imageWithData:[self diaryPhotoThumbnailData]];
-    [self setPrimitiveValue:pn forKey:@"photoThumbnail"];
+    [self setPrimitiveValue:pn forKey:@"diaryPhotoThumbnail"];
     
-    UIImage *vn = [UIImage imageWithData:[self diaryVideoData]];
-    [self setPrimitiveValue:vn forKey:@"videoThumbnail"];
+    UIImage *vn = [UIImage imageWithData:[self diaryVideoThumbData]];
+    [self setPrimitiveValue:vn forKey:@"diaryVideoThumbnail"];
     
 }
 

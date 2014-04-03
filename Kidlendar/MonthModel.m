@@ -164,14 +164,6 @@
         _eventsInMonth = events;
     }
     else {
-//        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(dateCreated >= %@) AND (dateCreated <= %@)", startDate, endDate];
-//        NSFetchRequest *request = [[NSFetchRequest alloc] init];
-//        [request setEntity:[NSEntityDescription entityForName:@"DiaryData" inManagedObjectContext:context]];
-//        [request setPredicate:predicate];
-//        
-//        NSError *error = nil;
-//        NSArray *results = [context executeFetchRequest:request error:&error];
-//        _diarysInMonth = results;
         
         NSMutableArray *fetchedDiary = [[NSMutableArray alloc]init];
         for (DiaryData *d in [[DiaryDataStore sharedStore]allItems]) {

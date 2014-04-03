@@ -13,6 +13,7 @@
 #import <CoreData/CoreData.h>
 #import "SettingViewController.h"
 #import "DiaryCreateViewController.h"
+#import "Dropbox.h"
 
 NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGranted";
 
@@ -362,6 +363,56 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
 - (NSURL *)applicationDocumentsDirectory
 {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+}
+
+#pragma mark - OAuth login flow and url scheme handling
+
+-(BOOL)application:(UIApplication *)application
+           openURL:(NSURL *)url
+ sourceApplication:(NSString *)sourceApplication
+        annotation:(id)annotation
+{
+    if ([[url scheme] isEqualToString:@"dropbox"]) {
+        [self exchangeRequestTokenForAccessToken];
+    }
+    return NO;
+}
+
+- (void)exchangeRequestTokenForAccessToken
+{
+    // OAUTH Step 3 - exchange request token for user access token
+    [Dropbox exchangeTokenForUserAccessTokenURLWithCompletionHandler:^(NSData *data,NSURLResponse *response,NSError *error) {
+        if (!error) {
+            NSHTTPURLResponse *httpResp = (NSHTTPURLResponse*) response;
+            if (httpResp.statusCode == 200) {
+                NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                NSDictionary *accessTokenDict = [Dropbox dictionaryFromOAuthResponseString:response];
+                
+                [[NSUserDefaults standardUserDefaults] setObject:accessTokenDict[oauthTokenKey] forKey:accessToken];
+                [[NSUserDefaults standardUserDefaults] setObject:accessTokenDict[oauthTokenKeySecret] forKey:accessTokenSecret];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                
+//                // now load main part of application
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    
+//                    NSString *segueId = @"TabBar";
+//                    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+//                    UITabBarController *initViewController = [storyboard instantiateViewControllerWithIdentifier:segueId];
+//                    
+//                    UINavigationController *nav = (UINavigationController *) self.window.rootViewController;
+//                    nav.navigationBar.hidden = YES;
+//                    [nav pushViewController:initViewController animated:NO];
+//                });
+                
+            } else {
+                // HANDLE BAD RESPONSE //
+                NSLog(@"exchange request for access token unexpected response %@",
+                      [NSHTTPURLResponse localizedStringForStatusCode:httpResp.statusCode]);
+            }
+        } else {
+            // ALWAYS HANDLE ERRORS :-] //
+        }
+    }];
 }
 
 @end

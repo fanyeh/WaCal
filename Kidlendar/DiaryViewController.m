@@ -20,6 +20,8 @@
 #import "Reachability.h"
 #import "CircleProgressView.h"
 #import "UploadStore.h"
+#import "Dropbox.h"
+#import "DBFile.h"
 
 @interface DiaryViewController () <UIAlertViewDelegate,NSURLSessionTaskDelegate>
 {
@@ -52,7 +54,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-            }
+    }
     return self;
 }
 
@@ -137,10 +139,6 @@
 {
     [[NSNotificationCenter defaultCenter]removeObserver:self name:@"uploadVideo" object:nil];
 }
-- (void)playVideo
-{
-    [self playMovieWithURL:[NSURL URLWithString:_diaryData.diaryVideoPath]];
-}
 
 - (void)showUploadProgress:(NSNotification *)notification
 {
@@ -151,6 +149,156 @@
         float uploadProgress = [[notification object] floatValue];
         [_circleProgressView updateProgress:uploadProgress];
     }
+}
+
+#pragma mark - Upload to Dropbox
+
+- (IBAction)uploadToDropbox:(id)sender
+{
+    NSString *token = [[NSUserDefaults standardUserDefaults] valueForKey:accessToken];
+    if (token) {
+        if (_diaryData.diaryVideoPath) {
+            __block NSData *data;
+
+            [[PhotoLoader defaultAssetsLibrary] assetForURL:[NSURL URLWithString:_diaryData.diaryVideoPath] resultBlock:^(ALAsset *asset) {
+                
+                dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+                dispatch_group_t group = dispatch_group_create();
+                
+                dispatch_group_async(group, queue, ^{
+                    ALAssetRepresentation *rep = [asset defaultRepresentation];
+                    buffer = (Byte*)malloc(rep.size);
+                    NSUInteger buffered = [rep getBytes:buffer fromOffset:0.0 length:rep.size error:nil];
+                    data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:NO];
+                    videoSize = rep.size;
+                });
+                
+                dispatch_group_notify(group, queue, ^{
+                    
+                    [self uploadVideo:data];
+                });
+                
+            } failureBlock:^(NSError *error) {
+                NSLog(@"Converting error %@",error);
+            }];
+            
+        } else {
+            FileManager *fm = [[FileManager alloc]initWithKey:_diaryData.diaryKey];
+            [self uploadImage:[fm loadCollectionImage]];
+        }
+    } else
+        [self getOAuthRequestToken];
+}
+
+- (void)uploadImage:(UIImage*)image
+{
+    NSData *imageData = UIImageJPEGRepresentation(image, 0.6);
+    
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+    config.HTTPMaximumConnectionsPerHost = 1;
+    [config setHTTPAdditionalHeaders:@{@"Authorization": [Dropbox apiAuthorizationHeader]}];
+    
+    NSURLSession *upLoadSession = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil];
+    
+    // for now just create a random file name, dropbox will handle it if we overwrite a file and create a new name..
+    NSURL *url = [Dropbox createPhotoUploadURL];
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    [request setHTTPMethod:@"PUT"];
+    
+    self.uploadTask = [upLoadSession uploadTaskWithRequest:request fromData:imageData];
+    
+    [_uploadTask resume];
+}
+
+- (void)uploadVideo:(NSData *)data
+{
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+    config.HTTPMaximumConnectionsPerHost = 1;
+    [config setHTTPAdditionalHeaders:@{@"Authorization": [Dropbox apiAuthorizationHeader]}];
+    
+    NSURLSession *upLoadSession = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil];
+    
+    // for now just create a random file name, dropbox will handle it if we overwrite a file and create a new name..
+    NSURL *url = [Dropbox createVideoUploadURL];
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    [request setHTTPMethod:@"PUT"];
+    
+    self.uploadTask = [upLoadSession uploadTaskWithRequest:request fromData:data];
+    
+    [_uploadTask resume];
+}
+- (IBAction)refreshDiary:(id)sender {
+
+    NSString *token = [[NSUserDefaults standardUserDefaults] valueForKey:accessToken];
+    if (token) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+        NSURLSessionConfiguration *config = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+        
+        config.HTTPMaximumConnectionsPerHost = 1;
+        [config setHTTPAdditionalHeaders:@{@"Authorization": [Dropbox apiAuthorizationHeader]}];
+        
+        NSString *photoDir = [NSString stringWithFormat:@"https://api.dropbox.com/1/search/dropbox/%@/photos?query=.jpg",appFolder];
+        NSURL *url = [NSURL URLWithString:photoDir];
+        
+        NSLog(@"url %@",url);
+        _session = [NSURLSession sessionWithConfiguration:config];
+        
+        [[_session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+
+
+            
+            if (!error) {
+                NSHTTPURLResponse *httpResp = (NSHTTPURLResponse*) response;
+                if (httpResp.statusCode == 200) {
+                    
+                    NSError *jsonError;
+                    NSArray *filesJSON = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonError];
+                    NSMutableArray *dbFiles = [[NSMutableArray alloc] init];
+                    
+                    if (!jsonError) {
+                        for (NSDictionary *fileMetadata in filesJSON) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+
+                            NSLog(@"filemeta %@",fileMetadata);
+                                
+                            });
+
+                            DBFile *file = [[DBFile alloc] initWithJSONData:fileMetadata];
+                            [dbFiles addObject:file];
+                        }
+                        
+                        [dbFiles sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+                            return [obj1 compare:obj2];
+                        }];
+                    }
+                } else {
+                    // HANDLE BAD RESPONSE //
+                    dispatch_async(dispatch_get_main_queue(), ^{
+
+                    NSLog(@"Bad response %@",httpResp);
+                    });
+
+                }
+            } else {
+
+                dispatch_async(dispatch_get_main_queue(), ^{
+
+                NSLog(@"Error %@",error);
+                    
+                });
+                // ALWAYS HANDLE ERRORS :-] //
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+                //                        [self.tableView reloadData];
+            });
+            
+        }] resume];
+
+    } else
+        [self getOAuthRequestToken];
 }
 
 #pragma mark - Social share
@@ -209,6 +357,14 @@
 
 #pragma mark - Video upload to Facebook
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex != 0) {
+        KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        [appDelegate getPublishStream];
+    }
+}
+
 - (void)uploadVideoToFacebook
 {
     KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
@@ -228,14 +384,6 @@
                                                   otherButtonTitles:@"OK", nil];
         
         [loginAlert show];
-    }
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex != 0) {
-        KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        [appDelegate getPublishStream];
     }
 }
 
@@ -290,6 +438,32 @@
     }];
 }
 
+- (void)uploadVidoeWithNSURLSession:(SLRequest *)request
+{
+    // 1
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+    config.HTTPMaximumConnectionsPerHost = 1;
+    
+    NSURLSession *upLoadSession = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil];
+    
+    self.uploadTask = [upLoadSession uploadTaskWithStreamedRequest:request.preparedURLRequest];
+    
+    [[[UploadStore sharedStore]allTasks] setValue:_uploadTask forKey:_diaryData.diaryKey];
+    
+    [_uploadTask resume];
+}
+
+- (void)cancelUpload
+{
+    NSURLSessionUploadTask *task = [[[UploadStore sharedStore]allTasks] objectForKey:_diaryData.diaryKey];
+    [task cancel];
+    _circleProgressView.hidden = YES;
+    _facebookImageView.hidden = NO;
+    [[[UploadStore sharedStore]allTasks]removeObjectForKey:_diaryData.diaryKey];
+    free(buffer);
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"diaryChange" object:nil];
+}
+
 #pragma mark - NSURLSessionTaskDelegate methods
 
 - (void)URLSession:(NSURLSession *)session
@@ -303,87 +477,6 @@ totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
         [[NSNotificationCenter defaultCenter]postNotificationName:@"uploadVideo" object:[NSString stringWithFormat:@"%f",uploadProgress] userInfo:@{@"diaryKey":_diaryData.diaryKey}];
     });
 }
-- (void)cancelUpload
-{
-    NSURLSessionUploadTask *task = [[[UploadStore sharedStore]allTasks] objectForKey:_diaryData.diaryKey];
-    [task cancel];
-    _circleProgressView.hidden = YES;
-    _facebookImageView.hidden = NO;
-    [[[UploadStore sharedStore]allTasks]removeObjectForKey:_diaryData.diaryKey];
-    free(buffer);
-    [[NSNotificationCenter defaultCenter]postNotificationName:@"diaryChange" object:nil];
-}
-
-- (void)uploadVidoeWithNSURLSession:(SLRequest *)request
-{
-    // 1
-    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
-    config.HTTPMaximumConnectionsPerHost = 1;
-
-    NSURLSession *upLoadSession = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil];
-    
-    self.uploadTask = [upLoadSession uploadTaskWithStreamedRequest:request.preparedURLRequest];
-    
-    [[[UploadStore sharedStore]allTasks] setValue:_uploadTask forKey:_diaryData.diaryKey];
-    
-    [_uploadTask resume];
-}
-
-//-(void)uploadVidoeWithAFNetwork:(SLRequest *)facebookRequest
-//{
-//    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]initWithRequest:facebookRequest.preparedURLRequest];
-//    [operation setUploadProgressBlock:^(NSUInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite) {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            float uploadProgress = totalBytesWritten/(float)totalBytesExpectedToWrite;
-//            [[NSNotificationCenter defaultCenter]postNotificationName:@"uploadVideo" object:[NSString stringWithFormat:@"%f",uploadProgress] userInfo:@{@"diaryKey":_diaryData.diaryKey}];
-//        });
-//    }];
-//    
-//    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-//        [[NSNotificationCenter defaultCenter]removeObserver:self name:_diaryData.diaryKey object:nil];
-//        UIAlertView *loginAlert = [[UIAlertView alloc]initWithTitle:[NSString stringWithFormat:@"Diary is uploaded"]
-//                                                            message:nil
-//                                                           delegate:self
-//                                                  cancelButtonTitle:@"OK"
-//                                                  otherButtonTitles:nil, nil];
-//        
-//        [loginAlert show];
-//                
-//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//        NSLog(@"Facebook upload error %@",error);
-//    }];
-//    
-//    [operation start];
-//    
-//    
-//    [facebookRequest performRequestWithHandler:^(NSData* responseData, NSHTTPURLResponse* urlResponse, NSError* error) {
-//        if (error) {
-//            // 4
-//            KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-//            [appDelegate presentErrorWithMessage:[NSString
-//                                                  stringWithFormat:@"There was an error uploading media. %@",
-//                                                  [error localizedDescription]]];
-//        }
-//        else
-//        {
-//            // 5
-//            NSError *jsonError;
-//            NSDictionary *responseJSON = [NSJSONSerialization
-//                                          JSONObjectWithData:responseData
-//                                          options:NSJSONReadingAllowFragments
-//                                          error:&jsonError];
-//            if (jsonError) {
-//                // 6
-//                KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-//                [appDelegate presentErrorWithMessage:[NSString
-//                                                      stringWithFormat:@"There was an error uploading media. %@",
-//                                                      [error localizedDescription]]];
-//            } else {
-//                NSLog(@"Response data %@",responseJSON);
-//            }
-//        }
-//    }];
-//}
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
 {
@@ -396,6 +489,7 @@ totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
     if (!error) {
         // 2
         dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"Response %@",task.response);
             NSLog(@"Upload completed");
             _circleProgressView.hidden = YES;
             _facebookImageView.hidden = NO;
@@ -419,6 +513,11 @@ totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
 
 #pragma mark - Movie player
 #pragma mark
+
+- (void)playVideo
+{
+    [self playMovieWithURL:[NSURL URLWithString:_diaryData.diaryVideoPath]];
+}
 
 -(void) playMovieWithURL: (NSURL*) theURL
 {
@@ -519,5 +618,49 @@ totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
         return YES;
     }
 }
+
+# pragma mark - OAUTH 1.0a STEP 1
+-(void)getOAuthRequestToken
+{
+    // OAUTH Step 1. Get request token.
+    [Dropbox requestTokenWithCompletionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (!error) {
+            NSHTTPURLResponse *httpResp = (NSHTTPURLResponse*) response;
+            if (httpResp.statusCode == 200) {
+                
+                NSString *responseStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                
+                /*
+                 oauth_token The request token that was just authorized. The request token secret isn't sent back.
+                 If the user chooses not to authorize the application,
+                 they will get redirected to the oauth_callback URL with the additional URL query parameter not_approved=true.
+                 */
+                NSDictionary *oauthDict = [Dropbox dictionaryFromOAuthResponseString:responseStr];
+                // save the REQUEST token and secret to use for normal api calls
+                [[NSUserDefaults standardUserDefaults] setObject:oauthDict[oauthTokenKey] forKey:requestToken];
+                [[NSUserDefaults standardUserDefaults] setObject:oauthDict[oauthTokenKeySecret] forKey:requestTokenSecret];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                
+                
+                NSString *authorizationURLWithParams = [NSString stringWithFormat:@"https://www.dropbox.com/1/oauth/authorize?oauth_token=%@&oauth_callback=dropbox://userauthorization",oauthDict[oauthTokenKey]];
+                
+                // escape codes
+                NSString *escapedURL = [authorizationURLWithParams stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+                
+//                [_tokenAlert dismissWithClickedButtonIndex:0 animated:NO];
+                
+                // opens to user auth page in safari
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:escapedURL]];
+                
+            } else {
+                // HANDLE BAD RESPONSE //
+                NSLog(@"unexpected response getting token %@",[NSHTTPURLResponse localizedStringForStatusCode:httpResp.statusCode]);
+            }
+        } else {
+            // ALWAYS HANDLE ERRORS :-] //
+        }
+    }];
+}
+
 
 @end
