@@ -667,13 +667,14 @@ static int deleteLabelSize = 30;
 
 -(void)deleteTap:(UITapGestureRecognizer *)sender
 {
+    // Diary indexpath
     NSIndexPath *indexPath =  [diaryPhotosView indexPathForCell:(UICollectionViewCell *)sender.view.superview];
     NSArray *imageInfo = [selectedPhotoOrderingInfo objectAtIndex:indexPath.row];
     [photoCollectionView deselectItemAtIndexPath:imageInfo[0] animated:YES];
     if ([fullScreenImageArray[indexPath.row] isKindOfClass:[ALAsset class]])
         [self deletePhotoFromDiaryView:imageInfo[0] andAsset:fullScreenImageArray[indexPath.row]];
     else
-        [self removePhotoWithIndexPath:indexPath];
+        [self removePhotoWithIndexPath:imageInfo[0]];
 }
 
 -(void)deletePhotoFromDiaryView:(NSIndexPath *)indexPath andAsset:(ALAsset *)asset
@@ -798,6 +799,7 @@ static int deleteLabelSize = 30;
 {
     if ([fullScreenImageArray count]==0)
         [self showNextButton:YES];
+    
     _noPhotoView.hidden = YES;
     ALAsset *asset =  [photoAssets objectAtIndex:indexPath.row];
 
@@ -812,8 +814,9 @@ static int deleteLabelSize = 30;
     cell.selectNumber.text = [NSString stringWithFormat:@"%ld",(unsigned long)[fullScreenImageArray count]];
     
     // Photo collectionview image info
-    // ImageInfo[0] = indexpath
+    // ImageInfo[0] = indexpath (Photo indexpath)
     // ImageInfo[1] = assset group name
+    // ImageInfo[2] = select number
     NSArray *imageInfo = @[indexPath,assetGroupPropertyName,cell.selectNumber.text];
     [selectedPhotoOrderingInfo addObject:imageInfo];
     
@@ -842,10 +845,9 @@ static int deleteLabelSize = 30;
         
         // ImageInfo[0] = indexpath
         // ImageInfo[1] = assset group name
-        // ImageInfo[2] = asset
-        
+        // ImageInfo[2] = select number
         if (imageInfo[0] == path) {
-            
+            NSLog(@"remove row %ld",path.row);
             // Remove image from resize image array
             NSUInteger index = [selectedPhotoOrderingInfo indexOfObject:imageInfo];
             [imageMeta removeObjectAtIndex:index];
@@ -862,20 +864,21 @@ static int deleteLabelSize = 30;
             // Hide no photo view
             if([selectedPhotoOrderingInfo count]==0)
                 _noPhotoView.hidden = NO;
-            
-            // Refresh selected number on cell
-            for (int i = 0; i < [selectedPhotoOrderingInfo count] ; i++) {
-                NSArray *n = [selectedPhotoOrderingInfo objectAtIndex:i];
-                AlbumPhotoCell *cell = (AlbumPhotoCell *)[photoCollectionView cellForItemAtIndexPath:n[0]];
-                cell.selectNumber.text = [NSString stringWithFormat:@"%d",i+1];
-            }
-            
-            [self processFaceDetection];
             break;
         }
     }
+    // Refresh selected number on cell
+    for (int i = 0; i < [selectedPhotoOrderingInfo count] ; i++) {
+        NSArray *n = [selectedPhotoOrderingInfo objectAtIndex:i];
+        AlbumPhotoCell *cell = (AlbumPhotoCell *)[photoCollectionView cellForItemAtIndexPath:n[0]];
+        cell.selectNumber.text = [NSString stringWithFormat:@"%d",i+1];
+        NSArray *newImageInfo = @[n[0],n[1],[NSString stringWithFormat:@"%d",i+1]];
+        [selectedPhotoOrderingInfo replaceObjectAtIndex:i withObject:newImageInfo];
+    }
+    
+    [self processFaceDetection];
     // Reload diary view data
-    [diaryPhotosView reloadData];
+//    [diaryPhotosView reloadData];
 }
 
 #pragma mark - Collection Views
