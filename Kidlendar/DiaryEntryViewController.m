@@ -265,14 +265,14 @@
     
     // Photo diary
     if (_selectedMediaType == kMediaTypePhoto) {
-        [diary setDiaryPhotoThumbDataFromImage:_diaryImage];
+        [diary setPhotoThumbnailDataFromImage:_diaryImage];
         [fm saveCollectionImage:_diaryImage];
     }
     // Video diary
     else {
         diary.diaryVideoPath = [NSString stringWithFormat:@"%@",_asset.defaultRepresentation.url];
         UIImage *image = [UIImage imageWithCGImage: _asset.defaultRepresentation.fullScreenImage];
-        [diary setDiaryVideoThumbDataFromImage:image];
+        [diary setVideoThumbnailDataFromImage:image];
         [fm saveCollectionImage:image];
     }
     

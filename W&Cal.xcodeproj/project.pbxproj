@@ -100,6 +100,7 @@
 		4C80F2F218E11FB300B4600C /* lookup_miss_etikate.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C80F2EF18E11FB300B4600C /* lookup_miss_etikate.png */; };
 		4C84A57318BF7278005A30AB /* ReminderButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C84A57218BF7278005A30AB /* ReminderButton.m */; };
 		4C88B387188E56E100F4F47E /* DiaryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88B386188E56E100F4F47E /* DiaryCell.m */; };
+		4C8952C418ECFFAF006BB793 /* DiaryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8952C318ECFFAF006BB793 /* DiaryData.m */; };
 		4C91918718AF3A4900ED4695 /* ImageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C91918618AF3A4900ED4695 /* ImageStore.m */; };
 		4C9214CB185AAA29009A3090 /* DateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9214CA185AAA29009A3090 /* DateView.m */; };
 		4C92155A185AD39E009A3090 /* MonthCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C921559185AD39E009A3090 /* MonthCalendarView.m */; };
@@ -135,7 +136,6 @@
 		4CDE496318DBD6DD0062DE9E /* recurrenceTag20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CDE495F18DBD6DD0062DE9E /* recurrenceTag20@2x.png */; };
 		4CDE496418DBD6DD0062DE9E /* calendarTab@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CDE496018DBD6DD0062DE9E /* calendarTab@2x.png */; };
 		4CDE496518DBD6DD0062DE9E /* alarmTag20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CDE496118DBD6DD0062DE9E /* alarmTag20@2x.png */; };
-		4CEEB9F818B4656100C7FA80 /* DiaryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEEB9F718B4656100C7FA80 /* DiaryData.m */; };
 		4CEEB9FE18B47BAF00C7FA80 /* CloudData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEEB9FD18B47BAF00C7FA80 /* CloudData.m */; };
 		4CF1D5D718D34CD900B8801F /* SelectedLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CF1D5D618D34CD900B8801F /* SelectedLocation.m */; };
 		4CF5151918C2FCC70050E330 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF5151818C2FCC70050E330 /* Social.framework */; };
@@ -314,6 +314,8 @@
 		4C84A57218BF7278005A30AB /* ReminderButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReminderButton.m; sourceTree = "<group>"; };
 		4C88B385188E56E100F4F47E /* DiaryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryCell.h; sourceTree = "<group>"; };
 		4C88B386188E56E100F4F47E /* DiaryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryCell.m; sourceTree = "<group>"; };
+		4C8952C218ECFFAF006BB793 /* DiaryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryData.h; sourceTree = "<group>"; };
+		4C8952C318ECFFAF006BB793 /* DiaryData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryData.m; sourceTree = "<group>"; };
 		4C91918518AF3A4900ED4695 /* ImageStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageStore.h; sourceTree = "<group>"; };
 		4C91918618AF3A4900ED4695 /* ImageStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageStore.m; sourceTree = "<group>"; };
 		4C9214C9185AAA29009A3090 /* DateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateView.h; sourceTree = "<group>"; };
@@ -365,8 +367,6 @@
 		4CDE495F18DBD6DD0062DE9E /* recurrenceTag20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "recurrenceTag20@2x.png"; path = "../recurrenceTag20@2x.png"; sourceTree = "<group>"; };
 		4CDE496018DBD6DD0062DE9E /* calendarTab@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "calendarTab@2x.png"; path = "../calendarTab@2x.png"; sourceTree = "<group>"; };
 		4CDE496118DBD6DD0062DE9E /* alarmTag20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "alarmTag20@2x.png"; path = "../alarmTag20@2x.png"; sourceTree = "<group>"; };
-		4CEEB9F618B4656100C7FA80 /* DiaryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiaryData.h; path = ../DiaryData.h; sourceTree = "<group>"; };
-		4CEEB9F718B4656100C7FA80 /* DiaryData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiaryData.m; path = ../DiaryData.m; sourceTree = "<group>"; };
 		4CEEB9FC18B47BAF00C7FA80 /* CloudData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CloudData.h; sourceTree = "<group>"; };
 		4CEEB9FD18B47BAF00C7FA80 /* CloudData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CloudData.m; sourceTree = "<group>"; };
 		4CF1D5D518D34CD900B8801F /* SelectedLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectedLocation.h; sourceTree = "<group>"; };
@@ -540,10 +540,10 @@
 		4C417E7A18714A69000878FC /* Diary Model */ = {
 			isa = PBXGroup;
 			children = (
+				4C8952C218ECFFAF006BB793 /* DiaryData.h */,
+				4C8952C318ECFFAF006BB793 /* DiaryData.m */,
 				4C7EA60C18DB310300460153 /* FileManager.m */,
 				4C7EA60D18DB310300460153 /* FileManager.h */,
-				4CEEB9F618B4656100C7FA80 /* DiaryData.h */,
-				4CEEB9F718B4656100C7FA80 /* DiaryData.m */,
 				4C23964418B3B5E800BB87E7 /* TempDiaryData.h */,
 				4C23964518B3B5E800BB87E7 /* TempDiaryData.m */,
 				4C417E7418714A4C000878FC /* DiaryDataStore.h */,
@@ -1025,10 +1025,10 @@
 				4C4F992018CF5E51007D3746 /* AFSecurityPolicy.m in Sources */,
 				4CFB086C187E696A00456D5D /* DateModel.m in Sources */,
 				4CA0368C18B7A12100015184 /* DiaryTableViewCell.m in Sources */,
-				4CEEB9F818B4656100C7FA80 /* DiaryData.m in Sources */,
 				4C4E837A18DEAD8200FA9A74 /* CircleProgressView.m in Sources */,
 				4C5C8FFC18A8730100B40F7E /* DiaryEntryViewController.m in Sources */,
 				4C570B3518D2D6D600BFA3C4 /* MapViewController.m in Sources */,
+				4C8952C418ECFFAF006BB793 /* DiaryData.m in Sources */,
 				4C417E7618714A4C000878FC /* DiaryDataStore.m in Sources */,
 				4C9214CB185AAA29009A3090 /* DateView.m in Sources */,
 				4C67BAD718B6FBC300452539 /* SwitchCell.m in Sources */,
