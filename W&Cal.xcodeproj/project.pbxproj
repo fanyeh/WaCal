@@ -101,6 +101,8 @@
 		4C84A57318BF7278005A30AB /* ReminderButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C84A57218BF7278005A30AB /* ReminderButton.m */; };
 		4C88B387188E56E100F4F47E /* DiaryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C88B386188E56E100F4F47E /* DiaryCell.m */; };
 		4C8952C418ECFFAF006BB793 /* DiaryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8952C318ECFFAF006BB793 /* DiaryData.m */; };
+		4C8952C918ED01ED006BB793 /* DBFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8952C618ED01ED006BB793 /* DBFile.m */; };
+		4C8952CA18ED01ED006BB793 /* Dropbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8952C818ED01ED006BB793 /* Dropbox.m */; };
 		4C91918718AF3A4900ED4695 /* ImageStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C91918618AF3A4900ED4695 /* ImageStore.m */; };
 		4C9214CB185AAA29009A3090 /* DateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C9214CA185AAA29009A3090 /* DateView.m */; };
 		4C92155A185AD39E009A3090 /* MonthCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C921559185AD39E009A3090 /* MonthCalendarView.m */; };
@@ -316,6 +318,10 @@
 		4C88B386188E56E100F4F47E /* DiaryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryCell.m; sourceTree = "<group>"; };
 		4C8952C218ECFFAF006BB793 /* DiaryData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryData.h; sourceTree = "<group>"; };
 		4C8952C318ECFFAF006BB793 /* DiaryData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryData.m; sourceTree = "<group>"; };
+		4C8952C518ED01ED006BB793 /* DBFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBFile.h; sourceTree = "<group>"; };
+		4C8952C618ED01ED006BB793 /* DBFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBFile.m; sourceTree = "<group>"; };
+		4C8952C718ED01ED006BB793 /* Dropbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dropbox.h; sourceTree = "<group>"; };
+		4C8952C818ED01ED006BB793 /* Dropbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dropbox.m; sourceTree = "<group>"; };
 		4C91918518AF3A4900ED4695 /* ImageStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageStore.h; sourceTree = "<group>"; };
 		4C91918618AF3A4900ED4695 /* ImageStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageStore.m; sourceTree = "<group>"; };
 		4C9214C9185AAA29009A3090 /* DateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateView.h; sourceTree = "<group>"; };
@@ -521,6 +527,10 @@
 		4C315C7C18AB299500A2A363 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				4C8952C518ED01ED006BB793 /* DBFile.h */,
+				4C8952C618ED01ED006BB793 /* DBFile.m */,
+				4C8952C718ED01ED006BB793 /* Dropbox.h */,
+				4C8952C818ED01ED006BB793 /* Dropbox.m */,
 				4C51761B186FF309002F6F6D /* KidlendarModel.xcdatamodeld */,
 				4C91918818AF3D3100ED4695 /* Other Model */,
 				4CFB0869187E68D600456D5D /* Calendar Model */,
@@ -1030,6 +1040,7 @@
 				4C570B3518D2D6D600BFA3C4 /* MapViewController.m in Sources */,
 				4C8952C418ECFFAF006BB793 /* DiaryData.m in Sources */,
 				4C417E7618714A4C000878FC /* DiaryDataStore.m in Sources */,
+				4C8952C918ED01ED006BB793 /* DBFile.m in Sources */,
 				4C9214CB185AAA29009A3090 /* DateView.m in Sources */,
 				4C67BAD718B6FBC300452539 /* SwitchCell.m in Sources */,
 				4CFB086F187E6BFB00456D5D /* MonthModel.m in Sources */,
@@ -1064,6 +1075,7 @@
 				4C4F992118CF5E51007D3746 /* AFURLConnectionOperation.m in Sources */,
 				4C4F992418CF5E51007D3746 /* AFURLSessionManager.m in Sources */,
 				4C4F991C18CF5E51007D3746 /* AFHTTPRequestOperation.m in Sources */,
+				4C8952CA18ED01ED006BB793 /* Dropbox.m in Sources */,
 				4CA2506C1869377000AEA94E /* UIImage+Resize.m in Sources */,
 				4C91918718AF3A4900ED4695 /* ImageStore.m in Sources */,
 				4C97EA7E18DDDD8C00BB19A8 /* SettingTableCell.m in Sources */,
