@@ -116,7 +116,7 @@
         if (dateModel.isCurrentMonth)
             dateView.dateLabel.textColor = [UIColor colorWithWhite:0.502 alpha:1.000];
         else
-            dateView.dateLabel.textColor = [UIColor colorWithWhite:0.902 alpha:1.000];
+            dateView.dateLabel.textColor = [UIColor colorWithWhite:0.824 alpha:1.000];
         
         // Configure color for today
         if (dateModel.isToday) {

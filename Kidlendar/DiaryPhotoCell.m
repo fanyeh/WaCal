@@ -24,7 +24,7 @@
         
         _deleteBadger = [[UILabel alloc]init];
         _deleteBadger.text = @"X";
-        _deleteBadger.textColor = [UIColor whiteColor];
+        _deleteBadger.textColor = MainColor;
         _deleteBadger.textAlignment = NSTextAlignmentCenter;
         _deleteBadger.font = [UIFont fontWithName:@"Helvetica-Bold" size:14];
         _deleteBadger.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.500];
@@ -33,8 +33,6 @@
         [self addSubview:_deleteBadger];
         
         highlightMask = [[UIView alloc]initWithFrame:self.contentView.bounds];
-//        highlightMask.layer.borderWidth = 3.0f;
-//        highlightMask.layer.borderColor = [MainColor CGColor];
         highlightMask.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.500];
         highlightMask.hidden = YES;
         

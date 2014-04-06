@@ -53,7 +53,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor colorWithWhite:0.961 alpha:1.000];
     
     emptyTableView = [[[NSBundle mainBundle] loadNibNamed:@"EmptyTableView" owner:self options:nil] objectAtIndex:0];
     [self.view addSubview:emptyTableView];
@@ -73,7 +73,7 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
     monthArray = @[@"January",@"February",@"March",@"April",@"May",@"June",@"July",@"August",@"September",@"October",@"November",@"December"];
-    weekdayArray = @[@"Sunday",@"Monday",@"Tuesday",@"Wedneday",@"Thursday",@"Friday",@"Saturday"];
+    weekdayArray = @[@"Sunday",@"Monday",@"Tuesday",@"Wednesday",@"Thursday",@"Friday",@"Saturday"];
     [self sortDiaryToSection];
     
     // Add observer to monitor event when new calendar event is created or removed

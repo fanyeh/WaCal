@@ -20,7 +20,6 @@
                 <outlet property="saveButton" destination="KIU-NY-Znt" id="9uv-aH-q3c"/>
                 <outlet property="scrollViewBackground" destination="3x1-6O-smT" id="eeS-pu-bks"/>
                 <outlet property="searchResultTable" destination="pS2-1Z-5YQ" id="s5Z-Zt-3f2"/>
-                <outlet property="videoPlayView" destination="PFO-EK-L9q" id="7t2-cR-Us8"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
         </placeholder>
@@ -78,21 +77,21 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                         </textView>
                                         <textField clipsSubviews="YES" tag="9" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Find location" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JjE-KJ-kih" userLabel="Location Field">
                                             <rect key="frame" x="8" y="187" width="260" height="40"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="search"/>
                                         </textField>
-                                        <textField clipsSubviews="YES" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="2013/12/13 Saturday" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ggv-6Q-Bvg" userLabel="Date Field">
+                                        <textField clipsSubviews="YES" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="2013/12/13 Saturday 14:00" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ggv-6Q-Bvg" userLabel="Date Field">
                                             <rect key="frame" x="8" y="146" width="260" height="40"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <textInputTraits key="textInputTraits"/>
                                         </textField>
                                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VXR-Y6-wkj">
@@ -115,17 +114,6 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </imageView>
-                                        <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PFO-EK-L9q" userLabel="videoPlayView">
-                                            <rect key="frame" x="209" y="66" width="53" height="53"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="playButton.png" translatesAutoresizingMaskIntoConstraints="NO" id="2L2-G7-Vle">
-                                                    <rect key="frame" x="17" y="14" width="26" height="26"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                </imageView>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.52000000000000002" colorSpace="calibratedWhite"/>
-                                        </view>
                                         <textField clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Subject" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aPc-K5-Mp3" userLabel="Subject">
                                             <rect key="frame" x="8" y="2" width="260" height="40"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -199,7 +187,6 @@
     </objects>
     <resources>
         <image name="delete.png" width="35" height="35"/>
-        <image name="playButton.png" width="44" height="44"/>
         <image name="save.png" width="35" height="35"/>
     </resources>
 </document>

@@ -18,7 +18,6 @@
 		4C0E893818DBEDFD008F0842 /* eventLocationLine20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0E893018DBEDFD008F0842 /* eventLocationLine20@2x.png */; };
 		4C0E893A18DBEDFD008F0842 /* eventCalendarLine20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0E893218DBEDFD008F0842 /* eventCalendarLine20@2x.png */; };
 		4C0E894418DC2493008F0842 /* evnetTimeArrowStart@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0E894218DC2493008F0842 /* evnetTimeArrowStart@2x.png */; };
-		4C0E894518DC2493008F0842 /* eventTimeArrowEnd@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C0E894318DC2493008F0842 /* eventTimeArrowEnd@2x.png */; };
 		4C12B2EF18A1FD960046C5EC /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2EE18A1FD960046C5EC /* CoreText.framework */; };
 		4C12B2F118A1FDA20046C5EC /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2F018A1FDA20046C5EC /* GLKit.framework */; };
 		4C12B2F318A1FDAA0046C5EC /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2F218A1FDAA0046C5EC /* ImageIO.framework */; };
@@ -135,6 +134,7 @@
 		4CD2B93218A4CF69002DA9E4 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CD2B93118A4CF69002DA9E4 /* CFNetwork.framework */; };
 		4CD90E4918ED0B07006D07AE /* DBFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD90E4518ED0B07006D07AE /* DBFile.m */; };
 		4CD90E4A18ED0B07006D07AE /* Dropbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD90E4618ED0B07006D07AE /* Dropbox.m */; };
+		4CD90E4C18ED9B03006D07AE /* eventTimeArrowEnd@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD90E4B18ED9B03006D07AE /* eventTimeArrowEnd@2x.png */; };
 		4CDE496318DBD6DD0062DE9E /* recurrenceTag20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CDE495F18DBD6DD0062DE9E /* recurrenceTag20@2x.png */; };
 		4CDE496418DBD6DD0062DE9E /* calendarTab@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CDE496018DBD6DD0062DE9E /* calendarTab@2x.png */; };
 		4CDE496518DBD6DD0062DE9E /* alarmTag20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CDE496118DBD6DD0062DE9E /* alarmTag20@2x.png */; };
@@ -197,7 +197,6 @@
 		4C0E893018DBEDFD008F0842 /* eventLocationLine20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "eventLocationLine20@2x.png"; sourceTree = "<group>"; };
 		4C0E893218DBEDFD008F0842 /* eventCalendarLine20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "eventCalendarLine20@2x.png"; sourceTree = "<group>"; };
 		4C0E894218DC2493008F0842 /* evnetTimeArrowStart@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "evnetTimeArrowStart@2x.png"; path = "../evnetTimeArrowStart@2x.png"; sourceTree = "<group>"; };
-		4C0E894318DC2493008F0842 /* eventTimeArrowEnd@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "eventTimeArrowEnd@2x.png"; path = "../eventTimeArrowEnd@2x.png"; sourceTree = "<group>"; };
 		4C12B2EC18A1FC280046C5EC /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMaps.framework; sourceTree = "<group>"; };
 		4C12B2EE18A1FD960046C5EC /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		4C12B2F018A1FDA20046C5EC /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
@@ -370,6 +369,7 @@
 		4CD90E4618ED0B07006D07AE /* Dropbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dropbox.m; sourceTree = "<group>"; };
 		4CD90E4718ED0B07006D07AE /* DBFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBFile.h; sourceTree = "<group>"; };
 		4CD90E4818ED0B07006D07AE /* Dropbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dropbox.h; sourceTree = "<group>"; };
+		4CD90E4B18ED9B03006D07AE /* eventTimeArrowEnd@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "eventTimeArrowEnd@2x.png"; sourceTree = "<group>"; };
 		4CDE495F18DBD6DD0062DE9E /* recurrenceTag20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "recurrenceTag20@2x.png"; path = "../recurrenceTag20@2x.png"; sourceTree = "<group>"; };
 		4CDE496018DBD6DD0062DE9E /* calendarTab@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "calendarTab@2x.png"; path = "../calendarTab@2x.png"; sourceTree = "<group>"; };
 		4CDE496118DBD6DD0062DE9E /* alarmTag20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "alarmTag20@2x.png"; path = "../alarmTag20@2x.png"; sourceTree = "<group>"; };
@@ -451,11 +451,11 @@
 		4C0E892B18DBEDE3008F0842 /* Event */ = {
 			isa = PBXGroup;
 			children = (
+				4CD90E4B18ED9B03006D07AE /* eventTimeArrowEnd@2x.png */,
 				4CC417D018D9725000EE8DBE /* mapicon@2x.png */,
 				4CC417D318D9731C00EE8DBE /* save@2x.png */,
 				4CC417D418D9731C00EE8DBE /* delete@2x.png */,
 				4C0E894218DC2493008F0842 /* evnetTimeArrowStart@2x.png */,
-				4C0E894318DC2493008F0842 /* eventTimeArrowEnd@2x.png */,
 				4C0E892C18DBEDFD008F0842 /* eventRepeatLine20@2x.png */,
 				4C0E892E18DBEDFD008F0842 /* eventReminderLine20@2x.png */,
 				4C0E893018DBEDFD008F0842 /* eventLocationLine20@2x.png */,
@@ -973,6 +973,7 @@
 				4CBA4BB618CD9B4F00B380AB /* PhotoAlbumTableCell.xib in Resources */,
 				4C68CABF18C63A51003776D2 /* playButton@2x.png in Resources */,
 				4C97EA8018DDDDA100BB19A8 /* SettingTableCell.xib in Resources */,
+				4CD90E4C18ED9B03006D07AE /* eventTimeArrowEnd@2x.png in Resources */,
 				4CDE496418DBD6DD0062DE9E /* calendarTab@2x.png in Resources */,
 				4C61326D18BF16990025FD00 /* EventCreateController.xib in Resources */,
 				4CA0369018B7A29F00015184 /* DiaryTableViewCell.xib in Resources */,
@@ -993,7 +994,6 @@
 				4C79153D18E86F1400D7ED95 /* eventLocationFill20@2x.png in Resources */,
 				4C570B3618D2D6D600BFA3C4 /* MapViewController.xib in Resources */,
 				4CC417D118D9725000EE8DBE /* mapicon@2x.png in Resources */,
-				4C0E894518DC2493008F0842 /* eventTimeArrowEnd@2x.png in Resources */,
 				4CB3DD8618521DC400673478 /* InfoPlist.strings in Resources */,
 				4C0E892718DBD9BD008F0842 /* twitter40@2x.png in Resources */,
 				4C0E892818DBD9BD008F0842 /* faceboo40@2x.png in Resources */,

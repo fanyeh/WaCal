@@ -113,7 +113,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     toolView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 40)];
-    toolView.backgroundColor = [UIColor whiteColor];
+    toolView.backgroundColor = [UIColor colorWithWhite:0.961 alpha:1.000];
     
     UIView *topBorder = [[UIView alloc]initWithFrame:CGRectMake(0, 40, 320, 1)];
     topBorder.backgroundColor = [UIColor colorWithWhite:0.902 alpha:1.000];
@@ -359,7 +359,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     if (textField.tag >2)
         [self showImage:textField.tag];
     
-    textField.inputView.backgroundColor = [UIColor whiteColor];
+    textField.inputView.backgroundColor = [UIColor colorWithWhite:0.961 alpha:1.000];
     textField.inputAccessoryView = toolView;
     
     return YES;
@@ -376,14 +376,14 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 {
     switch (textField.tag) {
         case 1:
-            _startTimeView.backgroundColor = [UIColor whiteColor];
+            _startTimeView.backgroundColor = [UIColor colorWithWhite:0.961 alpha:1.000];
             _startDateLabel.textColor = [UIColor blackColor];
             _startTimeLabel.textColor = [UIColor blackColor];
             _startTimeArrow.hidden = YES;
             _datePicker.minimumDate = minimumDate;
             break;
         case 2:
-            _endTimeView.backgroundColor = [UIColor whiteColor];
+            _endTimeView.backgroundColor = [UIColor colorWithWhite:0.961 alpha:1.000];
             _endDateLabel.textColor = LightGrayColor;
             _endTimeLabel.textColor = LightGrayColor;
             break;
@@ -584,7 +584,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 
     if (_event.allDay) {
         _event.allDay = NO;
-        _alldayView.backgroundColor = [UIColor whiteColor];
+        _alldayView.backgroundColor = [UIColor colorWithWhite:0.961 alpha:1.000];
         _alldayView.layer.borderWidth = 1.0f;
         _allLabel.textColor = LightGrayColor;
         _dayLabel.textColor = LightGrayColor;

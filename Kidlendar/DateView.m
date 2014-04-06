@@ -23,7 +23,7 @@
         // Initialization code
         labelSize = 29;
         dotSize = 6;
-        self.backgroundColor = [UIColor whiteColor];
+//        self.backgroundColor = [UIColor whiteColor];
         _dateLabel = [[UILabel alloc]initWithFrame:CGRectMake((self.frame.size.width - labelSize)/2,
                                                               1,
                                                               labelSize,

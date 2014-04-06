@@ -16,6 +16,7 @@
 {
     UIPageViewController *diaryPageViewController;
     NSMutableArray *modelArray;
+    NSInteger titleIndex;
 }
 
 @end
@@ -91,7 +92,7 @@
         return nil;
     }
     
-    self.navigationItem.title = [NSString stringWithFormat:@"%ld/%ld",currentIndex,[modelArray count]];
+    titleIndex =  currentIndex;
     DiaryViewController *contentViewController = [[DiaryViewController alloc] init];
     contentViewController.diaryData = [modelArray objectAtIndex:currentIndex - 1];
     return contentViewController;
@@ -106,22 +107,19 @@
         return nil;
     }
     
-    self.navigationItem.title = [NSString stringWithFormat:@"%ld/%ld",currentIndex+2,[modelArray count]];
+    titleIndex =  currentIndex+2;
     DiaryViewController *contentViewController = [[DiaryViewController alloc] init];
     contentViewController.diaryData = [modelArray objectAtIndex:currentIndex + 1];
     return contentViewController;
 }
 
-//- (NSInteger)presentationCountForPageViewController:(UIPageViewController *)pageViewController
-//{
-//    return [modelArray count];
-//}
-//
-//- (NSInteger)presentationIndexForPageViewController:(UIPageViewController *)pageViewController
-//{
-//    DiaryViewController *controller = pageViewController.viewControllers[0];
-//    return [modelArray indexOfObject:[controller diaryData]];
-//}
+#pragma mark - UIPageViewControllerDelegage
+
+- (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed
+{
+    if (completed)
+        self.navigationItem.title = [NSString stringWithFormat:@"%ld/%ld",titleIndex,[modelArray count]];
+}
 
 - (void)didReceiveMemoryWarning
 {

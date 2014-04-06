@@ -113,7 +113,7 @@
 
     _selectedDate = [monthModel dateModelForDate:[NSDate date]].date;
     [_monthView initCalendar:monthModel];
-    [self resetCalendarBySelectDate:NO];
+    [self resetCalendarBySelectDate:NO rewindWeekWithMonthChange:NO forwardWeekWithMonthChange:NO];
     
     NSDateComponents *comp = [_gregorian components:NSMonthCalendarUnit
                                            fromDate:_selectedDate];
@@ -156,6 +156,8 @@
     eventTableView.delegate = self;
     eventTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [eventTableView registerNib:[UINib nibWithNibName:@"EventTableCell" bundle:nil] forCellReuseIdentifier:@"Cell"];
+    eventTableView.showsHorizontalScrollIndicator = NO;
+    eventTableView.showsVerticalScrollIndicator = NO;
 
     [self.view addSubview:eventTableView];
     
@@ -331,20 +333,20 @@
 {
     NSDate *eventDate = [notification.userInfo objectForKey:@"startDate"];;
     _selectedDate = eventDate;
-    [self resetCalendarBySelectDate:YES];
+    [self resetCalendarBySelectDate:YES rewindWeekWithMonthChange:NO forwardWeekWithMonthChange:NO];
     if (_monthView.shrink)
         [self shrinkMonthWithOutAnimation];
 }
 
 -(void)refreshDiary:(NSNotification *)notification
 {
-    [self resetCalendarBySelectDate:NO];
+    [self resetCalendarBySelectDate:NO rewindWeekWithMonthChange:NO forwardWeekWithMonthChange:NO];
 //    [self showDiary];
 }
 
 - (void)switchEKCalendar:(NSNotification *)notification
 {
-    [self resetCalendarBySelectDate:NO];
+    [self resetCalendarBySelectDate:NO rewindWeekWithMonthChange:NO forwardWeekWithMonthChange:NO];
     if (_monthView.shrink)
         [self shrinkMonthWithOutAnimation];
 }
@@ -456,11 +458,13 @@
         _selectedDate = [_gregorian dateFromComponents:dateComponents];
     }
     [_monthView.dateGroupView.layer addAnimation:animation forKey:nil];
-    [self resetCalendarBySelectDate:bySelect];
+    [self resetCalendarBySelectDate:bySelect rewindWeekWithMonthChange:NO forwardWeekWithMonthChange:NO];
 }
 
 - (void)switchCalendarByWeek:(SwitchCalendar)forwardOrRewind bySelectDate:(BOOL)bySelect
 {
+    BOOL rewindChage = NO;
+    BOOL forwardChange = NO;
     // Normalize selectedDate to dateModel's date
     NSDateComponents *dateComponents = [_gregorian components:(
                                                                NSYearCalendarUnit |
@@ -493,6 +497,8 @@
                     dateComponents.day = 1; // Set to first date in case last date can be different for each month
                 }
                 _selectedDate = [_gregorian dateFromComponents:dateComponents];
+                rewindChage = YES;
+                
             }
             else {
                 DateModel *firstDateModelOfLastWeek = [[monthModel datesInMonth]objectAtIndex:row*7];
@@ -512,6 +518,7 @@
                     dateComponents.day = 1;  // Set to first date in case last date can be different for each month
                 }
                 _selectedDate = [_gregorian dateFromComponents:dateComponents];
+                forwardChange = YES;
             }
             else {
                 DateModel *firstDateModelOfNextWeek = [[monthModel datesInMonth]objectAtIndex:row*7];
@@ -519,7 +526,7 @@
             }
         }
     }
-    [self resetCalendarBySelectDate:bySelect];
+    [self resetCalendarBySelectDate:bySelect rewindWeekWithMonthChange:rewindChage forwardWeekWithMonthChange:forwardChange];
     [self shrinkMonthWithOutAnimation];
     
     if (!bySelect)
@@ -610,7 +617,7 @@
         eventTableView.frame = CGRectMake(0,
                                           134,
                                           self.view.frame.size.width,
-                                          260);
+                                          262.8);
     } else if (_emptyEventView.hidden){
         eventTableView.hidden = YES;
         [_emptyEventView.layer addAnimation:animation forKey:nil];
@@ -635,14 +642,16 @@
         animation.subtype = kCATransitionFromRight;
     
     if ([monthModel checkEventForDate:_selectedDate]) {
+        // If today's last event time is before current time , show last object
         if ([[[monthModel.eventsInDate lastObject]startDate] compare:[NSDate date]]== NSOrderedAscending) {
             _comingUpEvent = [monthModel.eventsInDate lastObject];
             [self updateComingEventViewEnds:YES];
             
-        } else {
+        } else { // Else show closest event to beyond current time
             for (EKEvent *comingUpEvent in monthModel.eventsInDate) {
                 if([comingUpEvent.startDate compare:[NSDate date]] == NSOrderedDescending) {
                     // Assign to _comingUpEvent in case user tap event from _comingEventView
+
                     _comingUpEvent = comingUpEvent;
                     [self updateComingEventViewEnds:NO];
                     break;
@@ -731,7 +740,7 @@
     }
 }
 
-- (void)resetCalendarBySelectDate:(BOOL)bySelect
+- (void)resetCalendarBySelectDate:(BOOL)bySelect rewindWeekWithMonthChange:(BOOL)rewindChange forwardWeekWithMonthChange:(BOOL)forwardChange
 {
     [_monthView setAppearanceOnDeselectDate:previousDateModel.date dateNotInCurrentMonth:previousDateModel.isCurrentMonth];
     previousDateModel.isSelected = NO;
@@ -743,6 +752,16 @@
     // Adjust selected date to monday of the week if month view is shrinked
     // Weekday Sunday = 1 , Saturday = 6
     if (_monthView.shrink&&!bySelect) {
+        
+        if (rewindChange) {
+            DateModel *d = [monthModel.datesInMonth objectAtIndex:4*7];
+            _selectedDate = d.date;
+        } else if (forwardChange) {
+            DateModel *d = [monthModel.datesInMonth objectAtIndex:7];
+            _selectedDate = d.date;
+        }
+        
+        
         NSDateComponents *dateComponents = [_gregorian components:(
                                                                    NSYearCalendarUnit |
                                                                    NSMonthCalendarUnit|

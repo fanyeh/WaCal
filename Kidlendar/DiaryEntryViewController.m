@@ -33,7 +33,6 @@
     BOOL hasText;
 //    BOOL locationFirstLoad;
 }
-@property (weak, nonatomic) IBOutlet UIView *searchMaskView;
 @property (weak, nonatomic) IBOutlet UIImageView *diaryPhotoView;
 @property (weak, nonatomic) IBOutlet UIView *locationSearchView;
 @property (weak, nonatomic) IBOutlet UITextField *diaryTimeField;
@@ -42,7 +41,6 @@
 @property (weak, nonatomic) IBOutlet UITableView *searchResultTable;
 @property (weak, nonatomic) IBOutlet UISearchBar *locationSearchBar;
 @property (weak, nonatomic) IBOutlet UITextView *diaryEntryView;
-@property (weak, nonatomic) IBOutlet UIView *videoPlayView;
 @property (weak, nonatomic) IBOutlet UIScrollView *contentScrollView;
 @property (weak, nonatomic) IBOutlet UIImageView *scrollViewBackground;
 @property (weak, nonatomic) IBOutlet UIImageView *mainViewBackground;
@@ -70,20 +68,12 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.navigationItem.hidesBackButton = YES;
     self.navigationItem.title = @"Words";
-//    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveDiary:)];
-//    self.navigationItem.rightBarButtonItem = saveButton;
+
     _saveButton.layer.masksToBounds = YES;
     _saveButton.layer.cornerRadius = _saveButton.frame.size.width/2;
     
     _deleteButton.layer.masksToBounds = YES;
     _deleteButton.layer.cornerRadius = _saveButton.frame.size.width/2;
-    
-    if ([_asset valueForProperty:ALAssetPropertyType] == ALAssetTypeVideo) {
-        _videoPlayView.layer.cornerRadius = _videoPlayView.frame.size.width/2;
-        _videoPlayView.layer.borderColor = [[UIColor whiteColor]CGColor];
-        _videoPlayView.layer.borderWidth = 2.0f;
-        _videoPlayView.hidden = NO;
-    }
     
     _mainViewBackground.image = _diaryImage;
     _diaryPhotoView.image =  [_diaryImage resizeImageToSize:_diaryPhotoView.frame.size];
@@ -107,7 +97,7 @@
 
     // Set up date formatter
     dateFormatter = [[NSDateFormatter alloc]init];
-    dateFormatter.dateFormat = @"yyyy/MM/dd";
+    dateFormatter.dateFormat = @"yyyy/MM/dd hh:mm , EEEE";
     dateFormatter.timeZone = [NSTimeZone systemTimeZone];
     
     photoDateFormatter = [[NSDateFormatter alloc]init];

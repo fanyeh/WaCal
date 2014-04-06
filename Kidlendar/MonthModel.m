@@ -17,6 +17,7 @@
 @implementation MonthModel
 {
     NSManagedObjectContext *context;
+    NSDate *currentMonthEndDate;
 }
 
 - (id)initMonthCalendarWithDate:(NSDate *)date andCalendar:(NSCalendar *)calendar
@@ -148,18 +149,34 @@
         model.hasEvent = [self checkEventForDate:model.date];
         model.hasDiary = [self checkDiaryForDate:model.date];
     }
+    
+    weekdayComponents.day +=1;
+    currentMonthEndDate = [_gregorian dateFromComponents:weekdayComponents];
 }
 
 - (void)fetchMonthlyEventOrDiary:(int)type
 {
     NSDate *startDate = ((DateModel *)_datesInMonth[0]).date;
+    // End date is start of end date + 1 day
     NSDate *endDate = ((DateModel *)[_datesInMonth lastObject]).date;
+    
+    NSDateComponents *comp = [_gregorian components:(NSWeekdayCalendarUnit|
+                                   NSDayCalendarUnit|
+                                   NSMonthCalendarUnit|
+                                   NSYearCalendarUnit)
+                         fromDate:endDate];
+    
+    comp.day += 1;
+
+    endDate = [_gregorian dateFromComponents:comp];
+
 
     // Type 0 = Event , 1 = Diary
     if (type==0) {
         NSPredicate *predicate = [[[CalendarStore sharedStore]eventStore] predicateForEventsWithStartDate:startDate
-                                                                     endDate:endDate
+                                                                                                  endDate:endDate
                                                                                                 calendars:@[[[CalendarStore sharedStore]calendar]]];
+        
         NSArray *events = [[[CalendarStore sharedStore]eventStore] eventsMatchingPredicate:predicate];
         _eventsInMonth = events;
     }

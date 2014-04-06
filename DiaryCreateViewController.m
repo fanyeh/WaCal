@@ -29,7 +29,6 @@ static int deleteLabelSize = 30;
     UICollectionView *diaryPhotosView; // Tag 0
     CGPoint _priorPoint;
     NSMutableArray *sizeArray;
-//    NSMutableDictionary *selectedPhotoInfo;
     NSMutableArray *cellImageArray;
     NSMutableArray *fullScreenImageArray;
     NSMutableArray *selectedPhotoOrderingInfo;
@@ -73,7 +72,6 @@ static int deleteLabelSize = 30;
 @property (weak, nonatomic) IBOutlet UIImageView *faceImageView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *faceDetectingActivity;
 
-
 @end
 
 @implementation DiaryCreateViewController
@@ -107,18 +105,19 @@ static int deleteLabelSize = 30;
     UILongPressGestureRecognizer *showDeleteVideo = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(showDeleteVideoButton:)];
     [videoImageView addGestureRecognizer:showDeleteVideo];
     
-    videoDeleteLabel = [[UILabel alloc]initWithFrame:CGRectMake(videoView.frame.size.width-deleteLabelSize-3, 3, deleteLabelSize, deleteLabelSize)];
+    videoDeleteLabel = [[UILabel alloc]initWithFrame:CGRectMake(videoView.frame.size.width-deleteLabelSize-5, 5, deleteLabelSize, deleteLabelSize)];
     videoDeleteLabel.backgroundColor = [UIColor redColor];
     videoDeleteLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:13];
     videoDeleteLabel.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.500];
     videoDeleteLabel.text = @"X";
-    videoDeleteLabel.textColor = [UIColor whiteColor];
+    videoDeleteLabel.textColor = MainColor;
     videoDeleteLabel.textAlignment = NSTextAlignmentCenter;
-    videoDeleteLabel.layer.borderColor = [[UIColor whiteColor]CGColor];
+    videoDeleteLabel.layer.borderColor = [MainColor CGColor];
     videoDeleteLabel.layer.borderWidth = 2.0f;
     videoDeleteLabel.layer.cornerRadius = videoDeleteLabel.frame.size.width/2;
     videoDeleteLabel.hidden = YES;
     videoDeleteLabel.userInteractionEnabled = YES;
+    videoDeleteLabel.layer.masksToBounds = YES;
     UITapGestureRecognizer *videoDeleteTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(cancelMPMoviePlayer)];
     [videoDeleteLabel addGestureRecognizer:videoDeleteTap];
     
@@ -847,7 +846,6 @@ static int deleteLabelSize = 30;
         // ImageInfo[1] = assset group name
         // ImageInfo[2] = select number
         if (imageInfo[0] == path) {
-            NSLog(@"remove row %ld",path.row);
             // Remove image from resize image array
             NSUInteger index = [selectedPhotoOrderingInfo indexOfObject:imageInfo];
             [imageMeta removeObjectAtIndex:index];
@@ -916,8 +914,8 @@ static int deleteLabelSize = 30;
         // Tap gesture for delete cell
         UITapGestureRecognizer *deleteCellGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(deleteTap:)];
         [cell.deleteBadger addGestureRecognizer:deleteCellGesture];
-        cell.deleteBadger.frame = CGRectMake(cell.contentView.bounds.size.width-deleteLabelSize-3,3, deleteLabelSize, deleteLabelSize);
-        cell.deleteBadger.layer.borderColor = [[UIColor whiteColor]CGColor];
+        cell.deleteBadger.frame = CGRectMake(cell.contentView.bounds.size.width-deleteLabelSize-5,5, deleteLabelSize, deleteLabelSize);
+        cell.deleteBadger.layer.borderColor = [MainColor CGColor];
         cell.deleteBadger.layer.borderWidth = 2.0f;
         cell.deleteBadger.layer.cornerRadius = cell.deleteBadger.frame.size.width/2;
         cell.deleteBadger.hidden = YES;
@@ -1205,6 +1203,8 @@ static int deleteLabelSize = 30;
 
 - (void)cancelMPMoviePlayer
 {
+    videoView.hidden = YES;
+    _noPhotoView.hidden = NO;
     navItem.rightBarButtonItem.title = @"0/5";
     [photoCollectionView deselectItemAtIndexPath:videoIndexPath animated:YES];
     [cellImageArray removeAllObjects];
