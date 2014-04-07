@@ -16,6 +16,7 @@
 #import "AlbumPhotoCell.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "PhotoAlbumTableCell.h"
+#import "PhotoLayout.h"
 
 static int deleteLabelSize = 30;
 
@@ -45,8 +46,9 @@ static int deleteLabelSize = 30;
     PhotoLoader *photoLoader;
     CGFloat swipeOffset;
     UITableView *photoAlbumTable;
-    UINavigationItem *navItem ;
-    UINavigationBar *navBar ;
+    UIToolbar *toolBar ;
+    UIBarButtonItem *tableButton;
+    UIBarButtonItem *photoButton;
     CGFloat photoCollectionExpandHeight;
     CGFloat photoCollectionShrinkHeight;
     NSMutableArray *imageMeta;
@@ -66,11 +68,16 @@ static int deleteLabelSize = 30;
     
     DiaryPhotoCell *touchedCell;
     UILabel *frameView;
+    
+    PhotoLayout *photoLayout;
 }
 
 @property (weak, nonatomic) IBOutlet UIView *noPhotoView;
 @property (weak, nonatomic) IBOutlet UIImageView *faceImageView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *faceDetectingActivity;
+@property (weak, nonatomic) IBOutlet UIImageView *noPhotoImage;
+@property (weak, nonatomic) IBOutlet UILabel *noPhotoLabel1;
+@property (weak, nonatomic) IBOutlet UILabel *noPhotoLabel2;
 
 @end
 
@@ -143,8 +150,16 @@ static int deleteLabelSize = 30;
     diaryCollectionViewInset = UIEdgeInsetsMake(2, 2, 2, 2);
     diaryMinimunCellSpace = 2.0;
     diaryMinimunLineSpace = 2.0;
+    
+    // Setup photolayout
+    CGFloat sizeWidth = 320-diaryCollectionViewInset.left-diaryCollectionViewInset.right;
+    CGFloat sizeHeight = 320-diaryCollectionViewInset.top-diaryCollectionViewInset.bottom;
+    photoLayout = [[PhotoLayout alloc]initWithSize:CGSizeMake(sizeWidth, sizeHeight)];
+    photoLayout.lineSpace = diaryMinimunLineSpace;
+    photoLayout.cellSpace = diaryMinimunCellSpace;
 
     UICollectionViewFlowLayout *diaryFlowLayout = [[UICollectionViewFlowLayout alloc]init];
+//    diaryFlowLayout.scrollDirection =  UICollectionViewScrollDirectionHorizontal;
     diaryPhotosView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 44, 320, 320) collectionViewLayout:diaryFlowLayout];
     diaryPhotosView.delegate = self;
     diaryPhotosView.dataSource = self;
@@ -166,23 +181,25 @@ static int deleteLabelSize = 30;
     [self.view addSubview:scroller];
     
     // Scroller for photo collection
-    UILabel *scrollerBar = [[UILabel alloc]initWithFrame:CGRectMake(scroller.center.x - 20, 4, 40, 6)];
+    UILabel *scrollerBar = [[UILabel alloc]initWithFrame:CGRectMake(scroller.center.x - 15, 7, 30, 4)];
     scrollerBar.backgroundColor = [UIColor whiteColor];
-    scrollerBar.layer.cornerRadius = 3;
+    scrollerBar.layer.cornerRadius = 2;
+    scrollerBar.layer.masksToBounds = YES;
     [scroller addSubview:scrollerBar];
     
-    // Navigation bar on scroller
-    navBar = [[UINavigationBar alloc]initWithFrame:CGRectMake(0, 10 , 320, 44)];
+    // Tool bar on scroller
+    toolBar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 11 , 320, 44)];
+    toolBar.tintColor = [UIColor whiteColor];
+    UIBarButtonItem *layoutButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:nil action:nil];
+    tableButton = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStyleBordered target:self action:@selector(showTable)];
+    photoButton = [[UIBarButtonItem alloc]initWithTitle:@"0/5" style:UIBarButtonItemStyleBordered target:nil action:nil];
+    UIBarButtonItem *flexButton1 = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    UIBarButtonItem *flexButton2 = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    toolBar.items = @[layoutButton,flexButton1,tableButton,flexButton2,photoButton];
+    [toolBar setBackgroundImage:[[UIImage alloc] init] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
+    [toolBar setBackgroundColor:[UIColor clearColor]];
+    [scroller addSubview:toolBar];
     
-    [navBar setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
-    [navBar setBackgroundColor:[UIColor clearColor]];
-    navBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
-    navItem = [[UINavigationItem alloc]init];
-    navItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"◀︎" style:UIBarButtonItemStyleBordered target:self action:@selector(showTable)];
-    navItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"0/5" style:UIBarButtonItemStyleBordered target:nil action:nil];
-    [navBar setItems:@[navItem]];
-    [scroller addSubview:navBar];
-
     // Set up photo album collection view
     photoCollectionViewInset = UIEdgeInsetsMake(2, 2, 2, 2);
     photoMinimunCellSpace = 1;
@@ -194,12 +211,12 @@ static int deleteLabelSize = 30;
     
     UICollectionViewFlowLayout *photoFlowLayout = [[UICollectionViewFlowLayout alloc]init];
     
-    photoCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 418, 320, photoCollectionExpandHeight)
+    photoCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 418, 320, photoCollectionShrinkHeight)
                                             collectionViewLayout:photoFlowLayout];
     photoCollectionView.delegate = self;
     photoCollectionView.dataSource = self;
     photoCollectionView.tag = 1;
-    photoCollectionView.backgroundColor = [UIColor whiteColor];
+    photoCollectionView.backgroundColor = [UIColor colorWithWhite:0.961 alpha:1.000];
 
     photoCollectionView.showsVerticalScrollIndicator = NO;
     [photoCollectionView registerClass:[AlbumPhotoCell class] forCellWithReuseIdentifier:@"AlbumPhotoCell"];
@@ -209,9 +226,8 @@ static int deleteLabelSize = 30;
     imageMeta = [[NSMutableArray alloc]init];
     
     // Table view for change photo album
-    photoAlbumTable = [[UITableView alloc]initWithFrame:CGRectMake(0, 418, 320, photoCollectionExpandHeight)
+    photoAlbumTable = [[UITableView alloc]initWithFrame:CGRectMake(320, 418, 320, photoCollectionShrinkHeight)
                                                   style:UITableViewStyleGrouped];
-    photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, 320, 0);
     photoAlbumTable.delegate = self;
     photoAlbumTable.dataSource = self;
     photoAlbumTable.contentInset = UIEdgeInsetsMake(-1.0f, 0.0f, 0.0f, 0.0);
@@ -219,6 +235,7 @@ static int deleteLabelSize = 30;
     photoAlbumTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     photoAlbumTable.allowsMultipleSelection = NO;
     photoAlbumTable.allowsSelection = YES;
+    photoAlbumTable.showsVerticalScrollIndicator = NO;
     [photoAlbumTable registerNib:[UINib nibWithNibName:@"PhotoAlbumTableCell" bundle:nil]
          forCellReuseIdentifier:@"PhotoAlbumTableCell"];
     photoAlbumTable.tintColor = MainColor;
@@ -258,19 +275,12 @@ static int deleteLabelSize = 30;
 -(void)viewWillAppear:(BOOL)animated
 {
     self.tabBarController.tabBar.hidden = YES;
-//    photoAlbumTable.hidden = YES;
     diaryPhotosView.backgroundColor = [UIColor clearColor];
-}
-
--(void)viewDidAppear:(BOOL)animated
-{
-//    photoAlbumTable.hidden = NO;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     self.tabBarController.tabBar.hidden = NO;
-//    photoAlbumTable.hidden = YES;
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -393,46 +403,8 @@ static int deleteLabelSize = 30;
 
 - (void)cellSizeArray
 {
-    CGFloat sizeWidth = diaryPhotosView.frame.size.width-diaryCollectionViewInset.left-diaryCollectionViewInset.right;
-    CGFloat sizeHeight = diaryPhotosView.frame.size.height-diaryCollectionViewInset.top-diaryCollectionViewInset.bottom;
-    switch ([selectedPhotoOrderingInfo count]) {
-        case 1:
-            //
-            sizeArray = [[NSMutableArray alloc]initWithArray:@[[NSValue valueWithCGSize:CGSizeMake(sizeWidth, sizeHeight)]]];
-            break;
-        case 2:
-            //
-            sizeArray = [[NSMutableArray alloc]initWithArray:@[[NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight-diaryMinimunLineSpace)/2)],
-                                                               [NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight-diaryMinimunLineSpace)/2)]
-                                                               ]];
-            break;
-        case 3:
-            //
-            sizeArray = [[NSMutableArray alloc]initWithArray:@[[NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight-diaryMinimunLineSpace)/2)],
-                                                               [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace)/2, (sizeHeight-diaryMinimunLineSpace)/2)],
-                                                               [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace)/2, (sizeHeight-diaryMinimunLineSpace)/2)]
-                                                               ]];
-            break;
-        case 4:
-            //
-            sizeArray = [[NSMutableArray alloc]initWithArray:@[[NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace)/2, (sizeHeight-diaryMinimunLineSpace)/2)],
-                                                               [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace)/2, (sizeHeight-diaryMinimunLineSpace)/2)],
-                                                               [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace)/2, (sizeHeight-diaryMinimunLineSpace)/2)],
-                                                               [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace)/2, (sizeHeight-diaryMinimunLineSpace)/2)]
-                                                               ]];
-            break;
-        case 5:
-            //
-            sizeArray =[[NSMutableArray alloc]initWithArray: @[[NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace*2)/3, (sizeHeight-diaryMinimunLineSpace)/2)],
-                                                               [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace*2)/3, (sizeHeight-diaryMinimunLineSpace)/2)],
-                                                               [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace*2)/3, (sizeHeight-diaryMinimunLineSpace)/2)],
-                                                               [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace)/2, (sizeHeight-diaryMinimunLineSpace)/2)],
-                                                               [NSValue valueWithCGSize:CGSizeMake((sizeWidth-diaryMinimunCellSpace)/2, (sizeHeight-diaryMinimunLineSpace)/2)]
-                                                               ]];
-            break;
-        default:
-            break;
-    }
+    NSInteger count = [selectedPhotoOrderingInfo count];
+    sizeArray = [photoLayout layoutBySelectionIndex:1 photoCount:count];
 }
 
 -(void)hidePhoto
@@ -447,7 +419,6 @@ static int deleteLabelSize = 30;
     diaryPhotosView.hidden = NO;
     _faceImageView.hidden = NO;
 }
-
 
 -(void)hideVideo
 {
@@ -681,7 +652,7 @@ static int deleteLabelSize = 30;
     if ([asset valueForProperty:ALAssetPropertyType]==ALAssetTypeVideo) {
         _noPhotoView.hidden = NO;
         [self cancelMPMoviePlayer];
-        navItem.rightBarButtonItem.title = @"0/1";
+        photoButton.title = @"0/1";
     } else
         [self removePhotoWithIndexPath:indexPath];
 }
@@ -701,7 +672,6 @@ static int deleteLabelSize = 30;
                                                320,
                                                photoCollectionExpandHeight);
         
-        
         photoAlbumTable.frame = CGRectMake(photoAlbumTable.frame.origin.x,
                                            photoAlbumTable.frame.origin.y,
                                            320,
@@ -716,12 +686,18 @@ static int deleteLabelSize = 30;
             photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, 0, -swipeOffset);
             
         } completion:^(BOOL finished) {
-            
+            self.view.backgroundColor = [UIColor blackColor];
+            _noPhotoImage.hidden = YES;
+            _noPhotoLabel1.hidden = YES;
+            _noPhotoLabel2.hidden = YES;
         }];
         
     }
     else if (sender.direction == UISwipeGestureRecognizerDirectionDown) {
-        
+        self.view.backgroundColor = [UIColor whiteColor];
+        _noPhotoImage.hidden = NO;
+        _noPhotoLabel1.hidden = NO;
+        _noPhotoLabel2.hidden = NO;
         sender.direction = UISwipeGestureRecognizerDirectionUp;
         [UIView animateWithDuration:0.5 animations:^{
             sender.view.backgroundColor = [UIColor blackColor];
@@ -740,7 +716,7 @@ static int deleteLabelSize = 30;
             photoAlbumTable.frame = CGRectMake(photoAlbumTable.frame.origin.x,
                                                photoAlbumTable.frame.origin.y,
                                                320,
-                                               photoCollectionExpandHeight);
+                                               photoCollectionShrinkHeight);
             
         }];
     }
@@ -757,19 +733,10 @@ static int deleteLabelSize = 30;
 - (void)setupPhotoCollectionView
 {
     NSArray *sourceKeys = photoLoader.sourceDictionary.allKeys;
-    
-    // Set up dictionary to preserve image and index path and album name
-//    for (NSString *key in sourceKeys) {
-//        NSMutableDictionary *photoGroupDict = [[NSMutableDictionary alloc]init];
-//        [selectedPhotoInfo setValue:photoGroupDict forKey:key];
-//    }
-    
     NSString *sourceKey = sourceKeys[1];
     assetGroupPropertyName = sourceKey;
-    
     photoAssets = [[NSMutableArray alloc]initWithArray:[[[photoLoader.sourceDictionary objectForKey:sourceKey] reverseObjectEnumerator] allObjects]];
-
-    navItem.title = assetGroupPropertyName;
+    tableButton.title =  [NSString stringWithFormat:@"%@\n▾",assetGroupPropertyName];
     [photoCollectionView reloadData];
 }
 
@@ -807,7 +774,7 @@ static int deleteLabelSize = 30;
     
     // Resize the image
     [fullScreenImageArray addObject:asset];
-    navItem.rightBarButtonItem.title = [NSString stringWithFormat:@"%ld/5",(unsigned long)[fullScreenImageArray count]];
+    photoButton.title = [NSString stringWithFormat:@"%ld/5",(unsigned long)[fullScreenImageArray count]];
     
     AlbumPhotoCell *cell = (AlbumPhotoCell *)[photoCollectionView cellForItemAtIndexPath:indexPath];
     cell.selectNumber.text = [NSString stringWithFormat:@"%ld",(unsigned long)[fullScreenImageArray count]];
@@ -850,7 +817,7 @@ static int deleteLabelSize = 30;
             NSUInteger index = [selectedPhotoOrderingInfo indexOfObject:imageInfo];
             [imageMeta removeObjectAtIndex:index];
             [fullScreenImageArray removeObjectAtIndex:index];
-            navItem.rightBarButtonItem.title = [NSString stringWithFormat:@"%ld/5",(unsigned long)[fullScreenImageArray count]];
+            photoButton.title = [NSString stringWithFormat:@"%ld/5",(unsigned long)[fullScreenImageArray count]];
             
             // Show "next" button
             if ([fullScreenImageArray count] <1)
@@ -988,7 +955,7 @@ static int deleteLabelSize = 30;
             if (videoIndexPath)
                 [photoCollectionView deselectItemAtIndexPath:videoIndexPath animated:YES];
             
-            navItem.rightBarButtonItem.title = @"1/1";
+            photoButton.title = @"1/1";
             videoIndexPath = indexPath;
             selectedMediaType = kMediaTypeVideo;
             UIImage *cellImage = [UIImage imageWithCGImage:[asset.defaultRepresentation fullScreenImage]];
@@ -1085,14 +1052,20 @@ static int deleteLabelSize = 30;
 - (void)showTable
 {
     [photoAlbumTable reloadData];
-    
     if (!showAlbumTable) {
-        photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, 320, 0);
+        // Show table
         photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, -320, 0);
+        [UIView animateWithDuration:0.5 animations:^{
+            photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, 320, 0);
+        }];
         showAlbumTable = YES;
     } else {
-        photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, -320, 0);
-        photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, 320, 0);
+        // Hide table
+        [UIView animateWithDuration:0.5 animations:^{
+            photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, -320, 0);
+        } completion:^(BOOL finished) {
+            photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, 320, 0);
+        }];
         showAlbumTable = NO;
     }
 }
@@ -1141,12 +1114,10 @@ static int deleteLabelSize = 30;
     NSArray *souceKeys = photoLoader.sourceDictionary.allKeys;
     NSString *key = souceKeys[indexPath.row];
     assetGroupPropertyName = key;
-    navItem.title = assetGroupPropertyName;
+    tableButton.title = [NSString stringWithFormat:@"%@",assetGroupPropertyName];
     NSMutableArray *photoAlbum = [[photoLoader sourceDictionary] objectForKey:key];
     [self reloadPhotoCollectionView:photoAlbum];
-    tableView.frame = CGRectOffset(tableView.frame, -320, 0);
-    photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, -320, 0);
-    showAlbumTable = NO;
+    [self showTable];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -1205,7 +1176,7 @@ static int deleteLabelSize = 30;
 {
     videoView.hidden = YES;
     _noPhotoView.hidden = NO;
-    navItem.rightBarButtonItem.title = @"0/5";
+    photoButton.title = @"0/5";
     [photoCollectionView deselectItemAtIndexPath:videoIndexPath animated:YES];
     [cellImageArray removeAllObjects];
     [self showNextButton:NO];

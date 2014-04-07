@@ -37,6 +37,7 @@
 		4C3FBA5718C4CCFF0097C67D /* face_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C3FBA5518C4CCFF0097C67D /* face_white.png */; };
 		4C3FBA5818C4CCFF0097C67D /* face_yellow.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C3FBA5618C4CCFF0097C67D /* face_yellow.png */; };
 		4C417E7618714A4C000878FC /* DiaryDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C417E7518714A4C000878FC /* DiaryDataStore.m */; };
+		4C488F6218F25049002B43A2 /* PhotoLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C488F6118F25049002B43A2 /* PhotoLayout.m */; };
 		4C48FFAA188D65580038AE6F /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFA9188D65580038AE6F /* CoreMedia.framework */; };
 		4C48FFAC188D65620038AE6F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFAB188D65620038AE6F /* CoreVideo.framework */; };
 		4C48FFAD188D656F0038AE6F /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFA7188D61C40038AE6F /* OpenGLES.framework */; };
@@ -224,6 +225,8 @@
 		4C3FBA5618C4CCFF0097C67D /* face_yellow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = face_yellow.png; sourceTree = "<group>"; };
 		4C417E7418714A4C000878FC /* DiaryDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiaryDataStore.h; path = ../DiaryDataStore.h; sourceTree = "<group>"; };
 		4C417E7518714A4C000878FC /* DiaryDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiaryDataStore.m; path = ../DiaryDataStore.m; sourceTree = "<group>"; };
+		4C488F6018F25049002B43A2 /* PhotoLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoLayout.h; sourceTree = "<group>"; };
+		4C488F6118F25049002B43A2 /* PhotoLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoLayout.m; sourceTree = "<group>"; };
 		4C48FFA7188D61C40038AE6F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		4C48FFA9188D65580038AE6F /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		4C48FFAB188D65620038AE6F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
@@ -550,6 +553,8 @@
 		4C417E7A18714A69000878FC /* Diary Model */ = {
 			isa = PBXGroup;
 			children = (
+				4C488F6018F25049002B43A2 /* PhotoLayout.h */,
+				4C488F6118F25049002B43A2 /* PhotoLayout.m */,
 				4C8952C218ECFFAF006BB793 /* DiaryData.h */,
 				4C8952C318ECFFAF006BB793 /* DiaryData.m */,
 				4C7EA60C18DB310300460153 /* FileManager.m */,
@@ -1081,6 +1086,7 @@
 				4C97EA7E18DDDD8C00BB19A8 /* SettingTableCell.m in Sources */,
 				4C92155A185AD39E009A3090 /* MonthCalendarView.m in Sources */,
 				4C84A57318BF7278005A30AB /* ReminderButton.m in Sources */,
+				4C488F6218F25049002B43A2 /* PhotoLayout.m in Sources */,
 				4C4F991E18CF5E51007D3746 /* AFHTTPSessionManager.m in Sources */,
 				4C68365018BB0FD100FAA259 /* FilterCell.m in Sources */,
 				4C6C936D18E02812004D7D68 /* UploadStore.m in Sources */,
