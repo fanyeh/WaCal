@@ -17,6 +17,9 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import "PhotoAlbumTableCell.h"
 #import "PhotoLayout.h"
+#import "LayoutCell.h"
+#import "Scroller.h"
+#import "VideoView.h"
 
 static int deleteLabelSize = 30;
 
@@ -26,50 +29,52 @@ static int deleteLabelSize = 30;
     UIEdgeInsets diaryCollectionViewInset;
     CGFloat diaryMinimunCellSpace;
     CGFloat diaryMinimunLineSpace;
-    
     UICollectionView *diaryPhotosView; // Tag 0
     CGPoint _priorPoint;
     NSMutableArray *sizeArray;
     NSMutableArray *cellImageArray;
     NSMutableArray *fullScreenImageArray;
     NSMutableArray *selectedPhotoOrderingInfo;
+    UILabel *frameView; // Empty frame
+    UICollectionViewFlowLayout *diaryFlowLayout;
     
+    // Diary Photo layout
+    PhotoLayout *photoLayout;
+    UICollectionView *layoutCollectionView; // Tag 2
+    BOOL showLayoutTable;
+    NSMutableArray *layoutSet;
+    NSInteger layoutIndex;
+
     // Photo collection view property
     UIEdgeInsets photoCollectionViewInset;
     CGFloat photoMinimunCellSpace;
     CGFloat photoMinimunLineSpace;
-
     UICollectionView *photoCollectionView; // Tag 1
-    BOOL scrollToBottom;
-    NSMutableArray *photoAssets;
-    NSString *assetGroupPropertyName;
-    PhotoLoader *photoLoader;
-    CGFloat swipeOffset;
-    UITableView *photoAlbumTable;
-    UIToolbar *toolBar ;
-    UIBarButtonItem *tableButton;
-    UIBarButtonItem *photoButton;
     CGFloat photoCollectionExpandHeight;
     CGFloat photoCollectionShrinkHeight;
     NSMutableArray *imageMeta;
+    DiaryPhotoCell *touchedCell;
 
+    // Scroller
+    Scroller *scroller;
+    CGFloat swipeOffset;
+
+    // Photo Album loader
+    NSMutableArray *photoAssets;
+    NSString *assetGroupPropertyName;
+    PhotoLoader *photoLoader;
+
+    // Photo Album Table
+    UITableView *photoAlbumTable;
     BOOL showAlbumTable;
     
+    // Video
     MPMoviePlayerViewController *videoPlayer;
     UIAlertView *preparingAlertView;
-    UIView *scroller;
-    
     NSIndexPath *videoIndexPath;
     MediaType selectedMediaType;
-    UIView *videoView;
-    UIImageView *videoImageView;
+    VideoView *videoView;
     UIBarButtonItem *nextButton;
-    UILabel *videoDeleteLabel;
-    
-    DiaryPhotoCell *touchedCell;
-    UILabel *frameView;
-    
-    PhotoLayout *photoLayout;
 }
 
 @property (weak, nonatomic) IBOutlet UIView *noPhotoView;
@@ -103,48 +108,15 @@ static int deleteLabelSize = 30;
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.navigationItem.title = @"Photos";
     
-    videoView = [[UIView alloc]initWithFrame:CGRectMake(2, 46, 316, 316)];
+    // Video
+    videoView = [[VideoView alloc]initWithFrame:CGRectMake(2, 46, 316, 316) deleteLabelSize:deleteLabelSize];
     UITapGestureRecognizer *videoTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(playMovie)];
-    [videoView addGestureRecognizer:videoTap];
-    
-    videoImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 316, 316)];
-    videoImageView.userInteractionEnabled  = YES;
     UILongPressGestureRecognizer *showDeleteVideo = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(showDeleteVideoButton:)];
-    [videoImageView addGestureRecognizer:showDeleteVideo];
-    
-    videoDeleteLabel = [[UILabel alloc]initWithFrame:CGRectMake(videoView.frame.size.width-deleteLabelSize-5, 5, deleteLabelSize, deleteLabelSize)];
-    videoDeleteLabel.backgroundColor = [UIColor redColor];
-    videoDeleteLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:13];
-    videoDeleteLabel.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.500];
-    videoDeleteLabel.text = @"X";
-    videoDeleteLabel.textColor = MainColor;
-    videoDeleteLabel.textAlignment = NSTextAlignmentCenter;
-    videoDeleteLabel.layer.borderColor = [MainColor CGColor];
-    videoDeleteLabel.layer.borderWidth = 2.0f;
-    videoDeleteLabel.layer.cornerRadius = videoDeleteLabel.frame.size.width/2;
-    videoDeleteLabel.hidden = YES;
-    videoDeleteLabel.userInteractionEnabled = YES;
-    videoDeleteLabel.layer.masksToBounds = YES;
     UITapGestureRecognizer *videoDeleteTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(cancelMPMoviePlayer)];
-    [videoDeleteLabel addGestureRecognizer:videoDeleteTap];
-    
-    [videoView addSubview:videoImageView];
-    [videoView addSubview:videoDeleteLabel];
+    [videoView addGestureRecognizer:videoTap];
+    [videoView.videoImageView addGestureRecognizer:showDeleteVideo];
+    [videoView.videoDeleteLabel addGestureRecognizer:videoDeleteTap];
     [self.view addSubview:videoView];
-    
-    UIView *videoPlayView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 88, 88)];
-    videoPlayView.layer.borderColor = [[UIColor whiteColor]CGColor];
-    videoPlayView.layer.borderWidth = 3.0f;
-    videoPlayView.layer.cornerRadius = videoPlayView.frame.size.width/2;
-    videoPlayView.center = videoImageView.center;
-    videoPlayView.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.700];
-    [videoImageView addSubview:videoPlayView];
-    
-    UIImageView *playButtonView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];
-    playButtonView.image = [UIImage imageNamed:@"playButton.png"];
-    playButtonView.center = videoImageView.center;
-    playButtonView.frame = CGRectOffset(playButtonView.frame, 5, 0);
-    [videoImageView addSubview:playButtonView];
     
     // Set up diary photo collection view
     diaryCollectionViewInset = UIEdgeInsetsMake(2, 2, 2, 2);
@@ -158,8 +130,7 @@ static int deleteLabelSize = 30;
     photoLayout.lineSpace = diaryMinimunLineSpace;
     photoLayout.cellSpace = diaryMinimunCellSpace;
 
-    UICollectionViewFlowLayout *diaryFlowLayout = [[UICollectionViewFlowLayout alloc]init];
-//    diaryFlowLayout.scrollDirection =  UICollectionViewScrollDirectionHorizontal;
+    diaryFlowLayout = [[UICollectionViewFlowLayout alloc]init];
     diaryPhotosView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 44, 320, 320) collectionViewLayout:diaryFlowLayout];
     diaryPhotosView.delegate = self;
     diaryPhotosView.dataSource = self;
@@ -171,58 +142,37 @@ static int deleteLabelSize = 30;
     selectedPhotoOrderingInfo = [[NSMutableArray alloc]init];
     [self.view addSubview:diaryPhotosView];
 
-    // Scroll control for photo collection view
-    scroller = [[UIView alloc]initWithFrame:CGRectMake(0, 364 , 320, 54)];
-    scroller.backgroundColor = [UIColor blackColor];
+    // Scroll control for photo collection view    
+    scroller = [[Scroller alloc]initWithFrame:CGRectMake(0, 364 , 320, 54)];
+    swipeOffset = diaryPhotosView.frame.size.height;
     UISwipeGestureRecognizer *swipGesture = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipePhotoCollection:)];
     swipGesture.direction = UISwipeGestureRecognizerDirectionUp;
     [scroller addGestureRecognizer:swipGesture];
-    swipeOffset = diaryPhotosView.frame.size.height;
+    scroller.layoutButton.target = self;
+    scroller.layoutButton.action = @selector(showLayout);
+    scroller.albumNameButton.target = self;
+    scroller.albumNameButton.action = @selector(showTable);
     [self.view addSubview:scroller];
     
-    // Scroller for photo collection
-    UILabel *scrollerBar = [[UILabel alloc]initWithFrame:CGRectMake(scroller.center.x - 15, 7, 30, 4)];
-    scrollerBar.backgroundColor = [UIColor whiteColor];
-    scrollerBar.layer.cornerRadius = 2;
-    scrollerBar.layer.masksToBounds = YES;
-    [scroller addSubview:scrollerBar];
-    
-    // Tool bar on scroller
-    toolBar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 11 , 320, 44)];
-    toolBar.tintColor = [UIColor whiteColor];
-    UIBarButtonItem *layoutButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:nil action:nil];
-    tableButton = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStyleBordered target:self action:@selector(showTable)];
-    photoButton = [[UIBarButtonItem alloc]initWithTitle:@"0/5" style:UIBarButtonItemStyleBordered target:nil action:nil];
-    UIBarButtonItem *flexButton1 = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    UIBarButtonItem *flexButton2 = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    toolBar.items = @[layoutButton,flexButton1,tableButton,flexButton2,photoButton];
-    [toolBar setBackgroundImage:[[UIImage alloc] init] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
-    [toolBar setBackgroundColor:[UIColor clearColor]];
-    [scroller addSubview:toolBar];
-    
     // Set up photo album collection view
+    CGSize screenSize = [[UIScreen mainScreen]bounds].size;
+    photoCollectionExpandHeight = screenSize.height - 44 - scroller.frame.size.height;
+    photoCollectionShrinkHeight = screenSize.height - 44 - diaryPhotosView.frame.size.height - scroller.frame.size.height;
+    UICollectionViewFlowLayout *photoFlowLayout = [[UICollectionViewFlowLayout alloc]init];
     photoCollectionViewInset = UIEdgeInsetsMake(2, 2, 2, 2);
     photoMinimunCellSpace = 1;
     photoMinimunLineSpace = 1;
 
-    CGSize screenSize = [[UIScreen mainScreen]bounds].size;
-    photoCollectionExpandHeight = screenSize.height - 44 - scroller.frame.size.height;
-    photoCollectionShrinkHeight = screenSize.height - 44 - diaryPhotosView.frame.size.height - scroller.frame.size.height;
-    
-    UICollectionViewFlowLayout *photoFlowLayout = [[UICollectionViewFlowLayout alloc]init];
-    
     photoCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 418, 320, photoCollectionShrinkHeight)
                                             collectionViewLayout:photoFlowLayout];
     photoCollectionView.delegate = self;
     photoCollectionView.dataSource = self;
     photoCollectionView.tag = 1;
     photoCollectionView.backgroundColor = [UIColor colorWithWhite:0.961 alpha:1.000];
-
     photoCollectionView.showsVerticalScrollIndicator = NO;
     [photoCollectionView registerClass:[AlbumPhotoCell class] forCellWithReuseIdentifier:@"AlbumPhotoCell"];
     photoCollectionView.allowsMultipleSelection = YES;
     [self.view addSubview:photoCollectionView];
-    
     imageMeta = [[NSMutableArray alloc]init];
     
     // Table view for change photo album
@@ -236,17 +186,30 @@ static int deleteLabelSize = 30;
     photoAlbumTable.allowsMultipleSelection = NO;
     photoAlbumTable.allowsSelection = YES;
     photoAlbumTable.showsVerticalScrollIndicator = NO;
-    [photoAlbumTable registerNib:[UINib nibWithNibName:@"PhotoAlbumTableCell" bundle:nil]
-         forCellReuseIdentifier:@"PhotoAlbumTableCell"];
+    [photoAlbumTable registerNib:[UINib nibWithNibName:@"PhotoAlbumTableCell" bundle:nil] forCellReuseIdentifier:@"PhotoAlbumTableCell"];
     photoAlbumTable.tintColor = MainColor;
     [self.view addSubview:photoAlbumTable];
     showAlbumTable = NO;
 
-    scrollToBottom = NO;
-        
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupPhotoCollectionView) name:@"loadLibraySourceDone" object:nil];
     photoLoader = [[PhotoLoader alloc]initWithSourceType:kSourceTypeAll];
     photoAssets = [[NSMutableArray alloc]init];
+    
+    // Layout collection view
+    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc]init];
+
+    layoutCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(320, 418, 320, photoCollectionShrinkHeight)
+                                             collectionViewLayout:flowLayout];
+    layoutCollectionView.delegate = self;
+    layoutCollectionView.dataSource = self;
+    layoutCollectionView.tag = 2;
+    layoutCollectionView.backgroundColor = [UIColor blackColor];
+    layoutCollectionView.showsVerticalScrollIndicator = NO;
+    [layoutCollectionView registerClass:[LayoutCell class] forCellWithReuseIdentifier:@"LayoutCell"];
+    showLayoutTable = NO;
+    [self.view addSubview:layoutCollectionView];
+    layoutSet = [[NSMutableArray alloc]init];
+    layoutIndex = 0;
     
     nextButton = [[UIBarButtonItem alloc]initWithTitle:@"Words" style:UIBarButtonItemStylePlain target:self action:@selector(doneSelection)];
     
@@ -336,7 +299,14 @@ static int deleteLabelSize = 30;
 - (void)processFaceDetection
 {
     [_faceDetectingActivity startAnimating];
-    [self cellSizeArray];
+    sizeArray = [layoutSet objectAtIndex:layoutIndex];
+    
+    if (layoutIndex == 2)
+        diaryFlowLayout.scrollDirection =  UICollectionViewScrollDirectionHorizontal;
+    else
+        diaryFlowLayout.scrollDirection =  UICollectionViewScrollDirectionVertical;
+
+
     [cellImageArray removeAllObjects];
     // Process face detection
     for (int i = 0 ; i < [fullScreenImageArray count]; i++) {
@@ -400,12 +370,6 @@ static int deleteLabelSize = 30;
 }
 
 #pragma mark -User Actions
-
-- (void)cellSizeArray
-{
-    NSInteger count = [selectedPhotoOrderingInfo count];
-    sizeArray = [photoLayout layoutBySelectionIndex:1 photoCount:count];
-}
 
 -(void)hidePhoto
 {
@@ -549,7 +513,7 @@ static int deleteLabelSize = 30;
     } else {
         ALAsset *videoAsset = [photoAssets objectAtIndex:videoIndexPath.row];
         entryViewController.asset = videoAsset;
-        entryViewController.diaryImage = videoImageView.image;
+        entryViewController.diaryImage = videoView.videoImageView.image;
     }
     [self.navigationController pushViewController:entryViewController animated:YES];
 }
@@ -587,20 +551,20 @@ static int deleteLabelSize = 30;
         [anim setDuration:0.1];
         [anim setRepeatCount:1];
         [anim setAutoreverses:YES];
-        [videoImageView.layer addAnimation:anim forKey:@"iconShake"];
+        [videoView.videoImageView.layer addAnimation:anim forKey:@"iconShake"];
         
-        if (videoDeleteLabel.hidden) {
-            videoDeleteLabel.hidden = NO;
-            videoDeleteLabel.alpha = 0;
+        if (videoView.videoDeleteLabel.hidden) {
+            videoView.videoDeleteLabel.hidden = NO;
+            videoView.videoDeleteLabel.alpha = 0;
             [UIView animateWithDuration:0.5 animations:^{
-                videoDeleteLabel.alpha = 1;
+                videoView.videoDeleteLabel.alpha = 1;
             }];
         }
         else {
             [UIView animateWithDuration:0.5 animations:^{
-                videoDeleteLabel.alpha = 0;
+                videoView.videoDeleteLabel.alpha = 0;
             } completion:^(BOOL finished) {
-                videoDeleteLabel.hidden = YES;
+                videoView.videoDeleteLabel.hidden = YES;
             }];
         }
     }
@@ -652,7 +616,7 @@ static int deleteLabelSize = 30;
     if ([asset valueForProperty:ALAssetPropertyType]==ALAssetTypeVideo) {
         _noPhotoView.hidden = NO;
         [self cancelMPMoviePlayer];
-        photoButton.title = @"0/1";
+        scroller.photoButton.title = @"0/1";
     } else
         [self removePhotoWithIndexPath:indexPath];
 }
@@ -736,7 +700,7 @@ static int deleteLabelSize = 30;
     NSString *sourceKey = sourceKeys[1];
     assetGroupPropertyName = sourceKey;
     photoAssets = [[NSMutableArray alloc]initWithArray:[[[photoLoader.sourceDictionary objectForKey:sourceKey] reverseObjectEnumerator] allObjects]];
-    tableButton.title =  [NSString stringWithFormat:@"%@\n▾",assetGroupPropertyName];
+    scroller.albumNameButton.title =  [NSString stringWithFormat:@"%@\n▾",assetGroupPropertyName];
     [photoCollectionView reloadData];
 }
 
@@ -774,7 +738,7 @@ static int deleteLabelSize = 30;
     
     // Resize the image
     [fullScreenImageArray addObject:asset];
-    photoButton.title = [NSString stringWithFormat:@"%ld/5",(unsigned long)[fullScreenImageArray count]];
+    scroller.photoButton.title = [NSString stringWithFormat:@"%ld/5",(unsigned long)[fullScreenImageArray count]];
     
     AlbumPhotoCell *cell = (AlbumPhotoCell *)[photoCollectionView cellForItemAtIndexPath:indexPath];
     cell.selectNumber.text = [NSString stringWithFormat:@"%ld",(unsigned long)[fullScreenImageArray count]];
@@ -785,6 +749,9 @@ static int deleteLabelSize = 30;
     // ImageInfo[2] = select number
     NSArray *imageInfo = @[indexPath,assetGroupPropertyName,cell.selectNumber.text];
     [selectedPhotoOrderingInfo addObject:imageInfo];
+    
+    // Get all layout set by photo count
+    [self getAllLayoutByPhotoCount:[selectedPhotoOrderingInfo count]];
     
     // Perform face detection and setup diary collection view
     [self processFaceDetection];
@@ -812,12 +779,13 @@ static int deleteLabelSize = 30;
         // ImageInfo[0] = indexpath
         // ImageInfo[1] = assset group name
         // ImageInfo[2] = select number
+        
         if (imageInfo[0] == path) {
             // Remove image from resize image array
             NSUInteger index = [selectedPhotoOrderingInfo indexOfObject:imageInfo];
             [imageMeta removeObjectAtIndex:index];
             [fullScreenImageArray removeObjectAtIndex:index];
-            photoButton.title = [NSString stringWithFormat:@"%ld/5",(unsigned long)[fullScreenImageArray count]];
+            scroller.photoButton.title = [NSString stringWithFormat:@"%ld/5",(unsigned long)[fullScreenImageArray count]];
             
             // Show "next" button
             if ([fullScreenImageArray count] <1)
@@ -841,9 +809,11 @@ static int deleteLabelSize = 30;
         [selectedPhotoOrderingInfo replaceObjectAtIndex:i withObject:newImageInfo];
     }
     
+    // Get new layoutset and refresh data
+    [self getAllLayoutByPhotoCount:[selectedPhotoOrderingInfo count]];
+    [layoutCollectionView reloadData];
+    
     [self processFaceDetection];
-    // Reload diary view data
-//    [diaryPhotosView reloadData];
 }
 
 #pragma mark - Collection Views
@@ -856,8 +826,10 @@ static int deleteLabelSize = 30;
 {
     if (collectionView.tag==0) {
         return [cellImageArray count];
-    } else {
+    } else if (collectionView.tag==1) {
         return [photoAssets count];
+    } else {
+        return [layoutSet count];
     }
 }
 
@@ -895,7 +867,7 @@ static int deleteLabelSize = 30;
 
         return cell;
         
-    } else {
+    } else if (collectionView.tag==1) {
         AlbumPhotoCell *cell = (AlbumPhotoCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"AlbumPhotoCell" forIndexPath:indexPath];
         ALAsset *asset =  [photoAssets objectAtIndex:indexPath.row];
         cell.asset = asset;
@@ -913,6 +885,17 @@ static int deleteLabelSize = 30;
         } else {
             cell.videoTimeLabel.hidden = YES;
             cell.videoLabel.hidden = YES;
+        }
+        return cell;
+    } else {
+        LayoutCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"LayoutCell" forIndexPath:indexPath];
+        if (indexPath.row == 2)
+            [cell drawLayoutWithViewSize:diaryPhotosView.frame.size andFrames:[layoutSet objectAtIndex:indexPath.row] andDirection:UICollectionViewScrollDirectionHorizontal];
+        else
+            [cell drawLayoutWithViewSize:diaryPhotosView.frame.size andFrames:[layoutSet objectAtIndex:indexPath.row] andDirection:UICollectionViewScrollDirectionVertical];
+        if (layoutIndex == indexPath.row) {
+            [layoutCollectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+            [cell setSelected:YES];
         }
         return cell;
     }
@@ -945,7 +928,7 @@ static int deleteLabelSize = 30;
         [self.navigationController pushViewController:photoViewController animated:YES];
     }
     // Photo collection view select
-    else {
+    else if (collectionView.tag==1) {
         photoCollectionView.userInteractionEnabled = NO;
         ALAsset *asset =  [photoAssets objectAtIndex:indexPath.row];
         if ([asset valueForProperty:ALAssetPropertyType]==ALAssetTypeVideo) {
@@ -955,11 +938,11 @@ static int deleteLabelSize = 30;
             if (videoIndexPath)
                 [photoCollectionView deselectItemAtIndexPath:videoIndexPath animated:YES];
             
-            photoButton.title = @"1/1";
+            scroller.photoButton.title = @"1/1";
             videoIndexPath = indexPath;
             selectedMediaType = kMediaTypeVideo;
             UIImage *cellImage = [UIImage imageWithCGImage:[asset.defaultRepresentation fullScreenImage]];
-            videoImageView.image = [cellImage cropWithFaceDetect:videoImageView.frame.size];
+            videoView.videoImageView.image = [cellImage cropWithFaceDetect:videoView.videoImageView.frame.size];
             
             [self hidePhoto];
             [self showVideo];
@@ -976,6 +959,9 @@ static int deleteLabelSize = 30;
             [self showPhoto];
             [self selectedPhoto:indexPath];
         }
+    } else {
+        layoutIndex = indexPath.row;
+        [self processFaceDetection];
     }
 }
 
@@ -1052,6 +1038,12 @@ static int deleteLabelSize = 30;
 - (void)showTable
 {
     [photoAlbumTable reloadData];
+    
+    // If layout table is present , hide it
+    if (showLayoutTable) {
+        [self showLayout];
+    }
+    
     if (!showAlbumTable) {
         // Show table
         photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, -320, 0);
@@ -1070,6 +1062,40 @@ static int deleteLabelSize = 30;
     }
 }
 
+- (void)showLayout
+{
+    [layoutCollectionView reloadData];
+    // If ablum is present , hide album table
+    if (showAlbumTable) {
+        [self showTable];
+    }
+    
+    if (!showLayoutTable) {
+        // Show table
+        layoutCollectionView.frame = CGRectOffset(photoAlbumTable.frame, -320, 0);
+        [UIView animateWithDuration:0.5 animations:^{
+            photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, 320, 0);
+        }];
+        showLayoutTable = YES;
+    } else {
+        // Hide table
+        [UIView animateWithDuration:0.5 animations:^{
+            photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, -320, 0);
+        } completion:^(BOOL finished) {
+            layoutCollectionView.frame = CGRectOffset(photoAlbumTable.frame, 320, 0);
+        }];
+        showLayoutTable = NO;
+    }
+}
+
+- (NSMutableArray *)getAllLayoutByPhotoCount:(NSInteger)count
+{
+    [layoutSet removeAllObjects];
+    for (int i =1; i < 5; i++) {
+        [layoutSet addObject:[photoLayout layoutBySelectionIndex:i photoCount:count]];
+    }
+    return layoutSet;
+}
 
 #pragma mark - UITableViewDataSource
 
@@ -1114,7 +1140,7 @@ static int deleteLabelSize = 30;
     NSArray *souceKeys = photoLoader.sourceDictionary.allKeys;
     NSString *key = souceKeys[indexPath.row];
     assetGroupPropertyName = key;
-    tableButton.title = [NSString stringWithFormat:@"%@",assetGroupPropertyName];
+    scroller.albumNameButton.title = [NSString stringWithFormat:@"%@",assetGroupPropertyName];
     NSMutableArray *photoAlbum = [[photoLoader sourceDictionary] objectForKey:key];
     [self reloadPhotoCollectionView:photoAlbum];
     [self showTable];
@@ -1176,7 +1202,7 @@ static int deleteLabelSize = 30;
 {
     videoView.hidden = YES;
     _noPhotoView.hidden = NO;
-    photoButton.title = @"0/5";
+    scroller.photoButton.title = @"0/5";
     [photoCollectionView deselectItemAtIndexPath:videoIndexPath animated:YES];
     [cellImageArray removeAllObjects];
     [self showNextButton:NO];

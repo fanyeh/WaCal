@@ -91,6 +91,9 @@
 		4C79153D18E86F1400D7ED95 /* eventLocationFill20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C79153918E86F1400D7ED95 /* eventLocationFill20@2x.png */; };
 		4C79153E18E86F1400D7ED95 /* eventCalendarFill20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C79153A18E86F1400D7ED95 /* eventCalendarFill20@2x.png */; };
 		4C79154618E872AF00D7ED95 /* crop35@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C79154318E872AF00D7ED95 /* crop35@2x.png */; };
+		4C7CA54318F39B2F00C3BAA9 /* LayoutCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7CA54218F39B2F00C3BAA9 /* LayoutCell.m */; };
+		4C7CA54818F3B02000C3BAA9 /* Scroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7CA54718F3B02000C3BAA9 /* Scroller.m */; };
+		4C7CA54B18F3B4E800C3BAA9 /* VideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C7CA54A18F3B4E800C3BAA9 /* VideoView.m */; };
 		4C7EA5F518DAB48000460153 /* video@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C7EA5F418DAB48000460153 /* video@2x.png */; };
 		4C7EA60818DAC36400460153 /* locationTag20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C7EA60618DAC36400460153 /* locationTag20@2x.png */; };
 		4C7EA60918DAC36400460153 /* locationTag10@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C7EA60718DAC36400460153 /* locationTag10@2x.png */; };
@@ -306,6 +309,12 @@
 		4C79153918E86F1400D7ED95 /* eventLocationFill20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "eventLocationFill20@2x.png"; sourceTree = "<group>"; };
 		4C79153A18E86F1400D7ED95 /* eventCalendarFill20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "eventCalendarFill20@2x.png"; sourceTree = "<group>"; };
 		4C79154318E872AF00D7ED95 /* crop35@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "crop35@2x.png"; sourceTree = "<group>"; };
+		4C7CA54118F39B2F00C3BAA9 /* LayoutCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutCell.h; sourceTree = "<group>"; };
+		4C7CA54218F39B2F00C3BAA9 /* LayoutCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayoutCell.m; sourceTree = "<group>"; };
+		4C7CA54618F3B02000C3BAA9 /* Scroller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scroller.h; sourceTree = "<group>"; };
+		4C7CA54718F3B02000C3BAA9 /* Scroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Scroller.m; sourceTree = "<group>"; };
+		4C7CA54918F3B4E800C3BAA9 /* VideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoView.h; sourceTree = "<group>"; };
+		4C7CA54A18F3B4E800C3BAA9 /* VideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoView.m; sourceTree = "<group>"; };
 		4C7EA5F418DAB48000460153 /* video@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "video@2x.png"; path = "../video@2x.png"; sourceTree = "<group>"; };
 		4C7EA60618DAC36400460153 /* locationTag20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "locationTag20@2x.png"; path = "../locationTag20@2x.png"; sourceTree = "<group>"; };
 		4C7EA60718DAC36400460153 /* locationTag10@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "locationTag10@2x.png"; path = "../locationTag10@2x.png"; sourceTree = "<group>"; };
@@ -516,6 +525,8 @@
 				4CBA4BB518CD9B4F00B380AB /* PhotoAlbumTableCell.xib */,
 				4CA2506D1869517400AEA94E /* DiaryPhotoCell.h */,
 				4CA2506E1869517400AEA94E /* DiaryPhotoCell.m */,
+				4C7CA54118F39B2F00C3BAA9 /* LayoutCell.h */,
+				4C7CA54218F39B2F00C3BAA9 /* LayoutCell.m */,
 				4C68364E18BB0FD100FAA259 /* FilterCell.h */,
 				4C68364F18BB0FD100FAA259 /* FilterCell.m */,
 				4CA0368A18B7A12100015184 /* DiaryTableViewCell.h */,
@@ -573,6 +584,10 @@
 				4C5B01F318ACBD7E0030FCCC /* DiaryCreateViewController.h */,
 				4C5B01F418ACBD7E0030FCCC /* DiaryCreateViewController.m */,
 				4C5B01F518ACBD7E0030FCCC /* DiaryCreateViewController.xib */,
+				4C7CA54918F3B4E800C3BAA9 /* VideoView.h */,
+				4C7CA54A18F3B4E800C3BAA9 /* VideoView.m */,
+				4C7CA54618F3B02000C3BAA9 /* Scroller.h */,
+				4C7CA54718F3B02000C3BAA9 /* Scroller.m */,
 				4C6C49BE186DDB680042EB61 /* DiaryTableViewController.h */,
 				4C6C49BF186DDB680042EB61 /* DiaryTableViewController.m */,
 				4C6C935E18E00A19004D7D68 /* EmptyTableView.xib */,
@@ -1036,6 +1051,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C7CA54818F3B02000C3BAA9 /* Scroller.m in Sources */,
 				4CB3DD8818521DC400673478 /* main.m in Sources */,
 				4C4F992018CF5E51007D3746 /* AFSecurityPolicy.m in Sources */,
 				4CFB086C187E696A00456D5D /* DateModel.m in Sources */,
@@ -1053,6 +1069,7 @@
 				4CB3DD8C18521DC400673478 /* KidlendarAppDelegate.m in Sources */,
 				4C50B73418B19DE50065434A /* LocationDataStore.m in Sources */,
 				4CFF692E18BF2B2900337857 /* ReminderView.m in Sources */,
+				4C7CA54318F39B2F00C3BAA9 /* LayoutCell.m in Sources */,
 				4C88B387188E56E100F4F47E /* DiaryCell.m in Sources */,
 				4C68364B18BAE4B200FAA259 /* AlbumPhotoCell.m in Sources */,
 				4C2E83BD1890BB450051215F /* CalendarStore.m in Sources */,
@@ -1076,6 +1093,7 @@
 				4C4F991D18CF5E51007D3746 /* AFHTTPRequestOperationManager.m in Sources */,
 				4C9CC3D318D943F400F899F0 /* DiaryPageViewController.m in Sources */,
 				4C315C7B18AB298800A2A363 /* PhotoLoader.m in Sources */,
+				4C7CA54B18F3B4E800C3BAA9 /* VideoView.m in Sources */,
 				4C50B73718B1BB3D0065434A /* MapKitHelpers.m in Sources */,
 				4C4F992118CF5E51007D3746 /* AFURLConnectionOperation.m in Sources */,
 				4C4F992418CF5E51007D3746 /* AFURLSessionManager.m in Sources */,
