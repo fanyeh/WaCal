@@ -44,6 +44,7 @@ static int deleteLabelSize = 30;
     BOOL showLayoutTable;
     NSMutableArray *layoutSet;
     NSInteger layoutIndex;
+    CGFloat currentLayoutTableHeight;
 
     // Photo collection view property
     UIEdgeInsets photoCollectionViewInset;
@@ -198,7 +199,7 @@ static int deleteLabelSize = 30;
     // Layout collection view
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc]init];
 
-    layoutCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(320, 418, 320, photoCollectionShrinkHeight)
+    layoutCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 568, 320, photoCollectionShrinkHeight)
                                              collectionViewLayout:flowLayout];
     layoutCollectionView.delegate = self;
     layoutCollectionView.dataSource = self;
@@ -210,6 +211,7 @@ static int deleteLabelSize = 30;
     [self.view addSubview:layoutCollectionView];
     layoutSet = [[NSMutableArray alloc]init];
     layoutIndex = 0;
+    currentLayoutTableHeight = photoCollectionShrinkHeight;
     
     nextButton = [[UIBarButtonItem alloc]initWithTitle:@"Words" style:UIBarButtonItemStylePlain target:self action:@selector(doneSelection)];
     
@@ -230,6 +232,7 @@ static int deleteLabelSize = 30;
     [self.view bringSubviewToFront:_noPhotoView];
     [self.view bringSubviewToFront:photoAlbumTable];
     [self.view bringSubviewToFront:photoCollectionView];
+    [self.view bringSubviewToFront:layoutCollectionView];
     [self.view bringSubviewToFront:scroller];
     [self.view bringSubviewToFront:_faceDetectingActivity];
 
@@ -626,9 +629,6 @@ static int deleteLabelSize = 30;
 
 - (void)swipePhotoCollection:(UISwipeGestureRecognizer *)sender
 {
-    [self.view bringSubviewToFront:scroller];
-    [self.view bringSubviewToFront:photoAlbumTable];
-    [self.view bringSubviewToFront:photoCollectionView];
     if (sender.direction == UISwipeGestureRecognizerDirectionUp) {
         sender.direction = UISwipeGestureRecognizerDirectionDown;
         photoCollectionView.frame = CGRectMake(photoCollectionView.frame.origin.x,
@@ -640,22 +640,30 @@ static int deleteLabelSize = 30;
                                            photoAlbumTable.frame.origin.y,
                                            320,
                                            photoCollectionExpandHeight);
+        
+        layoutCollectionView.frame = CGRectMake(layoutCollectionView.frame.origin.x,
+                                                layoutCollectionView.frame.origin.y,
+                                                320,
+                                                photoCollectionExpandHeight);
+
+        currentLayoutTableHeight = photoCollectionExpandHeight;
+        
         [UIView animateWithDuration:0.5 animations:^{
             if ([cellImageArray count]>0) {
                 sender.view.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.60];
             }
             sender.view.frame = CGRectOffset(sender.view.frame, 0, -swipeOffset);
             photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, 0, -swipeOffset);
-            
             photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, 0, -swipeOffset);
-            
+            if (showLayoutTable)
+                layoutCollectionView.frame = CGRectOffset(layoutCollectionView.frame, 0, -swipeOffset);
+
         } completion:^(BOOL finished) {
             self.view.backgroundColor = [UIColor blackColor];
             _noPhotoImage.hidden = YES;
             _noPhotoLabel1.hidden = YES;
             _noPhotoLabel2.hidden = YES;
         }];
-        
     }
     else if (sender.direction == UISwipeGestureRecognizerDirectionDown) {
         self.view.backgroundColor = [UIColor whiteColor];
@@ -668,8 +676,8 @@ static int deleteLabelSize = 30;
             sender.view.frame = CGRectOffset(sender.view.frame, 0, swipeOffset);
             photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, 0, swipeOffset);
             photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, 0, swipeOffset);
-            
-            
+            if (showLayoutTable)
+                layoutCollectionView.frame = CGRectOffset(layoutCollectionView.frame, 0, swipeOffset);
         } completion:^(BOOL finished) {
             
             photoCollectionView.frame = CGRectMake(photoCollectionView.frame.origin.x,
@@ -682,6 +690,12 @@ static int deleteLabelSize = 30;
                                                320,
                                                photoCollectionShrinkHeight);
             
+            layoutCollectionView.frame = CGRectMake(layoutCollectionView.frame.origin.x,
+                                                    layoutCollectionView.frame.origin.y,
+                                                    320,
+                                                    photoCollectionShrinkHeight);
+            currentLayoutTableHeight = photoCollectionShrinkHeight;
+
         }];
     }
 }
@@ -697,7 +711,7 @@ static int deleteLabelSize = 30;
 - (void)setupPhotoCollectionView
 {
     NSArray *sourceKeys = photoLoader.sourceDictionary.allKeys;
-    NSString *sourceKey = sourceKeys[1];
+    NSString *sourceKey = sourceKeys[0];
     assetGroupPropertyName = sourceKey;
     photoAssets = [[NSMutableArray alloc]initWithArray:[[[photoLoader.sourceDictionary objectForKey:sourceKey] reverseObjectEnumerator] allObjects]];
     scroller.albumNameButton.title =  [NSString stringWithFormat:@"%@\n▾",assetGroupPropertyName];
@@ -1065,34 +1079,36 @@ static int deleteLabelSize = 30;
 - (void)showLayout
 {
     [layoutCollectionView reloadData];
-    // If ablum is present , hide album table
-    if (showAlbumTable) {
-        [self showTable];
-    }
     
     if (!showLayoutTable) {
         // Show table
-        layoutCollectionView.frame = CGRectOffset(photoAlbumTable.frame, -320, 0);
+        layoutCollectionView.hidden = NO;
+
         [UIView animateWithDuration:0.5 animations:^{
-            photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, 320, 0);
+            layoutCollectionView.frame = CGRectOffset(layoutCollectionView.frame, 0, -currentLayoutTableHeight);
+        } completion:^(BOOL finished) {
+            showLayoutTable = YES;
         }];
-        showLayoutTable = YES;
     } else {
         // Hide table
         [UIView animateWithDuration:0.5 animations:^{
-            photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, -320, 0);
+            layoutCollectionView.frame = CGRectOffset(layoutCollectionView.frame, 0, currentLayoutTableHeight);
         } completion:^(BOOL finished) {
-            layoutCollectionView.frame = CGRectOffset(photoAlbumTable.frame, 320, 0);
+            showLayoutTable = NO;
+            layoutCollectionView.hidden = YES;
         }];
-        showLayoutTable = NO;
     }
 }
 
 - (NSMutableArray *)getAllLayoutByPhotoCount:(NSInteger)count
 {
     [layoutSet removeAllObjects];
-    for (int i =1; i < 5; i++) {
-        [layoutSet addObject:[photoLayout layoutBySelectionIndex:i photoCount:count]];
+    if (count == 1) {
+        [layoutSet addObject:[photoLayout layoutBySelectionIndex:1 photoCount:count]];
+    } else {
+        for (int i =1; i < 5; i++) {
+            [layoutSet addObject:[photoLayout layoutBySelectionIndex:i photoCount:count]];
+        }
     }
     return layoutSet;
 }
