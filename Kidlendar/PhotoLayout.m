@@ -372,9 +372,9 @@
             layoutArray = [[NSMutableArray alloc]initWithArray:@[
                                                                  [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/3*2, (sizeHeight - _lineSpace)/3*2)],
                                                                  [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/3-0.5, (sizeHeight - _lineSpace)/3*2)],
-                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/3, (sizeHeight - _lineSpace)/3)],
-                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/3, (sizeHeight - _lineSpace)/3)],
-                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/3, (sizeHeight - _lineSpace)/3)]
+                                                                 [NSValue valueWithCGSize:CGSizeMake(floorf((sizeWidth - _cellSpace)/3), (sizeHeight - _lineSpace)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake(floorf((sizeWidth - _cellSpace)/3), (sizeHeight - _lineSpace)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake(floorf((sizeWidth - _cellSpace)/3), (sizeHeight - _lineSpace)/3)]
                                                                  ]];
 
             break;

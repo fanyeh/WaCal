@@ -115,6 +115,7 @@
 		4CA0369018B7A29F00015184 /* DiaryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CA0368F18B7A29F00015184 /* DiaryTableViewCell.xib */; };
 		4CA2506C1869377000AEA94E /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA2506B1869377000AEA94E /* UIImage+Resize.m */; };
 		4CA2506F1869517400AEA94E /* DiaryPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA2506E1869517400AEA94E /* DiaryPhotoCell.m */; };
+		4CAEEEE618F590240056DFB0 /* layout@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CAEEEE518F590240056DFB0 /* layout@2x.png */; };
 		4CB3BD2C18A330D80006AFD4 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CB3BD2A18A330D80006AFD4 /* SettingViewController.m */; };
 		4CB3BD2D18A330D80006AFD4 /* SettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4CB3BD2B18A330D80006AFD4 /* SettingViewController.xib */; };
 		4CB3DD7C18521DC400673478 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB3DD7B18521DC400673478 /* Foundation.framework */; };
@@ -223,7 +224,6 @@
 		4C3ECBBC18BC3C75002CD2FB /* WeekdayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeekdayView.m; sourceTree = "<group>"; };
 		4C3EDA6C18C0CB0000FD7235 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		4C3EDA6E18C0CB1D00FD7235 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
-		4C3EDA7018C0CB3B00FD7235 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		4C3FBA5518C4CCFF0097C67D /* face_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = face_white.png; sourceTree = "<group>"; };
 		4C3FBA5618C4CCFF0097C67D /* face_yellow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = face_yellow.png; sourceTree = "<group>"; };
 		4C417E7418714A4C000878FC /* DiaryDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiaryDataStore.h; path = ../DiaryDataStore.h; sourceTree = "<group>"; };
@@ -349,6 +349,7 @@
 		4CA2506B1869377000AEA94E /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resize.m"; sourceTree = "<group>"; };
 		4CA2506D1869517400AEA94E /* DiaryPhotoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryPhotoCell.h; sourceTree = "<group>"; };
 		4CA2506E1869517400AEA94E /* DiaryPhotoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryPhotoCell.m; sourceTree = "<group>"; };
+		4CAEEEE518F590240056DFB0 /* layout@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "layout@2x.png"; sourceTree = "<group>"; };
 		4CB3BD2918A330D80006AFD4 /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingViewController.h; path = ../SettingViewController.h; sourceTree = "<group>"; };
 		4CB3BD2A18A330D80006AFD4 /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingViewController.m; path = ../SettingViewController.m; sourceTree = "<group>"; };
 		4CB3BD2B18A330D80006AFD4 /* SettingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SettingViewController.xib; path = ../SettingViewController.xib; sourceTree = "<group>"; };
@@ -735,6 +736,7 @@
 		4CB3DD6F18521DC400673478 = {
 			isa = PBXGroup;
 			children = (
+				4CAEEEE518F590240056DFB0 /* layout@2x.png */,
 				4C709E2218E913270076D2F2 /* Default-568h@2x.png */,
 				4C709E1C18E912D00076D2F2 /* Default@2x.png */,
 				4C709E1D18E912D00076D2F2 /* Default.png */,
@@ -771,7 +773,6 @@
 			isa = PBXGroup;
 			children = (
 				4CF5151818C2FCC70050E330 /* Social.framework */,
-				4C3EDA7018C0CB3B00FD7235 /* StoreKit.framework */,
 				4C3EDA6E18C0CB1D00FD7235 /* MobileCoreServices.framework */,
 				4C3EDA6C18C0CB0000FD7235 /* AudioToolbox.framework */,
 				4CD2B93118A4CF69002DA9E4 /* CFNetwork.framework */,
@@ -920,6 +921,11 @@
 				TargetAttributes = {
 					4CB3DD7718521DC400673478 = {
 						DevelopmentTeam = CH89446XPL;
+						SystemCapabilities = {
+							com.apple.InAppPurchase = {
+								enabled = 0;
+							};
+						};
 					};
 					4CB3DD9218521DC500673478 = {
 						TestTargetID = 4CB3DD7718521DC400673478;
@@ -1019,6 +1025,7 @@
 				4C0E892818DBD9BD008F0842 /* faceboo40@2x.png in Resources */,
 				4CB3BD2D18A330D80006AFD4 /* SettingViewController.xib in Resources */,
 				4CB42A4418E868E3001855FD /* Kidlendar-ICON-60.png in Resources */,
+				4CAEEEE618F590240056DFB0 /* layout@2x.png in Resources */,
 				4CB3DD8E18521DC400673478 /* Images.xcassets in Resources */,
 				4C80F2F218E11FB300B4600C /* lookup_miss_etikate.png in Resources */,
 				4C0E893A18DBEDFD008F0842 /* eventCalendarLine20@2x.png in Resources */,

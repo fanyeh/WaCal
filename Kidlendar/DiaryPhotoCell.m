@@ -23,11 +23,11 @@
         [self.contentView addSubview:_photoView];
         
         _deleteBadger = [[UILabel alloc]init];
-        _deleteBadger.text = @"X";
-        _deleteBadger.textColor = MainColor;
+        _deleteBadger.text = @"✕";
+        _deleteBadger.textColor = [UIColor whiteColor];
         _deleteBadger.textAlignment = NSTextAlignmentCenter;
-        _deleteBadger.font = [UIFont fontWithName:@"Helvetica-Bold" size:14];
-        _deleteBadger.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.500];
+        _deleteBadger.font = [UIFont fontWithName:@"Helvetica-Bold" size:20];
+        _deleteBadger.backgroundColor = TodayColor;
         _deleteBadger.userInteractionEnabled = YES;
         _deleteBadger.layer.masksToBounds = YES;
         [self addSubview:_deleteBadger];

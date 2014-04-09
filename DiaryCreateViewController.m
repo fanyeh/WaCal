@@ -651,9 +651,7 @@ static int deleteLabelSize = 30;
         currentLayoutTableHeight = photoCollectionExpandHeight;
         
         [UIView animateWithDuration:0.5 animations:^{
-            if ([cellImageArray count]>0) {
-                sender.view.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.60];
-            }
+            sender.view.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.60];
             sender.view.frame = CGRectOffset(sender.view.frame, 0, -swipeOffset);
             photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, 0, -swipeOffset);
             photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, 0, -swipeOffset);
@@ -661,14 +659,14 @@ static int deleteLabelSize = 30;
                 layoutCollectionView.frame = CGRectOffset(layoutCollectionView.frame, 0, -swipeOffset);
 
         } completion:^(BOOL finished) {
-            self.view.backgroundColor = [UIColor blackColor];
+            _faceImageView.hidden = YES;
             _noPhotoImage.hidden = YES;
             _noPhotoLabel1.hidden = YES;
             _noPhotoLabel2.hidden = YES;
         }];
     }
     else if (sender.direction == UISwipeGestureRecognizerDirectionDown) {
-        self.view.backgroundColor = [UIColor whiteColor];
+        _faceImageView.hidden = NO;
         _noPhotoImage.hidden = NO;
         _noPhotoLabel1.hidden = NO;
         _noPhotoLabel2.hidden = NO;
@@ -766,6 +764,9 @@ static int deleteLabelSize = 30;
     NSArray *imageInfo = @[indexPath,assetGroupPropertyName,cell.selectNumber.text];
     [selectedPhotoOrderingInfo addObject:imageInfo];
     
+    if ([selectedPhotoOrderingInfo count] > 1)
+        scroller.layoutButton.enabled = YES;
+
     // Get all layout set by photo count
     [self getAllLayoutByPhotoCount:[selectedPhotoOrderingInfo count]];
     
@@ -775,6 +776,8 @@ static int deleteLabelSize = 30;
 
 -(void)cancelPhotoSelection
 {
+    scroller.layoutButton.enabled = NO;
+    layoutIndex = 0;
     for (int i = 0; i < [selectedPhotoOrderingInfo count] ; i++) {
         NSArray *n = [selectedPhotoOrderingInfo objectAtIndex:i];
         [photoCollectionView deselectItemAtIndexPath:n[0] animated:YES];
@@ -813,6 +816,10 @@ static int deleteLabelSize = 30;
             // Hide no photo view
             if([selectedPhotoOrderingInfo count]==0)
                 _noPhotoView.hidden = NO;
+            
+            if([selectedPhotoOrderingInfo count] < 2)
+                scroller.layoutButton.enabled = NO;
+            
             break;
         }
     }
@@ -826,8 +833,17 @@ static int deleteLabelSize = 30;
     }
     
     // Get new layoutset and refresh data
-    [self getAllLayoutByPhotoCount:[selectedPhotoOrderingInfo count]];
-    [layoutCollectionView reloadData];
+    if([selectedPhotoOrderingInfo count]>0) {
+        [self getAllLayoutByPhotoCount:[selectedPhotoOrderingInfo count]];
+        [layoutCollectionView reloadData];
+        
+        if ([selectedPhotoOrderingInfo count] == 1) {
+            layoutIndex = 0;
+        } else if ([selectedPhotoOrderingInfo count] == 2) {
+            if (layoutIndex > 5)
+                layoutIndex = 0;
+        }
+    }
     
     [self processFaceDetection];
 }
@@ -870,8 +886,8 @@ static int deleteLabelSize = 30;
         UITapGestureRecognizer *deleteCellGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(deleteTap:)];
         [cell.deleteBadger addGestureRecognizer:deleteCellGesture];
         cell.deleteBadger.frame = CGRectMake(cell.contentView.bounds.size.width-deleteLabelSize-5,5, deleteLabelSize, deleteLabelSize);
-        cell.deleteBadger.layer.borderColor = [MainColor CGColor];
-        cell.deleteBadger.layer.borderWidth = 2.0f;
+        cell.deleteBadger.layer.borderColor = [[UIColor whiteColor] CGColor];
+        cell.deleteBadger.layer.borderWidth = 1.0f;
         cell.deleteBadger.layer.cornerRadius = cell.deleteBadger.frame.size.width/2;
         cell.deleteBadger.hidden = YES;
         
@@ -1069,6 +1085,7 @@ static int deleteLabelSize = 30;
             photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, 320, 0);
         }];
         showAlbumTable = YES;
+        scroller.albumNameButton.tintColor = MainColor;
     } else {
         // Hide table
         [UIView animateWithDuration:0.5 animations:^{
@@ -1077,6 +1094,7 @@ static int deleteLabelSize = 30;
             photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, 320, 0);
         }];
         showAlbumTable = NO;
+        scroller.albumNameButton.tintColor = [UIColor whiteColor];
     }
 }
 
@@ -1085,16 +1103,22 @@ static int deleteLabelSize = 30;
     [layoutCollectionView reloadData];
     
     if (!showLayoutTable) {
+
         // Show table
         layoutCollectionView.hidden = NO;
+        scroller.layoutButton.tintColor = MainColor;
 
         [UIView animateWithDuration:0.5 animations:^{
             layoutCollectionView.frame = CGRectOffset(layoutCollectionView.frame, 0, -currentLayoutTableHeight);
         } completion:^(BOOL finished) {
+            if (showAlbumTable)
+                [self showTable];
             showLayoutTable = YES;
         }];
     } else {
         // Hide table
+        scroller.layoutButton.tintColor = [UIColor whiteColor];
+
         [UIView animateWithDuration:0.5 animations:^{
             layoutCollectionView.frame = CGRectOffset(layoutCollectionView.frame, 0, currentLayoutTableHeight);
         } completion:^(BOOL finished) {
@@ -1142,7 +1166,12 @@ static int deleteLabelSize = 30;
     ALAsset *asset = [photoAlbum lastObject];
     cell.photoImageView.image = [UIImage imageWithCGImage: asset.thumbnail];
     cell.backgroundColor = [UIColor colorWithWhite:0.298 alpha:1.000];
-    cell.detail.text = [NSString stringWithFormat:@"%ld Photos",(unsigned long)[photoAlbum count]];
+    if ([photoAlbum count] > 1)
+        cell.detail.text = [NSString stringWithFormat:@"%ld Photos",(unsigned long)[photoAlbum count]];
+    else
+        cell.detail.text = [NSString stringWithFormat:@"%ld Photo",(unsigned long)[photoAlbum count]];
+
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
     if ([key isEqualToString:assetGroupPropertyName]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;

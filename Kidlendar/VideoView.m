@@ -42,14 +42,13 @@
         [_videoImageView addSubview:playButtonView];
         
         _videoDeleteLabel = [[UILabel alloc]initWithFrame:CGRectMake(frame.size.width-size-5, 5, size, size)];
-        _videoDeleteLabel.backgroundColor = [UIColor redColor];
-        _videoDeleteLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:13];
-        _videoDeleteLabel.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.500];
-        _videoDeleteLabel.text = @"X";
-        _videoDeleteLabel.textColor = MainColor;
+        _videoDeleteLabel.backgroundColor = TodayColor;
+        _videoDeleteLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:20];
+        _videoDeleteLabel.text = @"✕";
+        _videoDeleteLabel.textColor = [UIColor whiteColor];
         _videoDeleteLabel.textAlignment = NSTextAlignmentCenter;
-        _videoDeleteLabel.layer.borderColor = [MainColor CGColor];
-        _videoDeleteLabel.layer.borderWidth = 2.0f;
+        _videoDeleteLabel.layer.borderColor = [[UIColor whiteColor] CGColor];
+        _videoDeleteLabel.layer.borderWidth = 1.0f;
         _videoDeleteLabel.layer.cornerRadius = _videoDeleteLabel.frame.size.width/2;
         _videoDeleteLabel.hidden = YES;
         _videoDeleteLabel.userInteractionEnabled = YES;

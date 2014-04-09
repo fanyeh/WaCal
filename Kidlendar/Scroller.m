@@ -28,9 +28,11 @@
         // Tool bar on scroller
         _toolBar = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 11 , 320, 44)];
         _toolBar.tintColor = [UIColor whiteColor];
-        _layoutButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:nil action:nil];
+        _layoutButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"layout.png"] style:UIBarButtonItemStylePlain target:nil action:nil];
+        _layoutButton.enabled = NO;
         _albumNameButton = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStyleBordered target:nil action:nil];
         _photoButton = [[UIBarButtonItem alloc]initWithTitle:@"0/5" style:UIBarButtonItemStyleBordered target:nil action:nil];
+        _photoButton.enabled = NO;
         UIBarButtonItem *flexButton1 = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
         UIBarButtonItem *flexButton2 = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
         _toolBar.items = @[_layoutButton,flexButton1,_albumNameButton,flexButton2,_photoButton];
