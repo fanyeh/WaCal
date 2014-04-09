@@ -13,6 +13,7 @@
     CGFloat sizeWidth;
     CGFloat sizeHeight;
     NSMutableArray *layoutArray;
+    UICollectionViewScrollDirection direction;
 }
 
 -(id)initWithSize:(CGSize)size
@@ -26,37 +27,42 @@
     return self;
 }
 
--(NSMutableArray *)layoutBySelectionIndex:(NSInteger)index photoCount:(NSInteger)count
+-(NSDictionary *)layoutBySelectionIndex:(NSInteger)index photoCount:(NSInteger)count
 {
+    NSMutableArray *layoutFrames;
     switch (count) {
         case 1:
-            return [self onePhotoLayout];
+            layoutFrames = [self onePhotoLayout];
             break;
         case 2:
-            return [self twoPhotoLayout:index];
+            layoutFrames =  [self twoPhotoLayout:index];
             break;
         case 3:
-            return [self threePhotoLayout:index];
+            layoutFrames =  [self threePhotoLayout:index];
             break;
         case 4:
-            return [self fourPhotoLayout:index];
+            layoutFrames =  [self fourPhotoLayout:index];
             break;
         case 5:
-            return [self fivePhotoLayout:index];
+            layoutFrames =  [self fivePhotoLayout:index];
             break;
         default:
-            return nil;
             break;
     }
+    return [NSDictionary dictionaryWithObject:layoutFrames forKey:[NSNumber numberWithUnsignedInteger:direction]];
 }
 
 - (NSMutableArray *)onePhotoLayout
 {
-    return [[NSMutableArray alloc]initWithArray:@[[NSValue valueWithCGSize:CGSizeMake(sizeWidth, sizeHeight)]]];
+    layoutArray = [[NSMutableArray alloc]initWithArray:@[[NSValue valueWithCGSize:CGSizeMake(sizeWidth, sizeHeight)]]];
+    direction = UICollectionViewScrollDirectionVertical;
+    return layoutArray;
+
 }
 
 - (NSMutableArray *)twoPhotoLayout:(NSInteger)index
 {
+    direction = UICollectionViewScrollDirectionVertical;
     switch (index)
     {
         case 1:
@@ -72,9 +78,10 @@
                                                                  [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, sizeHeight)],
                                                                  [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, sizeHeight)]
                                                                  ]];
+
             break;
         case 3:
-            // Horizontal
+            // Vertical
             layoutArray = [[NSMutableArray alloc]initWithArray:@[
                                                                  [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/3*2, sizeHeight)],
                                                                  [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/3, sizeHeight)]
@@ -86,16 +93,37 @@
                                                                  [NSValue valueWithCGSize:CGSizeMake(sizeWidth,(sizeHeight - _lineSpace)/3*2)],
                                                                  [NSValue valueWithCGSize:CGSizeMake(sizeWidth,(sizeHeight - _lineSpace)/3)]
                                                                  ]];
+
             break;
+        case 5:
+            // Vertical
+            layoutArray = [[NSMutableArray alloc]initWithArray:@[
+                                                                 [NSValue valueWithCGSize:CGSizeMake(sizeWidth,(sizeHeight - _lineSpace)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake(sizeWidth,(sizeHeight - _lineSpace)/3*2)]
+                                                                 ]];
+            break;
+        case 6:
+            // Horizontal
+            layoutArray = [[NSMutableArray alloc]initWithArray:@[
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/3, sizeHeight)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake(floorf((sizeWidth - _cellSpace)/3*2) , sizeHeight)]
+                                                                 ]];
+//            direction = UICollectionViewScrollDirectionHorizontal;
+            
+            break;
+
         default:
             layoutArray = nil;
             break;
     }
     return layoutArray;
+
 }
 
 - (NSMutableArray *)threePhotoLayout:(NSInteger)index
 {
+    direction = UICollectionViewScrollDirectionVertical;
+
     switch (index)
     {
         case 1:
@@ -121,6 +149,8 @@
                                                                  [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, (sizeHeight - _lineSpace)/2)],
                                                                  [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, (sizeHeight - _lineSpace)/2)]
                                                                  ]];
+            direction = UICollectionViewScrollDirectionHorizontal;
+
             break;
         case 4:
             // Vertical
@@ -130,15 +160,50 @@
                                                                  [NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight - _lineSpace*2)/3)]
                                                                  ]];
             break;
+        case 5:
+            // Vertical
+            layoutArray = [[NSMutableArray alloc]initWithArray:@[
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, (sizeHeight - _lineSpace)/3*2)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, (sizeHeight - _lineSpace)/3*2)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake(sizeWidth,(sizeHeight - _lineSpace)/3 )]
+                                                                 ]];
+            break;
+        case 6:
+            // Vertical
+            layoutArray = [[NSMutableArray alloc]initWithArray:@[
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/3*2, (sizeHeight - _lineSpace)/3*2)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake(floorf((sizeWidth - _cellSpace)/3), (sizeHeight - _lineSpace)/3*2)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight - _lineSpace)/3)]
+                                                                 ]];
+            break;
+        case 7:
+            // Vertical
+            layoutArray = [[NSMutableArray alloc]initWithArray:@[
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace*2)/3, sizeHeight)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace*2)/3, sizeHeight)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace*2)/3, sizeHeight)]
+                                                                 ]];
+            break;
+        case 8:
+            // Vertical
+            layoutArray = [[NSMutableArray alloc]initWithArray:@[
+                                                                 [NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight - _lineSpace)/3*2)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/3*2, (sizeHeight - _lineSpace)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake(floorf((sizeWidth - _cellSpace)/3), (sizeHeight - _lineSpace)/3)]
+                                                                 ]];
+            break;
         default:
             layoutArray = nil;
             break;
     }
     return layoutArray;
+
 }
 
 - (NSMutableArray *)fourPhotoLayout:(NSInteger)index
 {
+    direction = UICollectionViewScrollDirectionVertical;
+
     switch (index)
     {
         case 1:
@@ -167,6 +232,8 @@
                                                                  [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, (sizeHeight - _lineSpace*2)/3)],
                                                                  [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, (sizeHeight - _lineSpace*2)/3)]
                                                                  ]];
+            direction = UICollectionViewScrollDirectionHorizontal;
+
             break;
         case 4:
             // Vertical
@@ -177,15 +244,54 @@
                                                                  [NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight - _lineSpace)/2)]
                                                                  ]];
             break;
+        case 5:
+            // Vertical
+            layoutArray = [[NSMutableArray alloc]initWithArray:@[
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/3*2, (sizeHeight - _lineSpace)/3*2)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake(floorf((sizeWidth - _cellSpace)/3), (sizeHeight - _lineSpace)/3*2)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/3*2,(sizeHeight - _lineSpace)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake(floorf((sizeWidth - _cellSpace)/3), (sizeHeight - _lineSpace)/3)]
+                                                                 ]];
+            break;
+        case 6:
+            // Vertical
+            layoutArray =[[NSMutableArray alloc]initWithArray: @[
+                                                                 [NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight-_lineSpace*2)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, (sizeHeight-_lineSpace*2)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, (sizeHeight-_lineSpace*2)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight-_lineSpace*2)/3)]
+                                                                 ]];
+            break;
+        case 7:
+            // Vertical
+            layoutArray =[[NSMutableArray alloc]initWithArray: @[
+                                                                 [NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight - _lineSpace*2)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight - _lineSpace*2)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/3*2, (sizeHeight - _lineSpace*2)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake(floorf((sizeWidth - _cellSpace)/3),(sizeHeight - _lineSpace*2)/3)]
+                                                                 ]];
+            break;
+        case 8:
+            // Vertical
+            layoutArray = [[NSMutableArray alloc]initWithArray:@[
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/3*2,(sizeHeight - _lineSpace)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake(floorf((sizeWidth - _cellSpace)/3), (sizeHeight - _lineSpace)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/3*2, (sizeHeight - _lineSpace)/3*2)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake(floorf((sizeWidth - _cellSpace)/3), (sizeHeight - _lineSpace)/3*2)]
+                                                                 ]];
+            break;
         default:
             layoutArray = nil;
             break;
     }
     return layoutArray;
+
 }
 
 - (NSMutableArray *)fivePhotoLayout:(NSInteger)index
 {
+    direction = UICollectionViewScrollDirectionVertical;
+
     switch (index)
     {
         case 1:
@@ -217,6 +323,8 @@
                                                                  [NSValue valueWithCGSize:CGSizeMake((sizeWidth-_cellSpace)/2, (sizeHeight-_lineSpace*2)/3)],
                                                                  [NSValue valueWithCGSize:CGSizeMake((sizeWidth-_cellSpace)/2, (sizeHeight-_lineSpace*2)/3)]
                                                                  ]];
+            direction = UICollectionViewScrollDirectionHorizontal;
+
 
             break;
         case 4:
@@ -228,6 +336,47 @@
                                                                  [NSValue valueWithCGSize:CGSizeMake((sizeWidth-_cellSpace*3)/4, (sizeHeight-_lineSpace)/2)],
                                                                  [NSValue valueWithCGSize:CGSizeMake((sizeWidth-_cellSpace*3)/4, (sizeHeight-_lineSpace)/2)]
                                                                  ]];
+            break;
+        case 5:
+            // Vertical
+            layoutArray =[[NSMutableArray alloc]initWithArray: @[
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, (sizeHeight-_lineSpace*2)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, (sizeHeight-_lineSpace*2)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight-_lineSpace*2)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, (sizeHeight-_lineSpace*2)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, (sizeHeight-_lineSpace*2)/3)]
+                                                                 ]];
+            break;
+        case 6:
+            // Vertical
+            layoutArray =[[NSMutableArray alloc]initWithArray: @[
+                                                                 [NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight-_lineSpace*2)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, (sizeHeight-_lineSpace*2)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, (sizeHeight-_lineSpace*2)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, (sizeHeight-_lineSpace*2)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, (sizeHeight-_lineSpace*2)/3)]
+                                                                 ]];
+            break;
+        case 7:
+            // Vertical
+            layoutArray =[[NSMutableArray alloc]initWithArray: @[
+                                                                 [NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight-_lineSpace*2)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight-_lineSpace*2)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace*2)/3, (sizeHeight-_lineSpace*2)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace*2)/3, (sizeHeight-_lineSpace*2)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace*2)/3, (sizeHeight-_lineSpace*2)/3)]
+                                                                 ]];
+            break;
+        case 8:
+            // Vertical
+            layoutArray = [[NSMutableArray alloc]initWithArray:@[
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/3*2, (sizeHeight - _lineSpace)/3*2)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/3-0.5, (sizeHeight - _lineSpace)/3*2)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/3, (sizeHeight - _lineSpace)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/3, (sizeHeight - _lineSpace)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/3, (sizeHeight - _lineSpace)/3)]
+                                                                 ]];
+
             break;
         default:
             layoutArray = nil;

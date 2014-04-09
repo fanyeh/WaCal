@@ -45,6 +45,7 @@ static int deleteLabelSize = 30;
     NSMutableArray *layoutSet;
     NSInteger layoutIndex;
     CGFloat currentLayoutTableHeight;
+    UICollectionViewScrollDirection layouScrollDirection;
 
     // Photo collection view property
     UIEdgeInsets photoCollectionViewInset;
@@ -302,7 +303,8 @@ static int deleteLabelSize = 30;
 - (void)processFaceDetection
 {
     [_faceDetectingActivity startAnimating];
-    sizeArray = [layoutSet objectAtIndex:layoutIndex];
+    NSDictionary *layoutDict = [layoutSet objectAtIndex:layoutIndex];
+    sizeArray = [layoutDict allValues][0];
     
     if (layoutIndex == 2)
         diaryFlowLayout.scrollDirection =  UICollectionViewScrollDirectionHorizontal;
@@ -903,10 +905,12 @@ static int deleteLabelSize = 30;
         return cell;
     } else {
         LayoutCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"LayoutCell" forIndexPath:indexPath];
-        if (indexPath.row == 2)
-            [cell drawLayoutWithViewSize:diaryPhotosView.frame.size andFrames:[layoutSet objectAtIndex:indexPath.row] andDirection:UICollectionViewScrollDirectionHorizontal];
-        else
-            [cell drawLayoutWithViewSize:diaryPhotosView.frame.size andFrames:[layoutSet objectAtIndex:indexPath.row] andDirection:UICollectionViewScrollDirectionVertical];
+        NSDictionary *layoutDict = [layoutSet objectAtIndex:indexPath.row];
+        UICollectionViewScrollDirection direction = [(NSNumber *)[layoutDict allKeys][0] unsignedIntegerValue];
+        NSMutableArray *layoutFrames = [layoutDict allValues][0];
+
+        [cell drawLayoutWithViewSize:diaryPhotosView.frame.size andFrames:layoutFrames andDirection:direction];
+
         if (layoutIndex == indexPath.row) {
             [layoutCollectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
             [cell setSelected:YES];
@@ -1103,13 +1107,18 @@ static int deleteLabelSize = 30;
 - (NSMutableArray *)getAllLayoutByPhotoCount:(NSInteger)count
 {
     [layoutSet removeAllObjects];
-    if (count == 1) {
-        [layoutSet addObject:[photoLayout layoutBySelectionIndex:1 photoCount:count]];
-    } else {
-        for (int i =1; i < 5; i++) {
-            [layoutSet addObject:[photoLayout layoutBySelectionIndex:i photoCount:count]];
-        }
+    NSInteger index;
+    if (count == 1)
+        index = 2;
+    else if (count == 2)
+        index = 7;
+    else
+        index = 9;
+    
+    for (int i =1; i < index; i++) {
+        [layoutSet addObject:[photoLayout layoutBySelectionIndex:i photoCount:count]];
     }
+    
     return layoutSet;
 }
 

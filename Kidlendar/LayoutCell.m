@@ -26,7 +26,7 @@
         // Initialization code
         layoutLayer = [CAShapeLayer layer];
         CGRect contentFrame = self.contentView.frame;
-        layoutView = [[UIView alloc]initWithFrame:CGRectMake(contentFrame.origin.x+10, contentFrame.origin.y+10, contentFrame.size.width-20, contentFrame.size.height-20)];
+        layoutView = [[UIView alloc]initWithFrame:CGRectMake(contentFrame.origin.x+12, contentFrame.origin.y+12, contentFrame.size.width-24, contentFrame.size.height-24)];
         [layoutView.layer addSublayer:layoutLayer];
         [self.contentView addSubview:layoutView];
         _layoutColor = [UIColor colorWithWhite:0.961 alpha:1.000];

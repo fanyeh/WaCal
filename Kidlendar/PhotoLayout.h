@@ -13,6 +13,6 @@
 @property (nonatomic) CGFloat cellSpace;
 
 -(id)initWithSize:(CGSize)size;
--(NSMutableArray *)layoutBySelectionIndex:(NSInteger)index photoCount:(NSInteger)count;
+-(NSDictionary *)layoutBySelectionIndex:(NSInteger)index photoCount:(NSInteger)count;
 
 @end
