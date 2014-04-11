@@ -14,9 +14,7 @@
     UIView *layoutView;
     NSInteger lines;
     NSInteger spaces;
-    CGSize diaryPhotoViewSize;
-    NSArray *layoutFrames;
-    UICollectionViewScrollDirection layoutDirection;
+    UIColor *layoutColor;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -29,17 +27,13 @@
         layoutView = [[UIView alloc]initWithFrame:CGRectMake(contentFrame.origin.x+12, contentFrame.origin.y+12, contentFrame.size.width-24, contentFrame.size.height-24)];
         [layoutView.layer addSublayer:layoutLayer];
         [self.contentView addSubview:layoutView];
-        _layoutColor = [UIColor colorWithWhite:0.961 alpha:1.000];
+        layoutColor = [UIColor colorWithWhite:0.961 alpha:1.000];
     }
     return self;
 }
 
 - (void)drawLayoutWithViewSize:(CGSize)size andFrames:(NSArray *)frames andDirection:(UICollectionViewScrollDirection)direction
 {
-    diaryPhotoViewSize = size;
-    layoutFrames = frames;
-    layoutDirection = direction;
-    
     CGRect layoutViewFrame = layoutView.frame;
     CGFloat originX = 0;
     CGFloat originY = 0;
@@ -48,7 +42,7 @@
     CGSize frameSize;
     CGSize previousFrameSize;
     CGMutablePathRef p1 = CGPathCreateMutable();
-    CGAffineTransform t = CGAffineTransformMakeScale(cellWidth / (size.width-2), cellHeight / (size.height-2));
+    CGAffineTransform t = CGAffineTransformMakeScale(cellWidth / (size.width-1), cellHeight / (size.height-1));
 
     for (int i = 0; i < frames.count ; i ++) {
         NSValue *v = frames[i];
@@ -90,7 +84,7 @@
     layoutLayer.path = p1;
     layoutLayer.lineJoin = kCALineJoinBevel;
     layoutLayer.lineWidth = 3.0f;
-    layoutLayer.strokeColor = _layoutColor.CGColor;
+    layoutLayer.strokeColor = layoutColor.CGColor;
     layoutLayer.fillColor = [UIColor clearColor].CGColor;
     CGPathRelease(p1);
 }
@@ -99,14 +93,32 @@
 {
     [super setSelected:selected];
     if (selected) {
-        _layoutColor = MainColor;
+        layoutColor = MainColor;
     }
     else {
-        _layoutColor = [UIColor colorWithWhite:0.961 alpha:1.000];
+        if (_isPhotoCountSection)
+            layoutColor = [UIColor colorWithWhite:0.961 alpha:1.000];
+        else
+            layoutColor = [UIColor colorWithWhite:0.400 alpha:1.000];
     }
-    
-    [self drawLayoutWithViewSize:diaryPhotoViewSize andFrames:layoutFrames andDirection:layoutDirection];
+    layoutLayer.strokeColor = layoutColor.CGColor;
 }
 
+-(void)setIsPhotoCountSection:(BOOL)isPhotoCountSection
+{
+    if (isPhotoCountSection) {
+        [self setUserInteractionEnabled: YES];
+        if (self.isSelected)
+            layoutColor = MainColor;
+        else
+            layoutColor = [UIColor colorWithWhite:0.961 alpha:1.000];
+    }
+    else {
+        layoutColor = [UIColor colorWithWhite:0.400 alpha:1.000];
+        [self setUserInteractionEnabled: NO];
+    }
+    
+    _isPhotoCountSection = isPhotoCountSection;
+}
 
 @end

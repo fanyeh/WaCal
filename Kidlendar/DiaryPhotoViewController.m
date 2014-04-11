@@ -31,23 +31,15 @@ typedef NS_ENUM(NSInteger, FilterType)
     UIPanGestureRecognizer *pan;
     NSMutableArray *filterImageArray;
     FilterType filter;
-
     GPUImageContrastFilter *contrastFilter;
     GPUImageExposureFilter *exposureFilter;
     GPUImageBrightnessFilter *brightnessFilter;
-    
     GPUImagePicture *stillImageSource;
-    
     BOOL isCrop;
-    
     UIImage *filteredImage;
-    
     CGSize sizeAfterAspectFit;
-    
     CGPoint photoCenter;
-    
     CGFloat initialRectRatio;
-    
     CGFloat sliderHeight;
 }
 @property (weak, nonatomic) IBOutlet UIImageView *photoImageView;
@@ -56,6 +48,8 @@ typedef NS_ENUM(NSInteger, FilterType)
 @property (weak, nonatomic) IBOutlet UISlider *adjustSlider;
 @property (weak, nonatomic) IBOutlet UIView *adjustSliderView;
 @property (weak, nonatomic) IBOutlet UIView *toolBarView;
+@property (weak, nonatomic) IBOutlet UIButton *cropButton;
+@property (weak, nonatomic) IBOutlet UIButton *brightnessButton;
 
 @end
 
@@ -84,6 +78,7 @@ typedef NS_ENUM(NSInteger, FilterType)
     
     self.navigationItem.rightBarButtonItem = saveButton;
     
+    
     // create crop rect pan gesture
     pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     
@@ -111,8 +106,13 @@ typedef NS_ENUM(NSInteger, FilterType)
                                        sizeAfterAspectFit.height);
     _photoImageView.center = photoCenter;
     _filterView.frame = _photoImageView.frame;
-    initialRectRatio = 0.95;
-    //    _filterView.fillMode = kGPUImageFillModePreserveAspectRatioAndFill;
+    initialRectRatio = 1;
+    
+    // Adjust cropRect size proportionally based on collection view cell size
+    _cropRectSize = [self resizeCropSize:_cropRectSize];
+    if (_cropRectSize.width == _photoImageView.frame.size.width && _cropRectSize.height == _photoImageView.frame.size.height) {
+        _cropButton.hidden = YES;
+    }
 
     // Filters
     _filterCollectionView.allowsMultipleSelection = NO;
@@ -223,27 +223,21 @@ typedef NS_ENUM(NSInteger, FilterType)
     // Create mask Path
     CGMutablePathRef p1 = CGPathCreateMutable();
     CGPathAddPath(p1, nil, CGPathCreateWithRect(cropRect, nil));
+//    CGPathAddPath(p1, nil, CGPathCreateWithRect(_photoImageView.bounds, nil));
     CGPathAddPath(p1, nil, CGPathCreateWithRect(_photoImageView.bounds, nil));
+
     _maskLayer.path = p1;
     CGPathRelease(p1);
 
     // display the path of the masks the for screenshot
     borderLayer.path = CGPathCreateWithRect(cropRect,nil);
     borderLayer.lineWidth = 3.0f;
-    borderLayer.strokeColor = [UIColor yellowColor].CGColor;
+    borderLayer.strokeColor = [UIColor clearColor].CGColor;
     borderLayer.fillColor = [UIColor clearColor].CGColor;
 }
 
 - (void)createCropMask
 {
-    CGRect imageBounds = _photoImageView.bounds;
-    CGPoint boundsCenter;
-    boundsCenter.x = (imageBounds.origin.x + imageBounds.size.width)/2;
-    boundsCenter.y = (imageBounds.origin.y + imageBounds.size.height)/2;
-    
-    // Adjust cropRect size proportionally based on collection view cell size
-    _cropRectSize = [self resizeCropSize:_cropRectSize];
-    
     // Setup crop rect
 
     if (_cropRectSize.width == _photoImageView.frame.size.width) {
@@ -263,7 +257,6 @@ typedef NS_ENUM(NSInteger, FilterType)
                                _cropRectSize.height);
     }
 
-    
     // create layer mask for the image
     _maskLayer =[[CAShapeLayer alloc]init];
     _maskLayer.frame = _photoImageView.bounds;
@@ -275,7 +268,7 @@ typedef NS_ENUM(NSInteger, FilterType)
     
     imageLayer = [CALayer layer];
     imageLayer.frame = _photoImageView.frame;
-    imageLayer.backgroundColor = [[UIColor colorWithWhite:0.000 alpha:0.600] CGColor];
+    imageLayer.backgroundColor = [[UIColor colorWithWhite:0.000 alpha:0.700] CGColor];
     imageLayer.mask = _maskLayer;
     [imageLayer addSublayer:borderLayer];
     [self.view.layer addSublayer:imageLayer];
@@ -337,7 +330,7 @@ typedef NS_ENUM(NSInteger, FilterType)
     _cropRect = CGRectOffset(_cropRect, translation.x, translation.y);
     
     CGRect frame = _cropRect;
-    CGFloat gapFromBoundary = 1;
+    CGFloat gapFromBoundary = 0;
     
     if (frame.origin.x < _photoImageView.bounds.origin.x)
         frame.origin.x = _photoImageView.bounds.origin.x + gapFromBoundary;
@@ -355,12 +348,19 @@ typedef NS_ENUM(NSInteger, FilterType)
     _cropRect = frame;
     [self updateMaskPath:_cropRect];
     [sender setTranslation:CGPointMake(0, 0) inView:self.view];
+    
+    if (sender.state == UIGestureRecognizerStateCancelled || sender.state == UIGestureRecognizerStateEnded) {
+        _cropRect = frame;
+        [self updateMaskPath:_cropRect];
+    }
 }
 
 -(CGRect)scaleCropRect
 {
-    CGFloat ratio = _photoImage.size.width/sizeAfterAspectFit.width;
-    CGAffineTransform t = CGAffineTransformMakeScale(ratio/initialRectRatio,ratio/initialRectRatio);
+    CGFloat widthRatio = _photoImage.size.width/sizeAfterAspectFit.width;
+    CGFloat heightRatio = _photoImage.size.height/sizeAfterAspectFit.height;
+
+    CGAffineTransform t = CGAffineTransformMakeScale(widthRatio/initialRectRatio,heightRatio/initialRectRatio);
     CGRect scaledCropRect = CGRectApplyAffineTransform(_cropRect,t);
     
     return scaledCropRect;
@@ -507,10 +507,12 @@ typedef NS_ENUM(NSInteger, FilterType)
         isCrop = NO;
         [imageLayer removeFromSuperlayer];
         _photoImageView.userInteractionEnabled = NO;
+        [_cropButton setImage:[UIImage imageNamed:@"cropWhite35.png"] forState:UIControlStateNormal];
     } else {
         isCrop = YES;
         [self createCropMask];
         _photoImageView.userInteractionEnabled = YES;
+        [_cropButton setImage:[UIImage imageNamed:@"crop35.png"] forState:UIControlStateNormal];
     }
 }
 
@@ -521,23 +523,16 @@ typedef NS_ENUM(NSInteger, FilterType)
         brightnessFilter.brightness = sender.value;
         [stillImageSource processImage];
     }
-//    if (filter == kFilterTypeExposure) {
-//        exposureFilter.exposure = sender.value;
-//        [stillImageSource processImage];
-//    } else if (filter == kFilterTypeBrightness) {
-//        brightnessFilter.brightness = sender.value;
-//        [stillImageSource processImage];
-//    } else if (filter == kFilterTypeContrast) {
-//        contrastFilter.contrast = sender.value;
-//        [stillImageSource processImage];
-//    }
     _photoImageView.hidden = YES;
 }
 
 // Slider view cancel button
 - (IBAction)cancelSlider:(id)sender
 {
-    //    _photoImageView.image = _photoImage;
+    if (brightnessFilter.brightness == 0)
+        [_brightnessButton setImage:[UIImage imageNamed:@"brightnessWhite35.png"] forState:UIControlStateNormal];
+    else
+        [_brightnessButton setImage:[UIImage imageNamed:@"brightness35.png"] forState:UIControlStateNormal];
     [exposureFilter removeAllTargets];
     [self hideSlider];
 }
@@ -545,6 +540,11 @@ typedef NS_ENUM(NSInteger, FilterType)
 // Slider view done button
 - (IBAction)getProcessedImage:(id)sender
 {
+    if (brightnessFilter.brightness == 0)
+        [_brightnessButton setImage:[UIImage imageNamed:@"brightnessWhite35.png"] forState:UIControlStateNormal];
+    else
+        [_brightnessButton setImage:[UIImage imageNamed:@"brightness35.png"] forState:UIControlStateNormal];
+
     [brightnessFilter endProcessing];
     _photoImageView.image = [brightnessFilter imageFromCurrentlyProcessedOutput];
     [brightnessFilter removeAllTargets];
@@ -572,6 +572,12 @@ typedef NS_ENUM(NSInteger, FilterType)
         _adjustSliderView.hidden = YES;
         
     }];
+}
+- (IBAction)resetBrightNess:(id)sender
+{
+    brightnessFilter.brightness = 0;
+    _adjustSlider.value = 0;
+    [stillImageSource processImage];
 }
 
 @end

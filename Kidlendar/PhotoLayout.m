@@ -12,16 +12,23 @@
 {
     CGFloat sizeWidth;
     CGFloat sizeHeight;
+    CGFloat _lineSpace;
+    CGFloat _cellSpace;
     NSMutableArray *layoutArray;
     UICollectionViewScrollDirection direction;
 }
 
--(id)initWithSize:(CGSize)size
+-(id)initWithSize:(CGSize)size andLineSpace:(CGFloat)line andCellSpace:(CGFloat)cell
 {
     self = [super init];
     if (self) {
         sizeWidth = size.width;
         sizeHeight = size.height;
+        _lineSpace = line;
+        _cellSpace = cell;
+        _allLayouts = [[NSMutableArray alloc]init];
+        [self getAllLayout];
+
     }
     
     return self;
@@ -30,6 +37,7 @@
 -(NSDictionary *)layoutBySelectionIndex:(NSInteger)index photoCount:(NSInteger)count
 {
     NSMutableArray *layoutFrames;
+    direction = UICollectionViewScrollDirectionVertical;
     switch (count) {
         case 1:
             layoutFrames = [self onePhotoLayout];
@@ -52,17 +60,34 @@
     return [NSDictionary dictionaryWithObject:layoutFrames forKey:[NSNumber numberWithUnsignedInteger:direction]];
 }
 
+-(void)getAllLayout
+{
+    NSInteger count;
+    NSInteger index;
+    for (count = 1; count < 6 ; count++) {
+        NSMutableArray *layoutsByPhotoCount = [[NSMutableArray alloc]init];
+        if (count == 1)
+            index = 2;
+        else if (count == 2)
+            index = 7;
+        else
+            index = 9;
+        
+        for (int i =1; i < index; i++) {
+            [layoutsByPhotoCount addObject:[self layoutBySelectionIndex:i photoCount:count]];
+        }
+        [_allLayouts addObject:layoutsByPhotoCount];
+    }
+}
+
 - (NSMutableArray *)onePhotoLayout
 {
     layoutArray = [[NSMutableArray alloc]initWithArray:@[[NSValue valueWithCGSize:CGSizeMake(sizeWidth, sizeHeight)]]];
-    direction = UICollectionViewScrollDirectionVertical;
     return layoutArray;
-
 }
 
 - (NSMutableArray *)twoPhotoLayout:(NSInteger)index
 {
-    direction = UICollectionViewScrollDirectionVertical;
     switch (index)
     {
         case 1:
@@ -73,7 +98,6 @@
                                                                ]];
             break;
         case 2:
-            // Vertical
             layoutArray = [[NSMutableArray alloc]initWithArray:@[
                                                                  [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, sizeHeight)],
                                                                  [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, sizeHeight)]
@@ -81,10 +105,9 @@
 
             break;
         case 3:
-            // Vertical
             layoutArray = [[NSMutableArray alloc]initWithArray:@[
                                                                  [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/3*2, sizeHeight)],
-                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/3, sizeHeight)]
+                                                                 [NSValue valueWithCGSize:CGSizeMake(floor((sizeWidth - _cellSpace)/3), sizeHeight)]
                                                                  ]];
             break;
         case 4:
@@ -103,13 +126,11 @@
                                                                  ]];
             break;
         case 6:
-            // Horizontal
+//            direction = UICollectionViewScrollDirectionHorizontal;
             layoutArray = [[NSMutableArray alloc]initWithArray:@[
                                                                  [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/3, sizeHeight)],
                                                                  [NSValue valueWithCGSize:CGSizeMake(floorf((sizeWidth - _cellSpace)/3*2) , sizeHeight)]
                                                                  ]];
-//            direction = UICollectionViewScrollDirectionHorizontal;
-            
             break;
 
         default:
@@ -122,8 +143,6 @@
 
 - (NSMutableArray *)threePhotoLayout:(NSInteger)index
 {
-    direction = UICollectionViewScrollDirectionVertical;
-
     switch (index)
     {
         case 1:
@@ -144,13 +163,12 @@
             break;
         case 3:
             // Horizontal
-            layoutArray = [[NSMutableArray alloc]initWithArray:@[
-                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, sizeHeight)],
-                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, (sizeHeight - _lineSpace)/2)],
-                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, (sizeHeight - _lineSpace)/2)]
-                                                                 ]];
-            direction = UICollectionViewScrollDirectionHorizontal;
 
+            layoutArray = [[NSMutableArray alloc]initWithArray:@[
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, (sizeHeight - _lineSpace)/2)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, (sizeHeight - _lineSpace)/2)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight - _lineSpace)/2)]
+                                                                 ]];
             break;
         case 4:
             // Vertical
@@ -202,8 +220,6 @@
 
 - (NSMutableArray *)fourPhotoLayout:(NSInteger)index
 {
-    direction = UICollectionViewScrollDirectionVertical;
-
     switch (index)
     {
         case 1:
@@ -225,15 +241,12 @@
                                                                  ]];
             break;
         case 3:
-            // Horizontal
-            layoutArray = [[NSMutableArray alloc]initWithArray:@[
-                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, sizeHeight)],
+            layoutArray =[[NSMutableArray alloc]initWithArray: @[
                                                                  [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, (sizeHeight - _lineSpace*2)/3)],
-                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, (sizeHeight - _lineSpace*2)/3)],
-                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, (sizeHeight - _lineSpace*2)/3)]
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2,(sizeHeight - _lineSpace*2)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight - _lineSpace*2)/3)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake(sizeWidth, (sizeHeight - _lineSpace*2)/3)]
                                                                  ]];
-            direction = UICollectionViewScrollDirectionHorizontal;
-
             break;
         case 4:
             // Vertical
@@ -290,8 +303,6 @@
 
 - (NSMutableArray *)fivePhotoLayout:(NSInteger)index
 {
-    direction = UICollectionViewScrollDirectionVertical;
-
     switch (index)
     {
         case 1:
@@ -315,17 +326,13 @@
                                                                  ]];
             break;
         case 3:
-            // Horizontal
             layoutArray =[[NSMutableArray alloc]initWithArray: @[
-                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, (sizeHeight-_lineSpace)/2)],
-                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth - _cellSpace)/2, (sizeHeight-_lineSpace)/2)],
-                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth-_cellSpace)/2, (sizeHeight-_lineSpace*2)/3)],
-                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth-_cellSpace)/2, (sizeHeight-_lineSpace*2)/3)],
-                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth-_cellSpace)/2, (sizeHeight-_lineSpace*2)/3)]
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth-_cellSpace)/2, (sizeHeight-_lineSpace)/2)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth-_cellSpace)/2, (sizeHeight-_lineSpace)/2)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth-_cellSpace*2)/3, (sizeHeight-_lineSpace)/2)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth-_cellSpace*2)/3, (sizeHeight-_lineSpace)/2)],
+                                                                 [NSValue valueWithCGSize:CGSizeMake((sizeWidth-_cellSpace*2)/3, (sizeHeight-_lineSpace)/2)]
                                                                  ]];
-            direction = UICollectionViewScrollDirectionHorizontal;
-
-
             break;
         case 4:
             // Vertical

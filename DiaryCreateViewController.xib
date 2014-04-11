@@ -26,9 +26,10 @@
                     <color key="backgroundColor" white="0.0" alpha="0.29999999999999999" colorSpace="calibratedWhite"/>
                 </imageView>
                 <activityIndicatorView hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" id="E6B-50-uWf">
-                    <rect key="frame" x="142" y="185" width="37" height="37"/>
+                    <rect key="frame" x="143" y="184" width="37" height="37"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <color key="color" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                 </activityIndicatorView>
                 <view contentMode="scaleToFill" id="biw-ZG-Adq">
                     <rect key="frame" x="2" y="46" width="316" height="316"/>
@@ -63,6 +64,6 @@
         </view>
     </objects>
     <resources>
-        <image name="selectPhoto.png" width="100" height="100"/>
+        <image name="selectPhoto.png" width="200" height="200"/>
     </resources>
 </document>

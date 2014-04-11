@@ -9,10 +9,10 @@
 #import <Foundation/Foundation.h>
 
 @interface PhotoLayout : NSObject
-@property (nonatomic) CGFloat lineSpace;
-@property (nonatomic) CGFloat cellSpace;
 
--(id)initWithSize:(CGSize)size;
+@property (strong,nonatomic) NSMutableArray *allLayouts;
+
+-(id)initWithSize:(CGSize)size andLineSpace:(CGFloat)line andCellSpace:(CGFloat)cell;
 -(NSDictionary *)layoutBySelectionIndex:(NSInteger)index photoCount:(NSInteger)count;
 
 @end

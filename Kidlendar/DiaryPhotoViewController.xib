@@ -8,6 +8,8 @@
             <connections>
                 <outlet property="adjustSlider" destination="A8n-M0-jzz" id="n3v-5D-PEb"/>
                 <outlet property="adjustSliderView" destination="cx7-x9-LcO" id="fXb-Xb-rF1"/>
+                <outlet property="brightnessButton" destination="0c0-88-e8g" id="cEP-U8-ATT"/>
+                <outlet property="cropButton" destination="Lh7-N8-unp" id="RGD-G2-sIi"/>
                 <outlet property="filterCollectionView" destination="zYQ-tK-FPJ" id="mBg-C0-kqs"/>
                 <outlet property="filterView" destination="oQD-4Z-OpC" id="fTb-GY-kMs"/>
                 <outlet property="photoImageView" destination="Mev-Wy-dzg" id="cdm-Ee-sGc"/>
@@ -46,9 +48,9 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="0c0-88-e8g">
-                            <rect key="frame" x="52" y="0.0" width="35" height="35"/>
+                            <rect key="frame" x="3" y="2" width="35" height="35"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="brightness35.png">
+                            <state key="normal" image="brightnessWhite35.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -56,9 +58,9 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Lh7-N8-unp">
-                            <rect key="frame" x="9" y="0.0" width="35" height="35"/>
+                            <rect key="frame" x="46" y="3" width="35" height="35"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="crop35.png">
+                            <state key="normal" image="cropWhite35.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -73,10 +75,12 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Eq4-Lg-qs4">
-                            <rect key="frame" x="20" y="13" width="48" height="30"/>
+                            <rect key="frame" x="9" y="7" width="55" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                             <color key="tintColor" red="0.23529411759999999" green="0.72941176470000002" blue="0.7843137255" alpha="1" colorSpace="calibratedRGB"/>
                             <state key="normal" title="Cancel">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -84,30 +88,36 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="eSb-Sb-Mzm">
-                            <rect key="frame" x="261" y="13" width="37" height="30"/>
+                            <rect key="frame" x="274" y="7" width="38" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                             <state key="normal" title="Done">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
                                 <action selector="getProcessedImage:" destination="-1" eventType="touchUpInside" id="4Wk-uR-ECr"/>
                             </connections>
                         </button>
-                        <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="A8n-M0-jzz">
-                            <rect key="frame" x="55" y="65" width="211" height="31"/>
+                        <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" minimumValueImage="brightnessDark22.png" maximumValueImage="brightnessLight22.png" id="A8n-M0-jzz">
+                            <rect key="frame" x="7" y="60" width="307" height="31"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="minimumTrackTintColor" red="0.23529411759999999" green="0.72941176470000002" blue="0.7843137255" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="maximumTrackTintColor" red="0.23529411759999999" green="0.72941176470000002" blue="0.7843137255" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="adjust:" destination="-1" eventType="valueChanged" id="cEw-Nu-ZrU"/>
                             </connections>
                         </slider>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="brightnessDark22.png" id="V6i-SO-VnH">
-                            <rect key="frame" x="20" y="71" width="22" height="22"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="cFA-pN-L03">
+                            <rect key="frame" x="140" y="103" width="40" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="brightnessLight22.png" id="KQc-cP-s9b">
-                            <rect key="frame" x="278" y="71" width="22" height="22"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        </imageView>
+                            <state key="normal" title="Reset">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="resetBrightNess:" destination="-1" eventType="touchUpInside" id="itd-EK-6Nl"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     <color key="tintColor" red="0.23529411764705882" green="0.72941176470588232" blue="0.78431372549019607" alpha="1" colorSpace="calibratedRGB"/>
@@ -120,9 +130,9 @@
         </view>
     </objects>
     <resources>
-        <image name="brightness35.png" width="35" height="35"/>
         <image name="brightnessDark22.png" width="22" height="22"/>
         <image name="brightnessLight22.png" width="22" height="22"/>
-        <image name="crop35.png" width="35" height="35"/>
+        <image name="brightnessWhite35.png" width="35" height="35"/>
+        <image name="cropWhite35.png" width="35" height="35"/>
     </resources>
 </document>

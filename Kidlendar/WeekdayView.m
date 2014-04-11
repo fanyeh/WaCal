@@ -15,8 +15,9 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        _selectedLabel = [[UILabel alloc]initWithFrame:CGRectMake(frame.size.width/4, frame.size.height - 5 ,frame.size.width/2, 2)];
-        _selectedLabel.layer.cornerRadius = 1.5f;
+        _selectedLabel = [[UILabel alloc]initWithFrame:CGRectMake(frame.size.width/4, frame.size.height - 7 ,frame.size.width/2, 2)];
+        _selectedLabel.layer.cornerRadius = 1;
+        _selectedLabel.layer.masksToBounds = YES;
         _selectedLabel.hidden = YES;
         [self addSubview:_selectedLabel];
         

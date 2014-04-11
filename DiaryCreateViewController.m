@@ -20,6 +20,7 @@
 #import "LayoutCell.h"
 #import "Scroller.h"
 #import "VideoView.h"
+#import "HeaderView.h"
 
 static int deleteLabelSize = 30;
 
@@ -43,7 +44,7 @@ static int deleteLabelSize = 30;
     UICollectionView *layoutCollectionView; // Tag 2
     BOOL showLayoutTable;
     NSMutableArray *layoutSet;
-    NSInteger layoutIndex;
+    NSIndexPath *layoutIndex;
     CGFloat currentLayoutTableHeight;
     UICollectionViewScrollDirection layouScrollDirection;
 
@@ -124,13 +125,6 @@ static int deleteLabelSize = 30;
     diaryCollectionViewInset = UIEdgeInsetsMake(2, 2, 2, 2);
     diaryMinimunCellSpace = 2.0;
     diaryMinimunLineSpace = 2.0;
-    
-    // Setup photolayout
-    CGFloat sizeWidth = 320-diaryCollectionViewInset.left-diaryCollectionViewInset.right;
-    CGFloat sizeHeight = 320-diaryCollectionViewInset.top-diaryCollectionViewInset.bottom;
-    photoLayout = [[PhotoLayout alloc]initWithSize:CGSizeMake(sizeWidth, sizeHeight)];
-    photoLayout.lineSpace = diaryMinimunLineSpace;
-    photoLayout.cellSpace = diaryMinimunCellSpace;
 
     diaryFlowLayout = [[UICollectionViewFlowLayout alloc]init];
     diaryPhotosView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 44, 320, 320) collectionViewLayout:diaryFlowLayout];
@@ -197,8 +191,14 @@ static int deleteLabelSize = 30;
     photoLoader = [[PhotoLoader alloc]initWithSourceType:kSourceTypeAll];
     photoAssets = [[NSMutableArray alloc]init];
     
+    // Setup photolayout
+    CGFloat sizeWidth = 320-diaryCollectionViewInset.left-diaryCollectionViewInset.right;
+    CGFloat sizeHeight = 320-diaryCollectionViewInset.top-diaryCollectionViewInset.bottom;
+    photoLayout = [[PhotoLayout alloc]initWithSize:CGSizeMake(sizeWidth, sizeHeight) andLineSpace:diaryMinimunLineSpace andCellSpace:diaryMinimunCellSpace];
+
     // Layout collection view
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc]init];
+    flowLayout.headerReferenceSize = CGSizeMake(layoutCollectionView.frame.size.width, 20);
 
     layoutCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 568, 320, photoCollectionShrinkHeight)
                                              collectionViewLayout:flowLayout];
@@ -208,10 +208,12 @@ static int deleteLabelSize = 30;
     layoutCollectionView.backgroundColor = [UIColor blackColor];
     layoutCollectionView.showsVerticalScrollIndicator = NO;
     [layoutCollectionView registerClass:[LayoutCell class] forCellWithReuseIdentifier:@"LayoutCell"];
+    [layoutCollectionView registerClass:[HeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView"];
+
     showLayoutTable = NO;
     [self.view addSubview:layoutCollectionView];
-    layoutSet = [[NSMutableArray alloc]init];
-    layoutIndex = 0;
+    layoutSet = photoLayout.allLayouts;
+    layoutIndex = [NSIndexPath indexPathForRow:0 inSection:0];
     currentLayoutTableHeight = photoCollectionShrinkHeight;
     
     nextButton = [[UIBarButtonItem alloc]initWithTitle:@"Words" style:UIBarButtonItemStylePlain target:self action:@selector(doneSelection)];
@@ -302,50 +304,50 @@ static int deleteLabelSize = 30;
 
 - (void)processFaceDetection
 {
-    [_faceDetectingActivity startAnimating];
-    NSDictionary *layoutDict = [layoutSet objectAtIndex:layoutIndex];
+    NSMutableArray *layoutByCount = [layoutSet objectAtIndex:layoutIndex.section];
+    NSDictionary *layoutDict = [layoutByCount objectAtIndex:layoutIndex.row];
     sizeArray = [layoutDict allValues][0];
-    
-    if (layoutIndex == 2)
-        diaryFlowLayout.scrollDirection =  UICollectionViewScrollDirectionHorizontal;
-    else
-        diaryFlowLayout.scrollDirection =  UICollectionViewScrollDirectionVertical;
-
 
     [cellImageArray removeAllObjects];
-    // Process face detection
-    for (int i = 0 ; i < [fullScreenImageArray count]; i++) {
-        
-        CGSize size = [sizeArray[i] CGSizeValue];
-        
-        UIImage *fullscreenImage;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_faceDetectingActivity startAnimating];
 
-        if ([fullScreenImageArray[i] isKindOfClass:[ALAsset class]]) {
-            ALAsset *asset = fullScreenImageArray[i];
-            fullscreenImage = [UIImage imageWithCGImage:[asset.defaultRepresentation fullScreenImage]];
-        } else
-            fullscreenImage = fullScreenImageArray[i];
-        
-        UIImage *cellImage;
-        
-        if ([[NSUserDefaults standardUserDefaults]boolForKey:@"FaceDetection"])
-            cellImage = [[fullscreenImage cropWithFaceDetect:size] resizeImageToSize:size];
-        else
-            cellImage = [[fullscreenImage cropWithoutFaceOutDetect:size] resizeImageToSize:size];
+        // Process face detection
+        for (int i = 0 ; i < [fullScreenImageArray count]; i++) {
+            
+            CGSize size = [sizeArray[i] CGSizeValue];
+            
+            UIImage *fullscreenImage;
 
-        [cellImageArray addObject:cellImage];
-    }
-    
-    [diaryPhotosView performBatchUpdates:^{
-        [diaryPhotosView reloadSections:[NSIndexSet indexSetWithIndex:0]];
-    } completion:^(BOOL finished) {
-        [_faceDetectingActivity stopAnimating];
-    }];
+            if ([fullScreenImageArray[i] isKindOfClass:[ALAsset class]]) {
+                ALAsset *asset = fullScreenImageArray[i];
+                fullscreenImage = [UIImage imageWithCGImage:[asset.defaultRepresentation fullScreenImage]];
+            } else
+                fullscreenImage = fullScreenImageArray[i];
+            
+            UIImage *cellImage;
+            
+            if ([[NSUserDefaults standardUserDefaults]boolForKey:@"FaceDetection"])
+                cellImage = [[fullscreenImage cropWithFaceDetect:size] resizeImageToSize:size];
+            else
+                cellImage = [[fullscreenImage cropWithoutFaceOutDetect:size] resizeImageToSize:size];
+            
+            [cellImageArray addObject:cellImage];
+        }
+        
+        [diaryPhotosView performBatchUpdates:^{
+            [diaryPhotosView reloadSections:[NSIndexSet indexSetWithIndex:0]];
+        } completion:^(BOOL finished) {
+            [_faceDetectingActivity stopAnimating];
+        }];
+    });
 }
 
 - (void)processFaceDetectionWithIndexPath:(NSArray *)paths
 {
-    [_faceDetectingActivity startAnimating];
+//    [_faceDetectingActivity startAnimating];
+    dispatch_async(dispatch_get_main_queue(), ^{
+
     for (NSIndexPath *path in paths) {
         CGSize size = [sizeArray[path.row] CGSizeValue];
         
@@ -372,6 +374,8 @@ static int deleteLabelSize = 30;
             [_faceDetectingActivity stopAnimating];
 
         }];
+    });
+
 }
 
 #pragma mark -User Actions
@@ -418,10 +422,11 @@ static int deleteLabelSize = 30;
         frameView.textAlignment = NSTextAlignmentCenter;
         frameView.font = [UIFont fontWithName:@"Helvetica" size:30];
         [self.view addSubview:frameView];
-        [self.view bringSubviewToFront:diaryPhotosView];
+        [self.view sendSubviewToBack:frameView];
+//        [self.view bringSubviewToFront:diaryPhotosView];
         [diaryPhotosView bringSubviewToFront:sender.view];
-        [self.view bringSubviewToFront:_faceImageView];
-        [self.view bringSubviewToFront:_faceDetectingActivity];
+//        [self.view bringSubviewToFront:_faceImageView];
+//        [self.view bringSubviewToFront:_faceDetectingActivity];
         [UIView animateWithDuration:0.3 animations:^{
             cell.transform = CGAffineTransformScale(cell.transform, 0.6, 0.6);
             cell.center = [sender locationInView:sender.view.superview];
@@ -611,19 +616,19 @@ static int deleteLabelSize = 30;
     NSArray *imageInfo = [selectedPhotoOrderingInfo objectAtIndex:indexPath.row];
     [photoCollectionView deselectItemAtIndexPath:imageInfo[0] animated:YES];
     if ([fullScreenImageArray[indexPath.row] isKindOfClass:[ALAsset class]])
-        [self deletePhotoFromDiaryView:imageInfo[0] andAsset:fullScreenImageArray[indexPath.row]];
+        [self deletePhotoFromDiaryView:imageInfo[0] andAsset:fullScreenImageArray[indexPath.row] andAssetGroup:imageInfo[1]];
     else
-        [self removePhotoWithIndexPath:imageInfo[0]];
+        [self removePhotoWithIndexPath:imageInfo[0] andAssetGroup:imageInfo[1]];
 }
 
--(void)deletePhotoFromDiaryView:(NSIndexPath *)indexPath andAsset:(ALAsset *)asset
+-(void)deletePhotoFromDiaryView:(NSIndexPath *)indexPath andAsset:(ALAsset *)asset andAssetGroup:(NSString *)assetGroup
 {
     if ([asset valueForProperty:ALAssetPropertyType]==ALAssetTypeVideo) {
         _noPhotoView.hidden = NO;
         [self cancelMPMoviePlayer];
         scroller.photoButton.title = @"0/1";
     } else
-        [self removePhotoWithIndexPath:indexPath];
+        [self removePhotoWithIndexPath:indexPath andAssetGroup:assetGroup];
 }
 
 #pragma mark - Photo collection view relate
@@ -651,7 +656,6 @@ static int deleteLabelSize = 30;
         currentLayoutTableHeight = photoCollectionExpandHeight;
         
         [UIView animateWithDuration:0.5 animations:^{
-            sender.view.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.60];
             sender.view.frame = CGRectOffset(sender.view.frame, 0, -swipeOffset);
             photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, 0, -swipeOffset);
             photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, 0, -swipeOffset);
@@ -659,20 +663,18 @@ static int deleteLabelSize = 30;
                 layoutCollectionView.frame = CGRectOffset(layoutCollectionView.frame, 0, -swipeOffset);
 
         } completion:^(BOOL finished) {
-            _faceImageView.hidden = YES;
             _noPhotoImage.hidden = YES;
             _noPhotoLabel1.hidden = YES;
             _noPhotoLabel2.hidden = YES;
         }];
     }
     else if (sender.direction == UISwipeGestureRecognizerDirectionDown) {
-        _faceImageView.hidden = NO;
         _noPhotoImage.hidden = NO;
         _noPhotoLabel1.hidden = NO;
         _noPhotoLabel2.hidden = NO;
+
         sender.direction = UISwipeGestureRecognizerDirectionUp;
         [UIView animateWithDuration:0.5 animations:^{
-            sender.view.backgroundColor = [UIColor blackColor];
             sender.view.frame = CGRectOffset(sender.view.frame, 0, swipeOffset);
             photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, 0, swipeOffset);
             photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, 0, swipeOffset);
@@ -698,6 +700,7 @@ static int deleteLabelSize = 30;
 
         }];
     }
+    [layoutCollectionView scrollToItemAtIndexPath:layoutIndex atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
 }
 
 -(void)showNextButton:(BOOL)show
@@ -761,14 +764,14 @@ static int deleteLabelSize = 30;
     // ImageInfo[0] = indexpath (Photo indexpath)
     // ImageInfo[1] = assset group name
     // ImageInfo[2] = select number
+    
     NSArray *imageInfo = @[indexPath,assetGroupPropertyName,cell.selectNumber.text];
     [selectedPhotoOrderingInfo addObject:imageInfo];
     
-    if ([selectedPhotoOrderingInfo count] > 1)
-        scroller.layoutButton.enabled = YES;
+    layoutIndex = [NSIndexPath indexPathForRow:layoutIndex.row inSection:[fullScreenImageArray count]-1];
 
-    // Get all layout set by photo count
-    [self getAllLayoutByPhotoCount:[selectedPhotoOrderingInfo count]];
+    if ([selectedPhotoOrderingInfo count] > 0)
+        scroller.layoutButton.enabled = YES;
     
     // Perform face detection and setup diary collection view
     [self processFaceDetection];
@@ -777,7 +780,7 @@ static int deleteLabelSize = 30;
 -(void)cancelPhotoSelection
 {
     scroller.layoutButton.enabled = NO;
-    layoutIndex = 0;
+    layoutIndex = [NSIndexPath indexPathForItem:0 inSection:0];
     for (int i = 0; i < [selectedPhotoOrderingInfo count] ; i++) {
         NSArray *n = [selectedPhotoOrderingInfo objectAtIndex:i];
         [photoCollectionView deselectItemAtIndexPath:n[0] animated:YES];
@@ -791,35 +794,56 @@ static int deleteLabelSize = 30;
 
 #pragma mark -Remove Photo
 
-- (void)removePhotoWithIndexPath:(NSIndexPath *)path
+- (void)removePhotoWithIndexPath:(NSIndexPath *)path andAssetGroup:(NSString *)assetGroup
 {
+    // ImageInfo[0] = indexpath
+    // ImageInfo[1] = assset group name
+    // ImageInfo[2] = select number
     for (NSArray *imageInfo in selectedPhotoOrderingInfo) {
-        
-        // ImageInfo[0] = indexpath
-        // ImageInfo[1] = assset group name
-        // ImageInfo[2] = select number
-        
-        if (imageInfo[0] == path) {
+    
+        // Path = PhotoCollectionViewPath
+        if (imageInfo[0] == path && [imageInfo[1] isEqualToString:assetGroup]) {
             // Remove image from resize image array
+            // Index = DiaryPhotoView index
             NSUInteger index = [selectedPhotoOrderingInfo indexOfObject:imageInfo];
             [imageMeta removeObjectAtIndex:index];
             [fullScreenImageArray removeObjectAtIndex:index];
-            scroller.photoButton.title = [NSString stringWithFormat:@"%ld/5",(unsigned long)[fullScreenImageArray count]];
-            
-            // Show "next" button
-            if ([fullScreenImageArray count] <1)
-                [self showNextButton:NO];
-            
             // Remove image info from ordering info
             [selectedPhotoOrderingInfo removeObject:imageInfo];
+
+            NSInteger newRow;
+            NSInteger newSection = [fullScreenImageArray count]-1;
+            if ([fullScreenImageArray count]==2) {
+                if (layoutIndex.row > 5)
+                    newRow = 0;
+                else
+                    newRow = layoutIndex.row;
+            } else if ([fullScreenImageArray count]==1) {
+                newRow = 0;
+
+            } else if ([fullScreenImageArray count]==0) {
+                newSection = 0;
+                newRow = 0;
+            } else {
+                newRow = layoutIndex.row;
+            }
             
-            // Hide no photo view
-            if([selectedPhotoOrderingInfo count]==0)
-                _noPhotoView.hidden = NO;
+            layoutIndex = [NSIndexPath indexPathForItem:newRow inSection:newSection];
+            [layoutCollectionView reloadData];
+            [layoutCollectionView scrollToItemAtIndexPath:layoutIndex atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
+ 
+            scroller.photoButton.title = [NSString stringWithFormat:@"%ld/5",(unsigned long)[fullScreenImageArray count]];
             
-            if([selectedPhotoOrderingInfo count] < 2)
+            // Hide "next" button
+            if ([fullScreenImageArray count] <1) {
+                [self showNextButton:NO];
                 scroller.layoutButton.enabled = NO;
-            
+                _noPhotoView.hidden = NO;
+                [cellImageArray removeAllObjects];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [diaryPhotosView reloadData];
+                });
+            }
             break;
         }
     }
@@ -832,37 +856,33 @@ static int deleteLabelSize = 30;
         [selectedPhotoOrderingInfo replaceObjectAtIndex:i withObject:newImageInfo];
     }
     
-    // Get new layoutset and refresh data
-    if([selectedPhotoOrderingInfo count]>0) {
-        [self getAllLayoutByPhotoCount:[selectedPhotoOrderingInfo count]];
-        [layoutCollectionView reloadData];
-        
-        if ([selectedPhotoOrderingInfo count] == 1) {
-            layoutIndex = 0;
-        } else if ([selectedPhotoOrderingInfo count] == 2) {
-            if (layoutIndex > 5)
-                layoutIndex = 0;
-        }
+    if ([fullScreenImageArray count] > 0) {
+        [self processFaceDetection];
     }
-    
-    [self processFaceDetection];
 }
 
 #pragma mark - Collection Views
 #pragma mark
 
 #pragma mark -UICollectionViewDataSource
-// Tag 0 = diary , 1 = photo
+// Tag 0 = diary , 1 = photo , 2 = layout
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    if (collectionView.tag == 2) {
+        return 5;
+    } else
+        return 1;
+}
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    if (collectionView.tag==0) {
+    if (collectionView.tag==0)
         return [cellImageArray count];
-    } else if (collectionView.tag==1) {
+    else if (collectionView.tag==1)
         return [photoAssets count];
-    } else {
-        return [layoutSet count];
-    }
+    else
+        return [[layoutSet objectAtIndex:section]count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -921,18 +941,51 @@ static int deleteLabelSize = 30;
         return cell;
     } else {
         LayoutCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"LayoutCell" forIndexPath:indexPath];
-        NSDictionary *layoutDict = [layoutSet objectAtIndex:indexPath.row];
+
+        NSMutableArray *layoutByCount = [layoutSet objectAtIndex:indexPath.section];
+        NSDictionary *layoutDict = [layoutByCount objectAtIndex:indexPath.row];
         UICollectionViewScrollDirection direction = [(NSNumber *)[layoutDict allKeys][0] unsignedIntegerValue];
         NSMutableArray *layoutFrames = [layoutDict allValues][0];
-
-        [cell drawLayoutWithViewSize:diaryPhotosView.frame.size andFrames:layoutFrames andDirection:direction];
-
-        if (layoutIndex == indexPath.row) {
+        
+        if (layoutIndex == indexPath) {
             [layoutCollectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
             [cell setSelected:YES];
         }
+        
+        if (layoutIndex.section == indexPath.section)
+            [cell setIsPhotoCountSection:YES];
+        else
+            [cell setIsPhotoCountSection:NO];
+
+        [cell drawLayoutWithViewSize:diaryPhotosView.frame.size andFrames:layoutFrames andDirection:direction];
         return cell;
     }
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionReusableView *reusableview = nil;
+    
+    if (collectionView.tag == 2) {
+        if (kind == UICollectionElementKindSectionHeader) {
+            HeaderView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                                                              withReuseIdentifier:@"HeaderView" forIndexPath:indexPath];
+            
+            if (indexPath.section == layoutIndex.section)
+                header.headerLabel.textColor = [UIColor whiteColor];
+            else
+                header.headerLabel.textColor = [UIColor colorWithWhite:0.400 alpha:1.000];
+            
+            NSInteger section = indexPath.section + 1;
+            if (section > 1)
+                header.headerLabel.text = [NSString stringWithFormat:@"%ld Photos",section];
+            else
+                header.headerLabel.text = [NSString stringWithFormat:@"%ld Photo",section];
+            
+            return header;
+        }
+    }
+    return reusableview;
 }
 
 #pragma mark -UICollectionViewDelegate
@@ -994,7 +1047,7 @@ static int deleteLabelSize = 30;
             [self selectedPhoto:indexPath];
         }
     } else {
-        layoutIndex = indexPath.row;
+        layoutIndex = indexPath;
         [self processFaceDetection];
     }
 }
@@ -1003,7 +1056,7 @@ static int deleteLabelSize = 30;
 {
     if (collectionView.tag==1) {
         ALAsset *asset =  [photoAssets objectAtIndex:indexPath.row];
-        [self deletePhotoFromDiaryView:indexPath andAsset:asset];
+        [self deletePhotoFromDiaryView:indexPath andAsset:asset andAssetGroup:assetGroupPropertyName];
     }
 }
 
@@ -1012,6 +1065,7 @@ static int deleteLabelSize = 30;
     if (collectionView.tag == 1) {
         ALAsset *asset =  [photoAssets objectAtIndex:indexPath.row];
         if ([asset valueForProperty:ALAssetPropertyType]==ALAssetTypePhoto) {
+            // Bring up alert if select more than 5 photos , and disallow selection
             if ([fullScreenImageArray count]>4) {
                 UIAlertView *fullAlert = [[UIAlertView alloc]initWithTitle:nil
                                                                    message:@"You may select up to 5 photos"
@@ -1024,8 +1078,7 @@ static int deleteLabelSize = 30;
                 return YES;
         } else
             return YES;
-    }
-    else
+    } else
         return YES;
 }
 
@@ -1080,20 +1133,20 @@ static int deleteLabelSize = 30;
     
     if (!showAlbumTable) {
         // Show table
+        showAlbumTable = YES;
         photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, -320, 0);
         [UIView animateWithDuration:0.5 animations:^{
             photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, 320, 0);
         }];
-        showAlbumTable = YES;
         scroller.albumNameButton.tintColor = MainColor;
     } else {
         // Hide table
+        showAlbumTable = NO;
         [UIView animateWithDuration:0.5 animations:^{
             photoCollectionView.frame = CGRectOffset(photoCollectionView.frame, -320, 0);
         } completion:^(BOOL finished) {
             photoAlbumTable.frame = CGRectOffset(photoAlbumTable.frame, 320, 0);
         }];
-        showAlbumTable = NO;
         scroller.albumNameButton.tintColor = [UIColor whiteColor];
     }
 }
@@ -1104,46 +1157,30 @@ static int deleteLabelSize = 30;
     
     if (!showLayoutTable) {
 
-        // Show table
+        // Show layout table
+        showLayoutTable = YES;
         layoutCollectionView.hidden = NO;
         scroller.layoutButton.tintColor = MainColor;
+        [layoutCollectionView scrollToItemAtIndexPath:layoutIndex atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
 
         [UIView animateWithDuration:0.5 animations:^{
             layoutCollectionView.frame = CGRectOffset(layoutCollectionView.frame, 0, -currentLayoutTableHeight);
         } completion:^(BOOL finished) {
-            if (showAlbumTable)
-                [self showTable];
-            showLayoutTable = YES;
+//            if (showAlbumTable)
+//                [self showTable];
         }];
     } else {
-        // Hide table
+        // Hide layout table
+        showLayoutTable = NO;
+
         scroller.layoutButton.tintColor = [UIColor whiteColor];
 
         [UIView animateWithDuration:0.5 animations:^{
             layoutCollectionView.frame = CGRectOffset(layoutCollectionView.frame, 0, currentLayoutTableHeight);
         } completion:^(BOOL finished) {
-            showLayoutTable = NO;
             layoutCollectionView.hidden = YES;
         }];
     }
-}
-
-- (NSMutableArray *)getAllLayoutByPhotoCount:(NSInteger)count
-{
-    [layoutSet removeAllObjects];
-    NSInteger index;
-    if (count == 1)
-        index = 2;
-    else if (count == 2)
-        index = 7;
-    else
-        index = 9;
-    
-    for (int i =1; i < index; i++) {
-        [layoutSet addObject:[photoLayout layoutBySelectionIndex:i photoCount:count]];
-    }
-    
-    return layoutSet;
 }
 
 #pragma mark - UITableViewDataSource

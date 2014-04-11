@@ -37,7 +37,7 @@
         UIBarButtonItem *flexButton2 = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
         _toolBar.items = @[_layoutButton,flexButton1,_albumNameButton,flexButton2,_photoButton];
         [_toolBar setBackgroundImage:[[UIImage alloc] init] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
-        [_toolBar setBackgroundColor:[UIColor clearColor]];
+        [_toolBar setBackgroundColor:[UIColor blackColor]];
         [self addSubview:_toolBar];
     }
     return self;

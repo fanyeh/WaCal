@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface LayoutCell : UICollectionViewCell
-@property (strong,nonatomic) UIColor *layoutColor;
+@property (nonatomic) BOOL isPhotoCountSection;
+
 - (void)drawLayoutWithViewSize:(CGSize)size andFrames:(NSArray *)frames andDirection:(UICollectionViewScrollDirection)direction;
 
 @end
