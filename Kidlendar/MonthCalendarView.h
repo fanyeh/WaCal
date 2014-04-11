@@ -17,12 +17,12 @@
 @property (nonatomic,strong) UIView *dateGroupView;
 @property CGRect shrinkFrame;
 
-
-//- (void)removeCalendarView;
 - (void)shrinkCalendarWithRow:(int)row withAnimation:(BOOL)animation complete:(void(^)(void))block;
 - (void)expandCalendarWithRow:(int)row withAnimation:(BOOL)animation complete:(void(^)(void))block;
 - (void)initCalendar:(MonthModel *)monthModel;
 - (void)setupCalendar:(MonthModel *)monthModel;
 - (void)setAppearanceOnSelectDate:(NSDate *)date;
 - (void)setAppearanceOnDeselectDate:(NSDate *)date dateNotInCurrentMonth:(BOOL)inMonth;
+- (DateView *)viewFromDate:(NSDate *)date;
+
 @end

@@ -89,6 +89,8 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 @property (weak, nonatomic) IBOutlet UIImageView *startTimeArrow;
 @property (weak, nonatomic) IBOutlet UITextField *reminderTextField;
 @property (weak, nonatomic) IBOutlet UITextField *repeatTextField;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *startDateFieldConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *endDateFieldConstraint;
 
 @end
 
@@ -221,6 +223,9 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     UITapGestureRecognizer *mapIconTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showMap)];
     [_mapIcon addGestureRecognizer:mapIconTap];
     selectedLocation = [[SelectedLocation alloc]init];
+    
+//    _startDateFieldConstraint.constant +=13;
+//    [_startDateLabel needsUpdateConstraints];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -230,22 +235,27 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     // Refresh label content based on event
     _subjectField.text = _event.title;
     if (_event.allDay) {
-        _event.allDay = YES;
+        
         _alldayView.backgroundColor = MainColor;
         _alldayView.layer.borderWidth = 0.0f;
         _allLabel.textColor = [UIColor whiteColor];
         _dayLabel.textColor = [UIColor whiteColor];
+        
+        _startDateFieldConstraint.constant +=13;
+        [_startDateLabel needsUpdateConstraints];
+        
+        _endDateFieldConstraint.constant +=13;
+        [_endDateLabel needsUpdateConstraints];
+
+        _startDateLabel.font = [UIFont fontWithName:@"Avenir-light" size:18];
+        _endDateLabel.font = [UIFont fontWithName:@"Avenir-light" size:18];
+        
         _startTimeLabel.hidden = YES;
         _endTimeLabel.hidden = YES;
         
-        _startDateLabel.frame = CGRectOffset(_startDateLabel.frame, 0 , -13);
-        _endDateLabel.frame = CGRectOffset(_endDateLabel.frame, 0 , -13);
-        _startDateLabel.font = [UIFont systemFontOfSize:15];
-        _endDateLabel.font = [UIFont systemFontOfSize:15];
-        
         _datePicker.datePickerMode = UIDatePickerModeDate;
+
     } else {
-        _event.allDay = NO;
         _allLabel.textColor = LightGrayColor;
         _dayLabel.textColor = LightGrayColor;
     }
@@ -554,19 +564,16 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     UIAlertView *deleteAlert;
     if (_event.hasRecurrenceRules) {
         deleteAlert = [[UIAlertView alloc]initWithTitle:@"Delete Event"
-                                                             message:nil
-                                                            delegate:self
-                                                   cancelButtonTitle:@"Cancel"
-                                                   otherButtonTitles:@"Delete current event",@"Delete all repeat event", nil];
-        
-        [deleteAlert show];
+                                                message:nil
+                                               delegate:self
+                                      cancelButtonTitle:@"Cancel"
+                                      otherButtonTitles:@"Delete current event",@"Delete all repeat event", nil];
     } else {
         deleteAlert = [[UIAlertView alloc]initWithTitle:@"Delete Event"
-                                                             message:nil
-                                                            delegate:self
-                                                   cancelButtonTitle:@"Cancel"
-                                                   otherButtonTitles:@"OK", nil];
-        
+                                                message:nil
+                                               delegate:self
+                                      cancelButtonTitle:@"Cancel"
+                                      otherButtonTitles:@"OK", nil];
     }
     [deleteAlert show];
 }
@@ -589,8 +596,14 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
         _allLabel.textColor = LightGrayColor;
         _dayLabel.textColor = LightGrayColor;
         
-        _startDateLabel.frame = CGRectOffset(_startDateLabel.frame, 0, 13);
-        _endDateLabel.frame = CGRectOffset(_endDateLabel.frame, 0 , 13);
+        _startDateFieldConstraint.constant -=13;
+        [_startDateLabel needsUpdateConstraints];
+        
+        _endDateFieldConstraint.constant -=13;
+        [_endDateLabel needsUpdateConstraints];
+        
+//        _startDateLabel.frame = CGRectOffset(_startDateLabel.frame, 0, 13);
+//        _endDateLabel.frame = CGRectOffset(_endDateLabel.frame, 0 , 13);
         _startDateLabel.font = [UIFont systemFontOfSize:12];
         _endDateLabel.font = [UIFont systemFontOfSize:12];
         
@@ -600,7 +613,6 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
         _datePicker.datePickerMode = UIDatePickerModeDateAndTime;
         _datePicker.minuteInterval = 5;
         
-        
     } else {
         _event.allDay = YES;
         _alldayView.backgroundColor = MainColor;
@@ -608,10 +620,14 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
         _allLabel.textColor = [UIColor whiteColor];
         _dayLabel.textColor = [UIColor whiteColor];
         
-        _startDateLabel.frame = CGRectOffset(_startDateLabel.frame, 0 , -13);
-        _endDateLabel.frame = CGRectOffset(_endDateLabel.frame, 0 , -13);
-        _startDateLabel.font = [UIFont systemFontOfSize:15];
-        _endDateLabel.font = [UIFont systemFontOfSize:15];
+        _startDateFieldConstraint.constant +=13;
+        [_startDateLabel needsUpdateConstraints];
+        
+        _endDateFieldConstraint.constant +=13;
+        [_endDateLabel needsUpdateConstraints];
+        
+        _startDateLabel.font = [UIFont fontWithName:@"Avenir-light" size:18];
+        _endDateLabel.font = [UIFont fontWithName:@"Avenir-light" size:18];
         
         _startTimeLabel.hidden = YES;
         _endTimeLabel.hidden = YES;

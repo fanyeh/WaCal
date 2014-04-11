@@ -122,6 +122,8 @@
         if (dateModel.isToday) {
             dateView.isToday = YES;
             dateView.dateLabel.textColor = TodayColor;
+            dateView.dateLabel.layer.borderWidth = 1;
+            dateView.dateLabel.layer.borderColor = TodayColor.CGColor;
         }
         
         // Add indicator if date has event
@@ -256,7 +258,7 @@
     weekdayView.selectedLabel.hidden = NO;
     view.dateLabel.layer.masksToBounds = YES;
     view.dateLabel.layer.cornerRadius = view.dateLabel.frame.size.width/2;
-        
+    
     CATransition *animation = [CATransition animation];
     animation.duration = 0.3f;
     animation.type = kCATransitionFade;
@@ -268,6 +270,7 @@
     if (view.isToday) {
         view.dateLabel.backgroundColor = TodayColor;
         weekdayView.selectedLabel.backgroundColor = TodayColor;
+        
     }
     else {
         view.dateLabel.backgroundColor = MainColor;
@@ -295,6 +298,7 @@
     view.dateLabel.backgroundColor =[UIColor clearColor];
     if (view.isToday) {
         view.dateLabel.textColor = TodayColor;
+        view.dateLabel.layer.borderWidth = 1;
     }
     else
         view.dateLabel.textColor = [UIColor colorWithWhite:0.600 alpha:1.000];
@@ -309,7 +313,8 @@
 
 -(void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
 {
-    fadeDateView.dateLabel.layer.cornerRadius = 0.0f;
+    if (!fadeDateView.isToday)
+        fadeDateView.dateLabel.layer.cornerRadius = 0.0f;
     fadeDateView.dateLabel.layer.masksToBounds = NO;
 }
 

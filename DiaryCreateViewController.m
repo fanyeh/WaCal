@@ -700,7 +700,19 @@ static int deleteLabelSize = 30;
 
         }];
     }
-    [layoutCollectionView scrollToItemAtIndexPath:layoutIndex atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
+    [self scrollToIndexPath];
+}
+
+- (void)scrollToIndexPath
+{
+    NSIndexPath *scrollIndex;
+    
+    if (layoutIndex.row != 0)
+        scrollIndex = [NSIndexPath indexPathForItem:0 inSection:layoutIndex.section];
+    else
+        scrollIndex = layoutIndex;
+    
+    [layoutCollectionView scrollToItemAtIndexPath:scrollIndex atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
 }
 
 -(void)showNextButton:(BOOL)show
@@ -830,7 +842,7 @@ static int deleteLabelSize = 30;
             
             layoutIndex = [NSIndexPath indexPathForItem:newRow inSection:newSection];
             [layoutCollectionView reloadData];
-            [layoutCollectionView scrollToItemAtIndexPath:layoutIndex atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
+            [self scrollToIndexPath];
  
             scroller.photoButton.title = [NSString stringWithFormat:@"%ld/5",(unsigned long)[fullScreenImageArray count]];
             
@@ -1161,7 +1173,7 @@ static int deleteLabelSize = 30;
         showLayoutTable = YES;
         layoutCollectionView.hidden = NO;
         scroller.layoutButton.tintColor = MainColor;
-        [layoutCollectionView scrollToItemAtIndexPath:layoutIndex atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
+        [self scrollToIndexPath];
 
         [UIView animateWithDuration:0.5 animations:^{
             layoutCollectionView.frame = CGRectOffset(layoutCollectionView.frame, 0, -currentLayoutTableHeight);

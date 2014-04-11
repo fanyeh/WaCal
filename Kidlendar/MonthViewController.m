@@ -39,7 +39,8 @@
     NSDateFormatter *eventTimeFormatter;
     NSInteger selectedMonth;
     DiaryData *showDiaryData;
-    
+    UIBarButtonItem *todayButton;
+    BOOL byGoToday;
 }
 
 @property (weak, nonatomic) IBOutlet UIView *diaryView;
@@ -172,13 +173,17 @@
     monthLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 5, 150, 24)];
     monthLabel.textColor = [UIColor whiteColor];
     monthLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:20];
+    monthLabel.textAlignment = NSTextAlignmentCenter;
     [leftBarButtonView addSubview:monthLabel];
-    yearLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 24, 100, 20)];
+    yearLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 24, 150, 20)];
     yearLabel.textColor = [UIColor whiteColor];
     yearLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:15];
+    yearLabel.textAlignment = NSTextAlignmentCenter;
     [leftBarButtonView addSubview:yearLabel];
-    UIBarButtonItem *monthButton = [[UIBarButtonItem alloc]initWithCustomView:leftBarButtonView];
-    self.navigationItem.leftBarButtonItem = monthButton;
+    todayButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(goToday)];
+//    self.navigationItem.leftBarButtonItem = todayButton;
+    
+    self.navigationItem.titleView = leftBarButtonView;
     [self setNavgationBarTitle];
     
     // Add observer to monitor event when new calendar event is created or removed
@@ -199,23 +204,54 @@
     [self showDiary];
 }
 
-//- (void)viewWillDisappear:(BOOL)animated
-//{
-//    _monthView.hidden = YES;
-//}
-//
-//-(void)viewWillAppear:(BOOL)animated
-//{
-//    _monthView.hidden  = NO;
-//}
-//- (BOOL)prefersStatusBarHidden {
-//    return YES;
-//}
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)goToday
+{
+    NSDateComponents *currentDateComponents = [_gregorian components:NSMonthCalendarUnit|NSYearCalendarUnit fromDate:_selectedDate];
+    
+    _selectedDate = [NSDate date];
+    NSDateComponents *toDateComponents = [_gregorian components:NSMonthCalendarUnit|NSYearCalendarUnit fromDate:_selectedDate];
+    
+    if (_monthView.shrink) {
+        byGoToday = YES;
+        if (currentDateComponents.year > toDateComponents.year)
+            [self switchCalendarByWeek:kCalendarRewind bySelectDate:YES];
+        
+        else if (currentDateComponents.month > toDateComponents.month)
+            [self switchCalendarByWeek:kCalendarRewind bySelectDate:YES];
+        
+        else if (currentDateComponents.month < toDateComponents.month)
+            [self switchCalendarByWeek:kCalendarForward bySelectDate:YES];
+        
+        else {
+            DateModel *todayModel = [monthModel dateModelForDate:_selectedDate];
+            if (todayModel.row > previousDateModel.row)
+                [self switchCalendarByWeek:kCalendarForward bySelectDate:YES];
+            
+            else if (todayModel.row < previousDateModel.row)
+                [self switchCalendarByWeek:kCalendarRewind bySelectDate:YES];
+            
+            else
+                [self dateLabelTapByCode];
+        }
+
+    } else {
+        if (currentDateComponents.year > toDateComponents.year)
+            [self switchCalendarByMonth:kCalendarRewind bySelectDate:YES];
+            
+        else if (currentDateComponents.month > toDateComponents.month)
+            [self switchCalendarByMonth:kCalendarRewind bySelectDate:YES];
+            
+        else if (currentDateComponents.month < toDateComponents.month)
+            [self switchCalendarByMonth:kCalendarForward bySelectDate:YES];
+        else
+            [self dateLabelTapByCode];
+    }
 }
 
 - (void)setNavgationBarTitle
@@ -498,7 +534,6 @@
                 }
                 _selectedDate = [_gregorian dateFromComponents:dateComponents];
                 rewindChage = YES;
-                
             }
             else {
                 DateModel *firstDateModelOfLastWeek = [[monthModel datesInMonth]objectAtIndex:row*7];
@@ -529,8 +564,12 @@
     [self resetCalendarBySelectDate:bySelect rewindWeekWithMonthChange:rewindChage forwardWeekWithMonthChange:forwardChange];
     [self shrinkMonthWithOutAnimation];
     
-    if (!bySelect)
+    // Show animation if switch week not by select date or by go today
+    if (!bySelect || byGoToday) {
         [self.monthView.dateGroupView.layer addAnimation:animation forKey:nil];
+        if (byGoToday)
+            byGoToday = NO;
+    }
 }
 
 - (void)dateLabelTap:(UITapGestureRecognizer *)sender
@@ -538,47 +577,76 @@
     DateView *dateView = (DateView*)sender.view;
     DateModel *dateModel = [[monthModel datesInMonth]objectAtIndex:dateView.tag];
     dateModel.isSelected = YES;
+    
+    if(dateView.isToday)
+        [self.navigationItem setLeftBarButtonItem:nil animated:YES];
+    else
+        [self.navigationItem setLeftBarButtonItem:todayButton animated:YES];
 
     if ([dateModel.date compare: previousDateModel.date] != NSOrderedSame) {
+
         [_monthView setAppearanceOnDeselectDate:previousDateModel.date dateNotInCurrentMonth:previousDateModel.isCurrentMonth];
         previousDateModel.isSelected = NO;
-    }
     
-    // Assign selectedDate based on tap
-    _selectedDate = dateModel.date;
-    
-    // Change month title if selected date is in different month
-    NSDateComponents *comp = [_gregorian components:NSMonthCalendarUnit
-                                           fromDate:_selectedDate];
-    
-    // Switch month by selected date in different month
-    if ([comp month] > selectedMonth) {
-        if(_monthView.shrink)
-           [self switchCalendarByWeek:kCalendarForward bySelectDate:YES];
-        else
-            [self switchCalendarByMonth:kCalendarForward bySelectDate:YES];
-    } else if ([comp month] <  selectedMonth){
-        if(_monthView.shrink)
-            [self switchCalendarByWeek:kCalendarRewind bySelectDate:YES];
-        else
-            [self switchCalendarByMonth:kCalendarRewind bySelectDate:YES];
-    }
+        // Assign selectedDate based on tap
+        _selectedDate = dateModel.date;
+        
+        // Change month title if selected date is in different month
+        NSDateComponents *comp = [_gregorian components:NSMonthCalendarUnit
+                                               fromDate:_selectedDate];
+        
+        // Switch month by selected date in different month
+        if ([comp month] > selectedMonth) {
+            if(_monthView.shrink)
+               [self switchCalendarByWeek:kCalendarForward bySelectDate:YES];
+            else
+                [self switchCalendarByMonth:kCalendarForward bySelectDate:YES];
+        } else if ([comp month] <  selectedMonth){
+            if(_monthView.shrink)
+                [self switchCalendarByWeek:kCalendarRewind bySelectDate:YES];
+            else
+                [self switchCalendarByMonth:kCalendarRewind bySelectDate:YES];
+        }
 
-    // Set up position of event & diary detail view
-    [_monthView setAppearanceOnSelectDate:dateModel.date];
-    
-    if (_monthView.shrink) {
-        [self showEventTable];
-        // Change nav bar title if month is shrinked and selected is in different month
-        if ([comp month] != selectedMonth)
-            [self setNavgationBarTitle];
+        // Set up position of event & diary detail view
+        [_monthView setAppearanceOnSelectDate:dateModel.date];
+        
+        if (_monthView.shrink) {
+            [self showEventTable];
+            // Change nav bar title if month is shrinked and selected is in different month
+            if ([comp month] != selectedMonth)
+                [self setNavgationBarTitle];
+        }
+        else
+            [self showComingEvent];
+        
+        [self showDiary];
+        
+        previousDateModel = dateModel;
     }
+}
+
+- (void)dateLabelTapByCode
+{
+    [_monthView setAppearanceOnDeselectDate:previousDateModel.date dateNotInCurrentMonth:previousDateModel.isCurrentMonth];
+
+    if (_monthView.shrink)
+        [self showEventTable];
     else
         [self showComingEvent];
     
     [self showDiary];
     
-    previousDateModel = dateModel;
+    // Set up previous date view and model
+    previousDateModel = [monthModel dateModelForDate:_selectedDate];
+    previousDateModel.isSelected = YES;
+    [_monthView setAppearanceOnSelectDate:previousDateModel.date];
+    
+    DateView *dateView = [_monthView viewFromDate:previousDateModel.date];
+    if(dateView.isToday)
+        [self.navigationItem setLeftBarButtonItem:nil animated:YES];
+    else
+        [self.navigationItem setLeftBarButtonItem:todayButton animated:YES];
 }
 
 - (void)activateDateLabelGesture
@@ -790,6 +858,13 @@
     previousDateModel = [monthModel dateModelForDate:_selectedDate];
     previousDateModel.isSelected = YES;
     [_monthView setAppearanceOnSelectDate:previousDateModel.date];
+    
+    DateView *dateView = [_monthView viewFromDate:previousDateModel.date];
+    if(dateView.isToday)
+        [self.navigationItem setLeftBarButtonItem:nil animated:YES];
+    else
+        [self.navigationItem setLeftBarButtonItem:todayButton animated:YES];
+    
     // Activate date view in month view
     [self activateDateLabelGesture];
     

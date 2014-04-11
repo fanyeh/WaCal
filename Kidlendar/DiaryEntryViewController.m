@@ -30,8 +30,6 @@
     NSArray* places;
     double locationLng;
     double locationLat;
-    BOOL hasText;
-//    BOOL locationFirstLoad;
 }
 @property (weak, nonatomic) IBOutlet UIImageView *diaryPhotoView;
 @property (weak, nonatomic) IBOutlet UIView *locationSearchView;
@@ -241,24 +239,28 @@
     // Update diary details
     DiaryData *diary = [[DiaryDataStore sharedStore]createItem];
     
+    // Diary subject
     diary.subject = _diarySubjectField.text;
-    if (hasText || ([_diaryEntryView isFirstResponder] && _diaryEntryView.text.length > 0)) {
-        diary.diaryText = _diaryEntryView.text;
-    }
     
+    // Diary text , only if there's text entered
+    if (_diaryEntryView.text.length > 0)
+        diary.diaryText = _diaryEntryView.text;
+    
+    //  Diary date
     diary.dateCreated = [[dateFormatter dateFromString: _diaryTimeField.text] timeIntervalSinceReferenceDate];
     
+    // Diary location
     if (_locationField.text.length > 0)
         diary.location = _locationField.text;
     
     FileManager *fm = [[FileManager alloc]initWithKey:diary.diaryKey];
     
-    // Photo diary
+    // Save Photo diary
     if (_selectedMediaType == kMediaTypePhoto) {
         [diary setPhotoThumbnailDataFromImage:_diaryImage];
         [fm saveCollectionImage:_diaryImage];
     }
-    // Video diary
+    // Save Video diary
     else {
         diary.diaryVideoPath = [NSString stringWithFormat:@"%@",_asset.defaultRepresentation.url];
         UIImage *image = [UIImage imageWithCGImage: _asset.defaultRepresentation.fullScreenImage];
@@ -315,27 +317,6 @@
     }
     return YES;
 }
-
-#pragma mark - UITextViewDelegate
-
-//- (BOOL) textViewShouldBeginEditing:(UITextView *)textView
-//{
-//    if (!hasText) {
-//        _diaryEntryView.text = @"";
-//        _diaryEntryView.textColor = [UIColor colorWithWhite:0.400 alpha:1.000];
-//    }
-//    return YES;
-//}
-//
-//- (void)textViewDidEndEditing:(UITextView *)textView
-//{
-//    if(_diaryEntryView.text.length == 0){
-//        _diaryEntryView.textColor = [UIColor colorWithWhite:0.667 alpha:1.000];
-//        _diaryEntryView.text = @"This moment...";
-//        hasText = NO;
-//    } else 
-//        hasText = YES;
-//}
 
 #pragma mark - Google Places Search
 // Google search

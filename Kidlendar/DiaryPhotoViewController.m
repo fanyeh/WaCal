@@ -41,6 +41,7 @@ typedef NS_ENUM(NSInteger, FilterType)
     CGPoint photoCenter;
     CGFloat initialRectRatio;
     CGFloat sliderHeight;
+    float brightness;
 }
 @property (weak, nonatomic) IBOutlet UIImageView *photoImageView;
 @property (weak, nonatomic) IBOutlet UICollectionView *filterCollectionView;
@@ -466,40 +467,21 @@ typedef NS_ENUM(NSInteger, FilterType)
     _adjustSlider.minimumValue = -0.5f;
     _adjustSlider.maximumValue = 0.5f;
     [_adjustSlider setValue:brightnessFilter.brightness animated:NO];
+    brightness = brightnessFilter.brightness;
     stillImageSource = [[GPUImagePicture alloc] initWithImage:filteredImage];
     [stillImageSource addTarget:brightnessFilter];
     [stillImageSource processImage];
     [self showSlider];
+
 }
 
-//// Exposure Bar Button
-//- (IBAction)exposure:(id)sender
-//{
-//    [exposureFilter addTarget:_filterView];
-//    filter = kFilterTypeExposure;
-//    _adjustSlider.minimumValue = -2.0f;
-//    _adjustSlider.maximumValue = 2.0f;
-//    [_adjustSlider setValue:exposureFilter.exposure animated:NO];
-//    stillImageSource = [[GPUImagePicture alloc] initWithImage:_photoImage];
-//    [stillImageSource addTarget:exposureFilter];
-//    [stillImageSource processImage];
-//    [self showSlider];
-//}
-//
-//- (IBAction)contrast:(id)sender
-//{
-//    //  contrast: The adjusted contrast (0.0 - 4.0, with 1.0 as the default)
-//
-//    [contrastFilter addTarget:_filterView];
-//    filter = kFilterTypeContrast;
-//    _adjustSlider.minimumValue = 0.5f;
-//    _adjustSlider.maximumValue = 2.0f;
-//    [_adjustSlider setValue:contrastFilter.contrast animated:NO];
-//    stillImageSource = [[GPUImagePicture alloc] initWithImage:_photoImage];
-//    [stillImageSource addTarget:contrastFilter];
-//    [stillImageSource processImage];
-//    [self showSlider];
-//}
+- (IBAction)resetBrightNess:(id)sender
+{
+    brightnessFilter.brightness = 0;
+    [_adjustSlider setValue:brightnessFilter.brightness animated:YES];
+    [stillImageSource processImage];
+    _photoImageView.hidden = YES;
+}
 
 - (IBAction)showCrop:(id)sender
 {
@@ -529,6 +511,7 @@ typedef NS_ENUM(NSInteger, FilterType)
 // Slider view cancel button
 - (IBAction)cancelSlider:(id)sender
 {
+    brightnessFilter.brightness = brightness;
     if (brightnessFilter.brightness == 0)
         [_brightnessButton setImage:[UIImage imageNamed:@"brightnessWhite35.png"] forState:UIControlStateNormal];
     else
@@ -572,12 +555,6 @@ typedef NS_ENUM(NSInteger, FilterType)
         _adjustSliderView.hidden = YES;
         
     }];
-}
-- (IBAction)resetBrightNess:(id)sender
-{
-    brightnessFilter.brightness = 0;
-    _adjustSlider.value = 0;
-    [stillImageSource processImage];
 }
 
 @end

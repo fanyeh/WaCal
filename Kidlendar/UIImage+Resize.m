@@ -305,9 +305,6 @@
 - (UIImage *)cropImageWithRectImageView:(CGRect)cropRect view:(UIImageView *)imageView
 {
     // Convert cropRect unit to cropRegion unit
-
-    NSLog(@"Image size %@",[NSValue valueWithCGSize:self.size]);
-    NSLog(@"Crop rect %@",[NSValue valueWithCGRect:cropRect]);
     CGAffineTransform t = CGAffineTransformMakeScale(1.0f / self.size.width, 1.0f / self.size.height);
     CGRect cropRegion = CGRectApplyAffineTransform(cropRect, t);
     
