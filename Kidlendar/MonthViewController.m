@@ -62,6 +62,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *locationTag;
 @property (weak, nonatomic) IBOutlet UILabel *endEventLabel;
 @property (weak, nonatomic) IBOutlet UILabel *addDiaryLabel;
+@property (weak, nonatomic) IBOutlet UILabel *locationLabel;
 
 @end
 
@@ -73,7 +74,7 @@
     if (self) {
         // Custom initialization
         _gregorian = [NSCalendar currentCalendar];
-        [_gregorian setTimeZone:[NSTimeZone systemTimeZone]];
+//        [_gregorian setTimeZone:[NSTimeZone systemTimeZone]];
         monthModel = [[MonthModel alloc]initMonthCalendarWithDate:[NSDate date] andCalendar:_gregorian];
     }
     return self;
@@ -96,15 +97,15 @@
     
     dateFormatter = [[NSDateFormatter alloc]init];
     dateFormatter.dateFormat = @"yyyy/MM/dd";
-    dateFormatter.timeZone = [NSTimeZone systemTimeZone];
+//    dateFormatter.timeZone = [NSTimeZone systemTimeZone];
     
     timeFormatter = [[NSDateFormatter alloc]init];
     timeFormatter.dateFormat = @"HH:mm";
-    timeFormatter.timeZone = [NSTimeZone systemTimeZone];
+//    timeFormatter.timeZone = [NSTimeZone systemTimeZone];
     
     eventTimeFormatter = [[NSDateFormatter alloc]init];
     eventTimeFormatter.dateFormat = @"hh:mm aa";
-    eventTimeFormatter.timeZone = [NSTimeZone systemTimeZone];
+//    eventTimeFormatter.timeZone = [NSTimeZone systemTimeZone];
 
     UITapGestureRecognizer *eventTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showEventView)];
     [_comingEventView addGestureRecognizer:eventTap];
@@ -180,9 +181,7 @@
     yearLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:15];
     yearLabel.textAlignment = NSTextAlignmentCenter;
     [leftBarButtonView addSubview:yearLabel];
-    todayButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(goToday)];
-//    self.navigationItem.leftBarButtonItem = todayButton;
-    
+    todayButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"today.png"] style:UIBarButtonItemStylePlain target:self action:@selector(goToday)];
     self.navigationItem.titleView = leftBarButtonView;
     [self setNavgationBarTitle];
     
@@ -202,6 +201,7 @@
                                                 name:@"EKCalendarSwitch" object:nil];
     
     [self showDiary];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -304,11 +304,8 @@
     EventTableCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     EKEvent *event = monthModel.eventsInDate[indexPath.row];
     cell.titleLabel.text = event.title;
+    cell.locationLabel.text = event.location;
     cell.dotView.layer.cornerRadius = cell.dotView.frame.size.width/2;
-    
-    if (!event.location) {
-        cell.titleLabel.frame = CGRectOffset(cell.titleLabel.frame, 0, 12);
-    }
 
     if ([event.startDate compare:[NSDate date]] == NSOrderedAscending)
         cell.eventEndLabel.hidden = NO;
@@ -367,7 +364,7 @@
 
 -(void)refreshCalendarOnEventChange:(NSNotification *)notification
 {
-    NSDate *eventDate = [notification.userInfo objectForKey:@"startDate"];;
+    NSDate *eventDate = [notification.userInfo objectForKey:@"startDate"];
     _selectedDate = eventDate;
     [self resetCalendarBySelectDate:YES rewindWeekWithMonthChange:NO forwardWeekWithMonthChange:NO];
     if (_monthView.shrink)
@@ -757,6 +754,7 @@
         _comingEventTimeEnd.text = [eventTimeFormatter stringFromDate:_comingUpEvent.endDate];
     }
     _comingEventTitle.text = _comingUpEvent.title;
+    _locationLabel.text = _comingUpEvent.location;
 }
 
 -(void)showDiary

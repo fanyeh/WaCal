@@ -37,6 +37,7 @@
     EKCalendar *selectedCalendar;
     CLLocationCoordinate2D destination;
     UIView *toolView;
+    NSMutableArray *writableCalendars;
 }
 
 @property (weak, nonatomic) IBOutlet UITextField *subjectField;
@@ -155,12 +156,12 @@
     // Set up date formatter
     dateFormatter = [[NSDateFormatter alloc]init];
     dateFormatter.dateFormat = @"yyyy/MM/dd";
-    dateFormatter.timeZone = [NSTimeZone systemTimeZone];
+//    dateFormatter.timeZone = [NSTimeZone systemTimeZone];
     
     // Set up time formatter
     timeFormatter = [[NSDateFormatter alloc]init];
-    timeFormatter.dateFormat = @"HH:mm";
-    timeFormatter.timeZone = [NSTimeZone systemTimeZone];
+    timeFormatter.dateFormat = @"hh:mm aa";
+//    timeFormatter.timeZone = [NSTimeZone systemTimeZone];
     
     // Setup Date picker
     _datePicker = [[UIDatePicker alloc]init];
@@ -192,11 +193,13 @@
     
     // Initialize new event
     event = [EKEvent eventWithEventStore:[[CalendarStore sharedStore]eventStore]];
-    event.timeZone = [NSTimeZone systemTimeZone];
+//    event.timeZone = [NSTimeZone systemTimeZone];
     event.calendar = [[CalendarStore sharedStore]calendar];
     event.startDate = _selectedDate;
-    event.endDate = [NSDate dateWithTimeInterval:300 sinceDate:_selectedDate];
+    event.endDate = [NSDate dateWithTimeInterval:3600 sinceDate:_selectedDate];
     event.allDay = NO;
+    [event addAlarm:[EKAlarm alarmWithRelativeOffset:-60*15]];
+    [self checkAlarm];
     
     selectedLocation = [[SelectedLocation alloc]init];
     
@@ -204,7 +207,12 @@
     UITapGestureRecognizer *mapIconTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showMap)];
     [_mapIcon addGestureRecognizer:mapIconTap];
     
-    _reminderValueLabel.text = [self minuteToString: [[NSUserDefaults standardUserDefaults]integerForKey:@"defaultAlarm"]];
+    writableCalendars = [[NSMutableArray alloc]init];
+    for (EKCalendar *cal in [[CalendarStore sharedStore]allCalendars]) {
+        if (cal.allowsContentModifications) {
+            [writableCalendars addObject:cal];
+        }
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -239,20 +247,20 @@
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    return [[[CalendarStore sharedStore]allCalendars] count];
+    return [writableCalendars count];
 }
 
 #pragma mark - UIPickerViewDelegate
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    EKCalendar *calendar = [[CalendarStore sharedStore]allCalendars][row];
+    EKCalendar *calendar = writableCalendars[row];
     return calendar.title;
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-    selectedCalendar = [[CalendarStore sharedStore]allCalendars][row];
+    selectedCalendar = writableCalendars[row];
     _calenderNameLabel.text = selectedCalendar.title;
 }
 
@@ -468,6 +476,8 @@
     event.location = _locationField.text;
     [[[CalendarStore sharedStore]eventStore] saveEvent:event span:EKSpanThisEvent commit:YES error:nil];
     
+    
+    NSLog(@"id %@",event.eventIdentifier);
     // Create new location
     if (selectedLocation.locationName) {
         LocationData *eventLocation = [[LocationDataStore sharedStore]createItemWithKey:event.eventIdentifier];
@@ -504,8 +514,8 @@
         
         _startDateLabel.frame = CGRectOffset(_startDateLabel.frame, 0, 13);
         _endDateLabel.frame = CGRectOffset(_endDateLabel.frame, 0 , 13);
-        _startDateLabel.font = [UIFont systemFontOfSize:12];
-        _endDateLabel.font = [UIFont systemFontOfSize:12];
+        _startDateLabel.font = [UIFont systemFontOfSize:13];
+        _endDateLabel.font = [UIFont systemFontOfSize:13];
         
         _startTimeLabel.hidden = NO;
         _endTimeLabel.hidden = NO;
@@ -544,6 +554,24 @@
 }
 
 #pragma mark - Reminder
+
+- (void)checkAlarm
+{
+    if (event.hasAlarms) {
+        for (EKAlarm *a in event.alarms) {
+            for (ReminderButton *b in reminder.subviews) {
+                if ((b.tag==1&&a.absoluteDate)||(b.timeOffset == a.relativeOffset*-1)) {
+                    [b setSelected:YES];
+                    b.backgroundColor =MainColor;
+                    _reminderValueLabel.text = [b.titleLabel.text stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+                    break;
+                }
+            }
+        }
+    } else {
+        _reminderValueLabel.text = @"No Reminder";
+    }
+}
 
 - (void)removeAllAlarms
 {
@@ -776,8 +804,6 @@
     // Hide search table after row selected
     _maskView.hidden = YES;
     _mapIcon.hidden = NO;
-    
-    
 }
 
 #pragma mark - Google Places Search

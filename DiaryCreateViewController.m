@@ -666,6 +666,9 @@ static int deleteLabelSize = 30;
             _noPhotoImage.hidden = YES;
             _noPhotoLabel1.hidden = YES;
             _noPhotoLabel2.hidden = YES;
+            
+            [self scrollToIndexPath];
+
         }];
     }
     else if (sender.direction == UISwipeGestureRecognizerDirectionDown) {
@@ -697,10 +700,11 @@ static int deleteLabelSize = 30;
                                                     320,
                                                     photoCollectionShrinkHeight);
             currentLayoutTableHeight = photoCollectionShrinkHeight;
+            
+            [self scrollToIndexPath];
 
         }];
     }
-    [self scrollToIndexPath];
 }
 
 - (void)scrollToIndexPath
@@ -852,6 +856,9 @@ static int deleteLabelSize = 30;
                 scroller.layoutButton.enabled = NO;
                 _noPhotoView.hidden = NO;
                 [cellImageArray removeAllObjects];
+                if (showLayoutTable) {
+                    [self showLayout];
+                }
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [diaryPhotosView reloadData];
                 });

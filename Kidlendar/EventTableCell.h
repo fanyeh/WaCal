@@ -15,4 +15,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIView *dotView;
 @property (weak, nonatomic) IBOutlet UILabel *eventEndLabel;
+@property (weak, nonatomic) IBOutlet UILabel *locationLabel;
+
 @end

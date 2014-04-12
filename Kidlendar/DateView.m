@@ -50,7 +50,7 @@
     
     hasEventView.layer.cornerRadius = hasEventView.frame.size.width/2;
     
-    hasEventView.backgroundColor = Rgb2UIColor(249, 203, 143);
+    hasEventView.backgroundColor = Rgb2UIColor(242, 208, 59);
     [self addSubview:hasEventView];
 }
 

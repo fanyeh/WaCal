@@ -97,6 +97,7 @@
 		4C57E75C18F78E6400D622C4 /* video@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C57E72B18F78E6400D622C4 /* video@2x.png */; };
 		4C57E75F18F79BFD00D622C4 /* brightnessWhite35@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C57E75D18F79BFD00D622C4 /* brightnessWhite35@2x.png */; };
 		4C57E76018F79BFD00D622C4 /* cropWhite35@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C57E75E18F79BFD00D622C4 /* cropWhite35@2x.png */; };
+		4C5A982F18F9729300C7E79C /* today@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C5A982E18F9729300C7E79C /* today@2x.png */; };
 		4C5B01F618ACBD7F0030FCCC /* DiaryCreateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B01F418ACBD7E0030FCCC /* DiaryCreateViewController.m */; };
 		4C5B01F718ACBD7F0030FCCC /* DiaryCreateViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C5B01F518ACBD7E0030FCCC /* DiaryCreateViewController.xib */; };
 		4C5C8FFC18A8730100B40F7E /* DiaryEntryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5C8FFA18A8730100B40F7E /* DiaryEntryViewController.m */; };
@@ -312,6 +313,7 @@
 		4C57E72B18F78E6400D622C4 /* video@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video@2x.png"; sourceTree = "<group>"; };
 		4C57E75D18F79BFD00D622C4 /* brightnessWhite35@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "brightnessWhite35@2x.png"; sourceTree = "<group>"; };
 		4C57E75E18F79BFD00D622C4 /* cropWhite35@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cropWhite35@2x.png"; sourceTree = "<group>"; };
+		4C5A982E18F9729300C7E79C /* today@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "today@2x.png"; sourceTree = "<group>"; };
 		4C5B01F318ACBD7E0030FCCC /* DiaryCreateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiaryCreateViewController.h; path = ../DiaryCreateViewController.h; sourceTree = "<group>"; };
 		4C5B01F418ACBD7E0030FCCC /* DiaryCreateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiaryCreateViewController.m; path = ../DiaryCreateViewController.m; sourceTree = "<group>"; };
 		4C5B01F518ACBD7E0030FCCC /* DiaryCreateViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DiaryCreateViewController.xib; path = ../DiaryCreateViewController.xib; sourceTree = "<group>"; };
@@ -608,6 +610,7 @@
 		4C57E6FA18F78E3800D622C4 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				4C5A982E18F9729300C7E79C /* today@2x.png */,
 				4C57E75D18F79BFD00D622C4 /* brightnessWhite35@2x.png */,
 				4C57E75E18F79BFD00D622C4 /* cropWhite35@2x.png */,
 				4C57E6FB18F78E6400D622C4 /* alarmTag20@2x.png */,
@@ -1000,6 +1003,7 @@
 				4C57E74218F78E6400D622C4 /* eventTimeArrowEnd@2x.png in Resources */,
 				4C57E73D18F78E6400D622C4 /* eventLocationLine20@2x.png in Resources */,
 				4C57E76018F79BFD00D622C4 /* cropWhite35@2x.png in Resources */,
+				4C5A982F18F9729300C7E79C /* today@2x.png in Resources */,
 				4C57E75C18F78E6400D622C4 /* video@2x.png in Resources */,
 				4C97EA8018DDDDA100BB19A8 /* SettingTableCell.xib in Resources */,
 				4C57E74818F78E6400D622C4 /* layout@2x.png in Resources */,
