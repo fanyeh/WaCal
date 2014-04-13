@@ -306,7 +306,9 @@
     cell.titleLabel.text = event.title;
     cell.locationLabel.text = event.location;
     cell.dotView.layer.cornerRadius = cell.dotView.frame.size.width/2;
+    cell.dotView.backgroundColor = [UIColor colorWithCGColor:event.calendar.CGColor];
 
+    // Hide or show "Ends" label
     if ([event.startDate compare:[NSDate date]] == NSOrderedAscending)
         cell.eventEndLabel.hidden = NO;
     else
@@ -318,8 +320,10 @@
         cell.endDateLabel.hidden = YES;
     } else {
         cell.alldayLabel.hidden = YES;
-        cell.startDateLabel.text = [eventTimeFormatter stringFromDate: event.startDate];
-        cell.endDateLabel.text = [eventTimeFormatter stringFromDate: event.endDate];
+        
+        cell.startDateLabel.attributedText = [self attributedTimeText:[eventTimeFormatter stringFromDate:event.startDate]];
+        cell.endDateLabel.attributedText = [self attributedTimeText:[eventTimeFormatter stringFromDate:event.endDate]];
+
         cell.startDateLabel.hidden = NO;
         cell.endDateLabel.hidden = NO;
     }
@@ -736,6 +740,7 @@
 
 -(void)updateComingEventViewEnds:(BOOL)ends
 {
+    _dotView.backgroundColor = [UIColor colorWithCGColor:_comingUpEvent.calendar.CGColor];
     if (ends)
         _endEventLabel.hidden = NO;
     else
@@ -750,8 +755,10 @@
         _comingEventTime.hidden = NO;
         _comingEventTimeEnd.hidden = NO;
         _allDayLabel.hidden = YES;
-        _comingEventTime.text  = [eventTimeFormatter stringFromDate:_comingUpEvent.startDate];
-        _comingEventTimeEnd.text = [eventTimeFormatter stringFromDate:_comingUpEvent.endDate];
+        
+        _comingEventTime.attributedText = [self attributedTimeText:[eventTimeFormatter stringFromDate:_comingUpEvent.startDate]];
+        _comingEventTimeEnd.attributedText = [self attributedTimeText:[eventTimeFormatter stringFromDate:_comingUpEvent.endDate]];
+
     }
     _comingEventTitle.text = _comingUpEvent.title;
     _locationLabel.text = _comingUpEvent.location;
@@ -886,6 +893,23 @@
     EventCreateController *newEventController = [[EventCreateController alloc]init];
     newEventController.selectedDate = _selectedDate;
     [[self navigationController]pushViewController:newEventController animated:YES];
+}
+
+- (NSAttributedString *)attributedTimeText:(NSString *)timeString
+{
+    NSMutableAttributedString *newTimeString = [[NSMutableAttributedString alloc] initWithString:timeString];
+    
+    if (timeString.length > 6) {
+        
+        NSRange selectedRange = NSMakeRange(5, 3);
+        
+        [newTimeString beginEditing];
+        [newTimeString addAttribute:NSFontAttributeName
+                              value:[UIFont fontWithName:@"HelveticaNeue" size:10.0]
+                              range:selectedRange];
+        [newTimeString endEditing];
+    }
+    return newTimeString;
 }
 
 @end

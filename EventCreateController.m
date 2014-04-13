@@ -118,7 +118,7 @@
     _locationSearchView.layer.cornerRadius = 10.0f;
 
     // Calendar
-    _calenderNameLabel.text = [[[CalendarStore sharedStore]calendar]title];
+    _calenderNameLabel.text = [[[[CalendarStore sharedStore]selectedCalendars]objectAtIndex:0]title];
     UIPickerView *calendarPicker = [[UIPickerView alloc]init];
     calendarPicker.delegate = self;
     calendarPicker.dataSource = self;
@@ -182,10 +182,10 @@
     _endTimeField.inputView = _datePicker;
     _endTimeField.tintColor = [UIColor clearColor];
     
-    _startTimeLabel.text = [timeFormatter stringFromDate:_selectedDate];
+    _startTimeLabel.attributedText = [self attributedTimeText:[timeFormatter stringFromDate:_selectedDate]];
     _startDateLabel.text = [dateFormatter stringFromDate:_selectedDate];
     
-    _endTimeLabel.text = [timeFormatter stringFromDate:[NSDate dateWithTimeInterval:3600 sinceDate:_selectedDate]];
+    _endTimeLabel.attributedText = [self attributedTimeText:[timeFormatter stringFromDate:[NSDate dateWithTimeInterval:3600 sinceDate:_selectedDate]]];
     _endDateLabel.text =  [dateFormatter stringFromDate:[NSDate dateWithTimeInterval:3600 sinceDate:_selectedDate]];
     
     minimumDate = [NSDate dateWithTimeInterval:300 sinceDate:_selectedDate];
@@ -194,7 +194,7 @@
     // Initialize new event
     event = [EKEvent eventWithEventStore:[[CalendarStore sharedStore]eventStore]];
 //    event.timeZone = [NSTimeZone systemTimeZone];
-    event.calendar = [[CalendarStore sharedStore]calendar];
+    event.calendar = [[[CalendarStore sharedStore]selectedCalendars]objectAtIndex:0];
     event.startDate = _selectedDate;
     event.endDate = [NSDate dateWithTimeInterval:3600 sinceDate:_selectedDate];
     event.allDay = NO;
@@ -304,6 +304,13 @@
     return YES;
 }
 
+- (BOOL)textFieldShouldClear:(UITextField *)textField {
+    if (textField.tag == 3)
+        _mapIcon.hidden = YES;
+    
+    return YES;
+}
+
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
     switch (textField.tag) {
@@ -349,17 +356,17 @@
     if (!event.allDay) {
         if (_startTimeField.isFirstResponder) {
             _startDateLabel.text = [dateFormatter stringFromDate: _datePicker.date];
-            _startTimeLabel.text = [timeFormatter stringFromDate: _datePicker.date];
+            _startTimeLabel.attributedText = [self attributedTimeText:[timeFormatter stringFromDate: _datePicker.date]];
             event.startDate = _datePicker.date;
             
             // Minimum end time after start time is selected
             minimumDate = [NSDate dateWithTimeInterval:300 sinceDate:_datePicker.date];
             event.endDate = [NSDate dateWithTimeInterval:3600 sinceDate:_datePicker.date];
             _endDateLabel.text = [dateFormatter stringFromDate:event.endDate];
-            _endTimeLabel.text = [timeFormatter stringFromDate:event.endDate];
+            _endTimeLabel.attributedText = [self attributedTimeText:[timeFormatter stringFromDate:event.endDate]];
         }
         else {
-            _endTimeLabel.text = [timeFormatter stringFromDate: _datePicker.date];
+            _endTimeLabel.attributedText = [self attributedTimeText:[timeFormatter stringFromDate: _datePicker.date]];
             _endDateLabel.text = [dateFormatter stringFromDate: _datePicker.date];
             event.endDate = _datePicker.date;
         }
@@ -855,6 +862,23 @@
     } else {
         return YES;
     }
+}
+
+- (NSAttributedString *)attributedTimeText:(NSString *)timeString
+{
+    NSMutableAttributedString *newTimeString = [[NSMutableAttributedString alloc] initWithString:timeString];
+
+    if (timeString.length > 6) {
+        
+        NSRange selectedRange = NSMakeRange(5, 3);
+        
+        [newTimeString beginEditing];
+        [newTimeString addAttribute:NSFontAttributeName
+                              value:[UIFont fontWithName:@"HelveticaNeue-Light" size:15.0]
+                              range:selectedRange];
+        [newTimeString endEditing];
+    }
+    return newTimeString;
 }
 
 @end

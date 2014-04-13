@@ -32,8 +32,14 @@
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
+    
+    if (selected) {
+        self.accessoryType = UITableViewCellAccessoryCheckmark;
+//        _calendarColorView.hidden = NO;
+    } else {
+        self.accessoryType = UITableViewCellAccessoryNone;
+//        _calendarColorView.hidden = YES;
+    }
 }
 
 @end

@@ -120,7 +120,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     // Do any additional setup after loading the view from its nib.
     
     // View controller
-    self.navigationItem.title = _event.title;
+    self.navigationItem.title = @"Event Details";
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     toolView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 40)];
@@ -145,7 +145,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     [toolView addSubview:deleteButton];
 
     // Calendar
-    _calendarName.text = [[[CalendarStore sharedStore]calendar]title];
+    _calendarName.text = _event.calendar.title;
     UIPickerView *calendarPicker = [[UIPickerView alloc]init];
     calendarPicker.delegate = self;
     calendarPicker.dataSource = self;
@@ -242,7 +242,6 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     _endDateLabel.text =  [dateFormatter stringFromDate:_event.endDate];
     _startDateLabel.text = [dateFormatter stringFromDate:_event.startDate];
 
-    
     minimumDate = [NSDate dateWithTimeInterval:300 sinceDate:_event.startDate];
     _datePicker.minimumDate = minimumDate;
     
@@ -273,16 +272,16 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
         eventStartDate = [NSDate dateWithTimeInterval:28800 sinceDate:_event.startDate];
         eventEndDate = [NSDate dateWithTimeInterval:-53999 sinceDate:_event.endDate];
         
-        _startTimeLabel.text = [timeFormatter stringFromDate:eventStartDate];
-        _endTimeLabel.text = [timeFormatter stringFromDate:eventEndDate];
+        _startTimeLabel.attributedText = [self attributedTimeText:[timeFormatter stringFromDate:eventStartDate]];
+        _endTimeLabel.attributedText = [self attributedTimeText:[timeFormatter stringFromDate:eventEndDate]];
 
     } else {
         isAllDay = NO;
         _allLabel.textColor = LightGrayColor;
         _dayLabel.textColor = LightGrayColor;
         
-        _startTimeLabel.text = [timeFormatter stringFromDate:_event.startDate];
-        _endTimeLabel.text = [timeFormatter stringFromDate:_event.endDate];
+        _startTimeLabel.attributedText =[self attributedTimeText:[timeFormatter stringFromDate:_event.startDate]];
+        _endTimeLabel.attributedText = [self attributedTimeText:[timeFormatter stringFromDate:_event.endDate]];
         
         eventStartDate = _event.startDate;
         eventEndDate = _event.endDate;
@@ -292,7 +291,11 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     
     
     // Check if there is location
-    if (_event.location) {
+    if (selectedLocation.locationName) {
+        _locationField.text = selectedLocation.locationName;
+        _mapIcon.hidden = NO;
+    }
+    else if (_event.location) {
         _locationField.text = _event.location;
         LocationData *l = [[[LocationDataStore sharedStore]allItems]objectForKey:_event.eventIdentifier];
         if (l) {
@@ -407,6 +410,13 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    if (textField.tag == 3)
+        _mapIcon.hidden = YES;
+    
+    return YES;
+}
+
+- (BOOL)textFieldShouldClear:(UITextField *)textField {
     if (textField.tag == 3)
         _mapIcon.hidden = YES;
     
@@ -570,6 +580,8 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
         _event.title = _subjectField.text;
         _event.location = _locationField.text;
         _event.allDay = isAllDay;
+        _event.startDate = eventStartDate;
+        _event.endDate = eventEndDate;
 
         [[[CalendarStore sharedStore]eventStore] saveEvent:_event span:EKSpanThisEvent commit:YES error:nil];
         eventIdentifier = _event.eventIdentifier;
@@ -671,17 +683,17 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     if (!isAllDay) {
         if (_startTimeField.isFirstResponder) {
             _startDateLabel.text = [dateFormatter stringFromDate: _datePicker.date];
-            _startTimeLabel.text = [timeFormatter stringFromDate: _datePicker.date];
+            _startTimeLabel.attributedText = [self attributedTimeText:[timeFormatter stringFromDate: _datePicker.date]];
             eventStartDate = _datePicker.date;
             
             // Minimum end time after start time is selected
             minimumDate = [NSDate dateWithTimeInterval:300 sinceDate:_datePicker.date];
             eventEndDate = [NSDate dateWithTimeInterval:3600 sinceDate:_datePicker.date];
             _endDateLabel.text = [dateFormatter stringFromDate:eventEndDate];
-            _endTimeLabel.text = [timeFormatter stringFromDate:eventEndDate];
+            _endTimeLabel.attributedText = [self attributedTimeText:[timeFormatter stringFromDate:eventEndDate]];
         }
         else {
-            _endTimeLabel.text = [timeFormatter stringFromDate: _datePicker.date];
+            _endTimeLabel.attributedText = [self attributedTimeText:[timeFormatter stringFromDate: _datePicker.date]];
             _endDateLabel.text = [dateFormatter stringFromDate: _datePicker.date];
             eventEndDate = _datePicker.date;
         }
@@ -1006,6 +1018,23 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     } else {
         return YES;
     }
+}
+
+- (NSAttributedString *)attributedTimeText:(NSString *)timeString
+{
+    NSMutableAttributedString *newTimeString = [[NSMutableAttributedString alloc] initWithString:timeString];
+    
+    if (timeString.length > 6) {
+        
+        NSRange selectedRange = NSMakeRange(5, 3);
+        
+        [newTimeString beginEditing];
+        [newTimeString addAttribute:NSFontAttributeName
+                              value:[UIFont fontWithName:@"HelveticaNeue-Light" size:15.0]
+                              range:selectedRange];
+        [newTimeString endEditing];
+    }
+    return newTimeString;
 }
 
 @end

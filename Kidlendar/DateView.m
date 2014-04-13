@@ -23,7 +23,6 @@
         // Initialization code
         labelSize = 29;
         dotSize = 6;
-//        self.backgroundColor = [UIColor whiteColor];
         _dateLabel = [[UILabel alloc]initWithFrame:CGRectMake((self.frame.size.width - labelSize)/2,
                                                               1,
                                                               labelSize,
@@ -50,7 +49,8 @@
     
     hasEventView.layer.cornerRadius = hasEventView.frame.size.width/2;
     
-    hasEventView.backgroundColor = Rgb2UIColor(242, 208, 59);
+    hasEventView.backgroundColor = [UIColor lightGrayColor];
+
     [self addSubview:hasEventView];
 }
 

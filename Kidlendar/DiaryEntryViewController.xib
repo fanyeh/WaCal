@@ -81,14 +81,14 @@
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                         </textView>
                                         <textField clipsSubviews="YES" tag="9" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Find location" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JjE-KJ-kih" userLabel="Location Field">
-                                            <rect key="frame" x="8" y="187" width="260" height="40"/>
+                                            <rect key="frame" x="8" y="187" width="266" height="40"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="search"/>
                                         </textField>
                                         <textField clipsSubviews="YES" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="2013/12/13 Saturday 14:00" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ggv-6Q-Bvg" userLabel="Date Field">
-                                            <rect key="frame" x="8" y="146" width="260" height="40"/>
+                                            <rect key="frame" x="8" y="146" width="266" height="40"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>

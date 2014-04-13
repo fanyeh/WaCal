@@ -61,7 +61,7 @@
     backgroundLayer.path = p2;
     CGPathRelease(p2);
     
-    backgroundLayer.lineWidth = 3.0f;
+    backgroundLayer.lineWidth = 1.0f;
     backgroundLayer.strokeColor = [UIColor colorWithWhite:0.902 alpha:1.000].CGColor;
     backgroundLayer.fillColor = [UIColor clearColor].CGColor;
 }

@@ -31,6 +31,9 @@
         _layoutButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"layout.png"] style:UIBarButtonItemStylePlain target:nil action:nil];
         _layoutButton.enabled = NO;
         _albumNameButton = [[UIBarButtonItem alloc]initWithTitle:@"" style:UIBarButtonItemStyleBordered target:nil action:nil];
+        [_albumNameButton setTitleTextAttributes:@{ NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue-Bold" size:18.0]}
+                                        forState: UIControlStateNormal];
+        
         _photoButton = [[UIBarButtonItem alloc]initWithTitle:@"0/5" style:UIBarButtonItemStyleBordered target:nil action:nil];
         _photoButton.enabled = NO;
         UIBarButtonItem *flexButton1 = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];

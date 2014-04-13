@@ -12,10 +12,14 @@
 @interface CalendarStore : NSObject
 
 @property (strong,nonatomic)  EKEventStore *eventStore;
-@property (strong,nonatomic)  EKCalendar *calendar;
+//@property (strong,nonatomic)  EKCalendar *calendar;
 @property (strong,nonatomic)  NSMutableArray *allCalendars;
+@property (strong,nonatomic)  NSMutableArray *selectedCalendars;
 @property (strong,nonatomic)  NSMutableDictionary *calendarSourceTitle;
+@property (strong,nonatomic)  NSMutableArray *selectedCalIDs;
 
 + (CalendarStore *)sharedStore;
+- (void)setSelectedCalendarsByIDs;
+-(void)setSelectedIDsByCalendars;
 
 @end

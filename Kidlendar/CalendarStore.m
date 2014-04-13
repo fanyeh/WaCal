@@ -28,8 +28,29 @@
     if(self) {
         self.eventStore = [[EKEventStore alloc]init];
         _allCalendars = [[NSMutableArray alloc]init];
+        _selectedCalendars = [[NSMutableArray alloc]init];
+        _selectedCalIDs = [[NSMutableArray alloc]init];
     }
     return self;
+}
+
+- (void)setSelectedCalendarsByIDs
+{
+    for (EKCalendar *c in _allCalendars) {
+        for (NSString *identifier in _selectedCalIDs) {
+            if ([identifier isEqualToString:c.calendarIdentifier]) {
+                [_selectedCalendars addObject:c];
+            }
+        }
+    }
+}
+
+-(void)setSelectedIDsByCalendars
+{
+    for (EKCalendar *c in [[CalendarStore sharedStore]allCalendars]) {
+        [_selectedCalIDs addObject:c.calendarIdentifier];
+    }
+    [self setSelectedCalendarsByIDs];
 }
 
 @end

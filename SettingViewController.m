@@ -12,12 +12,7 @@
 #import "SwitchCell.h"
 #import "SettingTableCell.h"
 
-@interface SettingViewController () <UIPickerViewDataSource,UIPickerViewDelegate>
-{
-    UIPickerView *alarmPicker;
-    NSArray *alarm;
-    UITextField *fakeAlarmField;
-}
+@interface SettingViewController ()
 
 @end
 
@@ -41,16 +36,9 @@
     self.navigationItem.title = @"Setting";
     
     self.tableView.tintColor = MainColor;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     [self.tableView registerNib:[UINib nibWithNibName:@"SettingTableCell" bundle:nil] forCellReuseIdentifier:@"CalendarCell"];
-    
-    alarmPicker = [[UIPickerView alloc]init];
-    alarmPicker.delegate = self;
-    alarmPicker.dataSource = self;
-    
-    alarm = @[@"On Time",@"5 Min",@"15 Min",@"30 Min",@"1 Hour",@"2 Hours",@"1 Day",@"2 Days",@"1 Week"];
-    
-    fakeAlarmField = [[UITextField alloc]init];
-    fakeAlarmField.inputView = alarmPicker;
+
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -69,98 +57,6 @@
 {
     return 1;
 }
-
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-    return [alarm count];
-}
-
-#pragma mark - UIPickerViewDelegate
-
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-    return alarm[row];
-}
-
-- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
-{
-    NSInteger timer;
-    switch (row+1) {
-        case 1:
-            timer=0;
-            break;
-        case 2:
-            timer=-60*5;
-            break;
-        case 3:
-            timer=-60*15;
-            break;
-        case 4:
-            timer=-60*30;
-            break;
-        case 5:
-            timer=-60*60;
-            break;
-        case 6:
-            timer=-60*120;
-            break;
-        case 7:
-            timer=-60*60*24;
-            break;
-        case 8:
-            timer=-60*60*24*2;
-            break;
-        case 9:
-            timer=-60*60*24*7;
-            break;
-        default:
-            timer=0;
-            break;
-    }
-
-    [[NSUserDefaults standardUserDefaults] setInteger:timer forKey:@"defaultAlarm"];
-    [self.tableView reloadData];
-    [fakeAlarmField resignFirstResponder];
-}
-
-- (NSString *)minuteToString:(NSInteger)minute
-{
-    NSString *time;
-    switch (minute/-1) {
-        case 0:
-            time = @"On Time";
-            break;
-        case 300:
-            time = @"5 Min";
-            break;
-        case 900:
-            time = @"15 Min";
-            break;
-        case 1800:
-            time = @"30 Min";
-            break;
-        case 3600:
-            time = @"1 Hour";
-            break;
-        case 7200:
-            time = @"2 Hours";
-            break;
-        case 86400:
-            time = @"1 Day";
-            break;
-        case 172800:
-            time = @"2 Days";
-            break;
-        case 604800:
-            time = @"1 Week";
-            break;
-        default:
-            break;
-    }
-    
-    return time;
-}
-
 
 #pragma mark - Table view data source
 
@@ -196,106 +92,60 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
-    if (section==0)
-        return [[[CalendarStore sharedStore]allCalendars]count];
-    else
-        return 1;
+
+    return [[[CalendarStore sharedStore]allCalendars]count];
+
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Calendar
-//    if (indexPath.section == 0) {
-
-        static NSString *CellIdentifier = @"CalendarCell";
-        SettingTableCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            cell = [[SettingTableCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
-        }
-    
-        // Configure the cell...
-        NSArray *allCalendars = [[CalendarStore sharedStore]allCalendars];
-        EKCalendar *calendar = allCalendars[indexPath.row];
-        if (calendar == [[CalendarStore sharedStore]calendar]) {
-            cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            cell.calendarColorView.hidden = NO;
-            [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
-        }
-        
-        cell.calendarColorView.layer.cornerRadius = cell.calendarColorView.frame.size.width/2;
-//        cell.calendarColorView.backgroundColor = [UIColor colorWithCGColor:calendar.CGColor];
-        cell.calendarNameLabel.text = calendar.title;
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        return cell;
-//    }
-//    // Face Detection
-//    else  if (indexPath.section == 1){
-//        static NSString *CellIdentifier = @"SwitchCell";
-//        SwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-//        if (cell == nil) {
-//            cell = [[SwitchCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-//        }
-//
-//        cell.textLabel.text =@"Face Detection";
-//        [cell.cellSwitch setOn:[[NSUserDefaults standardUserDefaults] boolForKey:@"FaceDetection"]];
-//        [cell.cellSwitch addTarget:self action:@selector(disableFaceDetection:) forControlEvents:UIControlEventValueChanged];
-//        return cell;
-//    }
-//    
-//    // Default Alarm
-//    else {
-//        static NSString *CellIdentifier = @"Cell";
-//        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-//        if (cell == nil) {
-//            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
-//        }
-//        
-//        cell.textLabel.text =@"Calendar Reminder";
-//        cell.detailTextLabel.text =[self minuteToString:[[NSUserDefaults standardUserDefaults] integerForKey:@"defaultAlarm"]];
-//        [cell.contentView addSubview:fakeAlarmField];
-//        
-//        return cell;
-//    }
-}
-
-
-- (void)disableFaceDetection:(UISwitch *)sender
-{
-    if (sender.on) {
-        NSLog(@"Switch on");
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"FaceDetection"];
-    } else {
-        NSLog(@"Switch off");
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"FaceDetection"];
+    static NSString *CellIdentifier = @"CalendarCell";
+    SettingTableCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[SettingTableCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
     }
+
+    // Configure the cell...
+    NSMutableArray *allCalendars = [[CalendarStore sharedStore]allCalendars];
+    NSMutableArray *selectedCalendars = [[CalendarStore sharedStore]selectedCalendars];
+    EKCalendar *calendar = allCalendars[indexPath.row];
+    
+    if ([selectedCalendars indexOfObject:calendar] != NSNotFound) {
+        [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+        [cell setSelected:YES];
+    }
+    
+    cell.calendarColorView.layer.cornerRadius = cell.calendarColorView.frame.size.width/2;
+    cell.calendarNameLabel.text = calendar.title;
+    cell.calendarColorView.backgroundColor = [UIColor colorWithCGColor:calendar.CGColor];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    return cell;
 }
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        SettingTableCell *cell = (SettingTableCell *)[tableView cellForRowAtIndexPath:indexPath];
-        cell.calendarColorView.hidden = NO;
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        NSArray *allCalendars = [[CalendarStore sharedStore]allCalendars];
-        EKCalendar *calendar = allCalendars[indexPath.row];
-        [CalendarStore sharedStore].calendar = calendar;
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"EKCalendarSwitch" object:nil];
-    } else if (indexPath.section == 2) {
-        [fakeAlarmField becomeFirstResponder];
-    }
+    NSArray *allCalendars = [[CalendarStore sharedStore]allCalendars];
+    EKCalendar *calendar = allCalendars[indexPath.row];
+    
+    [[[CalendarStore sharedStore]selectedCalendars]addObject:calendar];
+    [[[CalendarStore sharedStore]selectedCalIDs]addObject:calendar.calendarIdentifier];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:[[CalendarStore sharedStore]selectedCalIDs] forKey:@"selectedCalendars"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"EKCalendarSwitch" object:nil];
 }
 
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        SettingTableCell *cell = (SettingTableCell *)[tableView cellForRowAtIndexPath:indexPath];
-        cell.accessoryType = UITableViewCellAccessoryNone;
-        cell.calendarColorView.hidden = YES;
-    } else if (indexPath.section == 2) {
-        [fakeAlarmField resignFirstResponder];
-    }
+    NSArray *allCalendars = [[CalendarStore sharedStore]allCalendars];
+    EKCalendar *calendar = allCalendars[indexPath.row];
+    
+    [[[CalendarStore sharedStore]selectedCalendars]removeObject:calendar];
+    [[[CalendarStore sharedStore]selectedCalIDs]removeObject:calendar.calendarIdentifier];
+
+    [[NSUserDefaults standardUserDefaults] setObject:[[CalendarStore sharedStore]selectedCalIDs] forKey:@"selectedCalendars"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"EKCalendarSwitch" object:nil];
 }
 
 @end

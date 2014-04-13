@@ -173,12 +173,15 @@
 
     // Type 0 = Event , 1 = Diary
     if (type==0) {
-        NSPredicate *predicate = [[[CalendarStore sharedStore]eventStore] predicateForEventsWithStartDate:startDate
-                                                                                                  endDate:endDate
-                                                                                                calendars:@[[[CalendarStore sharedStore]calendar]]];
-        
-        NSArray *events = [[[CalendarStore sharedStore]eventStore] eventsMatchingPredicate:predicate];
-        _eventsInMonth = events;
+        if ([[CalendarStore sharedStore]selectedCalendars].count > 0 ) {
+            NSPredicate *predicate = [[[CalendarStore sharedStore]eventStore] predicateForEventsWithStartDate:startDate
+                                                                                                      endDate:endDate
+                                                                                                    calendars:[[CalendarStore sharedStore]selectedCalendars]];
+            
+            NSArray *events = [[[CalendarStore sharedStore]eventStore] eventsMatchingPredicate:predicate];
+            _eventsInMonth = events;
+        } else
+            _eventsInMonth = nil;
     }
     else {
         

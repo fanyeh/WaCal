@@ -202,19 +202,33 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
 {
     NSMutableArray *allCalendars = [[NSMutableArray alloc]initWithArray:[[[CalendarStore sharedStore]eventStore] calendarsForEntityType:EKEntityTypeEvent]];
     
+    // Fetch all calendars into calendar store
     for (EKCalendar *c in allCalendars) {
-            if (c.source.sourceType== EKSourceTypeCalDAV) {
+        if (c.source.sourceType== EKSourceTypeCalDAV && c.allowsContentModifications) {
             [[[CalendarStore sharedStore]allCalendars] addObject:c];
         }
     }
     
-    for (EKCalendar *c in allCalendars) {
-        if (c.type == EKCalendarTypeBirthday) {
-            [[[CalendarStore sharedStore]allCalendars] addObject:c];
-        }
+    // Not First load
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"notFirstLoad"]) {
+        [[CalendarStore sharedStore]setSelectedCalIDs:[[NSUserDefaults standardUserDefaults]objectForKey:@"selectedCalendars"]];
+        [[CalendarStore sharedStore] setSelectedCalendarsByIDs];
     }
+    // Frist load
+    else {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"notFirstLoad"];
+        [[CalendarStore sharedStore]setSelectedIDsByCalendars];
+        [[NSUserDefaults standardUserDefaults]setObject:[[CalendarStore sharedStore]selectedCalIDs] forKey:@"selectedCalendars"];
+    }
+
+    // Birthday Calendar
+//    for (EKCalendar *c in allCalendars) {
+//        if (c.type == EKCalendarTypeBirthday) {
+//            [[[CalendarStore sharedStore]allCalendars] addObject:c];
+//        }
+//    }
     
-    [[CalendarStore sharedStore]setCalendar:[CalendarStore sharedStore].allCalendars[0]];
+//    [[CalendarStore sharedStore]setCalendar:[CalendarStore sharedStore].allCalendars[0]];
 
     // Set up calendar controller
     MonthViewController *calendarController = [[MonthViewController alloc]init];
