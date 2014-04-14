@@ -321,8 +321,10 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 
 -(void)showMap
 {
-    MapViewController *map = [[MapViewController alloc]initWithLocation:selectedLocation];
-    [self.navigationController pushViewController:map animated:YES];
+    if ([self checkInternetConnection]) {
+        MapViewController *map = [[MapViewController alloc]initWithLocation:selectedLocation];
+        [self.navigationController pushViewController:map animated:YES];
+    }
 }
 
 #pragma mark - UIPickerViewDataSource
@@ -1012,7 +1014,10 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
     NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
     if (networkStatus == NotReachable) {
-        UIAlertView *noInternetAlert = [[UIAlertView alloc]initWithTitle:nil message:@"No Internet Connection" delegate:self cancelButtonTitle:@"Close" otherButtonTitles:nil, nil];
+        UIAlertView *noInternetAlert = [[UIAlertView alloc]initWithTitle:@"No Internet Connection"
+                                                                 message:@"Check your internet and try again"
+                                                                delegate:self cancelButtonTitle:@"Close"
+                                                       otherButtonTitles:nil, nil];
         [noInternetAlert show];
         return NO;
     } else {

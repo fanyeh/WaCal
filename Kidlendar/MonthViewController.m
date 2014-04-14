@@ -52,7 +52,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *diaryImageView;
 @property (weak, nonatomic) IBOutlet UIView *dotViewGray;
 @property (weak, nonatomic) IBOutlet UILabel *diaryTitle;
-@property (weak, nonatomic) IBOutlet UILabel *diaryDate;
 @property (weak, nonatomic) IBOutlet UILabel *diaryLocation;
 @property (weak, nonatomic) IBOutlet UITextView *diaryDetail;
 @property (weak, nonatomic) IBOutlet UILabel *allDayLabel;
@@ -87,6 +86,9 @@
     
     UITapGestureRecognizer *emptyEventTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(addEvent)];
     UITapGestureRecognizer *emptyDiaryTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(addDiary)];
+    
+    _diaryImageView.layer.cornerRadius = 10;
+    _diaryImageView.layer.masksToBounds = YES;
 
     [_emptyDiaryView addGestureRecognizer:emptyDiaryTap];
     [_emptyEventView addGestureRecognizer:emptyEventTap];
@@ -97,15 +99,12 @@
     
     dateFormatter = [[NSDateFormatter alloc]init];
     dateFormatter.dateFormat = @"yyyy/MM/dd";
-//    dateFormatter.timeZone = [NSTimeZone systemTimeZone];
     
     timeFormatter = [[NSDateFormatter alloc]init];
     timeFormatter.dateFormat = @"HH:mm";
-//    timeFormatter.timeZone = [NSTimeZone systemTimeZone];
     
     eventTimeFormatter = [[NSDateFormatter alloc]init];
     eventTimeFormatter.dateFormat = @"hh:mm aa";
-//    eventTimeFormatter.timeZone = [NSTimeZone systemTimeZone];
 
     UITapGestureRecognizer *eventTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showEventView)];
     [_comingEventView addGestureRecognizer:eventTap];
@@ -201,7 +200,6 @@
                                                 name:@"EKCalendarSwitch" object:nil];
     
     [self showDiary];
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -794,7 +792,6 @@
         }
         _diaryTitle.text = d.subject;
         _diaryDetail.text = d.diaryText;
-        _diaryDate.text = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSinceReferenceDate:d.dateCreated]];
         
         if (d.location.length > 0) {
             _locationTag.hidden = NO;

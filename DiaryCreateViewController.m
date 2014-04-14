@@ -200,7 +200,7 @@ static int deleteLabelSize = 30;
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc]init];
     flowLayout.headerReferenceSize = CGSizeMake(layoutCollectionView.frame.size.width, 20);
 
-    layoutCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 568, 320, photoCollectionShrinkHeight)
+    layoutCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, screenSize.height, 320, photoCollectionShrinkHeight)
                                              collectionViewLayout:flowLayout];
     layoutCollectionView.delegate = self;
     layoutCollectionView.dataSource = self;
@@ -216,7 +216,7 @@ static int deleteLabelSize = 30;
     layoutIndex = [NSIndexPath indexPathForRow:0 inSection:0];
     currentLayoutTableHeight = photoCollectionShrinkHeight;
     
-    nextButton = [[UIBarButtonItem alloc]initWithTitle:@"Words" style:UIBarButtonItemStylePlain target:self action:@selector(doneSelection)];
+    nextButton = [[UIBarButtonItem alloc]initWithTitle:@"Words" style:UIBarButtonItemStyleBordered target:self action:@selector(doneSelection)];
     
     UIPanGestureRecognizer *faceDetectPan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panFaceDetectView:)];
     [_faceImageView addGestureRecognizer:faceDetectPan];
@@ -997,9 +997,9 @@ static int deleteLabelSize = 30;
             
             NSInteger section = indexPath.section + 1;
             if (section > 1)
-                header.headerLabel.text = [NSString stringWithFormat:@"%ld Photos",section];
+                header.headerLabel.text = [NSString stringWithFormat:@"%ld Photos",(long)section];
             else
-                header.headerLabel.text = [NSString stringWithFormat:@"%ld Photo",section];
+                header.headerLabel.text = [NSString stringWithFormat:@"%ld Photo",(long)section];
             
             return header;
         }

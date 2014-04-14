@@ -362,6 +362,8 @@
     if (buttonIndex != 0) {
         KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
         [appDelegate getPublishStream];
+//        [appDelegate getFacebookAccount];
+
     }
 }
 
@@ -377,12 +379,11 @@
     }
     else
     {
-        UIAlertView *loginAlert = [[UIAlertView alloc]initWithTitle:nil
+        UIAlertView *loginAlert = [[UIAlertView alloc]initWithTitle:@"Facebook"
                                                             message:@"Click OK button to obtain Facebook access"
                                                            delegate:self
                                                   cancelButtonTitle:@"Cancel"
                                                   otherButtonTitles:@"OK", nil];
-        
         [loginAlert show];
     }
 }
@@ -420,10 +421,11 @@
                                                            URL:[NSURL URLWithString:@"https://graph.facebook.com/me/videos"]
                                                     parameters:params];
             
+            NSString *fileName = [NSString stringWithFormat:@"%@.mov",_diaryData.subject];
             [facebookRequest addMultipartData:data
                                      withName:@"source"
                                          type:@"video/quicktime"
-                                     filename:@"test1.mov"];
+                                     filename:fileName];
                         
             KidlendarAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
             
@@ -489,8 +491,6 @@ totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
     if (!error) {
         // 2
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"Response %@",task.response);
-            NSLog(@"Upload completed");
             _circleProgressView.hidden = YES;
             _facebookImageView.hidden = NO;
             [[[UploadStore sharedStore]allTasks]removeObjectForKey:_diaryData.diaryKey];
@@ -611,7 +611,10 @@ totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
     Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
     NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
     if (networkStatus == NotReachable) {
-        UIAlertView *noInternetAlert = [[UIAlertView alloc]initWithTitle:nil message:@"No Internet Connection" delegate:self cancelButtonTitle:@"Close" otherButtonTitles:nil, nil];
+        UIAlertView *noInternetAlert = [[UIAlertView alloc]initWithTitle:@"No Internet Connection"
+                                                                 message:@"Check your internet and try again"
+                                                                delegate:self cancelButtonTitle:@"Close"
+                                                       otherButtonTitles:nil, nil];
         [noInternetAlert show];
         return NO;
     } else {
@@ -640,7 +643,6 @@ totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
                 [[NSUserDefaults standardUserDefaults] setObject:oauthDict[oauthTokenKey] forKey:requestToken];
                 [[NSUserDefaults standardUserDefaults] setObject:oauthDict[oauthTokenKeySecret] forKey:requestTokenSecret];
                 [[NSUserDefaults standardUserDefaults] synchronize];
-                
                 
                 NSString *authorizationURLWithParams = [NSString stringWithFormat:@"https://www.dropbox.com/1/oauth/authorize?oauth_token=%@&oauth_callback=dropbox://userauthorization",oauthDict[oauthTokenKey]];
                 

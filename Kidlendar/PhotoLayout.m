@@ -28,7 +28,6 @@
         _cellSpace = cell;
         _allLayouts = [[NSMutableArray alloc]init];
         [self getAllLayout];
-
     }
     
     return self;

@@ -28,8 +28,11 @@
     NSDateFormatter *photoDateFormatter;
 
     NSArray* places;
+
     double locationLng;
     double locationLat;
+    
+    UIView *footerView;
 }
 @property (weak, nonatomic) IBOutlet UIImageView *diaryPhotoView;
 @property (weak, nonatomic) IBOutlet UIView *locationSearchView;
@@ -43,8 +46,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *scrollViewBackground;
 @property (weak, nonatomic) IBOutlet UIImageView *mainViewBackground;
 @property (weak, nonatomic) IBOutlet UIView *contentView;
-@property (weak, nonatomic) IBOutlet UIButton *deleteButton;
-@property (weak, nonatomic) IBOutlet UIButton *saveButton;
 
 @end
 
@@ -64,14 +65,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.navigationItem.hidesBackButton = YES;
     self.navigationItem.title = @"Words";
-
-    _saveButton.layer.masksToBounds = YES;
-    _saveButton.layer.cornerRadius = _saveButton.frame.size.width/2;
-    
-    _deleteButton.layer.masksToBounds = YES;
-    _deleteButton.layer.cornerRadius = _saveButton.frame.size.width/2;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveDiary)];
     
     _mainViewBackground.image = _diaryImage;
     _diaryPhotoView.image =  [_diaryImage resizeImageToSize:_diaryPhotoView.frame.size];
@@ -80,6 +75,11 @@
     _scrollViewBackground.image = [blurFilter imageByFilteringImage:croppedImage];
     _scrollViewBackground.layer.masksToBounds = YES;
     _scrollViewBackground.layer.cornerRadius = 5.0f;
+    
+    footerView = [[UIView alloc]initWithFrame:CGRectMake(0, 247, 280, 30)];
+    footerView.backgroundColor = [UIColor colorWithRed:0.235 green:0.729 blue:0.784 alpha:0.600];
+    footerView.layer.masksToBounds = YES;
+    [_scrollViewBackground addSubview:footerView];
 
     CALayer *backgroundLayer =[CALayer layer];
     backgroundLayer.frame = _mainViewBackground.bounds;
@@ -114,8 +114,6 @@
     UIView *locationLeftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
     [locationLeftView addSubview:locationTag];
     locationTag.center = locationLeftView.center;
-//    _locationField.leftView = locationLeftView;
-//    _locationField.leftViewMode = UITextFieldViewModeAlways;
     _locationField.rightView = locationLeftView;
     _locationField.rightViewMode = UITextFieldViewModeAlways;
     
@@ -128,25 +126,35 @@
     UIView *timeLeftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
     [timeLeftView addSubview:timeTag];
     timeTag.center = timeLeftView.center;
-//    _diaryTimeField.leftView = timeLeftView;
-//    _diaryTimeField.leftViewMode = UITextFieldViewModeAlways;
+
     _diaryTimeField.rightView = timeLeftView;
     _diaryTimeField.rightViewMode = UITextFieldViewModeAlways;
     
     _locationSearchBar.delegate = self;
-    _locationSearchBar.tintColor = MainColor;
+    _locationSearchBar.tintColor = [UIColor whiteColor];
     
     _searchResultTable.delegate = self;
     _searchResultTable.dataSource = self;
     
     // Query place from Google Places using location in selected photo
     if ([_imageMeta count] > 0) {
+        Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
+        NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
+        if (networkStatus != NotReachable) {
+            for (NSDictionary *meta in _imageMeta) {
+                if ([meta count] > 0) {
+                    NSDictionary *GPS = [meta objectForKey:@"{GPS}"];
+                    double longitude = [[GPS objectForKey:@"Longitude"] doubleValue];
+                    double latitude = [[GPS objectForKey:@"Latitude"] doubleValue];
+                    [self photoLocationLongitude:longitude andLatitude:latitude];
+                }
+            }
+        }
+    }
+    
+    // Check photo date
+    if ([_imageMeta count] > 0) {
         for (NSDictionary *meta in _imageMeta) {
-//            NSDictionary *GPS = [meta objectForKey:@"{GPS}"];
-//            double longitude = [[GPS objectForKey:@"Longitude"] doubleValue];
-//            double latitude = [[GPS objectForKey:@"Latitude"] doubleValue];
-//            [self queryGooglePlacesLongitude:longitude andLatitude:latitude withName:nil];
-            
             NSDictionary *TIFF = [meta objectForKey:@"{TIFF}"];
             if (TIFF) {
                 NSString *dateTime = [TIFF objectForKey:@"DateTime"];
@@ -158,10 +166,7 @@
                     }
                 }
             }
-            
         }
-//    } else {
-//        locationFirstLoad = NO;
     }
     _locationSearchView.layer.cornerRadius = 10.0f;
 }
@@ -169,6 +174,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     self.tabBarController.tabBar.hidden = YES;
+    footerView.hidden = NO;
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -181,13 +187,14 @@
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     _locationField.text = searchBar.text;
-    [self queryGooglePlacesLongitude:0 andLatitude:0 withName:searchBar.text];
+    [self queryGooglePlaceswithName:searchBar.text];
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
     _locationSearchView.hidden = YES;
     _contentView.hidden = NO;
+    footerView.hidden = NO;
 }
 
 #pragma mark - UITableViewDataSource
@@ -222,6 +229,7 @@
     locationLng =  [[[[places[indexPath.row] objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
     _locationSearchView.hidden = YES;
     _contentView.hidden = NO;
+    footerView.hidden = NO;
 }
 
 - (void)didReceiveMemoryWarning
@@ -234,11 +242,8 @@
 {
     _diaryTimeField.text = [dateFormatter stringFromDate:datePicker.date];
 }
-- (IBAction)deleteDiary:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-- (IBAction)saveDiary:(id)sender
+
+- (void)saveDiary
 {
     // Update diary details
     DiaryData *diary = [[DiaryDataStore sharedStore]createItem];
@@ -291,18 +296,6 @@
 
 #pragma mark - UITextFieldDelegate
 
-//- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
-//{
-//    if (textField.tag == 9 && locationFirstLoad) {
-//        if ([self checkInternetConnection]) {
-//            [_locationSearchBar becomeFirstResponder];
-//            _searchMaskView.hidden = NO;
-//            locationFirstLoad = NO;
-//        }
-//    }
-//    return YES;
-//}
-
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     if (textField.returnKeyType == UIReturnKeySearch) {
@@ -310,8 +303,9 @@
             _contentView.hidden = YES;
             _locationSearchView.hidden = NO;
             _locationSearchBar.text = _locationField.text;
-            [self queryGooglePlacesLongitude:0 andLatitude:0 withName:_locationField.text];
+            [self queryGooglePlaceswithName:_locationField.text];
             [_locationSearchBar becomeFirstResponder];
+            footerView.hidden = YES;
             return YES;
         }else
             return NO;
@@ -324,18 +318,12 @@
 
 #pragma mark - Google Places Search
 // Google search
--(void) queryGooglePlacesLongitude:(double)longitude andLatitude:(double)latitude withName:(NSString *)name
+-(void) queryGooglePlaceswithName:(NSString *)name
 {
+    NSString * language =  [[NSLocale currentLocale] localeIdentifier];
     // Sensor = true means search using GPS
-    NSString *url;
-    if (!name) {
-        url  = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%f,%F&radius=100&sensor=true&key=%@",latitude,longitude,kGOOGLE_API_KEY];
-    } else {
-        url = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/textsearch/json?query=%@&sensor=true&language=zh-TW&key=%@",name,kGOOGLE_API_KEY];
-    }
+    NSString *url = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/textsearch/json?query=%@&sensor=true&language=%@&key=%@",name,language,kGOOGLE_API_KEY];
 
-//    NSLog(@"URL %@",url);
-    //Formulate the string as a URL object.
     NSURL *googleRequestURL=[NSURL URLWithString:[url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     // Retrieve the results of the URL.
     
@@ -366,12 +354,55 @@
                            }];
 }
 
+-(void)photoLocationLongitude:(double)longitude andLatitude:(double)latitude
+{
+    // Sensor = true means search using GPS
+    NSString *url  = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=%f,%F&radius=500&types=establishment&sensor=true&key=%@",latitude,longitude,kGOOGLE_API_KEY];
+
+    
+    //    NSLog(@"URL %@",url);
+    //Formulate the string as a URL object.
+    NSURL *googleRequestURL=[NSURL URLWithString:[url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+    // Retrieve the results of the URL.
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:googleRequestURL];
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:queue
+                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+                               
+                               if ([data length]>0 && connectionError==nil) {
+                                   //收到正確的資料，連線沒有錯
+                                   NSDictionary* json = [NSJSONSerialization JSONObjectWithData:data
+                                                                                        options:NSJSONReadingAllowFragments
+                                                                                          error:&connectionError];
+                                   //The results from Google will be an array obtained from the NSDictionary object with the key "results".
+                                   places = [json objectForKey:@"results"];
+                                   if ([places count] > 0) {
+                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                           [_searchResultTable reloadData];
+                                           _locationField.text = [places[0] objectForKey:@"name"];
+                                       });
+                                   }
+                               } else if ([data length]==0 && connectionError==nil) {
+                                   //沒有資料，連線沒有錯誤
+                               } else if (connectionError != nil) {
+                                   //連線有錯誤
+                                   NSLog(@"error %@",connectionError);
+                               }
+                           }];
+}
+
+
 - (BOOL)checkInternetConnection
 {
     Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
     NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
     if (networkStatus == NotReachable) {
-        UIAlertView *noInternetAlert = [[UIAlertView alloc]initWithTitle:nil message:@"No Internet Connection" delegate:self cancelButtonTitle:@"Close" otherButtonTitles:nil, nil];
+        UIAlertView *noInternetAlert = [[UIAlertView alloc]initWithTitle:@"No Internet Connection"
+                                                                 message:@"Check your internet and try again"
+                                                                delegate:self cancelButtonTitle:@"Close"
+                                                       otherButtonTitles:nil, nil];
         [noInternetAlert show];
         return NO;
     } else {

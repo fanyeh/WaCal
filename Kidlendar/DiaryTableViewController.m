@@ -189,10 +189,16 @@
                 dayString = @"st";
             break;
         case 2:
-            dayString = @"nd";
+            if (day==12)
+                dayString = @"th";
+            else
+                dayString = @"nd";
             break;
         case 3:
-            dayString = @"rd";
+            if (day==13)
+                dayString = @"th";
+            else
+                dayString = @"rd";
             break;
         default:
             dayString = @"th";
@@ -240,6 +246,11 @@
         [cell.uploadCircle.layer removeAllAnimations];
         cell.uploadCircle.hidden = YES;
     }
+    
+   cell.cellImageView.layer.cornerRadius = 10;
+    cell.cellImageView.layer.masksToBounds = YES;
+
+
     return cell;
 }
 

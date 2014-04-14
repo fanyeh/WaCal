@@ -83,7 +83,7 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
     // 2
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // 3
-        NSDictionary *facebookOptions = @{ACFacebookAppIdKey : @"1450548605159832",
+        NSDictionary *facebookOptions = @{ACFacebookAppIdKey : @"1474913266054712",
                                           ACFacebookPermissionsKey : @[@"email", @"read_stream",@"user_relationships", @"user_website"],
                                           ACFacebookAudienceKey : ACFacebookAudienceEveryone };
         // 4
@@ -104,7 +104,7 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
                                                              {
                                                                  dispatch_async(dispatch_get_main_queue(), ^{
                                                                      UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Facebook"
-                                                                                                                         message:@"There was an error retrieving your Facebook account, make sure you have an account setup in iSocial"
+                                                                                                                         message:@"There was an error retrieving your Facebook account, make sure you have an account setup"
                                                                                                                         delegate:nil
                                                                                                                cancelButtonTitle:@"Dismiss"
                                                                                                                otherButtonTitles:nil];
@@ -116,7 +116,7 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
                                                              {
                                                                  dispatch_async(dispatch_get_main_queue(), ^{
                                                                      UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Facebook"
-                                                                                                                         message:@"Access to Facebook was not granted. Please go to the device settings and allow access for iSocial"
+                                                                                                                         message:@"Access to Facebook was not granted. Please go to the device settings and allow access"
                                                                                                                         delegate:nil
                                                                                                                cancelButtonTitle:@"Dismiss"
                                                                                                                otherButtonTitles:nil];
@@ -135,7 +135,7 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
     // 2
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // 3
-        NSDictionary *facebookOptions = @{ACFacebookAppIdKey : @"1450548605159832",
+        NSDictionary *facebookOptions = @{ACFacebookAppIdKey : @"1474913266054712",
                                           ACFacebookPermissionsKey : @[@"publish_stream"],
                                           ACFacebookAudienceKey : ACFacebookAudienceFriends };
         // 4
@@ -160,7 +160,7 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
                                                                    dispatch_async(dispatch_get_main_queue(), ^{
                                                                        UIAlertView *alertView = [[UIAlertView alloc]
                                                                                                  initWithTitle:@"Facebook"
-                                                                                                 message:@"There was an error retrieving your Facebook account, make sureyou have an account setup in Settings and that access is granted foriSocial"
+                                                                                                 message:@"There was an error retrieving your Facebook account, make sureyou have an account setup in Settings and that access is granted"
                                                                                                  delegate:nil
                                                                                                  cancelButtonTitle:@"Dismiss"
                                                                                                  otherButtonTitles:nil];
@@ -173,7 +173,7 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
                                                                    dispatch_async(dispatch_get_main_queue(), ^{
                                                                        UIAlertView *alertView = [[UIAlertView alloc]
                                                                                                  initWithTitle:@"Facebook"
-                                                                                                 message:@"Access to Facebook was not granted. Please go to the device settings and allow access for iSocial"
+                                                                                                 message:@"Access to Facebook was not granted. Please go to the device settings and allow access"
                                                                                                  delegate:nil
                                                                                                  cancelButtonTitle:@"Dismiss"
                                                                                                  otherButtonTitles:nil];
