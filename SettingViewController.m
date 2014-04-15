@@ -13,6 +13,10 @@
 #import "SettingTableCell.h"
 
 @interface SettingViewController ()
+{
+    NSMutableDictionary *calendarDict;
+    NSArray *calendarTitles;
+}
 
 @end
 
@@ -38,7 +42,8 @@
     self.tableView.tintColor = MainColor;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     [self.tableView registerNib:[UINib nibWithNibName:@"SettingTableCell" bundle:nil] forCellReuseIdentifier:@"CalendarCell"];
-
+    calendarDict = [[CalendarStore sharedStore]calendarDict];
+    calendarTitles = [[calendarDict allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];;
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -50,12 +55,6 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - UIPickerViewDataSource
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
-{
-    return 1;
 }
 
 #pragma mark - Table view data source
@@ -78,24 +77,23 @@
     headerLabel.textAlignment = NSTextAlignmentLeft;
     headerLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:17];
     headerLabel.center = headerView.center;
-    headerLabel.text = @"Calendar";
+    headerLabel.text = calendarTitles[section];
     [headerView addSubview:headerLabel];
     return headerView;
 }
 
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 1;
+    return [calendarTitles count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-
-    return [[[CalendarStore sharedStore]allCalendars]count];
-
+    return [[calendarDict objectForKey:calendarTitles[section]]count];
 }
+
+#pragma mark - UITableViewDelegate
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -106,9 +104,9 @@
     }
 
     // Configure the cell...
-    NSMutableArray *allCalendars = [[CalendarStore sharedStore]allCalendars];
     NSMutableArray *selectedCalendars = [[CalendarStore sharedStore]selectedCalendars];
-    EKCalendar *calendar = allCalendars[indexPath.row];
+    NSMutableArray *calendarsByTitle = [calendarDict objectForKey:[calendarTitles objectAtIndex:indexPath.section]];
+    EKCalendar *calendar = [calendarsByTitle objectAtIndex:indexPath.row];
     
     if ([selectedCalendars indexOfObject:calendar] != NSNotFound) {
         [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
@@ -125,8 +123,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSArray *allCalendars = [[CalendarStore sharedStore]allCalendars];
-    EKCalendar *calendar = allCalendars[indexPath.row];
+    NSMutableArray *calendarsByTitle = [calendarDict objectForKey:[calendarTitles objectAtIndex:indexPath.section]];
+    EKCalendar *calendar = [calendarsByTitle objectAtIndex:indexPath.row];
     
     [[[CalendarStore sharedStore]selectedCalendars]addObject:calendar];
     [[[CalendarStore sharedStore]selectedCalIDs]addObject:calendar.calendarIdentifier];
@@ -138,8 +136,8 @@
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSArray *allCalendars = [[CalendarStore sharedStore]allCalendars];
-    EKCalendar *calendar = allCalendars[indexPath.row];
+    NSMutableArray *calendarsByTitle = [calendarDict objectForKey:[calendarTitles objectAtIndex:indexPath.section]];
+    EKCalendar *calendar = [calendarsByTitle objectAtIndex:indexPath.row];
     
     [[[CalendarStore sharedStore]selectedCalendars]removeObject:calendar];
     [[[CalendarStore sharedStore]selectedCalIDs]removeObject:calendar.calendarIdentifier];

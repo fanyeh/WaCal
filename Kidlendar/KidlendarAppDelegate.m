@@ -61,6 +61,22 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
             }
         }];
     }
+    
+//    [_eventStore
+//     requestAccessToEntityType:EKEntityTypeReminder
+//     completion:^(BOOL granted, NSError *error) {
+//         if (granted) {
+//             _reminderAccess = YES;
+//             [[NSNotificationCenter defaultCenter]
+//              postNotificationName:
+//              RemindersAccessGranted
+//              object:self];
+//         } else {
+//             NSLog(@"Reminder access not granted: %@",
+//                   error);
+//         }
+//     }];
+
 
     [[UINavigationBar appearance] setBarStyle:UIBarStyleBlack];
     [[UINavigationBar appearance] setBarTintColor:BarColor];
@@ -200,15 +216,8 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
 
 - (void)createAllViewControllers
 {
-    NSMutableArray *allCalendars = [[NSMutableArray alloc]initWithArray:[[[CalendarStore sharedStore]eventStore] calendarsForEntityType:EKEntityTypeEvent]];
-    
-    // Fetch all calendars into calendar store
-    for (EKCalendar *c in allCalendars) {
-        if (c.source.sourceType== EKSourceTypeCalDAV && c.allowsContentModifications) {
-            [[[CalendarStore sharedStore]allCalendars] addObject:c];
-        }
-    }
-    
+    [[CalendarStore sharedStore]setCalendars];
+
     // Not First load
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"notFirstLoad"]) {
         [[CalendarStore sharedStore]setSelectedCalIDs:[[NSUserDefaults standardUserDefaults]objectForKey:@"selectedCalendars"]];
@@ -220,15 +229,6 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
         [[CalendarStore sharedStore]setSelectedIDsByCalendars];
         [[NSUserDefaults standardUserDefaults]setObject:[[CalendarStore sharedStore]selectedCalIDs] forKey:@"selectedCalendars"];
     }
-
-    // Birthday Calendar
-//    for (EKCalendar *c in allCalendars) {
-//        if (c.type == EKCalendarTypeBirthday) {
-//            [[[CalendarStore sharedStore]allCalendars] addObject:c];
-//        }
-//    }
-    
-//    [[CalendarStore sharedStore]setCalendar:[CalendarStore sharedStore].allCalendars[0]];
 
     // Set up calendar controller
     MonthViewController *calendarController = [[MonthViewController alloc]init];

@@ -22,6 +22,8 @@
 		4C3ECBBD18BC3C75002CD2FB /* WeekdayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3ECBBC18BC3C75002CD2FB /* WeekdayView.m */; };
 		4C3EDA6F18C0CB1D00FD7235 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C3EDA6E18C0CB1D00FD7235 /* MobileCoreServices.framework */; };
 		4C417E7618714A4C000878FC /* DiaryDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C417E7518714A4C000878FC /* DiaryDataStore.m */; };
+		4C45F36118FC11DA00198BB4 /* NoEditEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C45F35F18FC11DA00198BB4 /* NoEditEventViewController.m */; };
+		4C45F36218FC11DA00198BB4 /* NoEditEventViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C45F36018FC11DA00198BB4 /* NoEditEventViewController.xib */; };
 		4C488F6218F25049002B43A2 /* PhotoLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C488F6118F25049002B43A2 /* PhotoLayout.m */; };
 		4C48FFAA188D65580038AE6F /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFA9188D65580038AE6F /* CoreMedia.framework */; };
 		4C48FFAC188D65620038AE6F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C48FFAB188D65620038AE6F /* CoreVideo.framework */; };
@@ -221,6 +223,9 @@
 		4C3EDA6E18C0CB1D00FD7235 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		4C417E7418714A4C000878FC /* DiaryDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DiaryDataStore.h; path = ../DiaryDataStore.h; sourceTree = "<group>"; };
 		4C417E7518714A4C000878FC /* DiaryDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DiaryDataStore.m; path = ../DiaryDataStore.m; sourceTree = "<group>"; };
+		4C45F35E18FC11DA00198BB4 /* NoEditEventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoEditEventViewController.h; sourceTree = "<group>"; };
+		4C45F35F18FC11DA00198BB4 /* NoEditEventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoEditEventViewController.m; sourceTree = "<group>"; };
+		4C45F36018FC11DA00198BB4 /* NoEditEventViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NoEditEventViewController.xib; sourceTree = "<group>"; };
 		4C488F6018F25049002B43A2 /* PhotoLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoLayout.h; sourceTree = "<group>"; };
 		4C488F6118F25049002B43A2 /* PhotoLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoLayout.m; sourceTree = "<group>"; };
 		4C48FFA7188D61C40038AE6F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -526,6 +531,9 @@
 		4C3E3EA818865AFE00D02397 /* Event */ = {
 			isa = PBXGroup;
 			children = (
+				4C45F35E18FC11DA00198BB4 /* NoEditEventViewController.h */,
+				4C45F35F18FC11DA00198BB4 /* NoEditEventViewController.m */,
+				4C45F36018FC11DA00198BB4 /* NoEditEventViewController.xib */,
 				4C86E92E188F96E600137B6A /* Controller */,
 			);
 			name = Event;
@@ -990,6 +998,7 @@
 				4C57E72E18F78E6400D622C4 /* brightnessDark22@2x.png in Resources */,
 				4C57E73318F78E6400D622C4 /* Default-568h@2x.png in Resources */,
 				4C57E74318F78E6400D622C4 /* evnetTimeArrowStart@2x.png in Resources */,
+				4C45F36218FC11DA00198BB4 /* NoEditEventViewController.xib in Resources */,
 				4C6C49C5186DDDDF0042EB61 /* DiaryViewController.xib in Resources */,
 				4C57E72C18F78E6400D622C4 /* alarmTag20@2x.png in Resources */,
 				4C57E75518F78E6400D622C4 /* save@2x.png in Resources */,
@@ -1117,6 +1126,7 @@
 				4C4F991E18CF5E51007D3746 /* AFHTTPSessionManager.m in Sources */,
 				4C68365018BB0FD100FAA259 /* FilterCell.m in Sources */,
 				4C6C936D18E02812004D7D68 /* UploadStore.m in Sources */,
+				4C45F36118FC11DA00198BB4 /* NoEditEventViewController.m in Sources */,
 				4C4F991F18CF5E51007D3746 /* AFNetworkReachabilityManager.m in Sources */,
 				4C4F992318CF5E51007D3746 /* AFURLResponseSerialization.m in Sources */,
 				4CEEB9FE18B47BAF00C7FA80 /* CloudData.m in Sources */,

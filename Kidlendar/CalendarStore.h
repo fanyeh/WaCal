@@ -9,6 +9,10 @@
 #import <Foundation/Foundation.h>
 #import <EventKit/EventKit.h>
 
+extern NSString *const RemindersModelChangedNotification;
+extern NSString *const EventsAccessGranted;
+extern NSString *const RemindersAccessGranted;
+
 @interface CalendarStore : NSObject
 
 @property (strong,nonatomic)  EKEventStore *eventStore;
@@ -17,9 +21,15 @@
 @property (strong,nonatomic)  NSMutableArray *selectedCalendars;
 @property (strong,nonatomic)  NSMutableDictionary *calendarSourceTitle;
 @property (strong,nonatomic)  NSMutableArray *selectedCalIDs;
+@property (strong,nonatomic) NSMutableDictionary *calendarDict;
+@property (assign, readonly) BOOL eventAccess;
+@property (assign, readonly) BOOL reminderAccess;
+@property (strong) NSMutableArray *reminders;
 
 + (CalendarStore *)sharedStore;
 - (void)setSelectedCalendarsByIDs;
--(void)setSelectedIDsByCalendars;
+- (void)setSelectedIDsByCalendars;
+- (void)setCalendars;
+
 
 @end

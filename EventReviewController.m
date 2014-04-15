@@ -185,18 +185,15 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     // Set up date formatter
     dateFormatter = [[NSDateFormatter alloc]init];
     dateFormatter.dateFormat = @"yyyy/MM/dd";
-//    dateFormatter.timeZone = [NSTimeZone systemTimeZone];
     
     // Set up time formatter
     timeFormatter = [[NSDateFormatter alloc]init];
     timeFormatter.dateFormat =  @"hh:mm aa";
-//    timeFormatter.timeZone = [NSTimeZone systemTimeZone];
     
     // Setup Date picker
     _datePicker = [[UIDatePicker alloc]init];
     [_datePicker setDatePickerMode:UIDatePickerModeDateAndTime];
     [_datePicker addTarget:self action:@selector(changeDate) forControlEvents:UIControlEventValueChanged];
-//    _datePicker.date = _selectedDate;
     
     // When enter bring up title and time view and keyboard
     _subjectField.delegate = self;
@@ -228,6 +225,8 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
             [writableCalendars addObject:cal];
         }
     }
+    
+    selectedCalendar = _event.calendar;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -561,13 +560,12 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     NSString *eventIdentifier;
     
     // If use save event to alternate calendar then delete original event and create new event with selected calendar
-    if (![selectedCalendar.calendarIdentifier isEqualToString:_event.calendarItemIdentifier] && selectedCalendar) {
+    if (![selectedCalendar.calendarIdentifier isEqualToString:_event.calendar.calendarIdentifier]) {
         EKEvent  *newEvent = [EKEvent eventWithEventStore:[[CalendarStore sharedStore]eventStore]];
         newEvent.timeZone = [NSTimeZone systemTimeZone];
-        newEvent.title = _event.title;
+        newEvent.title = _subjectField.text;
         newEvent.calendar = selectedCalendar;
-        newEvent.startDate = _event.startDate;
-        newEvent.endDate = _event.endDate;
+        newEvent.location = _locationField.text;
         newEvent.allDay = isAllDay;
         newEvent.alarms = _event.alarms;
         newEvent.startDate = eventStartDate;
@@ -576,7 +574,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
         [[[CalendarStore sharedStore]eventStore] saveEvent:newEvent span:EKSpanThisEvent commit:YES error:nil];
         eventIdentifier = newEvent.eventIdentifier;
         
-        [[[CalendarStore sharedStore]eventStore] removeEvent:_event span:EKSpanThisEvent commit:YES error:nil];
+//        [[[CalendarStore sharedStore]eventStore] removeEvent:_event span:EKSpanThisEvent commit:YES error:nil];
         
     } else {
         _event.title = _subjectField.text;

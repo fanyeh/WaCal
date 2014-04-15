@@ -118,7 +118,6 @@
     _locationSearchView.layer.cornerRadius = 10.0f;
 
     // Calendar
-    _calenderNameLabel.text = [[[[CalendarStore sharedStore]selectedCalendars]objectAtIndex:0]title];
     UIPickerView *calendarPicker = [[UIPickerView alloc]init];
     calendarPicker.delegate = self;
     calendarPicker.dataSource = self;
@@ -193,8 +192,7 @@
     
     // Initialize new event
     event = [EKEvent eventWithEventStore:[[CalendarStore sharedStore]eventStore]];
-//    event.timeZone = [NSTimeZone systemTimeZone];
-    event.calendar = [[[CalendarStore sharedStore]selectedCalendars]objectAtIndex:0];
+//    event.calendar = [writableCalendars objectAtIndex:0];
     event.startDate = _selectedDate;
     event.endDate = [NSDate dateWithTimeInterval:3600 sinceDate:_selectedDate];
     event.allDay = NO;
@@ -213,6 +211,8 @@
             [writableCalendars addObject:cal];
         }
     }
+    _calenderNameLabel.text = [[writableCalendars objectAtIndex:0]title];
+    selectedCalendar = [writableCalendars objectAtIndex:0];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -481,12 +481,11 @@
 - (void)saveEvent:(id)sender
 {
     // Create new event
+    event.calendar = selectedCalendar;
     event.title = _subjectField.text;
     event.location = _locationField.text;
     [[[CalendarStore sharedStore]eventStore] saveEvent:event span:EKSpanThisEvent commit:YES error:nil];
     
-    
-    NSLog(@"id %@",event.eventIdentifier);
     // Create new location
     if (selectedLocation.locationName) {
         LocationData *eventLocation = [[LocationDataStore sharedStore]createItemWithKey:event.eventIdentifier];

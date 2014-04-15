@@ -23,6 +23,7 @@
 #import "LocationDataStore.h"
 #import "EventTableCell.h"
 #import "DiaryPageViewController.h"
+#import "NoEditEventViewController.h"
 
 @interface MonthViewController ()
 {
@@ -397,10 +398,17 @@
 
 -(void)showEventView
 {
-    EventReviewController *evc = [[EventReviewController alloc]init];
-    evc.event = _comingUpEvent;
-    evc.selectedDate = _selectedDate;
-    [self.navigationController pushViewController:evc animated:YES];
+    if (_comingUpEvent.calendar.allowsContentModifications) {
+        EventReviewController *evc = [[EventReviewController alloc]init];
+        evc.event = _comingUpEvent;
+        evc.selectedDate = _selectedDate;
+        [self.navigationController pushViewController:evc animated:YES];
+    } else{
+        
+        NoEditEventViewController *controller = [[NoEditEventViewController alloc]init];
+        controller.event = _comingUpEvent;
+        [self.navigationController pushViewController:controller animated:YES];
+    }
 }
 
 - (void)forwardMonth:(UITapGestureRecognizer *)sender
