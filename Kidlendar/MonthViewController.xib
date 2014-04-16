@@ -8,6 +8,7 @@
             <connections>
                 <outlet property="addDiaryLabel" destination="0t1-ac-TcV" id="BdY-YH-kMM"/>
                 <outlet property="allDayLabel" destination="s2W-gg-dJG" id="mV4-Bo-os6"/>
+                <outlet property="birthdayIcon" destination="nY8-Tu-aRq" id="q9V-1x-P9F"/>
                 <outlet property="comingEventTime" destination="0HI-Up-Hao" id="og3-K6-Gxl"/>
                 <outlet property="comingEventTimeEnd" destination="1r0-6c-fay" id="AzO-4l-M3i"/>
                 <outlet property="comingEventTitle" destination="3PH-GC-YQU" id="dCV-Vl-tjo"/>
@@ -22,6 +23,7 @@
                 <outlet property="emptyDiaryView" destination="5fp-Uf-A9B" id="JvL-I2-Che"/>
                 <outlet property="emptyEventView" destination="166-Px-c8h" id="qGI-k4-CJe"/>
                 <outlet property="endEventLabel" destination="ACt-r3-qUb" id="gKW-G1-hMe"/>
+                <outlet property="facebookIcon" destination="Tz1-Bn-RHS" id="ZSl-Tf-utJ"/>
                 <outlet property="locationLabel" destination="b4J-bF-n0W" id="m5v-mT-Dzu"/>
                 <outlet property="locationTag" destination="tab-ai-3Xc" id="jVx-pC-8ku"/>
                 <outlet property="monthView" destination="Jg6-h3-3bP" id="BMR-Kh-e88"/>
@@ -93,7 +95,7 @@
                                             <color key="backgroundColor" red="0.90196079015731812" green="0.90196079015731812" blue="0.90196079015731812" alpha="1" colorSpace="calibratedRGB"/>
                                         </view>
                                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ls6-nB-mkH" userLabel="event dot">
-                                            <rect key="frame" x="10" y="27" width="6" height="6"/>
+                                            <rect key="frame" x="14" y="27" width="6" height="6"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" red="0.94901960784313721" green="0.81568627450980391" blue="0.23137254901960785" alpha="1" colorSpace="calibratedRGB"/>
                                         </view>
@@ -138,6 +140,14 @@
                                             <color key="textColor" red="0.62352941179999999" green="0.61960784310000006" blue="0.61960784310000006" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="birthday20.png" translatesAutoresizingMaskIntoConstraints="NO" id="nY8-Tu-aRq">
+                                            <rect key="frame" x="7" y="16" width="20" height="20"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </imageView>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="faceboo40.png" translatesAutoresizingMaskIntoConstraints="NO" id="Tz1-Bn-RHS">
+                                            <rect key="frame" x="7" y="19" width="20" height="20"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </imageView>
                                     </subviews>
                                     <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
                                 </view>
@@ -146,7 +156,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wdQ-ts-BQM" userLabel="diary dot">
-                                            <rect key="frame" x="10" y="42" width="6" height="6"/>
+                                            <rect key="frame" x="14" y="42" width="6" height="6"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="backgroundColor" red="0.23529411764705882" green="0.72941176470588232" blue="0.78431372549019607" alpha="1" colorSpace="calibratedRGB"/>
                                         </view>
@@ -220,6 +230,8 @@
         </view>
     </objects>
     <resources>
+        <image name="birthday20.png" width="20" height="20"/>
+        <image name="faceboo40.png" width="40" height="40"/>
         <image name="locationTag10.png" width="10" height="10"/>
         <image name="playButton.png" width="44" height="44"/>
     </resources>

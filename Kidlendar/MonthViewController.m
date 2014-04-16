@@ -63,6 +63,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *endEventLabel;
 @property (weak, nonatomic) IBOutlet UILabel *addDiaryLabel;
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *facebookIcon;
+@property (weak, nonatomic) IBOutlet UIImageView *birthdayIcon;
 
 @end
 
@@ -312,6 +314,23 @@
         cell.eventEndLabel.hidden = NO;
     else
         cell.eventEndLabel.hidden = YES;
+    
+    NSString *urlString = [NSString stringWithFormat:@"%@",event.URL];
+    if (event.calendar.type == EKCalendarTypeBirthday) {
+        cell.birthdayIcon.hidden = NO;
+        cell.facebookIcon.hidden  = YES;
+        cell.dotView.hidden = YES;
+        
+    } else if ([urlString rangeOfString:@"facebook"].location != NSNotFound) {
+        cell.facebookIcon.hidden  = NO;
+        cell.birthdayIcon.hidden = YES;
+        cell.dotView.hidden = YES;
+    }
+    else {
+        cell.facebookIcon.hidden  = YES;
+        cell.birthdayIcon.hidden = YES;
+        cell.dotView.hidden = NO;
+    }
     
     if (event.allDay) {
         cell.alldayLabel.hidden = NO;
@@ -752,6 +771,24 @@
     else
         _endEventLabel.hidden = YES;
     
+    
+    NSString *urlString = [NSString stringWithFormat:@"%@",_comingUpEvent.URL];
+    if (_comingUpEvent.calendar.type == EKCalendarTypeBirthday) {
+        _birthdayIcon.hidden = NO;
+        _facebookIcon.hidden  = YES;
+        _dotView.hidden = YES;
+
+    } else if ([urlString rangeOfString:@"facebook"].location != NSNotFound) {
+        _facebookIcon.hidden  = NO;
+        _birthdayIcon.hidden = YES;
+        _dotView.hidden = YES;
+    }
+    else {
+        _facebookIcon.hidden  = YES;
+        _birthdayIcon.hidden = YES;
+        _dotView.hidden = NO;
+    }
+
     if (_comingUpEvent.isAllDay) {
         _comingEventTime.hidden = YES;
         _comingEventTimeEnd.hidden = YES;

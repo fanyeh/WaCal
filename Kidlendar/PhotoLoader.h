@@ -22,5 +22,8 @@ typedef NS_ENUM(NSInteger, SourceType)
 @property (nonatomic,strong) NSMutableDictionary *sourceDictionary;
 - (id)initWithSourceType:(SourceType)sourceType;
 + (ALAssetsLibrary *)defaultAssetsLibrary;
+- (void)createPhotoAlbum;
+- (void)saveImage:(UIImage *)image;
+
 
 @end

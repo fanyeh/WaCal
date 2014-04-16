@@ -108,6 +108,8 @@
 		4C61325B18BECC8C0025FD00 /* EventTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C61325A18BECC8C0025FD00 /* EventTableCell.m */; };
 		4C61326C18BF16990025FD00 /* EventCreateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C61326A18BF16990025FD00 /* EventCreateController.m */; };
 		4C61326D18BF16990025FD00 /* EventCreateController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4C61326B18BF16990025FD00 /* EventCreateController.xib */; };
+		4C648A8718FE49D2005268FE /* eventNotesFill20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C648A8618FE49D2005268FE /* eventNotesFill20@2x.png */; };
+		4C648A8918FEC42D005268FE /* birthday20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C648A8818FEC42D005268FE /* birthday20@2x.png */; };
 		4C67BAD718B6FBC300452539 /* SwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C67BAD618B6FBC300452539 /* SwitchCell.m */; };
 		4C68364B18BAE4B200FAA259 /* AlbumPhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C68364A18BAE4B200FAA259 /* AlbumPhotoCell.m */; };
 		4C68365018BB0FD100FAA259 /* FilterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C68364F18BB0FD100FAA259 /* FilterCell.m */; };
@@ -331,6 +333,8 @@
 		4C61326918BF16990025FD00 /* EventCreateController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EventCreateController.h; path = ../EventCreateController.h; sourceTree = "<group>"; };
 		4C61326A18BF16990025FD00 /* EventCreateController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EventCreateController.m; path = ../EventCreateController.m; sourceTree = "<group>"; };
 		4C61326B18BF16990025FD00 /* EventCreateController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EventCreateController.xib; path = ../EventCreateController.xib; sourceTree = "<group>"; };
+		4C648A8618FE49D2005268FE /* eventNotesFill20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "eventNotesFill20@2x.png"; path = "../eventNotesFill20@2x.png"; sourceTree = "<group>"; };
+		4C648A8818FEC42D005268FE /* birthday20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "birthday20@2x.png"; sourceTree = "<group>"; };
 		4C67BAD518B6FBC300452539 /* SwitchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwitchCell.h; sourceTree = "<group>"; };
 		4C67BAD618B6FBC300452539 /* SwitchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwitchCell.m; sourceTree = "<group>"; };
 		4C68364918BAE4B200FAA259 /* AlbumPhotoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumPhotoCell.h; sourceTree = "<group>"; };
@@ -618,6 +622,8 @@
 		4C57E6FA18F78E3800D622C4 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				4C648A8818FEC42D005268FE /* birthday20@2x.png */,
+				4C648A8618FE49D2005268FE /* eventNotesFill20@2x.png */,
 				4C5A982E18F9729300C7E79C /* today@2x.png */,
 				4C57E75D18F79BFD00D622C4 /* brightnessWhite35@2x.png */,
 				4C57E75E18F79BFD00D622C4 /* cropWhite35@2x.png */,
@@ -1014,6 +1020,7 @@
 				4C57E76018F79BFD00D622C4 /* cropWhite35@2x.png in Resources */,
 				4C5A982F18F9729300C7E79C /* today@2x.png in Resources */,
 				4C57E75C18F78E6400D622C4 /* video@2x.png in Resources */,
+				4C648A8918FEC42D005268FE /* birthday20@2x.png in Resources */,
 				4C97EA8018DDDDA100BB19A8 /* SettingTableCell.xib in Resources */,
 				4C57E74818F78E6400D622C4 /* layout@2x.png in Resources */,
 				4C57E74118F78E6400D622C4 /* eventRepeatLine20@2x.png in Resources */,
@@ -1049,6 +1056,7 @@
 				4C57E75718F78E6400D622C4 /* selectPhoto@2x.png in Resources */,
 				4C57E73818F78E6400D622C4 /* diaryTab@2x.png in Resources */,
 				4C57E74018F78E6400D622C4 /* eventRepeatFill20@2x.png in Resources */,
+				4C648A8718FE49D2005268FE /* eventNotesFill20@2x.png in Resources */,
 				4C57E75A18F78E6400D622C4 /* twitter40@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

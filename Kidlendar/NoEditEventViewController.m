@@ -14,24 +14,29 @@
 {
     NSDateFormatter *dateFormatter;
     NSDateFormatter *timeFormatter;
+    CGRect startDateLabelFrame;
 }
 @property (weak, nonatomic) IBOutlet UILabel *eventTitle;
-@property (weak, nonatomic) IBOutlet UILabel *eventWeekday;
-@property (weak, nonatomic) IBOutlet UILabel *calendarName;
 @property (weak, nonatomic) IBOutlet UILabel *eventDateTime;
 @property (weak, nonatomic) IBOutlet UILabel *alldayLabel;
 @property (weak, nonatomic) IBOutlet UILabel *startTimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *endTimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *startDateLabel;
-@property (weak, nonatomic) IBOutlet UILabel *endDateLabel;
 @property (weak, nonatomic) IBOutlet UITextField *calendarNameField;
 @property (weak, nonatomic) IBOutlet UILabel *repeatLabel;
 @property (weak, nonatomic) IBOutlet UIView *locationView;
 @property (weak, nonatomic) IBOutlet UIView *repeatView;
 @property (weak, nonatomic) IBOutlet UIView *calendarView;
-@property (weak, nonatomic) IBOutlet UIView *attendeeView;
 @property (weak, nonatomic) IBOutlet UITextView *eventNotes;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollview;
+@property (weak, nonatomic) IBOutlet UIView *notesView;
+@property (weak, nonatomic) IBOutlet UILabel *locationLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *startArrorw;
+@property (weak, nonatomic) IBOutlet UIImageView *endArrorw;
+@property (weak, nonatomic) IBOutlet UIImageView *birthdayIcon;
+@property (weak, nonatomic) IBOutlet UIImageView *facebookIcon;
+@property (weak, nonatomic) IBOutlet UILabel *weekdayLabel;
+@property (weak, nonatomic) IBOutlet UIView *timeView;
 
 @end
 
@@ -54,14 +59,13 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
 
     _eventTitle.text = _event.title;
-    _calendarName.text = _event.calendar.title;    
-    NSDateComponents *comp = [[NSCalendar currentCalendar]components:NSWeekdayCalendarUnit fromDate:_event.startDate];
     
-    _eventWeekday.text = [self convertWeekday:[comp weekday]];
+    if (_event.location)
+        _locationLabel.text = _event.location;
     
     // Set up date formatter
     dateFormatter = [[NSDateFormatter alloc]init];
-    dateFormatter.dateFormat = @"yyyy/MM/dd";
+    dateFormatter.dateFormat = @"yyyy/MM/dd , EEEE";
     
     // Set up time formatter
     timeFormatter = [[NSDateFormatter alloc]init];
@@ -102,78 +106,116 @@
         _locationView.hidden = YES;
         _repeatView.frame = CGRectOffset(_repeatView.frame, 0, -40);
         _calendarView.frame = CGRectOffset(_calendarView.frame, 0, -40);
-        _attendeeView.frame = CGRectOffset(_attendeeView.frame, 0, -40);
+        _eventNotes.frame = CGRectOffset(_eventNotes.frame, 0, -40);
+        _notesView.frame = CGRectOffset(_notesView.frame, 0, -40);
+
     }
     
     if (!_event.hasRecurrenceRules) {
         _repeatView.hidden = YES;
         _calendarView.frame = CGRectOffset(_calendarView.frame, 0, -40);
-        _attendeeView.frame = CGRectOffset(_attendeeView.frame, 0, -40);
+        _eventNotes.frame = CGRectOffset(_eventNotes.frame, 0, -40);
+        _notesView.frame = CGRectOffset(_notesView.frame, 0, -40);
     }
     
-    CGSize textviewSize = [_event.notes sizeWithAttributes:@{NSFontAttributeName:[_eventNotes font]}];
-    NSLog(@"textviewSize size %@",[NSValue valueWithCGSize:textviewSize]);
-
-    CGRect textviewFrame = _eventNotes.frame;
-    CGFloat originalHeigh = textviewFrame.size.height;
-    textviewFrame.size.height = textviewSize.width;
-    [_eventNotes setFrame:textviewFrame];
-    _eventNotes.text = _event.notes;
-    
-    if ((textviewSize.height + textviewFrame.origin.y) > [[UIScreen mainScreen]bounds].size.height) {
-        CGSize contentSize =  _scrollview.frame.size;
-        NSLog(@"content size %@",[NSValue valueWithCGSize:contentSize]);
-
-        contentSize.height += ((textviewSize.width + textviewFrame.origin.y) - [[UIScreen mainScreen]bounds].size.height);
-        _scrollview.contentSize = contentSize;
-        NSLog(@"content size %@",[NSValue valueWithCGSize:contentSize]);
+    if (_event.hasNotes) {
+        
+        _eventNotes.hidden = NO;
+        _notesView.hidden = NO;
+        
+        CGRect textViewRect = [_event.notes boundingRectWithSize:CGSizeMake(320, FLT_MAX)
+                                                         options:NSStringDrawingUsesLineFragmentOrigin
+                                                      attributes:@{NSFontAttributeName:[_eventNotes font]}
+                                                         context:nil];
+        
+        CGRect textviewFrame = _eventNotes.frame;
+        
+        textviewFrame.size.height = textViewRect.size.height+20;
+        [_eventNotes setFrame:textviewFrame];
+        _eventNotes.text = _event.notes;
+        
+        if ((textViewRect.size.height + textviewFrame.origin.y) > [[UIScreen mainScreen]bounds].size.height) {
+            CGSize contentSize =  _scrollview.frame.size;
+            contentSize.height += ((textviewFrame.size.height  + textviewFrame.origin.y) - [[UIScreen mainScreen]bounds].size.height + 84);
+            _scrollview.contentSize = contentSize;
+        }
+    } else {
+        _eventNotes.hidden = YES;
+        _notesView.hidden = YES;
     }
+    
+    startDateLabelFrame = _startDateLabel.frame;
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    _endDateLabel.text =  [dateFormatter stringFromDate:_event.endDate];
-    _startDateLabel.text = [dateFormatter stringFromDate:_event.startDate];
+    self.tabBarController.tabBar.hidden = YES;
     
+    // Birthday icon
+    if (_event.calendar.type == EKCalendarTypeBirthday)
+        _birthdayIcon.hidden = NO;
+    else
+        _birthdayIcon.hidden = YES;
+    
+    // Facebook icon
+    NSString *urlString = [NSString stringWithFormat:@"%@",_event.URL];
+    if ([urlString rangeOfString:@"facebook"].location == NSNotFound)
+        _facebookIcon.hidden  = YES;
+    else
+        _facebookIcon.hidden  = NO;
+
+    // Time setup
+
     if (_event.allDay) {
+
+        _timeView.frame = CGRectOffset(_timeView.frame, 0, -20);
+        _locationView.frame = CGRectOffset(_locationView.frame, 0, -20);
+        _repeatView.frame = CGRectOffset(_repeatView.frame, 0, -20);
+        _calendarView.frame = CGRectOffset(_calendarView.frame, 0, -20);
+        _eventNotes.frame = CGRectOffset(_eventNotes.frame, 0, -20);
+        _notesView.frame = CGRectOffset(_notesView.frame, 0, -20);
+        
+        dateFormatter.dateFormat = @"yyyy/MM/dd";
+        _startDateLabel.text = [dateFormatter stringFromDate:_event.startDate];
+        
+        dateFormatter.dateFormat = @"EEEE";
+        _weekdayLabel.hidden = NO;
+        _weekdayLabel.text = [dateFormatter stringFromDate:_event.startDate];
+
+        _alldayLabel.hidden = NO;
+        _startTimeLabel.hidden = YES;
+        _endTimeLabel.hidden = YES;
+        _startArrorw.hidden = YES;
+        _endArrorw.hidden = YES;
+        
         _alldayLabel.backgroundColor = MainColor;
         _alldayLabel.layer.borderWidth = 0.0f;
         _alldayLabel.textColor = [UIColor whiteColor];
-        
-        _startDateLabel.frame = CGRectOffset(_startDateLabel.frame, 0 , -13);
-        _eventWeekday.frame = CGRectOffset(_eventWeekday.frame, 0 , -13);
-        _startDateLabel.font = [UIFont fontWithName:@"HelveticaNeue-light" size:17];
-        _endDateLabel.font = [UIFont fontWithName:@"HelveticaNeue-light" size:17];
-        
-        _startTimeLabel.hidden = YES;
-        _endTimeLabel.hidden = YES;
-        _endDateLabel.hidden = YES;
-        _eventWeekday.hidden = NO;
-        
-        _startTimeLabel.attributedText = [self attributedTimeText:[timeFormatter stringFromDate:_event.startDate]];
-        _endTimeLabel.attributedText = [self attributedTimeText:[timeFormatter stringFromDate:_event.endDate]];
 
- 
+        _startDateLabel.font = [UIFont fontWithName:@"HelveticaNeue-light" size:17];
+        _startDateLabel.frame = CGRectMake(50, 85, _startDateLabel.frame.size.width, _startDateLabel.frame.size.height);
+        
+        _startDateLabel.frame = CGRectOffset(_startDateLabel.frame, 0, -20);
+        _weekdayLabel.frame = CGRectOffset(_weekdayLabel.frame, 0, -20);
+
+        
     } else {
-        _alldayLabel.backgroundColor = [UIColor colorWithWhite:0.961 alpha:1.000];
-        _alldayLabel.layer.borderWidth = 1.0f;
-        _alldayLabel.layer.borderColor = LightGrayColor.CGColor;
-        _alldayLabel.textColor = LightGrayColor;
-        
-//        _startDateLabel.frame = CGRectOffset(_startDateLabel.frame, 0, 13);
-//        _endDateLabel.frame = CGRectOffset(_endDateLabel.frame, 0 , 13);
-//        _startDateLabel.font = [UIFont systemFontOfSize:13];
-//        _endDateLabel.font = [UIFont systemFontOfSize:13];
-        
+        dateFormatter.dateFormat = @"yyyy/MM/dd , EEEE";
+        _startDateLabel.text = [dateFormatter stringFromDate:_event.startDate];
+        _weekdayLabel.hidden = YES;
+
+        _alldayLabel.hidden = YES;
+        _startDateLabel.frame = startDateLabelFrame;
+        _startDateLabel.font = [UIFont fontWithName:@"HelveticaNeue-light" size:13];
         _startTimeLabel.hidden = NO;
         _endTimeLabel.hidden = NO;
-        _eventWeekday.hidden = YES;
-        
+        _startArrorw.hidden = NO;
+        _endArrorw.hidden = NO;
         _startTimeLabel.attributedText =[self attributedTimeText:[timeFormatter stringFromDate:_event.startDate]];
         _endTimeLabel.attributedText = [self attributedTimeText:[timeFormatter stringFromDate:_event.endDate]];
     }
     
-    self.tabBarController.tabBar.hidden = YES;
 
 }
 

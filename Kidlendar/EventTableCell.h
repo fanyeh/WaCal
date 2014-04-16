@@ -16,5 +16,7 @@
 @property (weak, nonatomic) IBOutlet UIView *dotView;
 @property (weak, nonatomic) IBOutlet UILabel *eventEndLabel;
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *birthdayIcon;
+@property (weak, nonatomic) IBOutlet UIImageView *facebookIcon;
 
 @end

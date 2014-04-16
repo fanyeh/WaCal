@@ -17,6 +17,7 @@
 #import "FileManager.h"
 #import "Reachability.h"
 #import "GPUImage.h"
+#import "PhotoLoader.h"
 
 #define kGOOGLE_API_KEY @"AIzaSyAD9e182Fr19_2DcJFZYUHf6wEeXjxs_kQ"
 #define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
@@ -268,6 +269,9 @@
     if (_selectedMediaType == kMediaTypePhoto) {
         [diary setPhotoThumbnailDataFromImage:_diaryImage];
         [fm saveCollectionImage:_diaryImage];
+        PhotoLoader *loader = [[PhotoLoader alloc]initWithSourceType:kSourceTypePhoto];
+        [loader createPhotoAlbum];
+        [loader saveImage:_diaryImage];
     }
     // Save Video diary
     else {

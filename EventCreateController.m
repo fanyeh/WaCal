@@ -155,19 +155,17 @@
     // Set up date formatter
     dateFormatter = [[NSDateFormatter alloc]init];
     dateFormatter.dateFormat = @"yyyy/MM/dd";
-//    dateFormatter.timeZone = [NSTimeZone systemTimeZone];
     
     // Set up time formatter
     timeFormatter = [[NSDateFormatter alloc]init];
     timeFormatter.dateFormat = @"hh:mm aa";
-//    timeFormatter.timeZone = [NSTimeZone systemTimeZone];
     
     // Setup Date picker
     _datePicker = [[UIDatePicker alloc]init];
     [_datePicker setDatePickerMode:UIDatePickerModeDateAndTime];
     [_datePicker addTarget:self action:@selector(changeDate) forControlEvents:UIControlEventValueChanged];
     _datePicker.minuteInterval = 5;
-    _datePicker.date = _selectedDate;
+    _datePicker.date = [NSDate dateWithTimeInterval:28800 sinceDate:_selectedDate];
     
     // When enter bring up title and time view and keyboard
     _subjectField.delegate = self;
@@ -181,10 +179,10 @@
     _endTimeField.inputView = _datePicker;
     _endTimeField.tintColor = [UIColor clearColor];
     
-    _startTimeLabel.attributedText = [self attributedTimeText:[timeFormatter stringFromDate:_selectedDate]];
+    _startTimeLabel.attributedText = [self attributedTimeText:[timeFormatter stringFromDate:[NSDate dateWithTimeInterval:28800 sinceDate:_selectedDate]]];
     _startDateLabel.text = [dateFormatter stringFromDate:_selectedDate];
     
-    _endTimeLabel.attributedText = [self attributedTimeText:[timeFormatter stringFromDate:[NSDate dateWithTimeInterval:3600 sinceDate:_selectedDate]]];
+    _endTimeLabel.attributedText = [self attributedTimeText:[timeFormatter stringFromDate:[NSDate dateWithTimeInterval:32400 sinceDate:_selectedDate]]];
     _endDateLabel.text =  [dateFormatter stringFromDate:[NSDate dateWithTimeInterval:3600 sinceDate:_selectedDate]];
     
     minimumDate = [NSDate dateWithTimeInterval:300 sinceDate:_selectedDate];
@@ -192,9 +190,8 @@
     
     // Initialize new event
     event = [EKEvent eventWithEventStore:[[CalendarStore sharedStore]eventStore]];
-//    event.calendar = [writableCalendars objectAtIndex:0];
-    event.startDate = _selectedDate;
-    event.endDate = [NSDate dateWithTimeInterval:3600 sinceDate:_selectedDate];
+    event.startDate = [NSDate dateWithTimeInterval:28800 sinceDate:_selectedDate];
+    event.endDate = [NSDate dateWithTimeInterval:32400 sinceDate:_selectedDate];
     event.allDay = NO;
     [event addAlarm:[EKAlarm alarmWithRelativeOffset:-60*15]];
     [self checkAlarm];

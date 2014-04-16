@@ -42,7 +42,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Noo-CO-kjP" userLabel="dot">
-                        <rect key="frame" x="10" y="25" width="6" height="6"/>
+                        <rect key="frame" x="14" y="25" width="6" height="6"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" red="0.94901960784313721" green="0.81568627450980391" blue="0.23137254901960785" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
@@ -66,18 +66,32 @@
                         <color key="textColor" red="0.62352941179999999" green="0.61960784310000006" blue="0.61960784310000006" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="birthday20.png" translatesAutoresizingMaskIntoConstraints="NO" id="nZB-Tv-44V">
+                        <rect key="frame" x="7" y="16" width="20" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    </imageView>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="faceboo40.png" translatesAutoresizingMaskIntoConstraints="NO" id="p3Q-Gw-yqF">
+                        <rect key="frame" x="7" y="19" width="20" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    </imageView>
                 </subviews>
             </tableViewCellContentView>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <connections>
                 <outlet property="alldayLabel" destination="0wR-gP-0kE" id="DDp-Sv-tX5"/>
+                <outlet property="birthdayIcon" destination="nZB-Tv-44V" id="fFy-II-wkY"/>
                 <outlet property="dotView" destination="Noo-CO-kjP" id="PkY-55-tsz"/>
                 <outlet property="endDateLabel" destination="equ-Cu-EcK" id="WGH-H2-d8r"/>
                 <outlet property="eventEndLabel" destination="jcY-FA-P1N" id="u4F-JP-IaS"/>
+                <outlet property="facebookIcon" destination="p3Q-Gw-yqF" id="Dyq-YU-LTh"/>
                 <outlet property="locationLabel" destination="mph-mI-zor" id="JaM-Md-fLN"/>
                 <outlet property="startDateLabel" destination="iNh-O8-QmF" id="waa-Bq-WMj"/>
                 <outlet property="titleLabel" destination="VFL-4o-v2h" id="Dh9-Ld-4Ik"/>
             </connections>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="birthday20.png" width="20" height="20"/>
+        <image name="faceboo40.png" width="40" height="40"/>
+    </resources>
 </document>
