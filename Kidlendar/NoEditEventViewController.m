@@ -7,14 +7,17 @@
 //
 
 #import "NoEditEventViewController.h"
-#import "ReminderView.h"
-#import "ReminderButton.h"
+#import "MapViewController.h"
+#import "Reachability.h"
+#import "SelectedLocation.h"
 
 @interface NoEditEventViewController ()  <UITextFieldDelegate>
 {
     NSDateFormatter *dateFormatter;
     NSDateFormatter *timeFormatter;
     CGRect startDateLabelFrame;
+    NSArray *places;
+    SelectedLocation *selectedLocation;
 }
 @property (weak, nonatomic) IBOutlet UILabel *eventTitle;
 @property (weak, nonatomic) IBOutlet UILabel *eventDateTime;
@@ -37,6 +40,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *facebookIcon;
 @property (weak, nonatomic) IBOutlet UILabel *weekdayLabel;
 @property (weak, nonatomic) IBOutlet UIView *timeView;
+@property (weak, nonatomic) IBOutlet UIImageView *mapIcon;
 
 @end
 
@@ -145,6 +149,11 @@
     }
     
     startDateLabelFrame = _startDateLabel.frame;
+    
+    selectedLocation = [[SelectedLocation alloc]init];
+    
+    UITapGestureRecognizer *mapIconTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showMap)];
+    [_mapIcon addGestureRecognizer:mapIconTap];
 
 }
 
@@ -216,7 +225,56 @@
         _endTimeLabel.attributedText = [self attributedTimeText:[timeFormatter stringFromDate:_event.endDate]];
     }
     
+    // Find location
+    // Create temp location data
+    [self queryGooglePlaces:_locationLabel.text];
+}
 
+-(void)showMap
+{
+    if ([self checkInternetConnection]) {
+        MapViewController *map = [[MapViewController alloc]initWithLocation:selectedLocation];
+        [self.navigationController pushViewController:map animated:YES];
+    }
+}
+
+-(void) queryGooglePlaces:(NSString *)name
+{
+    NSString * language =  [[NSLocale currentLocale] localeIdentifier];
+    // Sensor = true means search using GPS
+    NSString *url = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/textsearch/json?query=%@&sensor=true&language=%@&key=%@",name,language,kGOOGLE_API_KEY];
+    
+    //Formulate the string as a URL object.
+    NSURL *googleRequestURL=[NSURL URLWithString:[url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+    // Retrieve the results of the URL.
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:googleRequestURL];
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:queue
+                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+                               
+                               if ([data length]>0 && connectionError==nil) {
+                                   //收到正確的資料，連線沒有錯
+                                   NSDictionary* json = [NSJSONSerialization JSONObjectWithData:data
+                                                                                        options:NSJSONReadingAllowFragments
+                                                                                          error:&connectionError];
+                                   //The results from Google will be an array obtained from the NSDictionary object with the key "results".
+                                   places = [json objectForKey:@"results"];
+                                   NSDictionary *selectedPlace = [places objectAtIndex:0];
+                                   selectedLocation.latitude =  [[[[selectedPlace objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"] doubleValue];
+                                   selectedLocation.longitude = [[[[selectedPlace objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
+                                   selectedLocation.locationName = [selectedPlace objectForKey:@"name"];
+                                   selectedLocation.locationAddress = [selectedPlace objectForKey:@"formatted_address"];
+                                   selectedLocation.reference = [selectedPlace objectForKey:@"reference"];
+                                   
+                               } else if ([data length]==0 && connectionError==nil) {
+                                   //沒有資料，連線沒有錯誤
+                               } else if (connectionError != nil) {
+                                   //連線有錯誤
+                                   NSLog(@"error %@",connectionError);
+                               }
+                           }];
 }
 
 - (void)didReceiveMemoryWarning
@@ -296,6 +354,22 @@
             break;
     }
     return freq;
+}
+
+- (BOOL)checkInternetConnection
+{
+    Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
+    NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
+    if (networkStatus == NotReachable) {
+        UIAlertView *noInternetAlert = [[UIAlertView alloc]initWithTitle:@"No Internet Connection"
+                                                                 message:@"Check your internet and try again"
+                                                                delegate:self cancelButtonTitle:@"Close"
+                                                       otherButtonTitles:nil, nil];
+        [noInternetAlert show];
+        return NO;
+    } else {
+        return YES;
+    }
 }
 
 @end

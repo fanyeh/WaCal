@@ -20,8 +20,6 @@
 #import "MapViewController.h"
 #import "Reachability.h"
 
-#define kGOOGLE_API_KEY @"AIzaSyAD9e182Fr19_2DcJFZYUHf6wEeXjxs_kQ"
-
 typedef void (^LocationCallback)(CLLocationCoordinate2D);
 
 @interface EventReviewController () <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UISearchBarDelegate,MKMapViewDelegate,UIAlertViewDelegate,UIPickerViewDataSource,UIPickerViewDelegate>
@@ -972,9 +970,9 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 // Google search
 -(void)queryGooglePlaces:(NSString *)name
 {
+    NSString * language =  [[NSLocale currentLocale] localeIdentifier];
     // Sensor = true means search using GPS
-    NSString *url;
-    url = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/textsearch/json?query=%@&sensor=true&language=zh-TW&key=%@",name,kGOOGLE_API_KEY];
+    NSString *url = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/textsearch/json?query=%@&sensor=true&language=%@&key=%@",name,language,kGOOGLE_API_KEY];
     
     //Formulate the string as a URL object.
     NSURL *googleRequestURL=[NSURL URLWithString:[url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];

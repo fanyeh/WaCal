@@ -117,6 +117,14 @@
     cell.calendarNameLabel.text = calendar.title;
     cell.calendarColorView.backgroundColor = [UIColor colorWithCGColor:calendar.CGColor];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    if (calendar.type == EKCalendarTypeBirthday) {
+        cell.birthdayIcon.hidden = NO;
+        cell.calendarColorView.hidden = YES;
+    } else {
+        cell.birthdayIcon.hidden = YES;
+        cell.calendarColorView.hidden = NO;
+    }
     return cell;
 }
 

@@ -61,29 +61,18 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
             }
         }];
     }
-    
-//    [_eventStore
-//     requestAccessToEntityType:EKEntityTypeReminder
-//     completion:^(BOOL granted, NSError *error) {
-//         if (granted) {
-//             _reminderAccess = YES;
-//             [[NSNotificationCenter defaultCenter]
-//              postNotificationName:
-//              RemindersAccessGranted
-//              object:self];
-//         } else {
-//             NSLog(@"Reminder access not granted: %@",
-//                   error);
-//         }
-//     }];
-
 
     [[UINavigationBar appearance] setBarStyle:UIBarStyleBlack];
     [[UINavigationBar appearance] setBarTintColor:BarColor];
-
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]]; //is the buttons text color
-    NSDictionary *size = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0],NSFontAttributeName,
-                          [UIColor whiteColor],NSForegroundColorAttributeName,nil];
+    
+    
+    NSDictionary *size = [NSDictionary dictionaryWithObjectsAndKeys:
+                          [UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0],
+                          NSFontAttributeName,
+                          [UIColor whiteColor],
+                          NSForegroundColorAttributeName,
+                          nil];
     [[UINavigationBar appearance]setTitleTextAttributes:size];
     [[UITabBar appearance] setTintColor:BarColor]; //is the buttons text color
 

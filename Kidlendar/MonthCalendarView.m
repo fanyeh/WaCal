@@ -122,8 +122,6 @@
         if (dateModel.isToday) {
             dateView.isToday = YES;
             dateView.dateLabel.textColor = TodayColor;
-            dateView.dateLabel.layer.borderWidth = 1;
-            dateView.dateLabel.layer.borderColor = TodayColor.CGColor;
         }
         
         // Add indicator if date has event
@@ -151,7 +149,6 @@
     __block CGFloat shrinkOffset = (5-row) * dateViewHeight;
 
     if (animation) {
-        
         [UIView animateWithDuration:0.4f animations:^{
             // 1. Shift original frame
             _dateGroupView.frame = CGRectOffset(dateGroupFrame, 0, -shiftOffset);
@@ -270,7 +267,6 @@
     if (view.isToday) {
         view.dateLabel.backgroundColor = TodayColor;
         weekdayView.selectedLabel.backgroundColor = TodayColor;
-        
     }
     else {
         view.dateLabel.backgroundColor = MainColor;
@@ -298,7 +294,6 @@
     view.dateLabel.backgroundColor =[UIColor clearColor];
     if (view.isToday) {
         view.dateLabel.textColor = TodayColor;
-        view.dateLabel.layer.borderWidth = 1;
     }
     else
         view.dateLabel.textColor = [UIColor colorWithWhite:0.600 alpha:1.000];

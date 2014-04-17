@@ -34,6 +34,12 @@
     double locationLat;
     
     UIView *footerView;
+    
+    CGRect originScrollFrame;
+    CGRect originLocationFrame;
+    CGRect originSearchTableFrame;
+    CGFloat screenHeight;
+
 }
 @property (weak, nonatomic) IBOutlet UIImageView *diaryPhotoView;
 @property (weak, nonatomic) IBOutlet UIView *locationSearchView;
@@ -46,7 +52,7 @@
 @property (weak, nonatomic) IBOutlet UIScrollView *contentScrollView;
 @property (weak, nonatomic) IBOutlet UIImageView *scrollViewBackground;
 @property (weak, nonatomic) IBOutlet UIImageView *mainViewBackground;
-@property (weak, nonatomic) IBOutlet UIView *contentView;
+//@property (weak, nonatomic) IBOutlet UIView *contentView;
 
 @end
 
@@ -68,17 +74,15 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.navigationItem.title = @"Words";
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveDiary)];
-    
+
     _mainViewBackground.image = _diaryImage;
     _diaryPhotoView.image =  [_diaryImage resizeImageToSize:_diaryPhotoView.frame.size];
     UIImage *croppedImage = [_mainViewBackground.image cropImageWithRectImageView:_scrollViewBackground.bounds view:_mainViewBackground];
     GPUImageiOSBlurFilter *blurFilter = [[GPUImageiOSBlurFilter alloc]init];
     _scrollViewBackground.image = [blurFilter imageByFilteringImage:croppedImage];
-    _scrollViewBackground.layer.masksToBounds = YES;
-    _scrollViewBackground.layer.cornerRadius = 5.0f;
     
-    footerView = [[UIView alloc]initWithFrame:CGRectMake(0, 247, 280, 30)];
-    footerView.backgroundColor = [UIColor colorWithRed:0.235 green:0.729 blue:0.784 alpha:0.600];
+    footerView = [[UIView alloc]initWithFrame:CGRectMake(0, 252, 320 , 36)];
+    footerView.backgroundColor =  [UIColor clearColor];//[UIColor colorWithRed:0.235 green:0.729 blue:0.784 alpha:0.400];
     footerView.layer.masksToBounds = YES;
     [_scrollViewBackground addSubview:footerView];
 
@@ -132,7 +136,7 @@
     _diaryTimeField.rightViewMode = UITextFieldViewModeAlways;
     
     _locationSearchBar.delegate = self;
-    _locationSearchBar.tintColor = [UIColor whiteColor];
+//    _locationSearchBar.tintColor = [UIColor whiteColor];
     
     _searchResultTable.delegate = self;
     _searchResultTable.dataSource = self;
@@ -170,6 +174,76 @@
         }
     }
     _locationSearchView.layer.cornerRadius = 10.0f;
+    
+
+
+    
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardFrameChange:) name:UIKeyboardWillChangeFrameNotification object:nil];
+}
+
+- (void)keyboardFrameChange:(NSNotification *)notification
+{
+    NSDictionary *info =  notification.userInfo;
+    NSValue *keyboardFrameValue = [info objectForKey:UIKeyboardFrameEndUserInfoKey];
+
+    CGRect keyboardFrame = [keyboardFrameValue CGRectValue];
+    
+
+    if (keyboardFrame.origin.y == 316 || keyboardFrame.origin.y == 228) {
+        // Scroll view
+        CGRect scrollFrame = _contentScrollView.frame;
+//        _contentScrollView.contentSize = _contentScrollView.frame.size;
+        scrollFrame.size.height -= 36;
+        _contentScrollView.frame = scrollFrame;
+        NSLog(@"scroll frame %@",[NSValue valueWithCGRect:scrollFrame]);
+        NSLog(@"scroll content %@",[NSValue valueWithCGSize:_contentScrollView.contentSize]);
+
+        // Location view
+        CGRect locationFrame = _locationSearchView.frame;
+        locationFrame.size.height -= 36;
+        _locationSearchView.frame = locationFrame;
+        
+        //        // Location table view
+        //        CGRect tableFrame = _searchResultTable.frame;
+        //        tableFrame.size.height -= 36;
+        //        _searchResultTable.frame = tableFrame;
+        
+        
+    } else {
+        _contentScrollView.frame = originScrollFrame;
+//        _contentScrollView.contentSize = _contentScrollView.frame.size;
+        _locationSearchView.frame = originLocationFrame;
+        //        _searchResultTable.frame = originSearchTableFrame;
+    }
+}
+
+- (void)viewDidLayoutSubviews
+{
+//    screenHeight = [[UIScreen mainScreen]bounds].size.height;
+//    if( screenHeight == 480) {
+//        CGRect scrollFrame = _contentScrollView.frame;
+//        scrollFrame.size.height -= 88;
+//        _contentScrollView.frame = scrollFrame;
+//        NSLog(@"scroll frame %@",[NSValue valueWithCGRect:scrollFrame]);
+//        
+//        CGSize contentSize = _contentScrollView.frame.size;
+//        contentSize.height = 288;
+//        _contentScrollView.contentSize = contentSize;
+//        NSLog(@"scroll content %@",[NSValue valueWithCGSize:contentSize]);
+//        
+//        
+//        CGRect searchFrame = _locationSearchView.frame;
+//        searchFrame.size.height -= 88;
+//        _locationSearchView.frame = scrollFrame;
+//    }
+    
+    originScrollFrame = _contentScrollView.frame;
+    originLocationFrame = _locationSearchView.frame;
+    originSearchTableFrame  = _searchResultTable.frame;
+    
+//    _contentScrollView.contentSize = _contentScrollView.frame.size;
+
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -194,7 +268,7 @@
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
 {
     _locationSearchView.hidden = YES;
-    _contentView.hidden = NO;
+    _contentScrollView.hidden = NO;
     footerView.hidden = NO;
 }
 
@@ -229,7 +303,7 @@
     locationLat =  [[[[places[indexPath.row] objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lat"] doubleValue];
     locationLng =  [[[[places[indexPath.row] objectForKey:@"geometry"] objectForKey:@"location"] objectForKey:@"lng"] doubleValue];
     _locationSearchView.hidden = YES;
-    _contentView.hidden = NO;
+    _contentScrollView.hidden = NO;
     footerView.hidden = NO;
 }
 
@@ -304,7 +378,7 @@
 {
     if (textField.returnKeyType == UIReturnKeySearch) {
         if ([self checkInternetConnection]) {
-            _contentView.hidden = YES;
+            _contentScrollView.hidden = YES;
             _locationSearchView.hidden = NO;
             _locationSearchBar.text = _locationField.text;
             [self queryGooglePlaceswithName:_locationField.text];
@@ -383,6 +457,7 @@
                                    //The results from Google will be an array obtained from the NSDictionary object with the key "results".
                                    places = [json objectForKey:@"results"];
                                    if ([places count] > 0) {
+                                       
                                        dispatch_async(dispatch_get_main_queue(), ^{
                                            [_searchResultTable reloadData];
                                            _locationField.text = [places[0] objectForKey:@"name"];

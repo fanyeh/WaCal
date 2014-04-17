@@ -69,7 +69,9 @@
                 }
             }];
             
-            [_sourceDictionary setObject:assets forKey:sGroupPropertyName];
+            // Show album only if it's not empty
+            if ([assets count] > 0)
+                [_sourceDictionary setObject:assets forKey:sGroupPropertyName];
         };
         
         // Group Enumerator Failure Block
@@ -104,7 +106,6 @@
                 if (createAccount) {
                     [self.library addAssetsGroupAlbumWithName:@"W&Cal"
                                                   resultBlock:^(ALAssetsGroup *group) {
-                                                      NSLog(@"added album: W&Cal");
                                                       __strong typeof(self) strongSelf = weakSelf;
                                                       if (strongSelf)
                                                           strongSelf->wacalGroup = group;
@@ -148,14 +149,11 @@
     CGImageRef img = [image CGImage];
     [self.library writeImageToSavedPhotosAlbum:img orientation:ALAssetOrientationUp completionBlock:^(NSURL *assetURL, NSError *error) {
         if (error.code == 0) {
-            NSLog(@"saved image completed:\nurl: %@", assetURL);
-            
             // try to get the asset
             [self.library assetForURL:assetURL
                           resultBlock:^(ALAsset *asset) {
                               // assign the photo to the album
                               [wacalGroup addAsset:asset];
-                              NSLog(@"Added %@ to %@", [[asset defaultRepresentation] filename], @"W&Cal");
                           }
                          failureBlock:^(NSError* error) {
                              NSLog(@"failed to retrieve image asset:\nError: %@ ", [error localizedDescription]);

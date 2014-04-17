@@ -18,6 +18,7 @@
                 <outlet property="facebookIcon" destination="Krh-7C-B7n" id="Xyw-6h-bfT"/>
                 <outlet property="locationLabel" destination="oPV-rI-tQZ" id="GlZ-Y4-RuB"/>
                 <outlet property="locationView" destination="hkN-Xn-FaS" id="UrC-Ib-J48"/>
+                <outlet property="mapIcon" destination="OLk-Lx-y9W" id="gLD-c3-eY2"/>
                 <outlet property="notesView" destination="LF4-vr-QdI" id="B47-8b-y80"/>
                 <outlet property="repeatLabel" destination="3Vg-6L-TpD" id="vn5-Hk-RBe"/>
                 <outlet property="repeatView" destination="87h-zD-Qqm" id="P1K-b4-ags"/>
@@ -35,7 +36,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="dVg-2K-Ogp">
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="dVg-2K-Ogp">
                     <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
@@ -56,7 +57,7 @@
                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mapicon.png" id="OLk-Lx-y9W">
+                                <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mapicon.png" id="OLk-Lx-y9W">
                                     <rect key="frame" x="275" y="2" width="35" height="35"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </imageView>

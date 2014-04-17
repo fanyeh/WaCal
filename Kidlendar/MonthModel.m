@@ -131,7 +131,10 @@
     if (rowNum == 4 && weekDayOfFirstDay !=1)
         compensateDaysForNextMonth = 14;
     long nextMonthDays = compensateDaysForNextMonth- (weekDayOfFirstDay -1);
+    if (nextMonthDays == 7)
+        rowNum++;
     long rowChange = 7 - weekDayOfFirstDay;
+
     if (nextMonthDays > 0) {
         for (int i =0 ; i < nextMonthDays; i++) {
             weekdayComponents.day += 1;

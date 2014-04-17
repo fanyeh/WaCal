@@ -12,12 +12,12 @@
 @interface DiaryTableViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *cellImageView;
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
-@property (weak, nonatomic) IBOutlet UITextView *diaryDetail;
 @property (weak, nonatomic) IBOutlet UILabel *diarySubject;
 @property (weak, nonatomic) IBOutlet UIImageView *videoPlayButton;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UIView *videoPlayView;
 @property (weak, nonatomic) IBOutlet UIImageView *locationTag;
 @property (weak, nonatomic) IBOutlet UIImageView *uploadCircle;
+@property (weak, nonatomic) IBOutlet UILabel *diaryDetail;
 
 @end

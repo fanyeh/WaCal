@@ -101,9 +101,13 @@
     points[0] = MKMapPointForCoordinate(_locationMapView.userLocation.location.coordinate);
     points[1] = MKMapPointForCoordinate(destinationAnnotation.coordinate);
     
-    MKCoordinateRegion boundingRegion = CoordinateRegionBoundingMapPoints(points, 2);
-    boundingRegion.span.latitudeDelta *= 1.1f;
-    boundingRegion.span.longitudeDelta *= 1.1f;
+//    MKCoordinateRegion boundingRegion = CoordinateRegionBoundingMapPoints(points, 2);
+//    boundingRegion.span.latitudeDelta *= 1.1f;
+//    boundingRegion.span.longitudeDelta *= 1.1f;
+//    [_locationMapView setRegion:boundingRegion animated:YES];
+
+    MKCoordinateSpan span = MKCoordinateSpanMake(0.01, 0.01);
+    MKCoordinateRegion boundingRegion = MKCoordinateRegionMake(destinationAnnotation.coordinate, span);
     [_locationMapView setRegion:boundingRegion animated:YES];
 }
 

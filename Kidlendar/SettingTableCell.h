@@ -11,5 +11,6 @@
 @interface SettingTableCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIView *calendarColorView;
 @property (weak, nonatomic) IBOutlet UILabel *calendarNameLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *birthdayIcon;
 
 @end

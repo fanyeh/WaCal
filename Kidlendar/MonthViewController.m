@@ -42,8 +42,8 @@
     DiaryData *showDiaryData;
     UIBarButtonItem *todayButton;
     BOOL byGoToday;
+    CGFloat screenHeight;
 }
-
 @property (weak, nonatomic) IBOutlet UIView *diaryView;
 @property (weak, nonatomic) IBOutlet UILabel *comingEventTime;
 @property (weak, nonatomic) IBOutlet UILabel *comingEventTimeEnd;
@@ -54,7 +54,6 @@
 @property (weak, nonatomic) IBOutlet UIView *dotViewGray;
 @property (weak, nonatomic) IBOutlet UILabel *diaryTitle;
 @property (weak, nonatomic) IBOutlet UILabel *diaryLocation;
-@property (weak, nonatomic) IBOutlet UITextView *diaryDetail;
 @property (weak, nonatomic) IBOutlet UILabel *allDayLabel;
 @property (weak, nonatomic) IBOutlet UIView *emptyDiaryView;
 @property (weak, nonatomic) IBOutlet UIView *emptyEventView;
@@ -65,6 +64,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *facebookIcon;
 @property (weak, nonatomic) IBOutlet UIImageView *birthdayIcon;
+@property (weak, nonatomic) IBOutlet UILabel *diaryTextLabel;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 @end
 
@@ -153,6 +154,7 @@
                                         _comingEventView.frame.origin.y,
                                         self.view.frame.size.width,
                                         _diaryView.frame.origin.y-(_monthView.shrinkFrame.origin.y+_monthView.shrinkFrame.size.height));
+    
     eventTableView = [[UITableView alloc]initWithFrame:eventTableFrame style:UITableViewStyleGrouped];
     eventTableView.dataSource = self;
     eventTableView.backgroundColor = [UIColor clearColor];
@@ -169,6 +171,7 @@
     UIBarButtonItem *addEventButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
                                                                                    target:self
                                                                                    action:@selector(addEvent)];
+    
     self.navigationItem.rightBarButtonItem = addEventButton;
 
     // Custom navgation left button view
@@ -203,6 +206,25 @@
                                                 name:@"EKCalendarSwitch" object:nil];
     
     [self showDiary];
+}
+
+- (void)viewDidLayoutSubviews
+{
+    screenHeight = [[UIScreen mainScreen]bounds].size.height;
+    if( screenHeight == 480) {
+        CGRect monthFrame = _monthView.frame;
+        monthFrame.size.height -= 18;
+        _monthView.frame = monthFrame;
+        
+        CGRect scrollFrame = _scrollView.frame;
+        scrollFrame.origin.y -= 18;
+        scrollFrame.size.height -= 70;
+        _scrollView.frame = scrollFrame;
+        
+        CGSize contentSize = _scrollView.contentSize;
+        contentSize.height = 140;
+        _scrollView.contentSize = contentSize;
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -268,25 +290,26 @@
     NSArray *monthArray = @[@"January",@"February",@"March",@"April",@"May",@"June",@"July",@"August",@"September",@"October",@"November",@"December"];
     if (selectedMonth !=[comp month]) {
         NSString *month = monthArray[[comp month]-1];
-        NSInteger currentMonth = [monthArray indexOfObject:monthLabel.text];
-        NSInteger currentYear = [yearLabel.text integerValue];
+//        NSInteger currentMonth = [monthArray indexOfObject:monthLabel.text];
+//        NSInteger currentYear = [yearLabel.text integerValue];
         
         // Add transition (must be called after myLabel has been displayed)
         CATransition *animation = [CATransition animation];
-        animation.duration = 1.0f;
-        animation.type = kCATransitionReveal;
+        animation.duration = 0.5f;
+        animation.type = kCATransitionFade;
+//        animation.subtype = kCATransitionFromTop;
         
-        // Forward or Rewind month
-        if (currentMonth > ([comp month]-1))
-            animation.subtype = kCATransitionFromLeft;
-        else
-            animation.subtype = kCATransitionFromRight;
-        
-        // Forward or Rewind year
-        if (currentYear > [comp year])
-            animation.subtype = kCATransitionFromLeft;
-        else if (currentYear < [comp year])
-            animation.subtype = kCATransitionFromRight;
+//        // Forward or Rewind month
+//        if (currentMonth > ([comp month]-1))
+//            animation.subtype = kCATransitionFromTop;
+//        else
+//            animation.subtype = kCATransitionFromBottom;
+//        
+//        // Forward or Rewind year
+//        if (currentYear > [comp year])
+//            animation.subtype = kCATransitionFromTop;
+//        else if (currentYear < [comp year])
+//            animation.subtype = kCATransitionFromBottom;
         
         animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
         [monthLabel.layer addAnimation:animation forKey:@"changeTextTransition"];
@@ -711,12 +734,15 @@
         eventTableView.frame = CGRectMake(0,
                                           134,
                                           self.view.frame.size.width,
-                                          262.8);
+                                          [[UIScreen mainScreen]bounds].size.height - _emptyDiaryView.frame.size.height - 49 - 134);
     } else if (_emptyEventView.hidden){
         eventTableView.hidden = YES;
         [_emptyEventView.layer addAnimation:animation forKey:nil];
         _emptyEventView.hidden = NO;
     }
+    
+    if (screenHeight == 480)
+        [_scrollView setContentOffset:CGPointMake(0, 70) animated:YES];
 }
 
 - (void)showComingEvent
@@ -760,7 +786,12 @@
        _comingEventView.hidden = YES;
        [_emptyEventView.layer addAnimation:animation forKey:nil];
        _emptyEventView.hidden = NO;
-    }
+   } else {
+       _comingEventView.hidden = YES;
+   }
+    
+    if (screenHeight == 480)
+        [_scrollView setContentOffset:CGPointZero animated:YES];
 }
 
 -(void)updateComingEventViewEnds:(BOOL)ends
@@ -836,7 +867,7 @@
             _videoPlayView.hidden = YES;
         }
         _diaryTitle.text = d.subject;
-        _diaryDetail.text = d.diaryText;
+        _diaryTextLabel.text = d.diaryText;
         
         if (d.location.length > 0) {
             _locationTag.hidden = NO;
