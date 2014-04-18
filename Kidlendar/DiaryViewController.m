@@ -63,7 +63,7 @@
     [super viewDidLoad];
 
     // Do any additional setup after loading the view from its nib.
-    
+
     // Put that image onto the screen in our image view
     FileManager *fm = [[FileManager alloc]initWithKey:_diaryData.diaryKey];
     _diaryPhoto.image = [[fm loadCollectionImage] resizeImageToSize:_diaryPhoto.frame.size];

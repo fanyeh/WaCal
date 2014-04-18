@@ -88,6 +88,22 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    screenHeight = [[UIScreen mainScreen]bounds].size.height;
+    if( screenHeight == 480) {
+        CGRect monthFrame = _monthView.frame;
+        monthFrame.size.height -= 18;
+        _monthView.frame = monthFrame;
+        
+        CGRect scrollFrame = _scrollView.frame;
+        scrollFrame.origin.y -= 18;
+        scrollFrame.size.height -= 70;
+        _scrollView.frame = scrollFrame;
+        
+        CGSize contentSize = _scrollView.contentSize;
+        contentSize.height = 140;
+        _scrollView.contentSize = contentSize;
+    }
+    
     UITapGestureRecognizer *emptyEventTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(addEvent)];
     UITapGestureRecognizer *emptyDiaryTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(addDiary)];
     
@@ -206,25 +222,6 @@
                                                 name:@"EKCalendarSwitch" object:nil];
     
     [self showDiary];
-}
-
-- (void)viewDidLayoutSubviews
-{
-    screenHeight = [[UIScreen mainScreen]bounds].size.height;
-    if( screenHeight == 480) {
-        CGRect monthFrame = _monthView.frame;
-        monthFrame.size.height -= 18;
-        _monthView.frame = monthFrame;
-        
-        CGRect scrollFrame = _scrollView.frame;
-        scrollFrame.origin.y -= 18;
-        scrollFrame.size.height -= 70;
-        _scrollView.frame = scrollFrame;
-        
-        CGSize contentSize = _scrollView.contentSize;
-        contentSize.height = 140;
-        _scrollView.contentSize = contentSize;
-    }
 }
 
 - (void)didReceiveMemoryWarning

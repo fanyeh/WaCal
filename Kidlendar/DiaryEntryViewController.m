@@ -119,8 +119,8 @@
     UIView *locationLeftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
     [locationLeftView addSubview:locationTag];
     locationTag.center = locationLeftView.center;
-    _locationField.rightView = locationLeftView;
-    _locationField.rightViewMode = UITextFieldViewModeAlways;
+    _locationField.leftView = locationLeftView;
+    _locationField.leftViewMode = UITextFieldViewModeAlways;
     
     _diaryTimeField.delegate = self;
     _diaryTimeField.inputView = datePicker;
@@ -132,8 +132,8 @@
     [timeLeftView addSubview:timeTag];
     timeTag.center = timeLeftView.center;
 
-    _diaryTimeField.rightView = timeLeftView;
-    _diaryTimeField.rightViewMode = UITextFieldViewModeAlways;
+    _diaryTimeField.leftView = timeLeftView;
+    _diaryTimeField.leftViewMode = UITextFieldViewModeAlways;
     
     _locationSearchBar.delegate = self;
 //    _locationSearchBar.tintColor = [UIColor whiteColor];
@@ -196,8 +196,8 @@
 //        _contentScrollView.contentSize = _contentScrollView.frame.size;
         scrollFrame.size.height -= 36;
         _contentScrollView.frame = scrollFrame;
-        NSLog(@"scroll frame %@",[NSValue valueWithCGRect:scrollFrame]);
-        NSLog(@"scroll content %@",[NSValue valueWithCGSize:_contentScrollView.contentSize]);
+//        NSLog(@"scroll frame %@",[NSValue valueWithCGRect:scrollFrame]);
+//        NSLog(@"scroll content %@",[NSValue valueWithCGSize:_contentScrollView.contentSize]);
 
         // Location view
         CGRect locationFrame = _locationSearchView.frame;
