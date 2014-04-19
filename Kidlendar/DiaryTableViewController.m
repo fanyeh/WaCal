@@ -31,6 +31,7 @@
     NSMutableDictionary *diaryInSections;
     UIView *emptyTableView;
     NSMutableDictionary *allUploadTasks;
+    NSArray *allSectionKeys;
 }
 
 @end
@@ -66,7 +67,7 @@
     dateFormatter = [[NSDateFormatter alloc]init];
     dateFormatter.dateFormat = @"yyyy/MM/dd";
     weekdayFormatter = [[NSDateFormatter alloc]init];
-    weekdayFormatter.dateFormat = @"EEEE";
+    weekdayFormatter.dateFormat = @"EE";
     
     // Set up table
     [self.tableView registerNib:[UINib nibWithNibName:@"DiaryTableViewCell" bundle:nil] forCellReuseIdentifier:@"DiaryTableViewCell"];
@@ -139,8 +140,10 @@
     
     for (DiaryData *d in sortedArray) {
         NSDate *diaryDate = [NSDate dateWithTimeIntervalSinceReferenceDate:d.dateCreated];
-        NSDateComponents *comp = [[NSCalendar currentCalendar]components:(NSCalendarUnitYear|NSCalendarUnitMonth) fromDate:diaryDate];
-        NSString *sectionKey = [NSString stringWithFormat:@"%@ %ld",monthArray[[comp month]-1],(long)[comp year]];
+        NSDateComponents *comp = [[NSCalendar currentCalendar]components:(NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay) fromDate:diaryDate];
+        comp.day = 1;
+        NSString *sectionKey = [NSString stringWithFormat:@"%ld/%ld/%ld",(long)[comp year],(long)[comp month],(long)[comp day]];
+
         if (![diaryInSections objectForKey:sectionKey]) {
             NSMutableArray *diarySet = [[NSMutableArray alloc]init];
             [diarySet addObject:d];
@@ -151,6 +154,11 @@
             [diarySet addObject:d];
         }
     }
+    
+    allSectionKeys = [diaryInSections.allKeys sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        
+        return [obj2 compare:obj1];
+    }];
 }
 
 #pragma mark - Table view data source
@@ -158,13 +166,16 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return [diaryInSections.allKeys count];
+    return [allSectionKeys count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    NSString *sectionKey =diaryInSections.allKeys[section];
+
+//    NSString *sectionKey =diaryInSections.allKeys[section];
+    NSString *sectionKey = allSectionKeys[section];
+
     return [[diaryInSections objectForKey:sectionKey] count];
 }
 
@@ -173,7 +184,7 @@
     DiaryTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DiaryTableViewCell"];
     if (!cell)
         cell =[[DiaryTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DiaryTableViewCell"];
-    NSString *sectionKey =diaryInSections.allKeys[indexPath.section];
+    NSString *sectionKey =allSectionKeys[indexPath.section];
     DiaryData *d = [[diaryInSections objectForKey:sectionKey] objectAtIndex:indexPath.row];
     
     NSDate *diaryDate = [NSDate dateWithTimeIntervalSinceReferenceDate:d.dateCreated];
@@ -284,7 +295,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     DiaryPageViewController *controller = [[DiaryPageViewController alloc]init];
-    NSString *sectionKey =diaryInSections.allKeys[indexPath.section];
+    NSString *sectionKey =allSectionKeys[indexPath.section];
     controller.diaryData = [[diaryInSections objectForKey:sectionKey] objectAtIndex:indexPath.row];
     [self.navigationController pushViewController:controller animated:YES];
 }
@@ -307,7 +318,10 @@
     headerLabel.textAlignment = NSTextAlignmentCenter;
     headerLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:16];
     headerLabel.center = headerView.center;
-    headerLabel.text = [diaryInSections.allKeys objectAtIndex:section];
+    
+    NSDate *sectionDate = [dateFormatter dateFromString:[allSectionKeys objectAtIndex:section]];
+    NSDateComponents *comp = [[NSCalendar currentCalendar]components:(NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay) fromDate:sectionDate];
+    headerLabel.text = [NSString stringWithFormat:@"%@ %ld",monthArray[[comp month]-1],(long)[comp year]];
     [headerView addSubview:headerLabel];
     return headerView;
 }
