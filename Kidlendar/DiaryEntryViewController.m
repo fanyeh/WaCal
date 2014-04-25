@@ -377,16 +377,23 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     if (textField.returnKeyType == UIReturnKeySearch) {
-        if ([self checkInternetConnection]) {
-            _contentScrollView.hidden = YES;
-            _locationSearchView.hidden = NO;
-            _locationSearchBar.text = _locationField.text;
-            [self queryGooglePlaceswithName:_locationField.text];
-            [_locationSearchBar becomeFirstResponder];
-            footerView.hidden = YES;
-            return YES;
-        }else
+        if (textField.text.length < 1) {
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Please enter location before search" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [alert show];
             return NO;
+        } else {
+            if ([self checkInternetConnection]) {
+                _contentScrollView.hidden = YES;
+                _locationSearchView.hidden = NO;
+                _locationSearchBar.text = _locationField.text;
+                [self queryGooglePlaceswithName:_locationField.text];
+                [_locationSearchBar becomeFirstResponder];
+                footerView.hidden = YES;
+                return YES;
+            }else
+                return NO;
+        }
+
     }
     if (textField.tag == 0) {
         [_diaryTimeField becomeFirstResponder];

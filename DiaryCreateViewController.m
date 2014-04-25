@@ -614,6 +614,7 @@ static int deleteLabelSize = 30;
     // Diary indexpath
     NSIndexPath *indexPath =  [diaryPhotosView indexPathForCell:(UICollectionViewCell *)sender.view.superview];
     NSArray *imageInfo = [selectedPhotoOrderingInfo objectAtIndex:indexPath.row];
+    // imageInfo[0] = photo collectionview index path
     [photoCollectionView deselectItemAtIndexPath:imageInfo[0] animated:YES];
     if ([fullScreenImageArray[indexPath.row] isKindOfClass:[ALAsset class]])
         [self deletePhotoFromDiaryView:imageInfo[0] andAsset:fullScreenImageArray[indexPath.row] andAssetGroup:imageInfo[1]];
@@ -822,6 +823,8 @@ static int deleteLabelSize = 30;
             // Remove image from resize image array
             // Index = DiaryPhotoView index
             NSUInteger index = [selectedPhotoOrderingInfo indexOfObject:imageInfo];
+            NSLog(@"image info[1] %@ : asset group %@ : index %ld",imageInfo[1],assetGroup,(unsigned long)index);
+
             [imageMeta removeObjectAtIndex:index];
             [fullScreenImageArray removeObjectAtIndex:index];
             // Remove image info from ordering info

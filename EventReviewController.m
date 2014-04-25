@@ -445,18 +445,24 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     if (textField.returnKeyType == UIReturnKeySearch) {
-        if ([self checkInternetConnection]) {
-            _locationSearchBar.text = _locationField.text;
-            
-            // Start searching from google when search key is pressed
-            [self queryGooglePlaces:_locationField.text];
-            
-            // Show the search table and search bar
-            _maskView.hidden = NO;
-            [_locationSearchBar becomeFirstResponder];
-            return YES;
-        } else
+        if (_locationField.text.length < 1) {
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Please enter location before search" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [alert show];
             return NO;
+        } else {
+            if ([self checkInternetConnection]) {
+                _locationSearchBar.text = _locationField.text;
+                
+                // Start searching from google when search key is pressed
+                [self queryGooglePlaces:_locationField.text];
+                
+                // Show the search table and search bar
+                _maskView.hidden = NO;
+                [_locationSearchBar becomeFirstResponder];
+                return YES;
+            } else
+                return NO;
+        }
     }
     return YES;
 }
