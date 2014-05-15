@@ -1,0 +1,95 @@
+/* 
+  Localizable.strings
+  W&Cal
+
+  Created by Jack Yeh on 2014/5/15.
+  Copyright (c) 2014年 MarriageKiller. All rights reserved.
+*/
+
+"New Event" = "New Event";
+"Event Details" = "Event Details";
+"Moments" = "Moments";
+"Setting" = "Setting";
+"Calendar" = "Calendar";
+"No Event" = "No Event";
+"This Moment" = "This Moment";
+"Select location" = "Select location";
+"Alarm" = "Alarm";
+"Repeat" = "Repeat";
+"Subject" = "Subject";
+
+// Event
+
+"Delete Event" = "Delete Event";
+"No Reminder" = "No Reminder";
+"Cancel" = "Cancel";
+"OK" = "OK";
+"Delete current event" =  "Delete current event";
+"Delete all repeat event" = "Delete all repeat event";
+
+"Never" = "Never";
+"Day" = "Day";
+"Week" = "Week";
+"Bi-Week" = "Bi-Week";
+"Month" = "Month";
+"Year" = "Year";
+
+"nDay" = " Day";
+"nWeek" = " Week";
+"nMonth" = " Month";
+"nYear" = " Year";
+"Every" = " Every";
+
+"On Time" = "On Time";
+"5 Min" = "5 Min";
+"15 Min" = "15 Min";
+"30 Min" = "30 Min";
+"1 Hour" = "1 Hour";
+"2 Hours" = "2 Hours";
+"1 Day" = "1 Day";
+"2 Days" = "2 Days";
+"1 Week" = "1 Week";
+
+"Location" = "Location";
+"Notes" = "Notes";
+
+
+// Diary create
+"Photos" = "Photos";
+"Select" = "Select";
+"Photo or Video" = "Photo or Video";
+"Words" = "Words";
+"Tap to create your first one!" = "Tap to create your first one!";
+"Empty moments." = "Empty moments.";
+"Destination" = "Destination";
+"Phone" = "Phone";
+
+// Calendar
+
+"Mon" = "Mon";
+"Tue" = "Tue";
+"Wed" = "Wed";
+"Thu" = "Thu";
+"Fri" = "Fri";
+"Sat" = "Sat";
+"Sun" = "Sun";
+
+"January" = "January";
+"February" = "February";
+"March" = "March";
+"April" = "April";
+"May" = "May";
+"June" = "June";
+"July" = "July";
+"August" = "August";
+"September" = "September";
+"October" = "October";
+"November" = "November";
+"December" = "December";
+
+// Alert Message
+
+"Please enter location before search" = "Please enter location before search";
+"No Internet Connection" = "No Internet Connection";
+"Check your internet connection and try again" = "Check your internet connection and try again";
+"Close" = "Close";

@@ -66,6 +66,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *birthdayIcon;
 @property (weak, nonatomic) IBOutlet UILabel *diaryTextLabel;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet UILabel *emptyEventLabel;
+@property (weak, nonatomic) IBOutlet UILabel *emptyDiaryLabel;
 
 @end
 
@@ -87,6 +89,8 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    _emptyEventLabel.text = NSLocalizedString(@"No Event", nil);
+    _emptyDiaryLabel.text = NSLocalizedString(@"This Moment", nil);
     
     screenHeight = [[UIScreen mainScreen]bounds].size.height;
     if( screenHeight == 480) {
@@ -286,35 +290,18 @@
     
     NSArray *monthArray = @[@"January",@"February",@"March",@"April",@"May",@"June",@"July",@"August",@"September",@"October",@"November",@"December"];
     if (selectedMonth !=[comp month]) {
-        NSString *month = monthArray[[comp month]-1];
-//        NSInteger currentMonth = [monthArray indexOfObject:monthLabel.text];
-//        NSInteger currentYear = [yearLabel.text integerValue];
-        
+
         // Add transition (must be called after myLabel has been displayed)
         CATransition *animation = [CATransition animation];
         animation.duration = 0.5f;
         animation.type = kCATransitionFade;
-//        animation.subtype = kCATransitionFromTop;
-        
-//        // Forward or Rewind month
-//        if (currentMonth > ([comp month]-1))
-//            animation.subtype = kCATransitionFromTop;
-//        else
-//            animation.subtype = kCATransitionFromBottom;
-//        
-//        // Forward or Rewind year
-//        if (currentYear > [comp year])
-//            animation.subtype = kCATransitionFromTop;
-//        else if (currentYear < [comp year])
-//            animation.subtype = kCATransitionFromBottom;
-        
         animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
         [monthLabel.layer addAnimation:animation forKey:@"changeTextTransition"];
-        monthLabel.text = month;
+        monthLabel.text = NSLocalizedString(monthArray[[comp month]-1], nil) ;
         yearLabel.text = [NSString stringWithFormat:@"%ld",(long)[comp year]];
         selectedMonth = [comp month];
     } else {
-        monthLabel.text = monthArray[selectedMonth-1];
+        monthLabel.text = NSLocalizedString( monthArray[selectedMonth-1], nil);
         yearLabel.text = [NSString stringWithFormat:@"%ld",(long)[comp year]];
     }
 }

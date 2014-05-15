@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C075B8719246EE1009928F2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C075B8919246EE1009928F2 /* Localizable.strings */; };
+		4C075B8D19249CB9009928F2 /* NSString+Localization.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C075B8C19249CB9009928F2 /* NSString+Localization.m */; };
 		4C0C38CA18673AD60001CC08 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C0C38C918673AD60001CC08 /* AssetsLibrary.framework */; };
 		4C12B2EF18A1FD960046C5EC /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2EE18A1FD960046C5EC /* CoreText.framework */; };
 		4C12B2F118A1FDA20046C5EC /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2F018A1FDA20046C5EC /* GLKit.framework */; };
@@ -203,6 +205,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C075B8319246EA8009928F2 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		4C075B8419246EA8009928F2 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		4C075B8819246EE1009928F2 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		4C075B8A19246EE4009928F2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		4C075B8B19249CB9009928F2 /* NSString+Localization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Localization.h"; sourceTree = "<group>"; };
+		4C075B8C19249CB9009928F2 /* NSString+Localization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Localization.m"; sourceTree = "<group>"; };
 		4C0C38C918673AD60001CC08 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		4C12B2EC18A1FC280046C5EC /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMaps.framework; sourceTree = "<group>"; };
 		4C12B2EE18A1FD960046C5EC /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -831,9 +839,12 @@
 				4CB3DD8318521DC400673478 /* W&Cal-Info.plist */,
 				4CA2506A1869377000AEA94E /* UIImage+Resize.h */,
 				4CA2506B1869377000AEA94E /* UIImage+Resize.m */,
+				4C075B8B19249CB9009928F2 /* NSString+Localization.h */,
+				4C075B8C19249CB9009928F2 /* NSString+Localization.m */,
 				4CB3DD8418521DC400673478 /* InfoPlist.strings */,
 				4CB3DD8718521DC400673478 /* main.m */,
 				4CB3DD8918521DC400673478 /* W&Cal-Prefix.pch */,
+				4C075B8919246EE1009928F2 /* Localizable.strings */,
 			);
 			name = "Supporting Files";
 			path = Kidlendar;
@@ -947,6 +958,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hant",
 			);
 			mainGroup = 4CB3DD6F18521DC400673478;
 			productRefGroup = 4CB3DD7918521DC400673478 /* Products */;
@@ -1000,6 +1012,7 @@
 				4C57E74418F78E6400D622C4 /* face_white.png in Resources */,
 				4C57E73518F78E6400D622C4 /* Default@2x.png in Resources */,
 				4C57E74718F78E6400D622C4 /* Kidlendar-ICON-60.png in Resources */,
+				4C075B8719246EE1009928F2 /* Localizable.strings in Resources */,
 				4C57E73718F78E6400D622C4 /* diary.png in Resources */,
 				4C57E72E18F78E6400D622C4 /* brightnessDark22@2x.png in Resources */,
 				4C57E73318F78E6400D622C4 /* Default-568h@2x.png in Resources */,
@@ -1078,6 +1091,7 @@
 			files = (
 				4C7CA54818F3B02000C3BAA9 /* Scroller.m in Sources */,
 				4CB3DD8818521DC400673478 /* main.m in Sources */,
+				4C075B8D19249CB9009928F2 /* NSString+Localization.m in Sources */,
 				4C4F992018CF5E51007D3746 /* AFSecurityPolicy.m in Sources */,
 				4CFB086C187E696A00456D5D /* DateModel.m in Sources */,
 				4CA0368C18B7A12100015184 /* DiaryTableViewCell.m in Sources */,
@@ -1167,10 +1181,20 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		4C075B8919246EE1009928F2 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4C075B8819246EE1009928F2 /* zh-Hant */,
+				4C075B8A19246EE4009928F2 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		4CB3DD8418521DC400673478 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				4CB3DD8518521DC400673478 /* en */,
+				4C075B8319246EA8009928F2 /* zh-Hant */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1179,6 +1203,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				4CB3DD9E18521DC500673478 /* en */,
+				4C075B8419246EA8009928F2 /* zh-Hant */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";

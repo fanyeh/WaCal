@@ -49,38 +49,38 @@
             
             switch (i) {
                 case 1:
-                    [alarmButton setTitle:@"On\nTime" forState:UIControlStateNormal];
+                    [alarmButton setTitle:NSLocalizedString( @"On Time" , nil) forState:UIControlStateNormal];
                     break;
                 case 2:
-                    [alarmButton setTitle:@"5\nMin" forState:UIControlStateNormal];
+                    [alarmButton setTitle:NSLocalizedString(@"5 Min" , nil)forState:UIControlStateNormal];
                     alarmButton.timeOffset = 300;
                     break;
                 case 3:
-                    [alarmButton setTitle:@"15\nMin" forState:UIControlStateNormal];
+                    [alarmButton setTitle:NSLocalizedString(@"15 Min" , nil)forState:UIControlStateNormal];
                     alarmButton.timeOffset = 900;
                     break;
                 case 4:
-                    [alarmButton setTitle:@"30\nMin" forState:UIControlStateNormal];
+                    [alarmButton setTitle:NSLocalizedString(@"30 Min" , nil)forState:UIControlStateNormal];
                     alarmButton.timeOffset = 1800;
                     break;
                 case 5:
-                    [alarmButton setTitle:@"1\nHour" forState:UIControlStateNormal];
+                    [alarmButton setTitle:NSLocalizedString(@"1 Hour" , nil) forState:UIControlStateNormal];
                     alarmButton.timeOffset = 3600;
                     break;
                 case 6:
-                    [alarmButton setTitle:@"2\nHours" forState:UIControlStateNormal];
+                    [alarmButton setTitle:NSLocalizedString(@"2 Hours" , nil) forState:UIControlStateNormal];
                     alarmButton.timeOffset = 7200;
                     break;
                 case 7:
-                    [alarmButton setTitle:@"1\nDay" forState:UIControlStateNormal];
+                    [alarmButton setTitle:NSLocalizedString(@"1 Day" , nil) forState:UIControlStateNormal];
                     alarmButton.timeOffset = 86400;
                     break;
                 case 8:
-                    [alarmButton setTitle:@"2\nDays" forState:UIControlStateNormal];
+                    [alarmButton setTitle:NSLocalizedString(@"2 Days", nil)  forState:UIControlStateNormal];
                     alarmButton.timeOffset = 172800;
                     break;
                 case 9:
-                    [alarmButton setTitle:@"1\nWeek" forState:UIControlStateNormal];
+                    [alarmButton setTitle:NSLocalizedString(@"1 Week" , nil) forState:UIControlStateNormal];
                     alarmButton.timeOffset = 604800;
                     break;
                     

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -20,7 +20,9 @@
                 <outlet property="diaryView" destination="rhp-AF-8j7" id="n4u-bY-R9q"/>
                 <outlet property="dotView" destination="ls6-nB-mkH" id="7w4-hk-kDp"/>
                 <outlet property="dotViewGray" destination="wdQ-ts-BQM" id="rx5-H4-STD"/>
+                <outlet property="emptyDiaryLabel" destination="0t1-ac-TcV" id="DmD-fr-Z18"/>
                 <outlet property="emptyDiaryView" destination="5fp-Uf-A9B" id="JvL-I2-Che"/>
+                <outlet property="emptyEventLabel" destination="oC5-4g-59C" id="k9j-nc-rdL"/>
                 <outlet property="emptyEventView" destination="166-Px-c8h" id="qGI-k4-CJe"/>
                 <outlet property="endEventLabel" destination="ACt-r3-qUb" id="gKW-G1-hMe"/>
                 <outlet property="facebookIcon" destination="Tz1-Bn-RHS" id="ZSl-Tf-utJ"/>

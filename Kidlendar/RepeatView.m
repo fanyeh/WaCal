@@ -49,22 +49,22 @@
             
             switch (i) {
                 case 1:
-                    [alarmButton setTitle:@"Never" forState:UIControlStateNormal];
+                    [alarmButton setTitle:NSLocalizedString( @"Never",nil) forState:UIControlStateNormal];
                     break;
                 case 2:
-                    [alarmButton setTitle:@"Day" forState:UIControlStateNormal];
+                    [alarmButton setTitle: NSLocalizedString(@"Day",nil) forState:UIControlStateNormal];
                     break;
                 case 3:
-                    [alarmButton setTitle:@"Week" forState:UIControlStateNormal];
+                    [alarmButton setTitle:NSLocalizedString(@"Week",nil) forState:UIControlStateNormal];
                     break;
                 case 4:
-                    [alarmButton setTitle:@"Bi-Week" forState:UIControlStateNormal];
+                    [alarmButton setTitle:NSLocalizedString(@"Bi-Week",nil) forState:UIControlStateNormal];
                     break;
                 case 5:
-                    [alarmButton setTitle:@"Month" forState:UIControlStateNormal];
+                    [alarmButton setTitle:NSLocalizedString(@"Month",nil) forState:UIControlStateNormal];
                     break;
                 case 6:
-                    [alarmButton setTitle:@"Year" forState:UIControlStateNormal];
+                    [alarmButton setTitle:NSLocalizedString(@"Year",nil) forState:UIControlStateNormal];
                     break;
                 default:
                     break;

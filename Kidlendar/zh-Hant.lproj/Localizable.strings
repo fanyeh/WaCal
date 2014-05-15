@@ -1,0 +1,96 @@
+/* 
+  Localizable.strings
+  W&Cal
+
+  Created by Jack Yeh on 2014/5/15.
+  Copyright (c) 2014年 MarriageKiller. All rights reserved.
+*/
+
+"New Event" = "新事件";
+"Event Details" = "事件明細";
+"Moments" = "精彩時刻";
+"Setting" = "設定";
+"Calendar" = "行事曆";
+"No Event" = "無新事件";
+"This Moment" = "這個時刻";
+"Select location" = "選擇地點";
+"Alarm" = "鬧鐘提醒";
+"Repeat" = "事件重複";
+"Subject" = "標題";
+
+// Event
+"Delete Event" = "刪除事件";
+"Cancel" = "取消";
+"OK" = "確認";
+"Delete current event" =  "只刪除這個事件";
+"Delete all repeat event" = "刪除這個事件所有的重複事件";
+
+"No Reminder" = "無鬧鐘提醒";
+
+"Never" = "從不";
+"Day" = "每天";
+"Week" = "每週";
+"Bi-Week" = "每兩周";
+"Month" = "每月";
+"Year" = "每年";
+
+"nDay" = "天";
+"nWeek" = "週";
+"nMonth" = "月";
+"nYear" = "年";
+"Every" = "每";
+
+
+"On Time" = "準時";
+"5 Min" = "前\n5分鐘";
+"15 Min" = "前\n15分鐘";
+"30 Min" = "前\n30分鐘";
+"1 Hour" = "前\n1小時";
+"2 Hours" = "前\n2小時";
+"1 Day" = "前\n一天";
+"2 Days" = "前\n兩天";
+"1 Week" = "前\n一周";
+
+"Location" = "地點";
+"Notes" = "備註";
+
+
+// Diary create
+"Photos" = "照片";
+"Select" = "選擇";
+"Photo or Video" = "照片 或 影片";
+"Words" = "千言萬語";
+"Tap to create your first one!" = "建立您的第一個精彩時刻!";
+"Empty moments." = "";
+"Destination" = "目的地";
+"Phone" = "電話";
+
+// Calendar
+
+"Mon" = "週一";
+"Tue" = "週二";
+"Wed" = "週三";
+"Thu" = "週四";
+"Fri" = "週五";
+"Sat" = "週六";
+"Sun" = "週日";
+
+"January" = "一月";
+"February" = "二月";
+"March" = "三月";
+"April" = "四月";
+"May" = "五月";
+"June" = "六月";
+"July" = "七月";
+"August" = "八月";
+"September" = "九月";
+"October" = "十月";
+"November" = "十一月";
+"December" = "十二月";
+
+// Alert Message
+
+"Please enter location before search" = "請先輸入地點";
+"No Internet Connection" = "目前沒有網路連線";
+"Check your internet connection and try again" = "請確認您的網路連線後再試一次";
+"Close" = "關閉";

@@ -72,7 +72,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.navigationItem.title = @"Words";
+    self.navigationItem.title = NSLocalizedString(@"Words", nil) ;
+    _diarySubjectField.placeholder = NSLocalizedString(@"Subject", nil);
+    _locationField.placeholder = NSLocalizedString(@"Select location", nil);
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveDiary)];
 
     _mainViewBackground.image = _diaryImage;
@@ -378,7 +380,7 @@
 {
     if (textField.returnKeyType == UIReturnKeySearch) {
         if (textField.text.length < 1) {
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Please enter location before search" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Please enter location before search",nil) message:nil delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil)  otherButtonTitles:nil, nil];
             [alert show];
             return NO;
         } else {
@@ -485,9 +487,9 @@
     Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
     NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
     if (networkStatus == NotReachable) {
-        UIAlertView *noInternetAlert = [[UIAlertView alloc]initWithTitle:@"No Internet Connection"
-                                                                 message:@"Check your internet and try again"
-                                                                delegate:self cancelButtonTitle:@"Close"
+        UIAlertView *noInternetAlert = [[UIAlertView alloc]initWithTitle: NSLocalizedString(@"No Internet Connection", nil)
+                                                                 message:NSLocalizedString(@"Check your internet connection and try again",nil)
+                                                                delegate:self cancelButtonTitle:NSLocalizedString(@"Close",nil)
                                                        otherButtonTitles:nil, nil];
         [noInternetAlert show];
         return NO;

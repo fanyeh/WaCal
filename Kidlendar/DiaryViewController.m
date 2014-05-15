@@ -611,9 +611,9 @@ totalBytesExpectedToSend:(int64_t)totalBytesExpectedToSend
     Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
     NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
     if (networkStatus == NotReachable) {
-        UIAlertView *noInternetAlert = [[UIAlertView alloc]initWithTitle:@"No Internet Connection"
-                                                                 message:@"Check your internet and try again"
-                                                                delegate:self cancelButtonTitle:@"Close"
+        UIAlertView *noInternetAlert = [[UIAlertView alloc]initWithTitle: NSLocalizedString(@"No Internet Connection", nil)
+                                                                 message:NSLocalizedString(@"Check your internet connection and try again",nil)
+                                                                delegate:self cancelButtonTitle:NSLocalizedString(@"Close",nil)
                                                        otherButtonTitles:nil, nil];
         [noInternetAlert show];
         return NO;

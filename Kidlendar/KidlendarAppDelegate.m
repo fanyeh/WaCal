@@ -222,17 +222,23 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
     // Set up calendar controller
     MonthViewController *calendarController = [[MonthViewController alloc]init];
     UINavigationController *calendarNavigationController = [[UINavigationController alloc]initWithRootViewController:calendarController];
-    calendarNavigationController.tabBarItem = [[UITabBarItem alloc]initWithTitle:@"Calendar" image:[UIImage imageNamed:@"calendarTab.png"] selectedImage:[UIImage imageNamed:@"calendarTab.png"]];
+    calendarNavigationController.tabBarItem = [[UITabBarItem alloc]initWithTitle:NSLocalizedString(@"Calendar", nil)
+                                                                           image:[UIImage imageNamed:@"calendarTab.png"]
+                                                                   selectedImage:[UIImage imageNamed:@"calendarTab.png"]];
     
     // Set up diary controller
     DiaryTableViewController *diaryController = [[DiaryTableViewController alloc]init];
     UINavigationController *diaryNavigationController = [[UINavigationController alloc]initWithRootViewController:diaryController];
-    diaryNavigationController.tabBarItem = [[UITabBarItem alloc]initWithTitle:@"Moments" image:[UIImage imageNamed:@"diaryTab.png"] selectedImage:[UIImage imageNamed:@"diaryTab.png"]];
+    diaryNavigationController.tabBarItem = [[UITabBarItem alloc]initWithTitle:NSLocalizedString(@"Moments", nil)
+                                                                        image:[UIImage imageNamed:@"diaryTab.png"]
+                                                                selectedImage:[UIImage imageNamed:@"diaryTab.png"]];
     
     // Set up setting controller
     SettingViewController *settingController = [[SettingViewController alloc]init];
     UINavigationController *settingNavigationController = [[UINavigationController alloc]initWithRootViewController:settingController];
-    settingNavigationController.tabBarItem = [[UITabBarItem alloc]initWithTitle:@"Setting" image:[UIImage imageNamed:@"settingTab.png"] selectedImage:[UIImage imageNamed:@"settingTab.png"]];
+    settingNavigationController.tabBarItem = [[UITabBarItem alloc]initWithTitle:NSLocalizedString(@"Setting", nil)
+                                                                          image:[UIImage imageNamed:@"settingTab.png"]
+                                                                  selectedImage:[UIImage imageNamed:@"settingTab.png"]];
     
     
     // Set up tab bar contoller for entire app

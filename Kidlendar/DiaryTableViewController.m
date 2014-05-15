@@ -33,6 +33,8 @@
     NSMutableDictionary *allUploadTasks;
     NSArray *allSectionKeys;
 }
+@property (weak, nonatomic) IBOutlet UILabel *emptyMomentsLabel;
+@property (weak, nonatomic) IBOutlet UILabel *emptyDiaryLabel;
 
 @end
 
@@ -58,10 +60,12 @@
     
     emptyTableView = [[[NSBundle mainBundle] loadNibNamed:@"EmptyTableView" owner:self options:nil] objectAtIndex:0];
     [self.view addSubview:emptyTableView];
+    _emptyMomentsLabel.text = NSLocalizedString(@"Empty moments.", nil);
+    _emptyDiaryLabel.text = NSLocalizedString(@"Tap to create your first one!", nil);
     
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self  action:@selector(createDiary)];
     self.navigationItem.rightBarButtonItem = addButton;
-    self.navigationItem.title = @"Moments";
+    self.navigationItem.title =NSLocalizedString(@"Moments",nil);
 
     // Date formatters
     dateFormatter = [[NSDateFormatter alloc]init];
@@ -274,7 +278,6 @@
         DiaryData *d = [[diaryInSections objectForKey:sectionKey] objectAtIndex:indexPath.row];
         FileManager *fm = [[FileManager alloc]initWithKey:d.diaryKey];
         [fm removeCollectionImage];
-        [[DiaryDataStore sharedStore] removeItem:d];
         
         // Delete item from sort diary and row
         if ([[[DiaryDataStore sharedStore]allItems]count] > 0) {
@@ -286,6 +289,8 @@
             [diaryInSections removeObjectForKey:sectionKey];
             [tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
         }
+        [[DiaryDataStore sharedStore] removeItem:d];
+
         [[NSNotificationCenter defaultCenter] postNotificationName:@"diaryChange" object:nil];
     }
 }

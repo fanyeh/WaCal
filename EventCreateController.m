@@ -91,7 +91,15 @@
     // Do any additional setup after loading the view from its nib.
     
     // Navgition bar
-    self.navigationItem.title = @"New Event";
+    self.navigationItem.title = NSLocalizedString(@"New Event", nil);
+    _subjectField.placeholder = NSLocalizedString(@"Subject", nil);
+    _locationField.placeholder = NSLocalizedString(@"Select location", nil);
+    _reminderLabel.text = NSLocalizedString(@"Alarm", nil);
+    _repeatLabel.text = NSLocalizedString(@"Repeat", nil);
+    _calendarLabel.text = NSLocalizedString(@"Calendar", nil);
+
+    _repeatValueLabel.text = NSLocalizedString(@"Never", nil);
+    
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     toolView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 40)];
@@ -332,7 +340,7 @@
 {
     if (textField.returnKeyType == UIReturnKeySearch) {
         if (_locationField.text.length < 1) {
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Please enter location before search" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle : NSLocalizedString(@"Please enter location before search",nil) message:nil delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil, nil];
             [alert show];
             return NO;
         } else {
@@ -573,13 +581,13 @@
                 if ((b.tag==1&&a.absoluteDate)||(b.timeOffset == a.relativeOffset*-1)) {
                     [b setSelected:YES];
                     b.backgroundColor =MainColor;
-                    _reminderValueLabel.text = [b.titleLabel.text stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+                    _reminderValueLabel.text = NSLocalizedString([b.titleLabel.text stringByReplacingOccurrencesOfString:@"\n" withString:@" "],nil);
                     break;
                 }
             }
         }
     } else {
-        _reminderValueLabel.text = @"No Reminder";
+        _reminderValueLabel.text = NSLocalizedString(@"No Reminder", nil);
     }
 }
 
@@ -659,31 +667,31 @@
     NSString *time;
     switch (minute/-1) {
         case 0:
-            time = @"On Time";
+            time = NSLocalizedString(@"On Time", nil);
             break;
         case 300:
-            time = @"5 Min";
+            time = NSLocalizedString(@"5 Min" ,nil);
             break;
         case 900:
-            time = @"15 Min";
+            time = NSLocalizedString(@"15 Min" ,nil);
             break;
         case 1800:
-            time = @"30 Min";
+            time = NSLocalizedString(@"30 Min", nil);
             break;
         case 3600:
-            time = @"1 Hour";
+            time = NSLocalizedString(@"1 Hour" ,nil);
             break;
         case 7200:
-            time = @"2 Hours";
+            time = NSLocalizedString(@"2 Hours" ,nil);
             break;
         case 86400:
-            time = @"1 Day";
+            time = NSLocalizedString(@"1 Day" ,nil);
             break;
         case 172800:
-            time = @"2 Days";
+            time = NSLocalizedString(@"2 Days" ,nil);
             break;
         case 604800:
-            time = @"1 Week";
+            time = NSLocalizedString(@"1 Week" ,nil);
             break;
         default:
             break;
@@ -859,9 +867,9 @@
     Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
     NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
     if (networkStatus == NotReachable) {
-        UIAlertView *noInternetAlert = [[UIAlertView alloc]initWithTitle:@"No Internet Connection"
-                                                                 message:@"Check your internet and try again"
-                                                                delegate:self cancelButtonTitle:@"Close"
+        UIAlertView *noInternetAlert = [[UIAlertView alloc]initWithTitle: NSLocalizedString(@"No Internet Connection", nil)
+                                                                 message:NSLocalizedString(@"Check your internet connection and try again",nil)
+                                                                delegate:self cancelButtonTitle:NSLocalizedString(@"Close",nil)
                                                        otherButtonTitles:nil, nil];
         [noInternetAlert show];
         return NO;

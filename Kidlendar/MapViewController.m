@@ -28,6 +28,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *phoneNumberLabel;
 @property (weak, nonatomic) IBOutlet UILabel *distanceLabel;
 @property (weak, nonatomic) IBOutlet UILabel *addressLabel;
+@property (weak, nonatomic) IBOutlet UILabel *phoneLabel;
 
 @end
 
@@ -64,7 +65,8 @@
 
     _mapDetailView.layer.cornerRadius = 5.0f;
     
-    self.navigationItem.title = @"Destination";
+    self.navigationItem.title = NSLocalizedString(@"Destination", nil);
+    _phoneLabel.text = NSLocalizedString(@"Phone", nil);
     
     UITapGestureRecognizer *phoneTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(makeCall)];
     [_phoneNumberLabel addGestureRecognizer:phoneTap];

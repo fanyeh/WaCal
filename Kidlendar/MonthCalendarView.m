@@ -12,6 +12,7 @@
 #import "DateModel.h"
 #import "WeekdayView.h"
 #import <QuartzCore/QuartzCore.h>
+#import "NSString+Localization.h"
 
 @implementation MonthCalendarView
 {
@@ -63,8 +64,7 @@
     // Set weekdays
     for (int i=1;i<8;i++) {
         WeekdayView *dateView = [[WeekdayView alloc]initWithFrame:CGRectMake(xOffSet,yOffSet,dateViewWidth,weekdayViewHeight)];
-//        dateView.layer.borderWidth  =1 ;
-        [dateView.dateLabel setText:weekDay[i-1]];
+        [dateView.dateLabel setText:NSLocalizedString(weekDay[i-1], nil)]; 
         dateView.dateLabel.frame = CGRectMake(0,0, dateViewWidth, weekdayViewHeight);
         xOffSet += dateViewWidth;
         dateView.row = -1;

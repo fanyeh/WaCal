@@ -86,6 +86,8 @@ static int deleteLabelSize = 30;
 @property (weak, nonatomic) IBOutlet UIImageView *noPhotoImage;
 @property (weak, nonatomic) IBOutlet UILabel *noPhotoLabel1;
 @property (weak, nonatomic) IBOutlet UILabel *noPhotoLabel2;
+@property (weak, nonatomic) IBOutlet UILabel *photoSelectLabel;
+@property (weak, nonatomic) IBOutlet UILabel *photoOrVideoLabel;
 
 @end
 
@@ -109,8 +111,9 @@ static int deleteLabelSize = 30;
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.automaticallyAdjustsScrollViewInsets = NO;
-    self.navigationItem.title = @"Photos";
-    
+    self.navigationItem.title = NSLocalizedString(@"Photos", nil);
+    _photoSelectLabel.text = NSLocalizedString(@"Select", nil);
+    _photoOrVideoLabel.text = NSLocalizedString(@"Photo or Video", nil);
     // Video
     videoView = [[VideoView alloc]initWithFrame:CGRectMake(2, 46, 316, 316) deleteLabelSize:deleteLabelSize];
     UITapGestureRecognizer *videoTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(playMovie)];
@@ -216,7 +219,7 @@ static int deleteLabelSize = 30;
     layoutIndex = [NSIndexPath indexPathForRow:0 inSection:0];
     currentLayoutTableHeight = photoCollectionShrinkHeight;
     
-    nextButton = [[UIBarButtonItem alloc]initWithTitle:@"Words" style:UIBarButtonItemStyleBordered target:self action:@selector(doneSelection)];
+    nextButton = [[UIBarButtonItem alloc]initWithTitle:NSLocalizedString(@"Words", nil)  style:UIBarButtonItemStyleBordered target:self action:@selector(doneSelection)];
     
     UIPanGestureRecognizer *faceDetectPan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panFaceDetectView:)];
     [_faceImageView addGestureRecognizer:faceDetectPan];

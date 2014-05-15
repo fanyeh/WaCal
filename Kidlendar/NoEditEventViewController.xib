@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -8,6 +8,7 @@
             <connections>
                 <outlet property="alldayLabel" destination="QzE-sS-nB1" id="Dd6-BZ-ZHe"/>
                 <outlet property="birthdayIcon" destination="3dJ-TH-5j9" id="3EG-nV-Qjg"/>
+                <outlet property="calendarLabel" destination="vuF-al-ECu" id="o58-kk-Nao"/>
                 <outlet property="calendarNameField" destination="2gu-jb-8zg" id="Lki-V9-RZB"/>
                 <outlet property="calendarView" destination="pfV-Fh-ycL" id="yRq-LA-rfh"/>
                 <outlet property="endArrorw" destination="0Gj-Xr-jKX" id="9FK-zG-2NQ"/>
@@ -19,8 +20,10 @@
                 <outlet property="locationLabel" destination="oPV-rI-tQZ" id="GlZ-Y4-RuB"/>
                 <outlet property="locationView" destination="hkN-Xn-FaS" id="UrC-Ib-J48"/>
                 <outlet property="mapIcon" destination="OLk-Lx-y9W" id="gLD-c3-eY2"/>
+                <outlet property="notesLabel" destination="nWT-Dx-S6c" id="8V7-am-hrq"/>
                 <outlet property="notesView" destination="LF4-vr-QdI" id="B47-8b-y80"/>
-                <outlet property="repeatLabel" destination="3Vg-6L-TpD" id="vn5-Hk-RBe"/>
+                <outlet property="repeatLabel" destination="3Vg-6L-TpD" id="uvk-cf-10X"/>
+                <outlet property="repeatTitleLabel" destination="jmg-mx-Blc" id="pnZ-04-3yj"/>
                 <outlet property="repeatView" destination="87h-zD-Qqm" id="P1K-b4-ags"/>
                 <outlet property="scrollview" destination="dVg-2K-Ogp" id="iLn-Xe-dwE"/>
                 <outlet property="startArrorw" destination="w13-Hf-Ulm" id="kBB-cY-Ued"/>
@@ -83,7 +86,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </imageView>
                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Repeat" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="jmg-mx-Blc">
-                                    <rect key="frame" x="50" y="9" width="55" height="21"/>
+                                    <rect key="frame" x="50" y="9" width="114" height="21"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                     <nil key="highlightedColor"/>

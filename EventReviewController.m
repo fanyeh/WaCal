@@ -118,7 +118,13 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     // Do any additional setup after loading the view from its nib.
     
     // View controller
-    self.navigationItem.title = @"Event Details";
+    self.navigationItem.title = NSLocalizedString(@"Event Details",nil);
+    _subjectField.placeholder = NSLocalizedString(@"Subject", nil);
+    _locationField.placeholder = NSLocalizedString(@"Select location", nil);
+    _reminderLabel.text = NSLocalizedString(@"Alarm", nil);
+    _repeatLabel.text = NSLocalizedString(@"Repeat", nil);
+    _calendarLabel.text = NSLocalizedString(@"Calendar", nil);
+    _repeatValueLabel.text = NSLocalizedString(@"Never", nil);
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     toolView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 40)];
@@ -446,7 +452,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 {
     if (textField.returnKeyType == UIReturnKeySearch) {
         if (_locationField.text.length < 1) {
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Please enter location before search" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Please enter location before search",nil) message:nil delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil, nil];
             [alert show];
             return NO;
         } else {
@@ -578,8 +584,6 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
         [[[CalendarStore sharedStore]eventStore] saveEvent:newEvent span:EKSpanThisEvent commit:YES error:nil];
         eventIdentifier = newEvent.eventIdentifier;
         
-//        [[[CalendarStore sharedStore]eventStore] removeEvent:_event span:EKSpanThisEvent commit:YES error:nil];
-        
     } else {
         _event.title = _subjectField.text;
         _event.location = _locationField.text;
@@ -616,17 +620,17 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 {
     UIAlertView *deleteAlert;
     if (_event.hasRecurrenceRules) {
-        deleteAlert = [[UIAlertView alloc]initWithTitle:@"Delete Event"
+        deleteAlert = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Delete Event",nil)
                                                 message:nil
                                                delegate:self
-                                      cancelButtonTitle:@"Cancel"
-                                      otherButtonTitles:@"Delete current event",@"Delete all repeat event", nil];
+                                      cancelButtonTitle:NSLocalizedString(@"Cancel",nil)
+                                      otherButtonTitles:NSLocalizedString(@"Delete current event",nil),NSLocalizedString(@"Delete all repeat event",nil), nil];
     } else {
-        deleteAlert = [[UIAlertView alloc]initWithTitle:@"Delete Event"
+        deleteAlert = [[UIAlertView alloc]initWithTitle:NSLocalizedString(@"Delete Event",nil)
                                                 message:nil
                                                delegate:self
-                                      cancelButtonTitle:@"Cancel"
-                                      otherButtonTitles:@"OK", nil];
+                                      cancelButtonTitle:NSLocalizedString(@"Cancel",nil)
+                                      otherButtonTitles:NSLocalizedString(@"OK",nil), nil];
     }
     [deleteAlert show];
 }
@@ -737,13 +741,13 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
                 if ((b.tag==1&&a.absoluteDate)||(b.timeOffset == a.relativeOffset*-1)) {
                     [b setSelected:YES];
                     b.backgroundColor =MainColor;
-                    _reminderValueLabel.text = [b.titleLabel.text stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+                    _reminderValueLabel.text = NSLocalizedString([b.titleLabel.text stringByReplacingOccurrencesOfString:@"\n" withString:@" "],nil);
                     break;
                 }
             }
         }
     } else {
-        _reminderValueLabel.text = @"No Reminder";
+        _reminderValueLabel.text = NSLocalizedString(@"No Reminder", nil);
     }
 }
 
@@ -1016,9 +1020,9 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
     NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
     if (networkStatus == NotReachable) {
-        UIAlertView *noInternetAlert = [[UIAlertView alloc]initWithTitle:@"No Internet Connection"
-                                                                 message:@"Check your internet and try again"
-                                                                delegate:self cancelButtonTitle:@"Close"
+        UIAlertView *noInternetAlert = [[UIAlertView alloc]initWithTitle: NSLocalizedString(@"No Internet Connection", nil)
+                                                                 message:NSLocalizedString(@"Check your internet connection and try again",nil)
+                                                                delegate:self cancelButtonTitle:NSLocalizedString(@"Close",nil)
                                                        otherButtonTitles:nil, nil];
         [noInternetAlert show];
         return NO;

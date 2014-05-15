@@ -41,6 +41,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *weekdayLabel;
 @property (weak, nonatomic) IBOutlet UIView *timeView;
 @property (weak, nonatomic) IBOutlet UIImageView *mapIcon;
+@property (weak, nonatomic) IBOutlet UILabel *calendarLabel;
+@property (weak, nonatomic) IBOutlet UILabel *notesLabel;
+@property (weak, nonatomic) IBOutlet UILabel *repeatTitleLabel;
 
 @end
 
@@ -59,7 +62,13 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    self.navigationItem.title = @"Event Details";
+    self.navigationItem.title = NSLocalizedString(@"Event Details", nil);
+    _locationLabel.text = NSLocalizedString(@"Location", nil);
+    _repeatTitleLabel.text = NSLocalizedString(@"Repeat", nil);
+    _calendarLabel.text = NSLocalizedString(@"Calendar", nil);
+    _notesLabel.text = NSLocalizedString(@"Notes", nil);
+    
+    
     self.automaticallyAdjustsScrollViewInsets = NO;
 
     _eventTitle.text = _event.title;
@@ -81,9 +90,9 @@
         for (EKRecurrenceRule *e in _event.recurrenceRules) {
         
             if (e.interval == 1)
-                [recurrenceString appendString:[NSString stringWithFormat:@"Every %@",[self getFrequency:e.frequency]]];
+                [recurrenceString appendString:[NSString stringWithFormat:@"%@%@", NSLocalizedString(@"Every", nil), NSLocalizedString([self getFrequency:e.frequency],nil)]];
             else
-                [recurrenceString appendString:[NSString stringWithFormat:@"Every %ld %@",e.interval,[self getFrequency:e.frequency]]];
+                [recurrenceString appendString:[NSString stringWithFormat:@"%@%ld %@", NSLocalizedString(@"Every", nil),e.interval,NSLocalizedString([self getFrequency:e.frequency],nil)]];
         }
     }
     
@@ -339,16 +348,16 @@
     NSString *freq;
     switch (frequency) {
         case EKRecurrenceFrequencyDaily:
-            freq = @"Day";
+            freq = @"nDay";
             break;
         case EKRecurrenceFrequencyWeekly:
-            freq = @"Week";
+            freq = @"nWeek";
             break;
         case EKRecurrenceFrequencyMonthly:
-            freq = @"Month";
+            freq = @"nMonth";
             break;
         case EKRecurrenceFrequencyYearly:
-            freq = @"Year";
+            freq = @"nYear";
             break;
         default:
             break;
@@ -361,9 +370,9 @@
     Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
     NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
     if (networkStatus == NotReachable) {
-        UIAlertView *noInternetAlert = [[UIAlertView alloc]initWithTitle:@"No Internet Connection"
-                                                                 message:@"Check your internet and try again"
-                                                                delegate:self cancelButtonTitle:@"Close"
+        UIAlertView *noInternetAlert = [[UIAlertView alloc]initWithTitle: NSLocalizedString(@"No Internet Connection", nil)
+                                                                 message:NSLocalizedString(@"Check your internet connection and try again",nil)
+                                                                delegate:self cancelButtonTitle:NSLocalizedString(@"Close",nil)
                                                        otherButtonTitles:nil, nil];
         [noInternetAlert show];
         return NO;
