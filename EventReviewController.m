@@ -149,7 +149,7 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     [toolView addSubview:deleteButton];
 
     // Calendar
-    _calendarName.text = _event.calendar.title;
+    _calendarName.text = NSLocalizedString(_event.calendar.title, nil);
     UIPickerView *calendarPicker = [[UIPickerView alloc]init];
     calendarPicker.delegate = self;
     calendarPicker.dataSource = self;
@@ -231,6 +231,9 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
     }
     
     selectedCalendar = _event.calendar;
+    
+    _allLabel.text = NSLocalizedString(@"All_Day_All", nil);
+    _dayLabel.text = NSLocalizedString(@"All_Day_Day", nil);
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -346,13 +349,13 @@ typedef void (^LocationCallback)(CLLocationCoordinate2D);
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     EKCalendar *calendar = writableCalendars[row];
-    return calendar.title;
+    return NSLocalizedString(calendar.title, calendar.title);
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
     selectedCalendar = writableCalendars[row];
-    _calendarName.text = selectedCalendar.title;
+    _calendarName.text = NSLocalizedString(selectedCalendar.title, nil) ;
 }
 
 #pragma mark - Memory Management

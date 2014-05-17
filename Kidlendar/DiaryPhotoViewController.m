@@ -69,7 +69,7 @@ typedef NS_ENUM(NSInteger, FilterType)
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    self.navigationItem.title = @"Edit Photo";
+    self.navigationItem.title = NSLocalizedString(@"Edit Photo", nil) ;
 
     // Add save button on navigation controller
 

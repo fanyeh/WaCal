@@ -76,7 +76,7 @@ NSString *const RemindersAccessGranted = @"RemindersAccessGranted";
         
         NSString *sourceTitle;
         if (!cal.allowsContentModifications)
-            sourceTitle = @"Other";
+            sourceTitle =  @"Other";
         else
             sourceTitle = cal.source.title;
         

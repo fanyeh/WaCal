@@ -394,6 +394,7 @@
 		4CA2506B1869377000AEA94E /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resize.m"; sourceTree = "<group>"; };
 		4CA2506D1869517400AEA94E /* DiaryPhotoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryPhotoCell.h; sourceTree = "<group>"; };
 		4CA2506E1869517400AEA94E /* DiaryPhotoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryPhotoCell.m; sourceTree = "<group>"; };
+		4CA320A61927413200372061 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4CB3BD2918A330D80006AFD4 /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingViewController.h; path = ../SettingViewController.h; sourceTree = "<group>"; };
 		4CB3BD2A18A330D80006AFD4 /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingViewController.m; path = ../SettingViewController.m; sourceTree = "<group>"; };
 		4CB3BD2B18A330D80006AFD4 /* SettingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SettingViewController.xib; path = ../SettingViewController.xib; sourceTree = "<group>"; };
@@ -959,6 +960,7 @@
 				en,
 				Base,
 				"zh-Hant",
+				ja,
 			);
 			mainGroup = 4CB3DD6F18521DC400673478;
 			productRefGroup = 4CB3DD7918521DC400673478 /* Products */;
@@ -1186,6 +1188,7 @@
 			children = (
 				4C075B8819246EE1009928F2 /* zh-Hant */,
 				4C075B8A19246EE4009928F2 /* en */,
+				4CA320A61927413200372061 /* ja */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

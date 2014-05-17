@@ -214,8 +214,11 @@
             [writableCalendars addObject:cal];
         }
     }
-    _calenderNameLabel.text = [[writableCalendars objectAtIndex:0]title];
+    _calenderNameLabel.text = NSLocalizedString([[writableCalendars objectAtIndex:0]title], nil);
     selectedCalendar = [writableCalendars objectAtIndex:0];
+    
+    _allLabel.text = NSLocalizedString(@"All_Day_All", nil);
+    _dayLabel.text = NSLocalizedString(@"All_Day_Day", nil);
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -260,7 +263,7 @@
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     EKCalendar *calendar = writableCalendars[row];
-    return calendar.title;
+    return NSLocalizedString(calendar.title, nil);
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component

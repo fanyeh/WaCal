@@ -54,6 +54,23 @@
 "Location" = "地點";
 "Notes" = "備註";
 
+"All_Day_All" = "整";
+"All_Day_Day" = "天";
+"All Day" = "整   天";
+
+
+"Birthdays" = "生日";
+
+"Other" = "其他";
+
+"Home" = "家庭";
+
+"Ends" = "結束";
+
+"Edit Photo" = "編輯照片";
+
+
+
 
 // Diary create
 "Photos" = "照片";

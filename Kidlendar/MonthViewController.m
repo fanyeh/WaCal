@@ -226,6 +226,8 @@
                                                 name:@"EKCalendarSwitch" object:nil];
     
     [self showDiary];
+    
+    _endEventLabel.text = NSLocalizedString(@"Ends", nil);
 }
 
 - (void)didReceiveMemoryWarning
@@ -315,6 +317,8 @@
     cell.locationLabel.text = event.location;
     cell.dotView.layer.cornerRadius = cell.dotView.frame.size.width/2;
     cell.dotView.backgroundColor = [UIColor colorWithCGColor:event.calendar.CGColor];
+    cell.eventEndLabel.text = NSLocalizedString(@"Ends", nil);
+
 
     // Hide or show "Ends" label
     if ([event.startDate compare:[NSDate date]] == NSOrderedAscending)

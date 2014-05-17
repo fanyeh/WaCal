@@ -1,0 +1,111 @@
+/* 
+  Localizable.strings
+  W&Cal
+
+  Created by Jack Yeh on 2014/5/15.
+  Copyright (c) 2014年 MarriageKiller. All rights reserved.
+*/
+
+"New Event" = "イベントを追加";
+"Event Details" = "イベントの詳細";
+"Moments" = "素晴らしい瞬間";
+"Setting" = "設定";
+"Calendar" = "カレンダー";
+"No Event" = "イベントはありません";
+"This Moment" = "この瞬間";
+"Select location" = "場所を選択";
+"Alarm" = "アラーム";
+"Repeat" = "繰り返し";
+"Subject" = "タイトル";
+
+// Event
+"Delete Event" = "このイベントを削除";
+"Cancel" = "キャンセル";
+"OK" = "オーケー";
+"Delete current event" =  "このイベントを削除";
+"Delete all repeat event" = "すべての繰り返しイベントを削除";
+
+"No Reminder" = "アラームはありません";
+
+"Never" = "しない";
+"Day" = "每天";
+"Week" = "每週";
+"Bi-Week" = "每兩周";
+"Month" = "每月";
+"Year" = "每年";
+
+"nDay" = "日";
+"nWeek" = "週";
+"nMonth" = "月";
+"nYear" = "年";
+"Every" = "毎";
+
+
+"On Time" = "時間通りに";
+"5 Min" = "事前に5分";
+"15 Min" = "事前に15分";
+"30 Min" = "事前に30分";
+"1 Hour" = "事前に1時間";
+"2 Hours" = "事前に2時間";
+"1 Day" = "事前に1日";
+"2 Days" = "事前に2日";
+"1 Week" = "事前に1週";
+
+"Location" = "場所";
+"Notes" = "メモ";
+
+"All_Day_All" = "終";
+"All_Day_Day" = "日";
+"All Day" = "終   日";
+
+
+"Birthdays" = "誕生日";
+
+"Other" = "その他";
+
+"Home" = "自宅";
+
+"Ends" = "終了";
+
+"Edit Photo" = "編集写真";
+
+
+// Diary create
+"Photos" = "写真";
+"Select" = "";
+"Photo or Video" = "写真やビデオを選ぶ";
+"Words" = "書く";
+"Tap to create your first one!" = "あなたの最初の瞬間を作成する!";
+"Empty moments." = "";
+"Destination" = "目的地";
+"Phone" = "電話番号";
+
+// Calendar
+
+"Mon" = "月";
+"Tue" = "火";
+"Wed" = "水";
+"Thu" = "木";
+"Fri" = "金";
+"Sat" = "土";
+"Sun" = "日";
+
+"January" = "一月";
+"February" = "二月";
+"March" = "三月";
+"April" = "四月";
+"May" = "五月";
+"June" = "六月";
+"July" = "七月";
+"August" = "八月";
+"September" = "九月";
+"October" = "十月";
+"November" = "十一月";
+"December" = "十二月";
+
+// Alert Message
+
+"Please enter location before search" = "場所を入力してください";
+"No Internet Connection" = "インターネットに接続しない";
+"Check your internet connection and try again" = "インターネット接続を確認し、再試行してください";
+"Close" = "クローズ";

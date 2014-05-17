@@ -53,6 +53,19 @@
 "Location" = "Location";
 "Notes" = "Notes";
 
+"All_Day_All" = "All";
+"All_Day_Day" = "Day";
+"All Day" = "All Day";
+
+"Birthdays" = "Birthdays";
+
+"Other" = "Other";
+
+"Home" = "Home";
+
+"Ends" = "Ends";
+
+"Edit Photo" = "Edit Photo";
 
 // Diary create
 "Photos" = "Photos";

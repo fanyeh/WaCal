@@ -77,7 +77,7 @@
     headerLabel.textAlignment = NSTextAlignmentLeft;
     headerLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:17];
     headerLabel.center = headerView.center;
-    headerLabel.text = calendarTitles[section];
+    headerLabel.text = NSLocalizedString(calendarTitles[section], nil);
     [headerView addSubview:headerLabel];
     return headerView;
 }
@@ -114,7 +114,7 @@
     }
     
     cell.calendarColorView.layer.cornerRadius = cell.calendarColorView.frame.size.width/2;
-    cell.calendarNameLabel.text = calendar.title;
+    cell.calendarNameLabel.text = NSLocalizedString(calendar.title, nil) ;
     cell.calendarColorView.backgroundColor = [UIColor colorWithCGColor:calendar.CGColor];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     

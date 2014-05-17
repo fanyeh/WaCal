@@ -164,6 +164,7 @@
     UITapGestureRecognizer *mapIconTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showMap)];
     [_mapIcon addGestureRecognizer:mapIconTap];
 
+    _alldayLabel.text = NSLocalizedString(@"All Day", nil);
 }
 
 - (void)viewWillAppear:(BOOL)animated
