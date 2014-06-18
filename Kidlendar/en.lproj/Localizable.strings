@@ -106,3 +106,12 @@
 "No Internet Connection" = "No Internet Connection";
 "Check your internet connection and try again" = "Check your internet connection and try again";
 "Close" = "Close";
+
+// 2014-6-18
+
+"Monday" = "Monday";
+"Sunday" = "Sunday";
+"Week Start" = "Week Start";
+"Lunar Calendar" = "Lunar Calendar";
+"Visible Calendars" = "Visible Calendars";
+"Rate W&Cal" = "Rate W&Cal";

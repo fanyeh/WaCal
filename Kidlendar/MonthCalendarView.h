@@ -24,5 +24,6 @@
 - (void)setAppearanceOnSelectDate:(NSDate *)date;
 - (void)setAppearanceOnDeselectDate:(NSDate *)date dateNotInCurrentMonth:(BOOL)inMonth;
 - (DateView *)viewFromDate:(NSDate *)date;
+- (void)refreshWeekday;
 
 @end

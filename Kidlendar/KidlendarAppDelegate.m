@@ -14,6 +14,7 @@
 #import "SettingViewController.h"
 #import "DiaryCreateViewController.h"
 #import "Dropbox.h"
+#import "MainSettingViewController.h"
 
 NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGranted";
 
@@ -73,6 +74,7 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
                           [UIColor whiteColor],
                           NSForegroundColorAttributeName,
                           nil];
+    
     [[UINavigationBar appearance]setTitleTextAttributes:size];
     [[UITabBar appearance] setTintColor:BarColor]; //is the buttons text color
 
@@ -234,7 +236,14 @@ NSString *const AccountFacebookAccountAccessGranted =  @"FacebookAccountAccessGr
                                                                 selectedImage:[UIImage imageNamed:@"diaryTab.png"]];
     
     // Set up setting controller
-    SettingViewController *settingController = [[SettingViewController alloc]init];
+//    SettingViewController *settingController = [[SettingViewController alloc]init];
+//    UINavigationController *settingNavigationController = [[UINavigationController alloc]initWithRootViewController:settingController];
+//    settingNavigationController.tabBarItem = [[UITabBarItem alloc]initWithTitle:NSLocalizedString(@"Setting", nil)
+//                                                                          image:[UIImage imageNamed:@"settingTab.png"]
+//                                                                  selectedImage:[UIImage imageNamed:@"settingTab.png"]];
+    
+    // Set up setting controller
+    MainSettingViewController *settingController = [[MainSettingViewController alloc]initWithStyle:UITableViewStyleGrouped];
     UINavigationController *settingNavigationController = [[UINavigationController alloc]initWithRootViewController:settingController];
     settingNavigationController.tabBarItem = [[UITabBarItem alloc]initWithTitle:NSLocalizedString(@"Setting", nil)
                                                                           image:[UIImage imageNamed:@"settingTab.png"]

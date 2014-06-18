@@ -1,0 +1,139 @@
+/* 
+  Localizable.strings
+  W&Cal
+
+  Created by Jack Yeh on 2014/5/15.
+  Copyright (c) 2014年 MarriageKiller. All rights reserved.
+*/
+
+"New Event" = "新事件";
+"Event Details" = "事件明細";
+"Moments" = "精彩时刻";
+"Setting" = "设定";
+"Calendar" = "行事历";
+"No Event" = "无新事件";
+"This Moment" = "这个时刻";
+"Select location" = "选择地点";
+"Alarm" = "闹钟提醒";
+"Repeat" = "事件重复";
+"Subject" = "标题";
+
+// Event
+"Delete Event" = "刪除事件";
+"Cancel" = "取消";
+"OK" = "确认";
+"Delete current event" =  "只删除这个事件";
+"Delete all repeat event" = "删除这个事件所有的重复事件";
+
+"No Reminder" = "无闹钟提醒";
+
+"Never" = "从不";
+"Day" = "每天";
+"Week" = "每周";
+"Bi-Week" = "每兩周";
+"Month" = "每月";
+"Year" = "每年";
+
+"nDay" = "天";
+"nWeek" = "周";
+"nMonth" = "月";
+"nYear" = "年";
+"Every" = "每";
+
+"On Time" = "准时";
+"5 Min" = "前\n5分钟";
+"15 Min" = "前\n15分钟";
+"30 Min" = "前\n30分钟";
+"1 Hour" = "前\n1小时";
+"2 Hours" = "前\n2小时";
+"1 Day" = "前\n一天";
+"2 Days" = "前\n兩天";
+"1 Week" = "前\n一周";
+
+"Location" = "地点";
+"Notes" = "备注";
+
+"All_Day_All" = "整";
+"All_Day_Day" = "天";
+"All Day" = "整   天";
+
+"Birthdays" = "生日";
+"Other" = "其他";
+"Home" = "家庭";
+"Ends" = "结束";
+"Edit Photo" = "编辑照片";
+
+// Diary create
+"Photos" = "照片";
+"Select" = "选择";
+"Photo or Video" = "照片 或 影片";
+"Words" = "千言万语";
+"Tap to create your first one!" = "建立您的第一个精彩时刻!";
+"Empty moments." = "";
+"Destination" = "目的地";
+"Phone" = "电话";
+
+// Calendar
+
+"Mon" = "周一";
+"Tue" = "周二";
+"Wed" = "周三";
+"Thu" = "周四";
+"Fri" = "周五";
+"Sat" = "周六";
+"Sun" = "周日";
+
+"January" = "1月";
+"February" = "2月";
+"March" = "3月";
+"April" = "4月";
+"May" = "5月";
+"June" = "6月";
+"July" = "7月";
+"August" = "8月";
+"September" = "9月";
+"October" = "10月";
+"November" = "11月";
+"December" = "12月";
+
+// Alert Message
+
+"Please enter location before search" = "请先输入地点";
+"No Internet Connection" = "目前没有互联网连接";
+"Check your internet connection and try again" = "请确认您的互联网连接后再试一次";
+"Close" = "关闭";
+
+// 2014-6-18
+
+"Monday" = "周一";
+"Sunday" = "周日";
+"Week Start" = "一周的开始";
+"Lunar Calendar" = "农民历";
+"Visible Calendars" = "所有的日历";
+"Rate W&Cal" = "给 W&Cal 一些评价";
+
+"小寒" = "小寒";
+"立春" = "立春";
+"驚蟄" = "惊蛰";
+"清明" = "清明";
+"立夏" = "立夏";
+"芒種" = "芒种";
+"小暑" = "小暑";
+"立秋" = "立秋";
+"白露" = "白露";
+"寒露" = "寒露";
+"立冬" = "立冬";
+"大雪" = "大雪";
+
+"大寒" = "大寒";
+"雨水" = "雨水";
+"春分" = "春分";
+"穀雨" = "谷雨";
+"小滿" = "小满";
+"夏至" = "夏至";
+"大暑" = "大暑";
+"處暑" = "处暑";
+"秋分" = "秋分";
+"霜降" = "霜降";
+"小雪" = "小雪";
+"冬至" = "冬至";

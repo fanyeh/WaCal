@@ -25,6 +25,8 @@
         self.dateLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:13];
         self.backgroundColor = [UIColor colorWithWhite:0.961 alpha:1.000];
         self.opaque = YES;
+        self.lunarDateLabel.hidden = YES;
+        
     }
     return self;
 }

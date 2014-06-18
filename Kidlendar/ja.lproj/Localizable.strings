@@ -90,18 +90,18 @@
 "Sat" = "土";
 "Sun" = "日";
 
-"January" = "一月";
-"February" = "二月";
-"March" = "三月";
-"April" = "四月";
-"May" = "五月";
-"June" = "六月";
-"July" = "七月";
-"August" = "八月";
-"September" = "九月";
-"October" = "十月";
-"November" = "十一月";
-"December" = "十二月";
+"January" = "1月";
+"February" = "2月";
+"March" = "3月";
+"April" = "4月";
+"May" = "5月";
+"June" = "6月";
+"July" = "7月";
+"August" = "8月";
+"September" = "9月";
+"October" = "10月";
+"November" = "11月";
+"December" = "12月";
 
 // Alert Message
 
@@ -109,3 +109,11 @@
 "No Internet Connection" = "インターネットに接続しない";
 "Check your internet connection and try again" = "インターネット接続を確認し、再試行してください";
 "Close" = "クローズ";
+
+"Monday" = "月曜日";
+"Sunday" = "日曜日";
+"Week Start" = "週の開始曜日";
+"Lunar Calendar" = "太陰暦";
+"Visible Calendars" = "全てのカレンダー";
+"Rate W&Cal" = "評価とコメント";
+

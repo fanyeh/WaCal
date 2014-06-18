@@ -10,6 +10,7 @@
 
 @interface DateView : UIView
 @property (strong,nonatomic) UILabel *dateLabel;
+@property (strong,nonatomic) UILabel *lunarDateLabel;
 @property (strong,nonatomic) NSDate *date;
 @property int row;
 @property int column;

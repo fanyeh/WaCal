@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4C075B8719246EE1009928F2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C075B8919246EE1009928F2 /* Localizable.strings */; };
 		4C075B8D19249CB9009928F2 /* NSString+Localization.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C075B8C19249CB9009928F2 /* NSString+Localization.m */; };
+		4C0A57DF1950957C00852759 /* MainSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C0A57DE1950957C00852759 /* MainSettingViewController.m */; };
 		4C0C38CA18673AD60001CC08 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C0C38C918673AD60001CC08 /* AssetsLibrary.framework */; };
 		4C12B2EF18A1FD960046C5EC /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2EE18A1FD960046C5EC /* CoreText.framework */; };
 		4C12B2F118A1FDA20046C5EC /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C12B2F018A1FDA20046C5EC /* GLKit.framework */; };
@@ -211,6 +212,8 @@
 		4C075B8A19246EE4009928F2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4C075B8B19249CB9009928F2 /* NSString+Localization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Localization.h"; sourceTree = "<group>"; };
 		4C075B8C19249CB9009928F2 /* NSString+Localization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Localization.m"; sourceTree = "<group>"; };
+		4C0A57DD1950957C00852759 /* MainSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainSettingViewController.h; sourceTree = "<group>"; };
+		4C0A57DE1950957C00852759 /* MainSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainSettingViewController.m; sourceTree = "<group>"; };
 		4C0C38C918673AD60001CC08 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		4C12B2EC18A1FC280046C5EC /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMaps.framework; sourceTree = "<group>"; };
 		4C12B2EE18A1FD960046C5EC /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -436,6 +439,7 @@
 		4CFB086D187E6BFB00456D5D /* MonthModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthModel.h; sourceTree = "<group>"; };
 		4CFB086E187E6BFB00456D5D /* MonthModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonthModel.m; sourceTree = "<group>"; };
 		4CFB6DC7186A6BAC001C8F05 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		4CFBB8551951D952002157F4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		4CFF692C18BF2B2900337857 /* ReminderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReminderView.h; sourceTree = "<group>"; };
 		4CFF692D18BF2B2900337857 /* ReminderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReminderView.m; sourceTree = "<group>"; };
 		4CFF692F18BF3FC000337857 /* RepeatView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RepeatView.h; sourceTree = "<group>"; };
@@ -760,6 +764,8 @@
 				4C97EA7C18DDDD8C00BB19A8 /* SettingTableCell.h */,
 				4C97EA7D18DDDD8C00BB19A8 /* SettingTableCell.m */,
 				4C97EA7F18DDDDA100BB19A8 /* SettingTableCell.xib */,
+				4C0A57DD1950957C00852759 /* MainSettingViewController.h */,
+				4C0A57DE1950957C00852759 /* MainSettingViewController.m */,
 			);
 			name = Setting;
 			sourceTree = "<group>";
@@ -961,6 +967,7 @@
 				Base,
 				"zh-Hant",
 				ja,
+				"zh-Hans",
 			);
 			mainGroup = 4CB3DD6F18521DC400673478;
 			productRefGroup = 4CB3DD7918521DC400673478 /* Products */;
@@ -1139,6 +1146,7 @@
 				4C50B73718B1BB3D0065434A /* MapKitHelpers.m in Sources */,
 				4C4F992118CF5E51007D3746 /* AFURLConnectionOperation.m in Sources */,
 				4C4F992418CF5E51007D3746 /* AFURLSessionManager.m in Sources */,
+				4C0A57DF1950957C00852759 /* MainSettingViewController.m in Sources */,
 				4C4F991C18CF5E51007D3746 /* AFHTTPRequestOperation.m in Sources */,
 				4CD90E4A18ED0B07006D07AE /* Dropbox.m in Sources */,
 				4CA2506C1869377000AEA94E /* UIImage+Resize.m in Sources */,
@@ -1189,6 +1197,7 @@
 				4C075B8819246EE1009928F2 /* zh-Hant */,
 				4C075B8A19246EE4009928F2 /* en */,
 				4CA320A61927413200372061 /* ja */,
+				4CFBB8551951D952002157F4 /* zh-Hans */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

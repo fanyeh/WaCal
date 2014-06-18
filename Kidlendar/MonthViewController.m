@@ -878,9 +878,12 @@
 {
     [_monthView setAppearanceOnDeselectDate:previousDateModel.date dateNotInCurrentMonth:previousDateModel.isCurrentMonth];
     previousDateModel.isSelected = NO;
+    
     // Reset monthmodel
     [monthModel createMonthWithSelectedDate:_selectedDate];
+    
     // Refresh Month view
+    [_monthView refreshWeekday];
     [_monthView setupCalendar:monthModel];
     
     // Adjust selected date to monday of the week if month view is shrinked

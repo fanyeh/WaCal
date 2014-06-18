@@ -41,6 +41,14 @@
 {
     [_datesInMonth removeAllObjects];
 
+    NSString *weekStart = [[NSUserDefaults standardUserDefaults]stringForKey:@"WeekStart"];
+    
+    int weekdayStart = 1;
+    
+    if ([weekStart isEqualToString:@"Sunday"]) {
+        
+        weekdayStart = 7;
+    }
     // Create date components based on given date and calendar
     NSDateComponents *weekdayComponents = [_gregorian components:(NSWeekdayCalendarUnit|
                                                                  NSDayCalendarUnit|
@@ -62,8 +70,8 @@
     NSDateComponents *comp = [_gregorian components:NSWeekdayCalendarUnit
                                           fromDate:w];
     
-    // Monday = 1 , Sunday = 7
-    long weekDayOfFirstDay = [comp weekday]-1;
+
+    long weekDayOfFirstDay = [comp weekday]-1; // Monday = 2 - 1 = 1 , Sunday = 1 - 1 = 0 = 7
     if (weekDayOfFirstDay==0)
         weekDayOfFirstDay = 7;
     
@@ -71,11 +79,25 @@
     int rowNum = 0;
     
     // Draw prevoius month date in same week
-    long previousMonthDays = weekDayOfFirstDay - 1;
+    
+    long previousMonthDays;
+    
+    if (weekdayStart == 1)
+        previousMonthDays = weekDayOfFirstDay - 1;
+    else
+        previousMonthDays = [comp weekday] - 1;
+    
+    // If 1st day start from Monday
+    //long previousMonthDays = weekDayOfFirstDay - 1;
+    
+    // If 1st day start from Sunday
+    //long previousMonthDays = [comp weekday] - 1;
+
     weekdayComponents.day -= previousMonthDays;
     DateModel *newDateModel;
 
-    if (weekDayOfFirstDay!=1) {
+    // If first day is not Monday (Sunday)
+    if (weekDayOfFirstDay!=weekdayStart) { // 1
         // Create DateComponent
         if (previousMonthDays > 0) {
             for (int i =0 ; i < previousMonthDays; i++) {
@@ -104,12 +126,18 @@
         weekdayComponents.day = i;
         NSDate *c = [_gregorian dateFromComponents:weekdayComponents];
         
-        // Change to next row after if week day is monday
-        if (weekDayOfFirstDay==1)
+        
+        
+        // Change to next row after if week day is Monday(Sunday)
+//        if (weekDayOfFirstDay==7) // 1
+//            rowNum++;
+        
+        if (weekDayOfFirstDay==weekdayStart) // 1
             rowNum++;
         
-        if (weekDayOfFirstDay==7)
-            weekDayOfFirstDay = 1;
+        
+        if (weekDayOfFirstDay==7) // 7
+            weekDayOfFirstDay = 1; // 1
         else
             weekDayOfFirstDay++;
         
@@ -128,7 +156,7 @@
     
     // Draw next month date in same week
     int compensateDaysForNextMonth = 7;
-    if (rowNum == 4 && weekDayOfFirstDay !=1)
+    if (rowNum == 4 && weekDayOfFirstDay !=1) //1
         compensateDaysForNextMonth = 14;
     long nextMonthDays = compensateDaysForNextMonth- (weekDayOfFirstDay -1);
     if (nextMonthDays == 7)

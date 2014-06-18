@@ -326,7 +326,7 @@
     
     NSDate *sectionDate = [dateFormatter dateFromString:[allSectionKeys objectAtIndex:section]];
     NSDateComponents *comp = [[NSCalendar currentCalendar]components:(NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay) fromDate:sectionDate];
-    headerLabel.text = [NSString stringWithFormat:@"%@ %ld",monthArray[[comp month]-1],(long)[comp year]];
+    headerLabel.text = [NSString stringWithFormat:@"%@ %ld",NSLocalizedString(monthArray[[comp month]-1], nil) ,(long)[comp year]];
     [headerView addSubview:headerLabel];
     return headerView;
 }

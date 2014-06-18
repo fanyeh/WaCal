@@ -37,7 +37,7 @@
     NSDictionary *size = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0],NSFontAttributeName,
                           [UIColor whiteColor],NSForegroundColorAttributeName,nil];
     self.navigationController.navigationBar.titleTextAttributes = size;
-    self.navigationItem.title = NSLocalizedString(@"Setting", nil);
+    self.navigationItem.title = NSLocalizedString(@"Calendar", nil);
     
     self.tableView.tintColor = MainColor;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
@@ -58,6 +58,7 @@
 }
 
 #pragma mark - Table view data source
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {

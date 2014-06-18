@@ -30,7 +30,7 @@
 "Never" = "從不";
 "Day" = "每天";
 "Week" = "每週";
-"Bi-Week" = "每兩周";
+"Bi-Week" = "每兩週";
 "Month" = "每月";
 "Year" = "每年";
 
@@ -40,7 +40,6 @@
 "nYear" = "年";
 "Every" = "每";
 
-
 "On Time" = "準時";
 "5 Min" = "前\n5分鐘";
 "15 Min" = "前\n15分鐘";
@@ -49,7 +48,7 @@
 "2 Hours" = "前\n2小時";
 "1 Day" = "前\n一天";
 "2 Days" = "前\n兩天";
-"1 Week" = "前\n一周";
+"1 Week" = "前\n一週";
 
 "Location" = "地點";
 "Notes" = "備註";
@@ -58,19 +57,11 @@
 "All_Day_Day" = "天";
 "All Day" = "整   天";
 
-
 "Birthdays" = "生日";
-
 "Other" = "其他";
-
 "Home" = "家庭";
-
 "Ends" = "結束";
-
 "Edit Photo" = "編輯照片";
-
-
-
 
 // Diary create
 "Photos" = "照片";
@@ -92,18 +83,18 @@
 "Sat" = "週六";
 "Sun" = "週日";
 
-"January" = "一月";
-"February" = "二月";
-"March" = "三月";
-"April" = "四月";
-"May" = "五月";
-"June" = "六月";
-"July" = "七月";
-"August" = "八月";
-"September" = "九月";
-"October" = "十月";
-"November" = "十一月";
-"December" = "十二月";
+"January" = "1月";
+"February" = "2月";
+"March" = "3月";
+"April" = "4月";
+"May" = "5月";
+"June" = "6月";
+"July" = "7月";
+"August" = "8月";
+"September" = "9月";
+"October" = "10月";
+"November" = "11月";
+"December" = "12月";
 
 // Alert Message
 
@@ -111,3 +102,39 @@
 "No Internet Connection" = "目前沒有網路連線";
 "Check your internet connection and try again" = "請確認您的網路連線後再試一次";
 "Close" = "關閉";
+
+// 2014-6-18
+
+"Monday" = "週一";
+"Sunday" = "週日";
+"Week Start" = "一週的開始";
+"Lunar Calendar" = "農民曆";
+"Visible Calendars" = "所有的日曆";
+"Rate W&Cal" = "給 W&Cal 一些評價";
+
+"小寒" = "小寒";
+"立春" = "立春";
+"驚蟄" = "驚蟄";
+"清明" = "清明";
+"立夏" = "立夏";
+"芒種" = "芒種";
+"小暑" = "小暑";
+"立秋" = "立秋";
+"白露" = "白露";
+"寒露" = "寒露";
+"立冬" = "立冬";
+"大雪" = "大雪";
+
+"大寒" = "大寒";
+"雨水" = "雨水";
+"春分" = "春分";
+"穀雨" = "穀雨";
+"小滿" = "小滿";
+"夏至" = "夏至";
+"大暑" = "大暑";
+"處暑" = "處暑";
+"秋分" = "秋分";
+"霜降" = "霜降";
+"小雪" = "小雪";
+"冬至" = "冬至";
+
